@@ -1,1 +1,1 @@
-# Inventory-Management
+Business inventory management app
