@@ -153,7 +153,7 @@ public class BuyShowActivity extends AppCompatActivity {
                 done.setGravity(Gravity.CENTER);
                 done.setClickable(false);
 
-                date.setText(String.valueOf(MainActivity.buyArray.get(i).getDate()).substring(0,2) + "/" + String.valueOf(MainActivity.buyArray.get(i).getDate()).substring(2,4));
+                date.setText(String.valueOf(MainActivity.buyArray.get(i).getDate()).substring(0, 2) + "/" + String.valueOf(MainActivity.buyArray.get(i).getDate()).substring(2, 4));
                 price.setText((nf.format(MainActivity.buyArray.get(i).getPrice())) + "$");
                 weight.setText((nf.format(MainActivity.buyArray.get(i).getWeight())));
                 doneWeight.setText(nf.format(MainActivity.buyArray.get(i).getDoneWeight()));

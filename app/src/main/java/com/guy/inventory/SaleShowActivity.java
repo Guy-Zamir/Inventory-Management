@@ -118,7 +118,7 @@ public class SaleShowActivity extends AppCompatActivity {
                 cb.setHeight(125);
                 checkBoxes.add(cb);
 
-                date.setText(MainActivity.saleArray.get(i).getDate());
+                date.setText(String.valueOf(MainActivity.saleArray.get(i).getDate()).substring(0, 2) + "/" + String.valueOf(MainActivity.saleArray.get(i).getDate()).substring(2, 4));
                 company.setText(MainActivity.saleArray.get(i).getCompany());
                 saleSum.setText((nf.format(MainActivity.saleArray.get(i).getSaleSum())) + "$");
                 tableRow.addView(cb);

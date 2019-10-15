@@ -1,7 +1,6 @@
 package com.guy.inventory;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +9,6 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.Date;
 
 public class BuyActivity extends AppCompatActivity {
 
@@ -75,7 +72,7 @@ public class BuyActivity extends AppCompatActivity {
                 int toast = 0;
 
                 day = dpBuyDate.getDayOfMonth();
-                month = dpBuyDate.getDayOfMonth();
+                month = dpBuyDate.getMonth();
                 year = dpBuyDate.getYear();
 
                 if (etBuySupplier.getText().toString().isEmpty()) {
@@ -105,17 +102,31 @@ public class BuyActivity extends AppCompatActivity {
                 polish = cbBuyPolish.isChecked();
                 done = cbBuyDone.isChecked();
 
-                if (etBuyDoneWeight.getText().toString().isEmpty()) {
-                    wage = -1;
-                } else if (Double.parseDouble(etBuyDoneWeight.getText().toString()) > weight) {
-                    toast = 2;
-                    doneWeight = Double.parseDouble(etBuyDoneWeight.getText().toString());
-                }
-
-                if (etBuyWage.getText().toString().isEmpty()) {
+                if (polish) {
+                    doneWeight = Double.parseDouble(etBuyKaratWeight.getText().toString());
                     wage = 50;
+                    done = true;
+
                 } else {
-                    wage = Double.parseDouble(etBuyWage.getText().toString());
+                    if (done) {
+
+                        if (etBuyDoneWeight.getText().toString().isEmpty()) {
+                            toast = 3;
+                        } else if (Double.valueOf(etBuyDoneWeight.getText().toString()) > Double.parseDouble(etBuyKaratWeight.getText().toString())) {
+                            toast = 2;
+                        } else {
+                            doneWeight = Double.valueOf(etBuyDoneWeight.getText().toString());
+                        }
+
+                        if (etBuyWage.getText().toString().isEmpty()) {
+                            wage = 50;
+                        } else {
+                            wage = Double.valueOf(etBuyWage.getText().toString());
+                        }
+                    } else {
+                        doneWeight = 0;
+                        wage = 0;
+                    }
                 }
 
                 switch (toast) {
@@ -125,6 +136,10 @@ public class BuyActivity extends AppCompatActivity {
 
                     case 2:
                         Toast.makeText(BuyActivity.this, "לא ניתן להזין משקל גמור גבוה ממשקל החבילה", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 3:
+                        Toast.makeText(BuyActivity.this, "יש להזין את המקשל הגמור של החבליה", Toast.LENGTH_SHORT).show();
                         break;
 
                     case 0:

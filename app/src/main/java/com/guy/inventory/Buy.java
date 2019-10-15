@@ -2,11 +2,10 @@ package com.guy.inventory;
 
 public class Buy {
     private double price, weight, doneWeight, wage;
-    private String supplier, id;
-    private int date;
+    private String supplier, id, date;
     private boolean polish, done;
 
-    public Buy(int date, String supplier, String id, double price, double weight, boolean polish, boolean done, double doneWeight, double wage) {
+    public Buy(String date, String supplier, String id, double price, double weight, boolean polish, boolean done, double doneWeight, double wage) {
         this.date = date;
         this.supplier = supplier;
         this.id = id;
@@ -14,15 +13,8 @@ public class Buy {
         this.weight = weight;
         this.polish = polish;
         this.done = done;
-        if (polish) {
-            this.doneWeight = weight;
-            this.wage = 0;
-        } else {
-            if (done) {
-                this.doneWeight = doneWeight;
-                this.wage = wage;
-            }
-        }
+        this.doneWeight = doneWeight;
+        this.wage = wage;
     }
 
     public double getPrice() {
@@ -49,7 +41,7 @@ public class Buy {
         return id;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 

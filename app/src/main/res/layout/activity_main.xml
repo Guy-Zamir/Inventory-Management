@@ -57,7 +57,7 @@
         android:layout_marginEnd="10dp"
         android:layout_weight="0"
         android:background="@color/colorPrimary"
-        android:text="טבלת הקניות"
+        android:text="טבלת קניות"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -71,7 +71,7 @@
         android:layout_marginEnd="10dp"
         android:layout_weight="0"
         android:background="@color/colorPrimary"
-        android:text="טבלת המכירות"
+        android:text="טבלת מכירות"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold" />
