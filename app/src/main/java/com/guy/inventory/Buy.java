@@ -52,4 +52,40 @@ public class Buy {
     public boolean isDone() {
         return done;
     }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public void setDoneWeight(double doneWeight) {
+        this.doneWeight = doneWeight;
+    }
+
+    public void setWage(double wage) {
+        this.wage = wage;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setPolish(boolean polish) {
+        this.polish = polish;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
 }

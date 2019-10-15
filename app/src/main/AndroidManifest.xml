@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SaleShowActivity"></activity>
+        <activity android:name=".SaleEditActivity"></activity>
+        <activity android:name=".BuyEditActivity" />
+        <activity android:name=".SaleShowActivity" />
         <activity android:name=".BuyShowActivity" />
         <activity android:name=".SummaryActivity" />
         <activity android:name=".SaleActivity" />

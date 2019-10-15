@@ -1,7 +1,11 @@
 package com.guy.inventory;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,11 +18,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class BuyShowActivity extends AppCompatActivity {
@@ -42,7 +42,16 @@ public class BuyShowActivity extends AppCompatActivity {
         btnBuyShowDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (checkPositions().isEmpty()) {
+                    Toast.makeText(BuyShowActivity.this, "יש לסמן את הפריט שברצונך לערוך", Toast.LENGTH_SHORT).show();
+                } else if (checkPositions().size() > 1) {
+                    Toast.makeText(BuyShowActivity.this, "יש לבחור פריט אחד בלבד לעריכה", Toast.LENGTH_SHORT).show();
 
+                } else {
+                    Intent intent = new Intent(BuyShowActivity.this, BuyEditActivity.class);
+                    intent.putExtra("position", checkPositions().get(0));
+                    startActivityForResult(intent, 1);
+                }
             }
         });
 
@@ -52,11 +61,22 @@ public class BuyShowActivity extends AppCompatActivity {
                 if (checkPositions().isEmpty()) {
                     Toast.makeText(BuyShowActivity.this, "יש לסמן על הפריטים שברצונך למחוק", Toast.LENGTH_SHORT).show();
                 } else {
-                    for (int i : checkPositions()) {
-                        MainActivity.buyArray.remove(i);
-                        tlBuy.removeAllViews();
-                        displayTable();
-                    }
+                    AlertDialog.Builder alert = new AlertDialog.Builder(BuyShowActivity.this);
+                    alert.setTitle("התראת מחיקה");
+                    alert.setMessage("האם אתה בטוח שברצונך למחוק את הנתונים המסומנים?");
+                    alert.setNegativeButton(android.R.string.no, null);
+                    alert.setIcon(android.R.drawable.ic_dialog_alert);
+
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (int i : checkPositions()) {
+                                MainActivity.buyArray.remove(i);
+                                tlBuy.removeAllViews();
+                                displayTable();
+                            }
+                        }
+                    });
+                    alert.show();
                 }
             }
         });
@@ -175,6 +195,15 @@ public class BuyShowActivity extends AppCompatActivity {
                 underLine.setBackgroundColor(Color.rgb(51, 51, 51));
                 tlBuy.addView(underLine);
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            tlBuy.removeAllViews();
+            displayTable();
         }
     }
 }

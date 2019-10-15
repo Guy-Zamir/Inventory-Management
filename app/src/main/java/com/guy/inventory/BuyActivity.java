@@ -104,7 +104,7 @@ public class BuyActivity extends AppCompatActivity {
 
                 if (polish) {
                     doneWeight = Double.parseDouble(etBuyKaratWeight.getText().toString());
-                    wage = 50;
+                    wage = 0;
                     done = true;
 
                 } else {

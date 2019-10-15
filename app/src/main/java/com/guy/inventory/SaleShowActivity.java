@@ -1,8 +1,12 @@
 package com.guy.inventory;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -36,25 +40,36 @@ public class SaleShowActivity extends AppCompatActivity {
 
         displayTable();
 
+        btnSaleShowDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         btnSaleShowDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkPositions().isEmpty()) {
                     Toast.makeText(SaleShowActivity.this, "יש לסמן על הפריטים שברצונך למחוק", Toast.LENGTH_SHORT).show();
                 } else {
-                    for (int i : checkPositions()) {
-                        MainActivity.saleArray.remove(i);
-                        tlSale.removeAllViews();
-                        displayTable();
-                    }
+                    AlertDialog.Builder alert = new AlertDialog.Builder(SaleShowActivity.this);
+                    alert.setTitle("התראת מחיקה");
+                    alert.setMessage("האם אתה בטוח שברצונך למחוק את הנתונים המסומנים?");
+                    alert.setNegativeButton(android.R.string.no, null);
+                    alert.setIcon(android.R.drawable.ic_dialog_alert);
+
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (int i : checkPositions()) {
+                                MainActivity.saleArray.remove(i);
+                                tlSale.removeAllViews();
+                                displayTable();
+                            }
+                        }
+                    });
+                    alert.show();
                 }
-            }
-        });
-
-        btnSaleShowDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
     }
@@ -144,5 +159,14 @@ public class SaleShowActivity extends AppCompatActivity {
             }
         }
         return positions;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            tlSale.removeAllViews();
+            displayTable();
+        }
     }
 }
