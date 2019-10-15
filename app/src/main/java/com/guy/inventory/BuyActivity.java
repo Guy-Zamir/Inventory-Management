@@ -7,15 +7,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Date;
+
 public class BuyActivity extends AppCompatActivity {
 
-    EditText etBuyDate, etBuySupplier, etBuyID, etBuyKaratPrice, etBuyKaratWeight, etBuyDoneWeight, etBuyWage;
+    DatePicker dpBuyDate;
+    EditText etBuySupplier, etBuyID, etBuyKaratPrice, etBuyKaratWeight, etBuyDoneWeight, etBuyWage;
     CheckBox cbBuyPolish, cbBuyDone;
     Button btnBuySubmit;
-    String supplier, id, date;
+    String supplier, id;
+    int day, month, year;
     boolean polish, done;
     double price, weight, doneWeight, wage;
 
@@ -24,7 +29,7 @@ public class BuyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buyactivity);
 
-        etBuyDate = findViewById(R.id.etBuyDate);
+        dpBuyDate = findViewById(R.id.dpBuyDate);
         etBuySupplier = findViewById(R.id.etBuySupplier);
         etBuyID = findViewById(R.id.etBuyID);
         etBuyKaratPrice = findViewById(R.id.etBuyKaratPrice);
@@ -67,41 +72,32 @@ public class BuyActivity extends AppCompatActivity {
         btnBuySubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean ok = true;
-                boolean theDate = true;
+                int toast = 0;
 
-                if (etBuyDate.getText().toString().isEmpty()) {
-                    ok = false;
-                } else if (etBuyDate.getText().toString().length() != 6) {
-                    theDate = false;
-                } else {
-                    date = etBuyDate.getText().toString().substring(0,2);
-                    date += ".";
-                    date += etBuyDate.getText().toString().substring(2,4);
-                    date += ".";
-                    date += etBuyDate.getText().toString().substring(4,6);
-                }
+                day = dpBuyDate.getDayOfMonth();
+                month = dpBuyDate.getDayOfMonth();
+                year = dpBuyDate.getYear();
 
                 if (etBuySupplier.getText().toString().isEmpty()) {
-                    ok = false;
+                    toast = 1;
                 } else {
                     supplier = etBuySupplier.getText().toString();
                 }
 
                 if (etBuyID.getText().toString().isEmpty()) {
-                    ok = false;
+                    toast = 1;
                 } else {
                     id = etBuyID.getText().toString();
                 }
 
                 if (etBuyKaratPrice.getText().toString().isEmpty()) {
-                    ok = false;
+                    toast = 1;
                 } else {
                     price = Double.parseDouble(etBuyKaratPrice.getText().toString());
                 }
 
                 if (etBuyKaratWeight.getText().toString().isEmpty()) {
-                    ok = false;
+                    toast = 1;
                 } else {
                     weight = Double.parseDouble(etBuyKaratWeight.getText().toString());
                 }
@@ -111,7 +107,8 @@ public class BuyActivity extends AppCompatActivity {
 
                 if (etBuyDoneWeight.getText().toString().isEmpty()) {
                     wage = -1;
-                } else {
+                } else if (Double.parseDouble(etBuyDoneWeight.getText().toString()) > weight) {
+                    toast = 2;
                     doneWeight = Double.parseDouble(etBuyDoneWeight.getText().toString());
                 }
 
@@ -121,23 +118,31 @@ public class BuyActivity extends AppCompatActivity {
                     wage = Double.parseDouble(etBuyWage.getText().toString());
                 }
 
-                if (!theDate) {
-                    Toast.makeText(BuyActivity.this, "יש למלא את התאריך ב6 ספרות", Toast.LENGTH_SHORT).show();
-                } else if (ok) {
-                    Intent intent = new Intent();
-                    intent.putExtra("date", date);
-                    intent.putExtra("supplier", supplier);
-                    intent.putExtra("id", id);
-                    intent.putExtra("price", price);
-                    intent.putExtra("weight", weight);
-                    intent.putExtra("polish", polish);
-                    intent.putExtra("doneWeight", doneWeight);
-                    intent.putExtra("wage", wage);
-                    setResult(RESULT_OK, intent);
-                    finishActivity(MainActivity.buy);
-                    finish();
-                } else {
-                    Toast.makeText(BuyActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                switch (toast) {
+                    case 1:
+                        Toast.makeText(BuyActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 2:
+                        Toast.makeText(BuyActivity.this, "לא ניתן להזין משקל גמור גבוה ממשקל החבילה", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 0:
+                        Intent intent = new Intent();
+                        intent.putExtra("day", day);
+                        intent.putExtra("month", month);
+                        intent.putExtra("year", year);
+                        intent.putExtra("supplier", supplier);
+                        intent.putExtra("id", id);
+                        intent.putExtra("price", price);
+                        intent.putExtra("weight", weight);
+                        intent.putExtra("polish", polish);
+                        intent.putExtra("done", done);
+                        intent.putExtra("doneWeight", doneWeight);
+                        intent.putExtra("wage", wage);
+                        setResult(RESULT_OK, intent);
+                        finishActivity(MainActivity.buy);
+                        finish();
                 }
             }
         });

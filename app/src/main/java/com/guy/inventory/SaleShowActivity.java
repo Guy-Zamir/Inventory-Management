@@ -3,6 +3,7 @@ package com.guy.inventory;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class SaleShowActivity extends AppCompatActivity {
@@ -61,10 +61,9 @@ public class SaleShowActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void displayTable() {
-        NumberFormat nf = new DecimalFormat("#.####");
+        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
         checkBoxes = new ArrayList<>();
         for (int i = MainActivity.saleArray.size() - 1; i >= 0; i--) {
-            CheckBox cb;
             TextView date;
             TextView company;
             TextView saleSum;
@@ -74,10 +73,7 @@ public class SaleShowActivity extends AppCompatActivity {
             date = new TextView(SaleShowActivity.this);
             company = new TextView(SaleShowActivity.this);
             saleSum = new TextView(SaleShowActivity.this);
-            cb = new CheckBox(SaleShowActivity.this);
 
-            cb.setHeight(150);
-            checkBoxes.add(cb);
 
             date.setGravity(Gravity.CENTER);
             date.setWidth(225);
@@ -90,7 +86,7 @@ public class SaleShowActivity extends AppCompatActivity {
             company.setTypeface(Typeface.DEFAULT_BOLD);
 
             saleSum.setGravity(Gravity.CENTER);
-            saleSum.setWidth(250);
+            saleSum.setWidth(275);
             saleSum.setTextColor(getResources().getColor(R.color.colorBlack));
             saleSum.setTypeface(Typeface.DEFAULT_BOLD);
 
@@ -115,6 +111,13 @@ public class SaleShowActivity extends AppCompatActivity {
                 i+=1;
 
             } else {
+                CheckBox cb;
+                cb = new CheckBox(SaleShowActivity.this);
+
+                cb.setWidth(100);
+                cb.setHeight(125);
+                checkBoxes.add(cb);
+
                 date.setText(MainActivity.saleArray.get(i).getDate());
                 company.setText(MainActivity.saleArray.get(i).getCompany());
                 saleSum.setText((nf.format(MainActivity.saleArray.get(i).getSaleSum())) + "$");
@@ -123,6 +126,11 @@ public class SaleShowActivity extends AppCompatActivity {
                 tableRow.addView(company);
                 tableRow.addView(saleSum);
                 tlSale.addView(tableRow);
+
+                View underLine = new View(this);
+                underLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 2));
+                underLine.setBackgroundColor(Color.rgb(51, 51, 51));
+                tlSale.addView(underLine);
             }
         }
     }

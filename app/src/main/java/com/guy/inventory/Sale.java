@@ -2,9 +2,10 @@ package com.guy.inventory;
 
 public class Sale {
     private double saleSum;
-    private String company, id, date;
+    private int date;
+    private String company, id;
 
-    public Sale(String date, String company, String id, double saleSum) {
+    public Sale(int date, String company, String id, double saleSum) {
         this.saleSum = saleSum;
         this.company = company;
         this.id = id;
@@ -27,11 +28,11 @@ public class Sale {
         this.id = id;
     }
 
-    public String getDate() {
+    public int getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(int date) {
         this.date = date;
     }
 

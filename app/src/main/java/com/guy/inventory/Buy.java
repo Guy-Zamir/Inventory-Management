@@ -2,10 +2,11 @@ package com.guy.inventory;
 
 public class Buy {
     private double price, weight, doneWeight, wage;
-    private String supplier, id, date;
+    private String supplier, id;
+    private int date;
     private boolean polish, done;
 
-    public Buy(String date, String supplier, String id, double price, double weight, boolean polish, boolean done, double doneWeight, double wage) {
+    public Buy(int date, String supplier, String id, double price, double weight, boolean polish, boolean done, double doneWeight, double wage) {
         this.date = date;
         this.supplier = supplier;
         this.id = id;
@@ -48,7 +49,7 @@ public class Buy {
         return id;
     }
 
-    public String getDate() {
+    public int getDate() {
         return date;
     }
 
