@@ -24,7 +24,7 @@ public class BuyEditActivity extends AppCompatActivity {
     String supplier = "", id = "", date = "";
     double price = 0, weight = 0, doneWeight = 0, wage = 0;
     boolean done, polish;
-    int toast = 0;
+    boolean toast = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,25 +89,25 @@ public class BuyEditActivity extends AppCompatActivity {
                 date = dayText + monthText + yearText;
 
                 if (etBuyEditSupplier.getText().toString().isEmpty()) {
-                    toast = 1;
+                    toast = true;
                 } else {
                     supplier = etBuyEditSupplier.getText().toString();
                 }
 
                 if (etBuyEditID.getText().toString().isEmpty()) {
-                    toast = 1;
+                    toast = true;
                 } else {
                     id = etBuyEditID.getText().toString();
                 }
 
                 if (etBuyEditPrice.getText().toString().isEmpty()) {
-                    toast = 1;
+                    toast = true;
                 } else {
                     price = Double.parseDouble(etBuyEditPrice.getText().toString());
                 }
 
                 if (etBuyEditWeight.getText().toString().isEmpty()) {
-                    toast = 1;
+                    toast = true;
                 } else {
                     weight = Double.parseDouble(etBuyEditWeight.getText().toString());
                 }
@@ -115,70 +115,43 @@ public class BuyEditActivity extends AppCompatActivity {
                 polish = cbBuyEditPolish.isChecked();
                 done = cbBuyEditDone.isChecked();
 
-                if (cbBuyEditPolish.isChecked()) {
-                    done = true;
-                    doneWeight = Double.parseDouble(etBuyEditWeight.getText().toString());
-                    wage = 0;
+                if (etBuyEditDoneWeight.getText().toString().isEmpty()) {
+                    toast = true;
                 } else {
-                    if (cbBuyEditDone.isChecked()) {
-
-                        if (etBuyEditDoneWeight.getText().toString().isEmpty()) {
-                            toast = 3;
-                        } else if (Double.valueOf(etBuyEditDoneWeight.getText().toString()) > Double.parseDouble(etBuyEditPrice.getText().toString())) {
-                            toast = 2;
-                        } else {
-                            doneWeight = Double.parseDouble(etBuyEditWeight.getText().toString());
-                        }
-
-                        if (etBuyEditWage.getText().toString().isEmpty()) {
-                            wage = 50;
-                        } else {
-                            wage = Double.valueOf(etBuyEditWage.getText().toString());
-                        }
-                    } else {
-                        doneWeight = 0;
-                        wage = 0;
-                    }
+                    doneWeight = Double.parseDouble(etBuyEditDoneWeight.getText().toString());
                 }
 
-                switch (toast) {
-                    case 1:
-                        Toast.makeText(BuyEditActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
-                        break;
+                if (etBuyEditWage.getText().toString().isEmpty()) {
+                    toast = true;
+                } else {
+                    wage = Double.parseDouble(etBuyEditWage.getText().toString());
+                }
 
-                    case 2:
-                        Toast.makeText(BuyEditActivity.this, "לא ניתן להזין משקל גמור גבוה ממשקל החבילה", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 3:
-                        Toast.makeText(BuyEditActivity.this, "יש להזין את המקשל הגמור של החבליה", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 0:
-
-                        AlertDialog.Builder alert = new AlertDialog.Builder(BuyEditActivity.this);
-                        alert.setTitle("שינוי נתונים");
-                        alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
-                        alert.setNegativeButton(android.R.string.no, null);
-                        alert.setIcon(android.R.drawable.ic_dialog_alert);
-
-                        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                MainActivity.buyArray.get(position).setDate(date);
-                                MainActivity.buyArray.get(position).setSupplier(supplier);
-                                MainActivity.buyArray.get(position).setId(id);
-                                MainActivity.buyArray.get(position).setPrice(price);
-                                MainActivity.buyArray.get(position).setWeight(weight);
-                                MainActivity.buyArray.get(position).setPolish(polish);
-                                MainActivity.buyArray.get(position).setDone(done);
-                                MainActivity.buyArray.get(position).setDoneWeight(doneWeight);
-                                MainActivity.buyArray.get(position).setWage(wage);
-                                setResult(RESULT_OK);
-                                finishActivity(1);
-                                finish();
-                            }
-                        });
-                        alert.show();
+                if (toast) {
+                    Toast.makeText(BuyEditActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(BuyEditActivity.this);
+                    alert.setTitle("שינוי נתונים");
+                    alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
+                    alert.setNegativeButton(android.R.string.no, null);
+                    alert.setIcon(android.R.drawable.ic_dialog_alert);
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.buyArray.get(position).setDate(date);
+                            MainActivity.buyArray.get(position).setSupplier(supplier);
+                            MainActivity.buyArray.get(position).setId(id);
+                            MainActivity.buyArray.get(position).setPrice(price);
+                            MainActivity.buyArray.get(position).setWeight(weight);
+                            MainActivity.buyArray.get(position).setPolish(polish);
+                            MainActivity.buyArray.get(position).setDone(done);
+                            MainActivity.buyArray.get(position).setDoneWeight(doneWeight);
+                            MainActivity.buyArray.get(position).setWage(wage);
+                            setResult(RESULT_OK);
+                            finishActivity(1);
+                            finish();
+                        }
+                    });
+                    alert.show();
                 }
             }
         });

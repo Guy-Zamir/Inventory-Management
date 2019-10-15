@@ -43,7 +43,16 @@ public class SaleShowActivity extends AppCompatActivity {
         btnSaleShowDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (checkPositions().isEmpty()) {
+                    Toast.makeText(SaleShowActivity.this, "יש לסמן את הפריט שברצונך לערוך", Toast.LENGTH_SHORT).show();
+                } else if (checkPositions().size() > 1) {
+                    Toast.makeText(SaleShowActivity.this, "יש לבחור פריט אחד בלבד לעריכה", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(SaleShowActivity.this, SaleEditActivity.class);
+                    int pos = checkPositions().get(0);
+                    intent.putExtra("pos", pos);
+                    startActivityForResult(intent, 2);
+                }
             }
         });
 
@@ -81,27 +90,34 @@ public class SaleShowActivity extends AppCompatActivity {
         for (int i = MainActivity.saleArray.size() - 1; i >= 0; i--) {
             TextView date;
             TextView company;
+            TextView weight;
             TextView saleSum;
             TableRow tableRow;
 
             tableRow = new TableRow(SaleShowActivity.this);
             date = new TextView(SaleShowActivity.this);
             company = new TextView(SaleShowActivity.this);
+            weight = new TextView(SaleShowActivity.this);
             saleSum = new TextView(SaleShowActivity.this);
 
 
             date.setGravity(Gravity.CENTER);
-            date.setWidth(225);
+            date.setWidth(170);
             date.setTextColor(getResources().getColor(R.color.colorBlack));
             date.setTypeface(Typeface.DEFAULT_BOLD);
 
             company.setGravity(Gravity.CENTER);
-            company.setWidth(400);
+            company.setWidth(360);
             company.setTextColor(getResources().getColor(R.color.colorBlack));
             company.setTypeface(Typeface.DEFAULT_BOLD);
 
+            weight.setGravity(Gravity.CENTER);
+            weight.setWidth(150);
+            weight.setTextColor(getResources().getColor(R.color.colorBlack));
+            weight.setTypeface(Typeface.DEFAULT_BOLD);
+
             saleSum.setGravity(Gravity.CENTER);
-            saleSum.setWidth(275);
+            saleSum.setWidth(250);
             saleSum.setTextColor(getResources().getColor(R.color.colorBlack));
             saleSum.setTypeface(Typeface.DEFAULT_BOLD);
 
@@ -114,12 +130,17 @@ public class SaleShowActivity extends AppCompatActivity {
                 company.setPaintFlags(company.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 company.setTextSize(18);
 
+                weight.setText("משקל");
+                weight.setPaintFlags(saleSum.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                weight.setTextSize(18);
+
                 saleSum.setText("סכום");
                 saleSum.setPaintFlags(saleSum.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 saleSum.setTextSize(18);
 
                 tableRow.addView(date);
                 tableRow.addView(company);
+                tableRow.addView(weight);
                 tableRow.addView(saleSum);
                 tlSaleHeader.addView(tableRow);
                 firstDisplay = false;
@@ -129,16 +150,18 @@ public class SaleShowActivity extends AppCompatActivity {
                 CheckBox cb;
                 cb = new CheckBox(SaleShowActivity.this);
 
-                cb.setWidth(100);
+                cb.setWidth(75);
                 cb.setHeight(125);
                 checkBoxes.add(cb);
 
                 date.setText(String.valueOf(MainActivity.saleArray.get(i).getDate()).substring(0, 2) + "/" + String.valueOf(MainActivity.saleArray.get(i).getDate()).substring(2, 4));
                 company.setText(MainActivity.saleArray.get(i).getCompany());
+                weight.setText(nf.format(MainActivity.saleArray.get(i).getWeight()));
                 saleSum.setText((nf.format(MainActivity.saleArray.get(i).getSaleSum())) + "$");
                 tableRow.addView(cb);
                 tableRow.addView(date);
                 tableRow.addView(company);
+                tableRow.addView(weight);
                 tableRow.addView(saleSum);
                 tlSale.addView(tableRow);
 
@@ -164,7 +187,7 @@ public class SaleShowActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+        if (requestCode == 2) {
             tlSale.removeAllViews();
             displayTable();
         }

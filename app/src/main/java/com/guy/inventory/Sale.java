@@ -1,14 +1,15 @@
 package com.guy.inventory;
 
 public class Sale {
-    private double saleSum;
+    private double saleSum, weight;
     private String company, id, date;
 
-    public Sale(String date, String company, String id, double saleSum) {
+    public Sale(String date, String company, String id, double saleSum, double weight) {
         this.saleSum = saleSum;
         this.company = company;
         this.id = id;
         this.date = date;
+        this.weight = weight;
     }
 
     public double getSaleSum() {
@@ -41,5 +42,13 @@ public class Sale {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BuyEditActivity">
+    tools:context=".SaleEditActivity">
 
     <Button
         android:id="@+id/btnSaleEditHeader"
@@ -20,7 +20,7 @@
         android:textStyle="bold" />
 
     <DatePicker
-        android:id="@+id/dpBuyEditDate"
+        android:id="@+id/dpSaleEditDate"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:calendarViewShown="false"
@@ -36,7 +36,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvSaleEditSupplier"
+            android:id="@+id/tvSaleEditCompany"
             android:layout_width="275dp"
             android:layout_height="37dp"
             android:layout_weight="1"
@@ -46,7 +46,7 @@
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/etSaleEditSupplier"
+            android:id="@+id/etSaleEditCompany"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"

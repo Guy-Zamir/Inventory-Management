@@ -46,7 +46,6 @@ public class BuyShowActivity extends AppCompatActivity {
                     Toast.makeText(BuyShowActivity.this, "יש לסמן את הפריט שברצונך לערוך", Toast.LENGTH_SHORT).show();
                 } else if (checkPositions().size() > 1) {
                     Toast.makeText(BuyShowActivity.this, "יש לבחור פריט אחד בלבד לעריכה", Toast.LENGTH_SHORT).show();
-
                 } else {
                     Intent intent = new Intent(BuyShowActivity.this, BuyEditActivity.class);
                     intent.putExtra("position", checkPositions().get(0));

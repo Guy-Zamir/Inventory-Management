@@ -39,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
         buyArray.add(new Buy("07101992", "יהלומי דובשניות בעמ", "00234233", 1230, 14.2, false, true, 16.6, 50));
         buyArray.add(new Buy("07101992", "יהלומי קפאין בעמ", "0012313", 35, 1.2, false, true, 16.6, 50));
 
-        saleArray.add(new Sale("07101992", "יהלומי ביצ'צ'י בעמ", "1239823", 1214234.23));
-        saleArray.add(new Sale("07101992", "יהלומי ג'ינג'ר בעמ", "16516", 9432.26));
-        saleArray.add(new Sale("07101992", "יהלומי חומייני בעמ", "1893", 45453.26));
-        saleArray.add(new Sale("07101992", "יהלומי הגזמנו בעמ", "32186", 84513.84));
-        saleArray.add(new Sale("07101992", "יהלומי ג'ון סנוו בעמ", "12318", 18532.20));
-        saleArray.add(new Sale("07101992", "יהלומי ראגנאר בעמ", "16152", 18762.87));
+        saleArray.add(new Sale("07101992", "יהלומי ביצ'צ'י בעמ", "1239823", 12134.23, 100));
+        saleArray.add(new Sale("07101992", "יהלומי ג'ינג'ר בעמ", "16516", 9432.26, 24.23));
+        saleArray.add(new Sale("07101992", "יהלומי חומייני בעמ", "1893", 45453.26, 123.1));
+        saleArray.add(new Sale("07101992", "יהלומי הגזמנו בעמ", "32186", 84513.84, 9023));
+        saleArray.add(new Sale("07101992", "יהלומי ג'ון סנוו בעמ", "12318", 18532.29, 19.12));
+        saleArray.add(new Sale("07101992", "יהלומי ראגנאר בעמ", "16152", 18762.87, 74.34));
 
 
         btnResult.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 String company = data.getStringExtra("company");
                 String id = data.getStringExtra("id");
                 double saleSum = data.getDoubleExtra("saleSum", 0);
-                Sale sale = new Sale(date, company, id, saleSum);
+                double weight = data.getDoubleExtra("weight", 0);
+                Sale sale = new Sale(date, company, id, saleSum, weight);
                 saleArray.add(sale);
             }
         }

@@ -13,11 +13,11 @@ import android.widget.Toast;
 public class SaleActivity extends AppCompatActivity {
 
     DatePicker dpSaleDate;
-    EditText etSaleCompany, etSaleID, etSaleSum;
+    EditText etSaleCompany, etSaleID, etSaleSum, etSaleWeight;
     Button btnSaleSubmit;
-    String company, id, date;
+    String company, id;
     int day, month, year;
-    double saleSum;
+    double saleSum, weight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class SaleActivity extends AppCompatActivity {
         etSaleID = findViewById(R.id.etSaleID);
         etSaleSum = findViewById(R.id.etSaleSum);
         btnSaleSubmit = findViewById(R.id.btnSaleSubmit);
+        etSaleWeight = findViewById(R.id.etSaleWeight);
 
         btnSaleSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +52,12 @@ public class SaleActivity extends AppCompatActivity {
                     id = etSaleID.getText().toString();
                 }
 
+                if (etSaleWeight.getText().toString().isEmpty()) {
+                    toast = true;
+                } else {
+                    weight = Double.parseDouble(etSaleWeight.getText().toString());
+                }
+
                 if (etSaleSum.getText().toString().isEmpty()) {
                     toast = true;
                 } else {
@@ -65,6 +72,7 @@ public class SaleActivity extends AppCompatActivity {
                     intent.putExtra("company", company);
                     intent.putExtra("id", id);
                     intent.putExtra("saleSum", saleSum);
+                    intent.putExtra("weight", weight);
                     setResult(RESULT_OK, intent);
                     finishActivity(MainActivity.buy);
                     finish();
