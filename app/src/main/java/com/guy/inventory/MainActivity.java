@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 
@@ -45,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         saleArray.add(new Sale("07101992", "יהלומי הגזמנו בעמ", "32186", 84513.84, 9023));
         saleArray.add(new Sale("07101992", "יהלומי ג'ון סנוו בעמ", "12318", 18532.29, 19.12));
         saleArray.add(new Sale("07101992", "יהלומי ראגנאר בעמ", "16152", 18762.87, 74.34));
-
 
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,14 +113,15 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if (requestCode == sale) {
             if (data != null) {
-                @SuppressLint("DefaultLocale") String day = String.format("%02d", data.getIntExtra("day", 0));
-                @SuppressLint("DefaultLocale") String month = String.format("%02d", (data.getIntExtra("month", 0)+1));
-                @SuppressLint("DefaultLocale") String year = String.format("%02d", data.getIntExtra("year", 0));
+                Bundle bundle = data.getExtras();
+                @SuppressLint("DefaultLocale") String day = String.format("%02d", bundle.getInt("day", 0));
+                @SuppressLint("DefaultLocale") String month = String.format("%02d", (bundle.getInt("month", 0)+1));
+                @SuppressLint("DefaultLocale") String year = String.format("%02d", bundle.getInt("year", 0));
                 String date = day+month+year;
-                String company = data.getStringExtra("company");
-                String id = data.getStringExtra("id");
-                double saleSum = data.getDoubleExtra("saleSum", 0);
-                double weight = data.getDoubleExtra("weight", 0);
+                String company = bundle.getString("company");
+                String id = bundle.getString("id");
+                double saleSum = bundle.getDouble("saleSum", 0);
+                double weight = bundle.getDouble("weight", 0);
                 Sale sale = new Sale(date, company, id, saleSum, weight);
                 saleArray.add(sale);
             }

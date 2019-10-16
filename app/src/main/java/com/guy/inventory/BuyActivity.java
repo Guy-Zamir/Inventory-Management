@@ -37,31 +37,16 @@ public class BuyActivity extends AppCompatActivity {
         cbBuyDone = findViewById(R.id.cbBuyDone);
         btnBuySubmit = findViewById(R.id.btnBuySubmit);
 
-        etBuyDoneWeight.setVisibility(View.GONE);
-        etBuyWage.setVisibility(View.GONE);
-
         cbBuyPolish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (cbBuyPolish.isChecked()) {
-                    cbBuyDone.setVisibility(View.GONE);
-                    cbBuyDone.setChecked(false);
-                } else {
-                    cbBuyDone.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        cbBuyDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (cbBuyDone.isChecked()) {
-                    etBuyDoneWeight.setVisibility(View.VISIBLE);
-                    etBuyWage.setVisibility(View.VISIBLE);
-                    cbBuyPolish.setChecked(false);
-                } else {
-                    etBuyDoneWeight.setVisibility(View.GONE);
+                    cbBuyDone.setChecked(true);
                     etBuyWage.setVisibility(View.GONE);
+                    etBuyDoneWeight.setVisibility(View.GONE);
+                } else {
+                    etBuyWage.setVisibility(View.VISIBLE);
+                    etBuyDoneWeight.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -102,17 +87,35 @@ public class BuyActivity extends AppCompatActivity {
                 polish = cbBuyPolish.isChecked();
                 done = cbBuyDone.isChecked();
 
-                if (etBuyDoneWeight.getText().toString().isEmpty()) {
-                    toast = true;
+                if (polish) {
+                    wage = 0;
+                    doneWeight = weight;
+                } else if (done){
+                    if (etBuyWage.getText().toString().isEmpty()) {
+                        wage = 50;
+                    } else {
+                        wage = Double.valueOf(etBuyWage.getText().toString());
+                    }
+
+                    if (etBuyDoneWeight.getText().toString().isEmpty()) {
+                        toast = true;
+                    } else {
+                        doneWeight = Double.valueOf(etBuyDoneWeight.getText().toString());
+                    }
                 } else {
-                    doneWeight = Double.valueOf(etBuyDoneWeight.getText().toString());
+                    if (etBuyWage.getText().toString().isEmpty()) {
+                        wage = 50;
+                    } else {
+                        wage = Double.valueOf(etBuyWage.getText().toString());
+                    }
+                    if (etBuyDoneWeight.getText().toString().isEmpty()) {
+                        doneWeight = 0;
+                    } else {
+                        done = true;
+                        doneWeight = Double.valueOf(etBuyDoneWeight.getText().toString());
+                    }
                 }
 
-                if (etBuyWage.getText().toString().isEmpty()) {
-                    toast = true;
-                } else {
-                    wage = Double.valueOf(etBuyWage.getText().toString());
-                }
 
                 if (toast) {
                     Toast.makeText(BuyActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();

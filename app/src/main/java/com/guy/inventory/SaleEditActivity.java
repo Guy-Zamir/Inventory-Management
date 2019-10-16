@@ -32,7 +32,7 @@ public class SaleEditActivity extends AppCompatActivity {
         etSaleEditSum = findViewById(R.id.etSaleEditSum);
         btnSaleEditSubmit = findViewById(R.id.btnSaleEditSubmit);
 
-        pos = getIntent().getIntExtra("pos", 0);
+        pos = getIntent().getIntExtra("pos", 3);
         etSaleEditCompany.setText(MainActivity.saleArray.get(pos).getCompany());
         etSaleEditID.setText(MainActivity.saleArray.get(pos).getId());
         etSaleEditWeight.setText(String.valueOf(MainActivity.saleArray.get(pos).getWeight()));

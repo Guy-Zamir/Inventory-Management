@@ -62,17 +62,7 @@ public class BuyEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (cbBuyEditPolish.isChecked()) {
-                    etBuyEditDoneWeight.setVisibility(View.GONE);
-                    etBuyEditWage.setVisibility(View.GONE);
-                    cbBuyEditDone.setVisibility(View.GONE);
-                    tvBuyEditDoneWeight.setVisibility(View.GONE);
-                    tvBuyEditWage.setVisibility(View.GONE);
-                } else {
-                    etBuyEditDoneWeight.setVisibility(View.VISIBLE);
-                    etBuyEditWage.setVisibility(View.VISIBLE);
-                    cbBuyEditDone.setVisibility(View.VISIBLE);
-                    tvBuyEditDoneWeight.setVisibility(View.VISIBLE);
-                    tvBuyEditWage.setVisibility(View.VISIBLE);
+                    cbBuyEditDone.setChecked(true);
                 }
             }
         });
@@ -115,16 +105,33 @@ public class BuyEditActivity extends AppCompatActivity {
                 polish = cbBuyEditPolish.isChecked();
                 done = cbBuyEditDone.isChecked();
 
-                if (etBuyEditDoneWeight.getText().toString().isEmpty()) {
-                    toast = true;
-                } else {
-                    doneWeight = Double.parseDouble(etBuyEditDoneWeight.getText().toString());
-                }
+                if (polish) {
+                    wage = 0;
+                    doneWeight = weight;
+                } else if (done){
+                    if (etBuyEditWage.getText().toString().isEmpty()) {
+                        wage = 50;
+                    } else {
+                        wage = Double.valueOf(etBuyEditWage.getText().toString());
+                    }
 
-                if (etBuyEditWage.getText().toString().isEmpty()) {
-                    toast = true;
+                    if (etBuyEditDoneWeight.getText().toString().isEmpty()) {
+                        toast = true;
+                    } else {
+                        doneWeight = Double.valueOf(etBuyEditDoneWeight.getText().toString());
+                    }
                 } else {
-                    wage = Double.parseDouble(etBuyEditWage.getText().toString());
+                    if (etBuyEditWage.getText().toString().isEmpty()) {
+                        wage = 50;
+                    } else {
+                        wage = Double.valueOf(etBuyEditWage.getText().toString());
+                    }
+                    if (etBuyEditDoneWeight.getText().toString().isEmpty()) {
+                        doneWeight = 0;
+                    } else {
+                        done = true;
+                        doneWeight = Double.valueOf(etBuyEditDoneWeight.getText().toString());
+                    }
                 }
 
                 if (toast) {
