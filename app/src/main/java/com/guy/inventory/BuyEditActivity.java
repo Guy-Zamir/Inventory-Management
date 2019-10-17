@@ -53,9 +53,9 @@ public class BuyEditActivity extends AppCompatActivity {
         cbBuyEditDone.setChecked(MainActivity.buyArray.get(position).isDone());
         cbBuyEditPolish.setChecked(MainActivity.buyArray.get(position).isPolish());
 
-        int day = Integer.parseInt(MainActivity.buyArray.get(position).getDate().substring(0,2));
-        int month = Integer.parseInt(MainActivity.buyArray.get(position).getDate().substring(2,4))-1;
-        int year = Integer.parseInt(MainActivity.buyArray.get(position).getDate().substring(4,8));
+        int day = Integer.parseInt(MainActivity.buyArray.get(position).getBuyDate().substring(0,2));
+        int month = Integer.parseInt(MainActivity.buyArray.get(position).getBuyDate().substring(2,4))-1;
+        int year = Integer.parseInt(MainActivity.buyArray.get(position).getBuyDate().substring(4,8));
         dpBuyEditDate.updateDate(year, month, day);
 
         cbBuyEditPolish.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +144,7 @@ public class BuyEditActivity extends AppCompatActivity {
                     alert.setIcon(android.R.drawable.ic_dialog_alert);
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.buyArray.get(position).setDate(date);
+                            MainActivity.buyArray.get(position).setBuyDate(date);
                             MainActivity.buyArray.get(position).setSupplier(supplier);
                             MainActivity.buyArray.get(position).setId(id);
                             MainActivity.buyArray.get(position).setPrice(price);

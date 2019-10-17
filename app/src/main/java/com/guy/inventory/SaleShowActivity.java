@@ -153,7 +153,7 @@ public class SaleShowActivity extends AppCompatActivity {
                 cb.setHeight(125);
                 checkBoxes.add(cb);
 
-                date.setText(String.valueOf(MainActivity.saleArray.get(i).getDate()).substring(0, 2) + "/" + String.valueOf(MainActivity.saleArray.get(i).getDate()).substring(2, 4));
+                date.setText(String.valueOf(MainActivity.saleArray.get(i).getSaleDate()).substring(0, 2) + "/" + String.valueOf(MainActivity.saleArray.get(i).getSaleDate()).substring(2, 4));
                 company.setText(MainActivity.saleArray.get(i).getCompany());
                 weight.setText(nf.format(MainActivity.saleArray.get(i).getWeight()));
                 saleSum.setText((nf.format(MainActivity.saleArray.get(i).getSaleSum())) + "$");

@@ -24,7 +24,7 @@ public class SaleEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buy_edit);
+        setContentView(R.layout.activity_sale_edit);
         dpSaleEditDate = findViewById(R.id.dpSaleEditDate);
         etSaleEditCompany = findViewById(R.id.etSaleEditCompany);
         etSaleEditID = findViewById(R.id.etSaleEditID);
@@ -32,15 +32,15 @@ public class SaleEditActivity extends AppCompatActivity {
         etSaleEditSum = findViewById(R.id.etSaleEditSum);
         btnSaleEditSubmit = findViewById(R.id.btnSaleEditSubmit);
 
-        pos = getIntent().getIntExtra("pos", 3);
+        pos = getIntent().getIntExtra("pos", 0);
         etSaleEditCompany.setText(MainActivity.saleArray.get(pos).getCompany());
         etSaleEditID.setText(MainActivity.saleArray.get(pos).getId());
         etSaleEditWeight.setText(String.valueOf(MainActivity.saleArray.get(pos).getWeight()));
         etSaleEditSum.setText(String.valueOf(MainActivity.saleArray.get(pos).getSaleSum()));
 
-        int day = Integer.parseInt(MainActivity.saleArray.get(pos).getDate().substring(0,2));
-        int month = Integer.parseInt(MainActivity.saleArray.get(pos).getDate().substring(2,4))-1;
-        int year = Integer.parseInt(MainActivity.saleArray.get(pos).getDate().substring(4,8));
+        int day = Integer.parseInt(MainActivity.saleArray.get(pos).getSaleDate().substring(0,2));
+        int month = Integer.parseInt(MainActivity.saleArray.get(pos).getSaleDate().substring(2,4))-1;
+        int year = Integer.parseInt(MainActivity.saleArray.get(pos).getSaleDate().substring(4,8));
         dpSaleEditDate.updateDate(year, month, day);
 
         btnSaleEditSubmit.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +88,7 @@ public class SaleEditActivity extends AppCompatActivity {
                     alert.setIcon(android.R.drawable.ic_dialog_alert);
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.saleArray.get(pos).setDate(date);
+                            MainActivity.saleArray.get(pos).setSaleDate(date);
                             MainActivity.saleArray.get(pos).setCompany(company);
                             MainActivity.saleArray.get(pos).setId(id);
                             MainActivity.saleArray.get(pos).setWeight(weight);

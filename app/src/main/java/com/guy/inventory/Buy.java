@@ -2,19 +2,19 @@ package com.guy.inventory;
 
 public class Buy {
     private double price, weight, doneWeight, wage;
-    private String supplier, id, date;
+    private String supplier, id, buyDate;
     private boolean polish, done;
 
-    public Buy(String date, String supplier, String id, double price, double weight, boolean polish, boolean done, double doneWeight, double wage) {
-        this.date = date;
-        this.supplier = supplier;
-        this.id = id;
-        this.price = price;
-        this.weight = weight;
-        this.polish = polish;
-        this.done = done;
-        this.doneWeight = doneWeight;
-        this.wage = wage;
+    public Buy() {
+        this.buyDate = null;
+        this.supplier = null;
+        this.id = null;
+        this.price  = 0;
+        this.weight = 0;
+        this.polish = false;
+        this.done = false;
+        this.doneWeight = 0;
+        this.wage = 0;
     }
 
     public double getPrice() {
@@ -41,8 +41,8 @@ public class Buy {
         return id;
     }
 
-    public String getDate() {
-        return date;
+    public String getBuyDate() {
+        return buyDate;
     }
 
     public boolean isPolish() {
@@ -77,8 +77,8 @@ public class Buy {
         this.id = id;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setBuyDate(String buyDate) {
+        this.buyDate = buyDate;
     }
 
     public void setPolish(boolean polish) {

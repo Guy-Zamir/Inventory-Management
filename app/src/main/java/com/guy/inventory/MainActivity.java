@@ -35,21 +35,6 @@ public class MainActivity extends AppCompatActivity {
         btnBuyShow = findViewById(R.id.btnBuyShow);
         btnSaleShow = findViewById(R.id.btnSaleShow);
 
-        buyArray.add(new Buy("07101992", "יהלומי אלכס דניאל בעמ", "10016", 335, 26.61, false, false, 26.61, 50));
-        buyArray.add(new Buy("07101992", "יהלומי דבש בעמ", "12312", 340, 123.2, false, true, 16.6, 50));
-        buyArray.add(new Buy("07101992", "יהלומי חרא בעמ", "23234", 543, 564.2, false, true, 16.6, 50));
-        buyArray.add(new Buy("07101992", "יהלומי קקי בעמ", "234231", 1543.00, 489.2, false, true, 16.6, 50));
-        buyArray.add(new Buy("07101992", "יהלומי גמלים בעמ", "03434", 832.12, 152.2, false, false, 16.6, 50));
-        buyArray.add(new Buy("07101992", "יהלומי דובשניות בעמ", "00234233", 1230, 14.2, false, true, 16.6, 50));
-        buyArray.add(new Buy("07101992", "יהלומי קפאין בעמ", "0012313", 35, 1.2, false, true, 16.6, 50));
-
-        saleArray.add(new Sale("07101992", "יהלומי ביצ'צ'י בעמ", "1239823", 12134.23, 100));
-        saleArray.add(new Sale("07101992", "יהלומי ג'ינג'ר בעמ", "16516", 9432.26, 24.23));
-        saleArray.add(new Sale("07101992", "יהלומי חומייני בעמ", "1893", 45453.26, 123.1));
-        saleArray.add(new Sale("07101992", "יהלומי הגזמנו בעמ", "32186", 84513.84, 9023));
-        saleArray.add(new Sale("07101992", "יהלומי ג'ון סנוו בעמ", "12318", 18532.29, 19.12));
-        saleArray.add(new Sale("07101992", "יהלומי ראגנאר בעמ", "16152", 18762.87, 74.34));
-
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BuyActivity.class);
-                startActivityForResult(intent, buy);
+                startActivity(intent);
             }
         });
 
@@ -70,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SaleActivity.class);
-                startActivityForResult(intent, sale);
+                startActivity(intent);
             }
         });
 
@@ -89,42 +74,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == buy) {
-            if (data != null) {
-                @SuppressLint("DefaultLocale") String day = String.format("%02d", data.getIntExtra("day", 0));
-                @SuppressLint("DefaultLocale") String month = String.format("%02d", (data.getIntExtra("month", 0)+1));
-                @SuppressLint("DefaultLocale") String year = String.format("%02d", data.getIntExtra("year", 0));
-                String date = day+month+year;
-                String supplier = data.getStringExtra("supplier");
-                String id = data.getStringExtra("id");
-                double price = data.getDoubleExtra("price", 0);
-                double weight = data.getDoubleExtra("weight", 0);
-                double doneWeight = data.getDoubleExtra("doneWeight", 0);
-                double wage = data.getDoubleExtra("wage", 0);
-                boolean polish = data.getBooleanExtra("polish", false);
-                boolean done = data.getBooleanExtra("done", false);
-                Buy buy = new Buy(date, supplier, id, price, weight, polish, done, doneWeight, wage);
-                buyArray.add(buy);
-            }
-        } else if (requestCode == sale) {
-            if (data != null) {
-                Bundle bundle = data.getExtras();
-                @SuppressLint("DefaultLocale") String day = String.format("%02d", bundle.getInt("day", 0));
-                @SuppressLint("DefaultLocale") String month = String.format("%02d", (bundle.getInt("month", 0)+1));
-                @SuppressLint("DefaultLocale") String year = String.format("%02d", bundle.getInt("year", 0));
-                String date = day+month+year;
-                String company = bundle.getString("company");
-                String id = bundle.getString("id");
-                double saleSum = bundle.getDouble("saleSum", 0);
-                double weight = bundle.getDouble("weight", 0);
-                Sale sale = new Sale(date, company, id, saleSum, weight);
-                saleArray.add(sale);
-            }
-        }
     }
 }

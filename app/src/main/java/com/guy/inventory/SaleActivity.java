@@ -2,6 +2,7 @@ package com.guy.inventory;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,13 +11,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+
 public class SaleActivity extends AppCompatActivity {
 
     DatePicker dpSaleDate;
     EditText etSaleCompany, etSaleID, etSaleSum, etSaleWeight;
     Button btnSaleSubmit;
-    String company, id;
-    int day, month, year;
+    String company, id, date;
     double saleSum, weight;
 
     @Override
@@ -36,9 +40,11 @@ public class SaleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean toast = false;
 
-                day = dpSaleDate.getDayOfMonth();
-                month = dpSaleDate.getMonth();
-                year = dpSaleDate.getYear();
+
+                @SuppressLint("DefaultLocale") String day = String.format("%02d", dpSaleDate.getDayOfMonth());
+                @SuppressLint("DefaultLocale") String month = String.format("%02d", (dpSaleDate.getMonth()+1));
+                @SuppressLint("DefaultLocale") String year = String.format("%02d", dpSaleDate.getYear());
+                date = day+month+year;
 
                 if (etSaleCompany.getText().toString().isEmpty()) {
                     toast = true;
@@ -64,20 +70,28 @@ public class SaleActivity extends AppCompatActivity {
                     saleSum = Double.parseDouble(etSaleSum.getText().toString());
                 }
 
-                if (!toast) {
-                    Intent intent = new Intent();
-                    intent.putExtra("day", day);
-                    intent.putExtra("month", month);
-                    intent.putExtra("year", year);
-                    intent.putExtra("company", company);
-                    intent.putExtra("id", id);
-                    intent.putExtra("saleSum", saleSum);
-                    intent.putExtra("weight", weight);
-                    setResult(RESULT_OK, intent);
-                    finishActivity(MainActivity.buy);
-                    finish();
-                } else {
+                if (toast) {
                     Toast.makeText(SaleActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                } else {
+                    Sale sale = new Sale();
+                    sale.setSaleDate(date);
+                    sale.setCompany(company);
+                    sale.setId(id);
+                    sale.setSaleSum(saleSum);
+                    sale.setWeight(weight);
+                    Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
+                        @Override
+                        public void handleResponse(Sale response) {
+                            Toast.makeText(SaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(SaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    MainActivity.saleArray.add(sale);
+                    finish();
                 }
             }
         });
