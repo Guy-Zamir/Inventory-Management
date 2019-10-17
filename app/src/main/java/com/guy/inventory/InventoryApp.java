@@ -1,7 +1,6 @@
 package com.guy.inventory;
 
 import android.app.Application;
-
 import com.backendless.Backendless;
 
 public class InventoryApp extends Application {
