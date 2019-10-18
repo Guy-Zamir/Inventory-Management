@@ -21,22 +21,22 @@ public class SummaryActivity extends AppCompatActivity {
         tvAllWork = findViewById(R.id.tvAllWork);
         tvAllWorkWeight = findViewById(R.id.tvAllWorkWeight);
         DecimalFormat nf = new DecimalFormat( "#,###,###,###,###,###.##" );
-
-        for (Buy buy : MainActivity.buyArray) {
-            allBuys += (buy.getPrice() * buy.getWeight());
-            if (!buy.isDone()) {
-                allWork += buy.getPrice()*buy.getWeight();
-                allWorkWeight += buy.getWeight();
-            }
-        }
-
-        for (Sale sale : MainActivity.saleArray) {
-            allSales += sale.getSaleSum();
-        }
-
-        tvAllBuys.setText(nf.format(allBuys)+"$");
-        tvAllSales.setText(nf.format(allSales)+"$");
-        tvAllWork.setText(nf.format(allWork)+"$");
-        tvAllWorkWeight.setText(nf.format(allWorkWeight) + "קראט ");
+//
+//        for (Buy buy : MainActivity.buyArray) {
+//            allBuys += (buy.getPrice() * buy.getWeight());
+//            if (!buy.isDone()) {
+//                allWork += buy.getPrice()*buy.getWeight();
+//                allWorkWeight += buy.getWeight();
+//            }
+//        }
+//
+//        for (Sale sale : MainActivity.saleArray) {
+//            allSales += sale.getSaleSum();
+//        }
+//
+//        tvAllBuys.setText(nf.format(allBuys)+"$");
+//        tvAllSales.setText(nf.format(allSales)+"$");
+//        tvAllWork.setText(nf.format(allWork)+"$");
+//        tvAllWorkWeight.setText(nf.format(allWorkWeight) + "קראט ");
     }
 }

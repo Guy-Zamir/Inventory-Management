@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -17,6 +18,9 @@ import com.backendless.exceptions.BackendlessFault;
 
 public class SaleActivity extends AppCompatActivity {
 
+    private View mProgressView;
+    private View mLoginFormView;
+    private TextView tvLoad;
     DatePicker dpSaleDate;
     EditText etSaleCompany, etSaleID, etSaleSum, etSaleWeight;
     Button btnSaleSubmit;
@@ -28,6 +32,9 @@ public class SaleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saleactivity);
 
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+        tvLoad = findViewById(R.id.tvLoad);
         dpSaleDate = findViewById(R.id.dpSaleDate);
         etSaleCompany = findViewById(R.id.etSaleCompany);
         etSaleID = findViewById(R.id.etSaleID);
@@ -40,33 +47,18 @@ public class SaleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean toast = false;
 
-
                 @SuppressLint("DefaultLocale") String day = String.format("%02d", dpSaleDate.getDayOfMonth());
                 @SuppressLint("DefaultLocale") String month = String.format("%02d", (dpSaleDate.getMonth()+1));
                 @SuppressLint("DefaultLocale") String year = String.format("%02d", dpSaleDate.getYear());
                 date = day+month+year;
 
-                if (etSaleCompany.getText().toString().isEmpty()) {
+                if (etSaleCompany.getText().toString().isEmpty() || etSaleID.getText().toString().isEmpty() ||
+                        etSaleWeight.getText().toString().isEmpty() || etSaleSum.getText().toString().isEmpty()) {
                     toast = true;
                 } else {
                     company = etSaleCompany.getText().toString();
-                }
-
-                if (etSaleID.getText().toString().isEmpty()) {
-                    toast = true;
-                } else {
                     id = etSaleID.getText().toString();
-                }
-
-                if (etSaleWeight.getText().toString().isEmpty()) {
-                    toast = true;
-                } else {
                     weight = Double.parseDouble(etSaleWeight.getText().toString());
-                }
-
-                if (etSaleSum.getText().toString().isEmpty()) {
-                    toast = true;
-                } else {
                     saleSum = Double.parseDouble(etSaleSum.getText().toString());
                 }
 
@@ -79,21 +71,31 @@ public class SaleActivity extends AppCompatActivity {
                     sale.setId(id);
                     sale.setSaleSum(saleSum);
                     sale.setWeight(weight);
+                    sale.setPrice((saleSum/weight));
+                    sale.setUserEmail(InventoryApp.user.getEmail());
+                    showProgress(true);
                     Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
                         @Override
                         public void handleResponse(Sale response) {
                             Toast.makeText(SaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            SaleActivity.this.finish();
+                            showProgress(false);
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
+                            showProgress(false);
                             Toast.makeText(SaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-                    MainActivity.saleArray.add(sale);
-                    finish();
                 }
             }
         });
+    }
+
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }

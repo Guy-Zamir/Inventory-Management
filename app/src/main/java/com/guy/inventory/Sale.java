@@ -1,16 +1,12 @@
 package com.guy.inventory;
 
-public class Sale {
-    private double saleSum, weight;
-    private String company, id, saleDate;
+import java.util.Date;
 
-    public Sale() {
-        this.saleSum = 0;
-        this.company = null;
-        this.id = null;
-        this.saleDate = null;
-        this.weight = 0;
-    }
+public class Sale {
+    private double saleSum, weight, price;
+    private String company, id, saleDate, userEmail;
+    private Date created, updated;
+    private String objectId;
 
     public double getSaleSum() {
         return saleSum;
@@ -18,6 +14,30 @@ public class Sale {
 
     public void setSaleSum(double saleSum) {
         this.saleSum = saleSum;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getId() {
@@ -36,19 +56,35 @@ public class Sale {
         this.saleDate = saleDate;
     }
 
-    public String getCompany() {
-        return company;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public double getWeight() {
-        return weight;
+    public Date getCreated() {
+        return created;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

@@ -3,41 +3,69 @@ package com.guy.inventory;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import android.annotation.SuppressLint;
+
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.text.DecimalFormat;
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.DataQueryBuilder;
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class SaleShowActivity extends AppCompatActivity {
-    TableLayout tlSale;
-    TableLayout tlSaleHeader;
+    private View mProgressView;
+    private View mLoginFormView;
+    private TextView tvLoad;
+    ListView lvSaleList;
     Button btnSaleShowDelete, btnSaleShowDetails;
-    ArrayList<CheckBox> checkBoxes;
-    boolean firstDisplay = true;
+    SalesAdapter adapter;
+    public static boolean[] checkBoxes;
+    int checkIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sale_show);
-        tlSale = findViewById(R.id.tlSale);
-        tlSaleHeader = findViewById(R.id.tlSaleHeader);
+        lvSaleList = findViewById(R.id.lvSaleList);
         btnSaleShowDelete = findViewById(R.id.btnSaleShowDelete);
         btnSaleShowDetails = findViewById(R.id.btnSaleShowDetails);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+        tvLoad = findViewById(R.id.tvLoad);
 
-        displayTable();
+        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+
+        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        queryBuilder.setWhereClause(whereClause);
+        queryBuilder.setGroupBy("created");
+
+        showProgress(true);
+        tvLoad.setText("טוען נתונים, אנא המתן...");
+
+        Backendless.Data.of(Sale.class).find(queryBuilder, new AsyncCallback<List<Sale>>() {
+            @Override
+            public void handleResponse(List<Sale> response) {
+                InventoryApp.sales = response;
+                adapter = new SalesAdapter(SaleShowActivity.this, InventoryApp.sales);
+                lvSaleList.setAdapter(adapter);
+                showProgress(false);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(SaleShowActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                showProgress(false);
+            }
+        });
+
 
         btnSaleShowDetails.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,9 +76,9 @@ public class SaleShowActivity extends AppCompatActivity {
                     Toast.makeText(SaleShowActivity.this, "יש לבחור פריט אחד בלבד לעריכה", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(SaleShowActivity.this, SaleEditActivity.class);
-                    int pos = checkPositions().get(0);
-                    intent.putExtra("pos", pos);
-                    startActivityForResult(intent, 2);
+                    checkIndex = checkPositions().get(0);
+                    intent.putExtra("checkIndex", checkIndex);
+                    startActivityForResult(intent, 1);
                 }
             }
         });
@@ -60,6 +88,8 @@ public class SaleShowActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (checkPositions().isEmpty()) {
                     Toast.makeText(SaleShowActivity.this, "יש לסמן על הפריטים שברצונך למחוק", Toast.LENGTH_SHORT).show();
+                } else if (checkPositions().size() > 1) {
+                    Toast.makeText(SaleShowActivity.this, "יש לסמן פריט אחד בלבד", Toast.LENGTH_SHORT).show();
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(SaleShowActivity.this);
                     alert.setTitle("התראת מחיקה");
@@ -69,12 +99,28 @@ public class SaleShowActivity extends AppCompatActivity {
 
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            for (int i : checkPositions()) {
-                                MainActivity.saleArray.remove(i);
-                                tlSale.removeAllViews();
-                                displayTable();
+
+                            showProgress(true);
+                            for (final int i : checkPositions()) {
+                                checkIndex = i;
                             }
-                        }
+
+                            Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(checkIndex), new AsyncCallback<Long>() {
+                                @Override
+                                public void handleResponse(Long response) {
+                                    InventoryApp.sales.remove(checkIndex);
+                                    showProgress(false);
+                                    adapter.notifyDataSetChanged();
+                                    checkBoxes[checkIndex] = false;
+                                    Toast.makeText(SaleShowActivity.this, "נמחק בהצלחה", Toast.LENGTH_SHORT).show();
+                                }
+                                @Override
+                                public void handleFault(BackendlessFault fault) {
+                                    showProgress(false);
+                                    Toast.makeText(SaleShowActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            }
                     });
                     alert.show();
                 }
@@ -82,113 +128,27 @@ public class SaleShowActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("SetTextI18n")
-    public void displayTable() {
-        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-        checkBoxes = new ArrayList<>();
-        for (int i = MainActivity.saleArray.size() - 1; i >= 0; i--) {
-            TextView date;
-            TextView company;
-            TextView weight;
-            TextView saleSum;
-            TableRow tableRow;
-
-            tableRow = new TableRow(SaleShowActivity.this);
-            date = new TextView(SaleShowActivity.this);
-            company = new TextView(SaleShowActivity.this);
-            weight = new TextView(SaleShowActivity.this);
-            saleSum = new TextView(SaleShowActivity.this);
-
-
-            date.setGravity(Gravity.CENTER);
-            date.setWidth(170);
-            date.setTextColor(getResources().getColor(R.color.colorBlack));
-            date.setTypeface(Typeface.DEFAULT_BOLD);
-
-            company.setGravity(Gravity.CENTER);
-            company.setWidth(360);
-            company.setTextColor(getResources().getColor(R.color.colorBlack));
-            company.setTypeface(Typeface.DEFAULT_BOLD);
-
-            weight.setGravity(Gravity.CENTER);
-            weight.setWidth(150);
-            weight.setTextColor(getResources().getColor(R.color.colorBlack));
-            weight.setTypeface(Typeface.DEFAULT_BOLD);
-
-            saleSum.setGravity(Gravity.CENTER);
-            saleSum.setWidth(250);
-            saleSum.setTextColor(getResources().getColor(R.color.colorBlack));
-            saleSum.setTypeface(Typeface.DEFAULT_BOLD);
-
-            if (firstDisplay) {
-                date.setText("תאריך");
-                date.setPaintFlags(date.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                date.setTextSize(18);
-
-                company.setText("חברה");
-                company.setPaintFlags(company.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                company.setTextSize(18);
-
-                weight.setText("משקל");
-                weight.setPaintFlags(saleSum.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                weight.setTextSize(18);
-
-                saleSum.setText("סכום");
-                saleSum.setPaintFlags(saleSum.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                saleSum.setTextSize(18);
-
-                tableRow.addView(date);
-                tableRow.addView(company);
-                tableRow.addView(weight);
-                tableRow.addView(saleSum);
-                tlSaleHeader.addView(tableRow);
-                firstDisplay = false;
-                i+=1;
-
-            } else {
-                CheckBox cb;
-                cb = new CheckBox(SaleShowActivity.this);
-
-                cb.setWidth(75);
-                cb.setHeight(125);
-                checkBoxes.add(cb);
-
-                date.setText(String.valueOf(MainActivity.saleArray.get(i).getSaleDate()).substring(0, 2) + "/" + String.valueOf(MainActivity.saleArray.get(i).getSaleDate()).substring(2, 4));
-                company.setText(MainActivity.saleArray.get(i).getCompany());
-                weight.setText(nf.format(MainActivity.saleArray.get(i).getWeight()));
-                saleSum.setText((nf.format(MainActivity.saleArray.get(i).getSaleSum())) + "$");
-                tableRow.addView(cb);
-                tableRow.addView(date);
-                tableRow.addView(company);
-                tableRow.addView(weight);
-                tableRow.addView(saleSum);
-                tlSale.addView(tableRow);
-
-                View underLine = new View(this);
-                underLine.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 2));
-                underLine.setBackgroundColor(Color.rgb(51, 51, 51));
-                tlSale.addView(underLine);
-            }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            adapter.notifyDataSetChanged();
         }
+    }
+
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     public ArrayList<Integer> checkPositions() {
         ArrayList<Integer> positions = new ArrayList<>();
-        for (int i = 0; i < checkBoxes.size(); i++) {
-            if (checkBoxes.get(i).isChecked()) {
-                int position = checkBoxes.size() - 1 - i;
-                positions.add(position);
+        for (int i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i]) {
+                positions.add(i);
             }
         }
         return positions;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2) {
-            tlSale.removeAllViews();
-            displayTable();
-        }
     }
 }

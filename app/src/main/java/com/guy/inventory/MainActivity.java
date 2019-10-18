@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import java.util.LinkedList;
+
 
 public class MainActivity extends AppCompatActivity {
     Button btnResult, btnBuy, btnSale, btnBuyShow, btnSaleShow;
-    public static LinkedList<Buy> buyArray = new LinkedList<>();
-    public static LinkedList<Sale> saleArray = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
