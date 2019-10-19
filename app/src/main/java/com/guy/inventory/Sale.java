@@ -1,12 +1,13 @@
 package com.guy.inventory;
-
 import java.util.Date;
 
 public class Sale {
     private double saleSum, weight, price;
-    private String company, id, saleDate, userEmail;
+    private String company, id, saleDate, payDate;
+    private int days;
+
     private Date created, updated;
-    private String objectId;
+    private String objectId, userEmail;
 
     public double getSaleSum() {
         return saleSum;
@@ -86,5 +87,21 @@ public class Sale {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
+    }
+
+    public String getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(String payDate) {
+        this.payDate = payDate;
     }
 }

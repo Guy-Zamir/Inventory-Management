@@ -35,22 +35,11 @@
         android:layout_marginTop="5dp"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnSaleHeader"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:background="@drawable/headers"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:text="מכירה חדשה"
-            android:textColor="#ffffff"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
         <DatePicker
             android:id="@+id/dpSaleDate"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_marginTop="20dp"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:gravity="center|center_horizontal|center_vertical" />
@@ -102,6 +91,18 @@
             android:gravity="center_horizontal|center_vertical"
             android:hint="סכום המכירה"
             android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/etSaleDays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:ems="10"
+            android:gravity="center_horizontal|center_vertical"
+            android:hint="מספר ימים"
+            android:inputType="number" />
 
         <Button
             android:id="@+id/btnSaleSubmit"

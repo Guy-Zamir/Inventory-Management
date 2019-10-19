@@ -35,22 +35,11 @@
         android:layout_marginTop="5dp"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnBuyHeader"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:background="@drawable/headers"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:text="קנייה חדשה"
-            android:textColor="#ffffff"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
         <DatePicker
             android:id="@+id/dpBuyDate"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:gravity="center|center_horizontal|center_vertical" />
@@ -80,7 +69,7 @@
             android:inputType="number" />
 
         <EditText
-            android:id="@+id/etBuyKaratPrice"
+            android:id="@+id/etBuyPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -92,7 +81,7 @@
             android:inputType="numberDecimal" />
 
         <EditText
-            android:id="@+id/etBuyKaratWeight"
+            android:id="@+id/etBuyWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -103,53 +92,29 @@
             android:hint="משקל החבילה"
             android:inputType="numberDecimal" />
 
+        <EditText
+            android:id="@+id/etBuyDays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:ems="10"
+            android:gravity="center_horizontal|center_vertical"
+            android:hint="מספר ימים"
+            android:inputType="number" />
+
         <CheckBox
             android:id="@+id/cbBuyPolish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="30dp"
             android:gravity="center_horizontal|center_vertical"
             android:scrollbarSize="6sp"
             android:text="מלוטש"
             android:textSize="20sp" />
-
-        <CheckBox
-            android:id="@+id/cbBuyDone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="40dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:scrollbarSize="6sp"
-            android:text="חבילה גמורה"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/etBuyDoneWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="10dp"
-            android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
-            android:hint="משקל אחרי עבודה"
-            android:inputType="numberDecimal" />
-
-        <EditText
-            android:id="@+id/etBuyWage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="10dp"
-            android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
-            android:hint="שכר עבודה"
-            android:inputType="numberDecimal" />
 
         <Button
             android:id="@+id/btnBuySubmit"
