@@ -18,6 +18,7 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,6 +32,8 @@ public class EditSale extends AppCompatActivity {
     DatePicker dpSaleEditDate;
     EditText etSaleEditCompany, etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
     TextView tvSaleEditCompany, tvSaleEditID, tvSaleEditWeight, tvSaleEditSum, tvSaleEditDays;
+    TextView tvSaleDetailsCompany, tvSaleDetailsBuyDate, tvSaleDetailsPayDate, tvSaleDetailsID,
+            tvSaleDetailsPrice, tvSaleDetailsWeight, tvSaleDetailsDays, tvSaleDetailsSum;
     Button btnSaleEditSubmit;
 
     int index, days;
@@ -44,7 +47,6 @@ public class EditSale extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_sale);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -71,6 +73,37 @@ public class EditSale extends AppCompatActivity {
         tvSaleEditWeight = findViewById(R.id.tvSaleEditWeight);
         tvSaleEditSum = findViewById(R.id.tvSaleEditSum);
         tvSaleEditDays = findViewById(R.id.tvSaleEditDays);
+
+        tvSaleDetailsCompany = findViewById(R.id.tvSaleDetailsCompany);
+        tvSaleDetailsBuyDate = findViewById(R.id.tvSaleDetailsBuyDate);
+        tvSaleDetailsPayDate = findViewById(R.id.tvSaleDetailsPayDate);
+        tvSaleDetailsID = findViewById(R.id.tvSaleDetailsID);
+        tvSaleDetailsPrice = findViewById(R.id.tvSaleDetailsPrice);
+        tvSaleDetailsWeight = findViewById(R.id.tvSaleDetailsWeight);
+        tvSaleDetailsDays = findViewById(R.id.tvSaleDetailsDays);
+        tvSaleDetailsSum = findViewById(R.id.tvSaleDetailsSum);
+
+        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+
+        Calendar saleDate = Calendar.getInstance();
+        saleDate.setTime(InventoryApp.sales.get(index).getSaleDate());
+        @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
+        @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
+
+        Calendar payDate = Calendar.getInstance();
+        payDate.setTime(InventoryApp.sales.get(index).getPayDate());
+        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
+
+        tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
+        tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
+
+        tvSaleDetailsCompany.setText("שם הספק:  " + InventoryApp.sales.get(index).getCompany());
+        tvSaleDetailsID.setText("מספר האסמכתא:  " + InventoryApp.sales.get(index).getId());
+        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(index).getPrice()) + "$");
+        tvSaleDetailsWeight.setText("משקל החבילה:  " + nf.format(InventoryApp.sales.get(index).getWeight()));
+        tvSaleDetailsDays.setText("מספר הימים:  " + nf.format(InventoryApp.sales.get(index).getDays()));
+        tvSaleDetailsSum.setText("סכום העסקה:  " + nf.format(InventoryApp.sales.get(index).getSaleSum()) + "$");
 
         llSaleEdit.setVisibility(View.GONE);
         llSaleDetails.setVisibility(View.VISIBLE);
