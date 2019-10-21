@@ -48,9 +48,9 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="3"
                 android:background="@drawable/buttons"
                 android:foregroundGravity="center"
@@ -59,13 +59,26 @@
                 app:srcCompat="@drawable/delete_icon" />
 
             <ImageView
+                android:id="@+id/ivSalePaid"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="3"
+                android:background="@drawable/buttons"
+                android:foregroundGravity="center"
+                app:srcCompat="@drawable/full_dollar" />
+
+            <ImageView
                 android:id="@+id/ivSaleEdit"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="3"
                 android:background="@drawable/buttons"
                 android:foregroundGravity="center"
@@ -74,194 +87,216 @@
                 app:srcCompat="@drawable/edit_icon" />
 
             <ImageView
-                android:id="@+id/ivSalePaid"
+                android:id="@+id/ivSaleDetails"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="3"
                 android:background="@drawable/buttons"
                 android:foregroundGravity="center"
-                app:srcCompat="@drawable/full_dollar" />
+                android:outlineAmbientShadowColor="@color/colorPrimary"
+                android:outlineSpotShadowColor="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/details_icon" />
 
         </LinearLayout>
 
-        <DatePicker
-            android:id="@+id/dpSaleEditDate"
+        <LinearLayout
+            android:id="@+id/llSaleDetails"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:layout_marginTop="5dp"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner"
-            android:gravity="center|center_horizontal|center_vertical" />
-
-        <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="15dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvSaleEditCompany"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="שם החברה:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/etSaleEditCompany"
+                android:id="@+id/textView2"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="textPersonName" />
-
+                android:layout_height="wrap_content"
+                android:text="בהכנה" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="15dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvSaleEditID"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="מספר חשבונית:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/etSaleEditID"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="textPersonName" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="15dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvSaleEditWeight"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="משקל החבילה:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/etSaleEditWeight"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="numberDecimal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="15dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvSaleEditSum"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="סכום המכירה:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/etSaleEditSum"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="numberDecimal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="15dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvSaleEditDays"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="מספר הימים:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/etSaleEditDays"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="numberDecimal" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btnSaleEditSubmit"
+            android:id="@+id/llSaleEdit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="0"
-            android:background="@drawable/buttons"
-            android:clickable="true"
-            android:text="אשר"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <DatePicker
+                android:id="@+id/dpSaleEditDate"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_marginTop="5dp"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:gravity="center|center_horizontal|center_vertical" />
+
+            <LinearLayout
+                android:layout_width="375dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginTop="15dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSaleEditCompany"
+                    android:layout_width="275dp"
+                    android:layout_height="37dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:text="שם החברה:"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/etSaleEditCompany"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:inputType="textPersonName" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="375dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginTop="15dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSaleEditID"
+                    android:layout_width="275dp"
+                    android:layout_height="37dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:text="מספר חשבונית:"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/etSaleEditID"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="375dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginTop="15dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSaleEditWeight"
+                    android:layout_width="275dp"
+                    android:layout_height="37dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:text="משקל החבילה:"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/etSaleEditWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="375dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginTop="15dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSaleEditSum"
+                    android:layout_width="275dp"
+                    android:layout_height="37dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:text="סכום המכירה:"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/etSaleEditSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="375dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginTop="15dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSaleEditDays"
+                    android:layout_width="275dp"
+                    android:layout_height="37dp"
+                    android:layout_weight="1"
+                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:text="מספר הימים:"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/etSaleEditDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSaleEditSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="0"
+                android:background="@drawable/buttons"
+                android:clickable="true"
+                android:text="אשר"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

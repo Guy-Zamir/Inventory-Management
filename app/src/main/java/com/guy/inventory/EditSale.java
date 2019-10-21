@@ -4,12 +4,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
@@ -24,7 +26,8 @@ public class EditSale extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    ImageView ivSaleDelete, ivSaleEdit, ivSalePaid;
+    LinearLayout llSaleEdit, llSaleDetails;
+    ImageView ivSaleDelete, ivSaleEdit, ivSalePaid, ivSaleDetails;
     DatePicker dpSaleEditDate;
     EditText etSaleEditCompany, etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
     TextView tvSaleEditCompany, tvSaleEditID, tvSaleEditWeight, tvSaleEditSum, tvSaleEditDays;
@@ -33,13 +36,15 @@ public class EditSale extends AppCompatActivity {
     int index, days;
     String company, id;
     double weight, saleSum;
-    boolean toast = false, edit = true;
+    boolean toast = false, edit = false, details = true;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_sale);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -48,6 +53,10 @@ public class EditSale extends AppCompatActivity {
         ivSaleDelete = findViewById(R.id.ivSaleDelete);
         ivSaleEdit = findViewById(R.id.ivSaleEdit);
         ivSalePaid = findViewById(R.id.ivSalePaid);
+        ivSaleDetails = findViewById(R.id.ivSaleDetails);
+
+        llSaleEdit = findViewById(R.id.llSaleEdit);
+        llSaleDetails = findViewById(R.id.llSaleDetails);
 
         dpSaleEditDate = findViewById(R.id.dpSaleEditDate);
         etSaleEditCompany = findViewById(R.id.etSaleEditCompany);
@@ -62,6 +71,9 @@ public class EditSale extends AppCompatActivity {
         tvSaleEditWeight = findViewById(R.id.tvSaleEditWeight);
         tvSaleEditSum = findViewById(R.id.tvSaleEditSum);
         tvSaleEditDays = findViewById(R.id.tvSaleEditDays);
+
+        llSaleEdit.setVisibility(View.GONE);
+        llSaleDetails.setVisibility(View.VISIBLE);
 
         index = getIntent().getIntExtra("index", 0);
 
@@ -80,36 +92,30 @@ public class EditSale extends AppCompatActivity {
         date.setTime(InventoryApp.sales.get(index).getSaleDate());
         dpSaleEditDate.updateDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
 
+        ivSaleDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                details = !details;
+                edit = !edit;
+                if (details) {
+                    llSaleDetails.setVisibility(View.VISIBLE);
+                    llSaleEdit.setVisibility(View.GONE);
+                } else {
+                    llSaleDetails.setVisibility(View.GONE);
+                }
+            }
+        });
+
         ivSaleEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 edit = !edit;
+                details = !details;
                 if (edit) {
-                    dpSaleEditDate.setVisibility(View.VISIBLE);
-                    etSaleEditCompany.setVisibility(View.VISIBLE);
-                    etSaleEditID.setVisibility(View.VISIBLE);
-                    etSaleEditWeight.setVisibility(View.VISIBLE);
-                    etSaleEditSum.setVisibility(View.VISIBLE);
-                    etSaleEditDays.setVisibility(View.VISIBLE);
-                    btnSaleEditSubmit.setVisibility(View.VISIBLE);
-                    tvSaleEditCompany.setVisibility(View.VISIBLE);
-                    tvSaleEditID.setVisibility(View.VISIBLE);
-                    tvSaleEditWeight.setVisibility(View.VISIBLE);
-                    tvSaleEditSum.setVisibility(View.VISIBLE);
-                    tvSaleEditDays.setVisibility(View.VISIBLE);
+                    llSaleEdit.setVisibility(View.VISIBLE);
+                    llSaleDetails.setVisibility(View.GONE);
                 } else {
-                    dpSaleEditDate.setVisibility(View.GONE);
-                    etSaleEditCompany.setVisibility(View.GONE);
-                    etSaleEditID.setVisibility(View.GONE);
-                    etSaleEditWeight.setVisibility(View.GONE);
-                    etSaleEditSum.setVisibility(View.GONE);
-                    etSaleEditDays.setVisibility(View.GONE);
-                    btnSaleEditSubmit.setVisibility(View.GONE);
-                    tvSaleEditCompany.setVisibility(View.GONE);
-                    tvSaleEditID.setVisibility(View.GONE);
-                    tvSaleEditWeight.setVisibility(View.GONE);
-                    tvSaleEditSum.setVisibility(View.GONE);
-                    tvSaleEditDays.setVisibility(View.GONE);
+                    llSaleEdit.setVisibility(View.GONE);
                 }
             }
         });

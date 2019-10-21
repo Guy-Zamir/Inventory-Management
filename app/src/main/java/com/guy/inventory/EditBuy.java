@@ -5,19 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,29 +27,41 @@ public class EditBuy extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    ImageView ivBuyEditDelete, ivBuyEdit, ivBuyEditPaid, ivBuyEditDone;
+    LinearLayout llBuyEdit, llBuyDone, llBuyDetails, llBuyDetailsDone;
+    ImageView ivBuyEditDelete, ivBuyEdit, ivBuyEditPaid, ivBuyEditDone, ivBuyDetails;
     DatePicker dpBuyEditDate;
     EditText etBuyEditSupplier, etBuyEditID, etBuyEditPrice, etBuyEditWeight, etBuyEditDays, etBuyEditDoneWeight, etBuyEditWage;
     TextView tvBuyEditSupplier, tvBuyEditID, tvBuyEditPrice, tvBuyEditWeight, tvBuyEditDays, tvBuyEditDoneWeight, tvBuyEditWage;
+    TextView tvBuyDetailsSupplier, tvBuyDetailsBuyDate, tvBuyDetailsPayDate, tvBuyDetailsID,
+            tvBuyDetailsPrice, tvBuyDetailsWeight, tvBuyDetailsDays, tvBuyDetailsSum, tvBuyDetailsDoneWeight, tvBuyDetailsWage, tvBuyDetailsWorkDe;
     Button btnBuyEditSubmit;
 
     int index, days;
     String supplier, id;
     double weight, doneWeight, wage, price;
-    boolean toast = false ,edit = true;
+    boolean toast = false ,edit = false, details = true;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_buy);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
+
+        llBuyEdit = findViewById(R.id.llBuyEdit);
+        llBuyDone = findViewById(R.id.llBuyDone);
+        llBuyDetails = findViewById(R.id.llBuyDetails);
+        llBuyDetailsDone = findViewById(R.id.llBuyDetailsDone);
 
         ivBuyEditDelete = findViewById(R.id.ivBuyEditDelete);
         ivBuyEdit = findViewById(R.id.ivBuyEdit);
         ivBuyEditPaid = findViewById(R.id.ivBuyEditPaid);
         ivBuyEditDone = findViewById(R.id.ivBuyEditDone);
+        ivBuyDetails = findViewById(R.id.ivBuyDetails);
 
         dpBuyEditDate = findViewById(R.id.dpBuyEditDate);
         etBuyEditSupplier = findViewById(R.id.etBuyEditSupplier);
@@ -68,6 +81,21 @@ public class EditBuy extends AppCompatActivity {
         tvBuyEditDoneWeight = findViewById(R.id.tvBuyEditDoneWeight);
         tvBuyEditWage = findViewById(R.id.tvBuyEditWage);
 
+        tvBuyDetailsSupplier = findViewById(R.id.tvBuyDetailsSupplier);
+        tvBuyDetailsBuyDate = findViewById(R.id.tvBuyDetailsBuyDate);
+        tvBuyDetailsPayDate = findViewById(R.id.tvBuyDetailsPayDate);
+        tvBuyDetailsID = findViewById(R.id.tvBuyDetailsID);
+        tvBuyDetailsPrice = findViewById(R.id.tvBuyDetailsPrice);
+        tvBuyDetailsWeight = findViewById(R.id.tvBuyDetailsWeight);
+        tvBuyDetailsDays = findViewById(R.id.tvBuyDetailsDays);
+        tvBuyDetailsSum = findViewById(R.id.tvBuyDetailsSum);
+        tvBuyDetailsDoneWeight = findViewById(R.id.tvBuyDetailsDoneWeight);
+        tvBuyDetailsWage = findViewById(R.id.tvBuyDetailsWage);
+        tvBuyDetailsWorkDe = findViewById(R.id.tvBuyDetailsWorkDe);
+
+        llBuyEdit.setVisibility(View.GONE);
+        llBuyDetails.setVisibility(View.VISIBLE);
+
         index = getIntent().getIntExtra("index", 0);
 
         if (InventoryApp.buys.get(index).isPaid()) {
@@ -77,17 +105,41 @@ public class EditBuy extends AppCompatActivity {
         }
 
         if (InventoryApp.buys.get(index).isDone()) {
-            etBuyEditDoneWeight.setVisibility(View.VISIBLE);
-            tvBuyEditDoneWeight.setVisibility(View.VISIBLE);
-            etBuyEditWage.setVisibility(View.VISIBLE);
-            tvBuyEditWage.setVisibility(View.VISIBLE);
+            llBuyDone.setVisibility(View.VISIBLE);
             ivBuyEditDone.setImageResource(R.drawable.done_icon);
         } else {
-            etBuyEditDoneWeight.setVisibility(View.GONE);
-            tvBuyEditDoneWeight.setVisibility(View.GONE);
-            etBuyEditWage.setVisibility(View.GONE);
-            tvBuyEditWage.setVisibility(View.GONE);
+            llBuyDone.setVisibility(View.GONE);
             ivBuyEditDone.setImageResource(R.drawable.not_done_icon);
+        }
+        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+
+        Calendar saleDate = Calendar.getInstance();
+        saleDate.setTime(InventoryApp.buys.get(index).getBuyDate());
+        @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
+        @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
+
+        Calendar payDate = Calendar.getInstance();
+        payDate.setTime(InventoryApp.buys.get(index).getPayDate());
+        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
+
+        tvBuyDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
+        tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
+
+        tvBuyDetailsSupplier.setText("שם הספק:  " + InventoryApp.buys.get(index).getSupplier());
+        tvBuyDetailsID.setText("מספר אסמכתא:  " + InventoryApp.buys.get(index).getId());
+        tvBuyDetailsPrice.setText("מחיר לקראט:  " + nf.format(InventoryApp.buys.get(index).getPrice()) + "$");
+        tvBuyDetailsWeight.setText("משקל החבילה:  " + nf.format(InventoryApp.buys.get(index).getWeight()));
+        tvBuyDetailsDays.setText("מספר ימים:  " + InventoryApp.buys.get(index).getDays());
+        tvBuyDetailsSum.setText("סכום העסקה:  " + nf.format(InventoryApp.buys.get(index).getSum()) + "$");
+        tvBuyDetailsDoneWeight.setText("משקל גמור:  " + nf.format(InventoryApp.buys.get(index).getDoneWeight()));
+        tvBuyDetailsWage.setText("שכר עבודה:  " + nf.format(InventoryApp.buys.get(index).getWage()) + "$" + " , " +
+                nf.format(InventoryApp.buys.get(index).getWage()/InventoryApp.buys.get(index).getPrice()*100) + "%" + " , " +
+                nf.format(InventoryApp.buys.get(index).getWage()*InventoryApp.buys.get(index).getWeight()) + "$");
+        tvBuyDetailsWorkDe.setText("אחוז ליטוש:  " + nf.format(InventoryApp.buys.get(index).getWorkDepreciation()*100) + "%");
+
+        if (InventoryApp.buys.get(index).isPolish()) {
+            llBuyDetailsDone.setVisibility(View.GONE);
         }
 
         etBuyEditSupplier.setText(InventoryApp.buys.get(index).getSupplier());
@@ -106,44 +158,33 @@ public class EditBuy extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 edit = !edit;
+                details = !details;
                 if (edit) {
-                    dpBuyEditDate.setVisibility(View.VISIBLE);
-                    etBuyEditSupplier.setVisibility(View.VISIBLE);
-                    etBuyEditID.setVisibility(View.VISIBLE);
-                    etBuyEditPrice.setVisibility(View.VISIBLE);
-                    etBuyEditWeight.setVisibility(View.VISIBLE);
-                    etBuyEditDays.setVisibility(View.VISIBLE);
-                    btnBuyEditSubmit.setVisibility(View.VISIBLE);
-                    tvBuyEditSupplier.setVisibility(View.VISIBLE);
-                    tvBuyEditID.setVisibility(View.VISIBLE);
-                    tvBuyEditPrice.setVisibility(View.VISIBLE);
-                    tvBuyEditWeight.setVisibility(View.VISIBLE);
-                    tvBuyEditDays.setVisibility(View.VISIBLE);
+                    llBuyEdit.setVisibility(View.VISIBLE);
+                    llBuyDetails.setVisibility(View.GONE);
                     if (InventoryApp.buys.get(index).isDone()) {
-                        tvBuyEditDoneWeight.setVisibility(View.VISIBLE);
-                        tvBuyEditWage.setVisibility(View.VISIBLE);
-                        etBuyEditDoneWeight.setVisibility(View.VISIBLE);
-                        etBuyEditWage.setVisibility(View.VISIBLE);
+                        llBuyDone.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    dpBuyEditDate.setVisibility(View.GONE);
-                    etBuyEditSupplier.setVisibility(View.GONE);
-                    etBuyEditID.setVisibility(View.GONE);
-                    etBuyEditPrice.setVisibility(View.GONE);
-                    etBuyEditWeight.setVisibility(View.GONE);
-                    etBuyEditDays.setVisibility(View.GONE);
-                    btnBuyEditSubmit.setVisibility(View.GONE);
-                    tvBuyEditSupplier.setVisibility(View.GONE);
-                    tvBuyEditID.setVisibility(View.GONE);
-                    tvBuyEditPrice.setVisibility(View.GONE);
-                    tvBuyEditWeight.setVisibility(View.GONE);
-                    tvBuyEditDays.setVisibility(View.GONE);
+                    llBuyEdit.setVisibility(View.GONE);
+                    llBuyDetails.setVisibility(View.VISIBLE);
                     if (InventoryApp.buys.get(index).isDone()) {
-                        tvBuyEditDoneWeight.setVisibility(View.GONE);
-                        tvBuyEditWage.setVisibility(View.GONE);
-                        etBuyEditDoneWeight.setVisibility(View.GONE);
-                        etBuyEditWage.setVisibility(View.GONE);
+                        llBuyDone.setVisibility(View.GONE);
                     }
+                }
+            }
+        });
+
+        ivBuyDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                details = !details;
+                edit = !edit;
+                if (details) {
+                    llBuyDetails.setVisibility(View.VISIBLE);
+                    llBuyEdit.setVisibility(View.GONE);
+                } else {
+                    llBuyDetails.setVisibility(View.GONE);
                 }
             }
         });
@@ -239,6 +280,8 @@ public class EditBuy extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         if (InventoryApp.buys.get(index).isDone()) {
                             InventoryApp.buys.get(index).setDone(false);
+                            InventoryApp.buys.get(index).setDoneWeight(0);
+                            InventoryApp.buys.get(index).setWage(0);
                         } else {
                             InventoryApp.buys.get(index).setDone(true);
                         }
@@ -250,16 +293,12 @@ public class EditBuy extends AppCompatActivity {
                                 showProgress(false);
                                 Toast.makeText(EditBuy.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                 if (InventoryApp.buys.get(index).isDone()) {
-                                    etBuyEditDoneWeight.setVisibility(View.VISIBLE);
-                                    tvBuyEditDoneWeight.setVisibility(View.VISIBLE);
-                                    etBuyEditWage.setVisibility(View.VISIBLE);
-                                    tvBuyEditWage.setVisibility(View.VISIBLE);
+                                    llBuyDone.setVisibility(View.VISIBLE);
+                                    llBuyDetailsDone.setVisibility(View.VISIBLE);
                                     ivBuyEditDone.setImageResource(R.drawable.done_icon);
                                 } else {
-                                    etBuyEditDoneWeight.setVisibility(View.GONE);
-                                    tvBuyEditDoneWeight.setVisibility(View.GONE);
-                                    etBuyEditWage.setVisibility(View.GONE);
-                                    tvBuyEditWage.setVisibility(View.GONE);
+                                    llBuyDone.setVisibility(View.GONE);
+                                    llBuyDetailsDone.setVisibility(View.GONE);
                                     ivBuyEditDone.setImageResource(R.drawable.not_done_icon);
                                 }
                             }
