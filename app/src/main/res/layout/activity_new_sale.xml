@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BuyActivity">
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context=".NewSale">
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -36,7 +37,7 @@
         android:orientation="vertical">
 
         <DatePicker
-            android:id="@+id/dpBuyDate"
+            android:id="@+id/dpSaleDate"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="20dp"
@@ -45,55 +46,55 @@
             android:gravity="center|center_horizontal|center_vertical" />
 
         <EditText
-            android:id="@+id/etBuySupplier"
+            android:id="@+id/etSaleCompany"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:ems="10"
             android:gravity="center_horizontal|center_vertical"
-            android:hint="שם הספק"
+            android:hint="חברה"
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/etBuyID"
+            android:id="@+id/etSaleID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:ems="10"
             android:gravity="center_horizontal|center_vertical"
-            android:hint="מספר אסמכתא"
+            android:hint="מספר חשבונית"
             android:inputType="number" />
 
         <EditText
-            android:id="@+id/etBuyPrice"
+            android:id="@+id/etSaleWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:ems="10"
             android:gravity="center_horizontal|center_vertical"
-            android:hint="מחיר לקראט"
+            android:hint="משקל חבילה"
             android:inputType="numberDecimal" />
 
         <EditText
-            android:id="@+id/etBuyWeight"
+            android:id="@+id/etSaleSum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:ems="10"
             android:gravity="center_horizontal|center_vertical"
-            android:hint="משקל החבילה"
+            android:hint="סכום המכירה"
             android:inputType="numberDecimal" />
 
         <EditText
-            android:id="@+id/etBuyDays"
+            android:id="@+id/etSaleDays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -104,24 +105,12 @@
             android:hint="מספר ימים"
             android:inputType="number" />
 
-        <CheckBox
-            android:id="@+id/cbBuyPolish"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="30dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:scrollbarSize="6sp"
-            android:text="מלוטש"
-            android:textSize="20sp" />
-
         <Button
-            android:id="@+id/btnBuySubmit"
+            android:id="@+id/btnSaleSubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="0"
             android:background="@drawable/buttons"

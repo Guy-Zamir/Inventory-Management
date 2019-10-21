@@ -15,8 +15,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import java.util.List;
 
-
-public class SaleShowActivity extends AppCompatActivity {
+public class SalesTable extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -26,7 +25,7 @@ public class SaleShowActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sale_show);
+        setContentView(R.layout.activity_sales_table);
         lvSaleList = findViewById(R.id.lvSaleList);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -45,14 +44,14 @@ public class SaleShowActivity extends AppCompatActivity {
             @Override
             public void handleResponse(List<Sale> response) {
                 InventoryApp.sales = response;
-                adapter = new SalesAdapter(SaleShowActivity.this, InventoryApp.sales);
+                adapter = new SalesAdapter(SalesTable.this, InventoryApp.sales);
                 lvSaleList.setAdapter(adapter);
                 showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(SaleShowActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SalesTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 showProgress(false);
             }
         });
@@ -60,7 +59,7 @@ public class SaleShowActivity extends AppCompatActivity {
         lvSaleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SaleShowActivity.this, SaleEditActivity.class);
+                Intent intent = new Intent(SalesTable.this, EditSale.class);
                 intent.putExtra("index", position);
                 startActivityForResult(intent, 1);
             }

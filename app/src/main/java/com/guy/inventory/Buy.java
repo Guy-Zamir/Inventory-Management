@@ -1,12 +1,12 @@
 package com.guy.inventory;
-
 import java.util.Date;
 
 public class Buy {
-    private double price, weight, doneWeight, sum, workDepreciation;
-    private int days, wage;
-    private String supplier, id, buyDate, payDate;
-    private boolean polish, done;
+    private Date buyDate, payDate;
+    private double price, weight, doneWeight, sum, workDepreciation, wage;
+    private int days;
+    private String supplier, id;
+    private boolean polish, done, paid;
 
     private Date created, updated;
     private String objectId, userEmail;
@@ -59,11 +59,11 @@ public class Buy {
         this.days = days;
     }
 
-    public int getWage() {
+    public double getWage() {
         return wage;
     }
 
-    public void setWage(int wage) {
+    public void setWage(double wage) {
         this.wage = wage;
     }
 
@@ -83,19 +83,19 @@ public class Buy {
         this.id = id;
     }
 
-    public String getBuyDate() {
+    public Date getBuyDate() {
         return buyDate;
     }
 
-    public void setBuyDate(String buyDate) {
+    public void setBuyDate(Date buyDate) {
         this.buyDate = buyDate;
     }
 
-    public String getPayDate() {
+    public Date getPayDate() {
         return payDate;
     }
 
-    public void setPayDate(String payDate) {
+    public void setPayDate(Date payDate) {
         this.payDate = payDate;
     }
 
@@ -145,5 +145,13 @@ public class Buy {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 }

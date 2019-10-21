@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SaleShowActivity">
+    tools:context=".BuysTable">
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -33,25 +33,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
+        android:background="@drawable/background"
         android:orientation="vertical">
 
-        <ScrollView
+        <ListView
+            android:id="@+id/lvBuyList"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/lvSaleList"
-                    android:layout_width="match_parent"
-                    android:layout_height="670dp">
-
-                </ListView>
-            </LinearLayout>
-        </ScrollView>
+        </ListView>
 
     </LinearLayout>
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.guy.inventory;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
@@ -55,7 +53,6 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void handleResponse(BackendlessUser response) {
                             InventoryApp.user = response;
-                            Toast.makeText(Login.this, "נכנס בהצלחה", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(Login.this, MainActivity.class));
                             Login.this.finish();
                         }
@@ -111,9 +108,8 @@ public class Login extends AppCompatActivity {
                     Backendless.Data.of(BackendlessUser.class).findById(objectUserId, new AsyncCallback<BackendlessUser>() {
                         @Override
                         public void handleResponse(BackendlessUser response) {
-                            InventoryApp.user = response;
-                            startActivity(new Intent(Login.this, MainActivity.class));
-                            Login.this.finish();
+                            showProgress(false);
+                            etEmail.setText(response.getEmail());
                         }
 
                         @Override

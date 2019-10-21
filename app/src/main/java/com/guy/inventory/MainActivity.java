@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-
 public class MainActivity extends AppCompatActivity {
     Button btnResult, btnBuy, btnSale, btnBuyShow, btnSaleShow;
 
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SummaryActivity.class);
+                Intent intent = new Intent(MainActivity.this, Summary.class);
                 startActivity(intent);
             }
         });
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BuyActivity.class);
+                Intent intent = new Intent(MainActivity.this, NewBuy.class);
                 startActivity(intent);
             }
         });
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         btnSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SaleActivity.class);
+                Intent intent = new Intent(MainActivity.this, NewSale.class);
                 startActivity(intent);
             }
         });
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         btnBuyShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BuyShowActivity.class);
+                Intent intent = new Intent(MainActivity.this, BuysTable.class);
                 startActivity(intent);
             }
         });
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         btnSaleShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SaleShowActivity.class);
+                Intent intent = new Intent(MainActivity.this, SalesTable.class);
                 startActivity(intent);
             }
         });

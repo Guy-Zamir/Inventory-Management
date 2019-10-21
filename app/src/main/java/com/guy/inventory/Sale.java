@@ -3,8 +3,10 @@ import java.util.Date;
 
 public class Sale {
     private double saleSum, weight, price;
-    private String company, id, saleDate, payDate;
+    private String company, id;
     private int days;
+    private boolean paid;
+    private Date saleDate, payDate;
 
     private Date created, updated;
     private String objectId, userEmail;
@@ -49,20 +51,36 @@ public class Sale {
         this.id = id;
     }
 
-    public String getSaleDate() {
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    public Date getSaleDate() {
         return saleDate;
     }
 
-    public void setSaleDate(String saleDate) {
+    public void setSaleDate(Date saleDate) {
         this.saleDate = saleDate;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public Date getPayDate() {
+        return payDate;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setPayDate(Date payDate) {
+        this.payDate = payDate;
     }
 
     public Date getCreated() {
@@ -89,19 +107,11 @@ public class Sale {
         this.objectId = objectId;
     }
 
-    public int getDays() {
-        return days;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setDays(int days) {
-        this.days = days;
-    }
-
-    public String getPayDate() {
-        return payDate;
-    }
-
-    public void setPayDate(String payDate) {
-        this.payDate = payDate;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

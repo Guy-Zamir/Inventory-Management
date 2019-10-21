@@ -2,7 +2,6 @@ package com.guy.inventory;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +12,10 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import java.util.Calendar;
+import java.util.Date;
 
-public class SaleActivity extends AppCompatActivity {
+public class NewSale extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -31,7 +32,7 @@ public class SaleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saleactivity);
+        setContentView(R.layout.activity_new_sale);
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -63,7 +64,7 @@ public class SaleActivity extends AppCompatActivity {
                 }
 
                 if (toast) {
-                    Toast.makeText(SaleActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewSale.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
                 } else {
                     Sale sale = new Sale();
                     sale.setSaleDate(getDateFromDatePicker(dpSaleDate));
@@ -72,21 +73,32 @@ public class SaleActivity extends AppCompatActivity {
                     sale.setSaleSum(saleSum);
                     sale.setWeight(weight);
                     sale.setDays(days);
+
+                    Calendar cAddedDays = Calendar.getInstance();
+                    cAddedDays.setTime(sale.getSaleDate());
+                    cAddedDays.add(Calendar.DATE, days);
+                    Date addedDays = new Date();
+                    addedDays.setTime(cAddedDays.getTimeInMillis());
+                    Date now = new Date();
+                    if (now.after(addedDays)) {
+                        sale.setPaid(true);
+                    }
+                    sale.setPayDate(addedDays);
                     sale.setPrice((saleSum/weight));
                     sale.setUserEmail(InventoryApp.user.getEmail());
                     showProgress(true);
                     Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
                         @Override
                         public void handleResponse(Sale response) {
-                            Toast.makeText(SaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                            SaleActivity.this.finish();
+                            Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            NewSale.this.finish();
                             showProgress(false);
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
                             showProgress(false);
-                            Toast.makeText(SaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -100,10 +112,12 @@ public class SaleActivity extends AppCompatActivity {
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
-    private String getDateFromDatePicker(DatePicker datePicker){
-        @SuppressLint("DefaultLocale") String day = String.format("%02d", datePicker.getDayOfMonth());
-        @SuppressLint("DefaultLocale") String month = String.format("%02d", (datePicker.getMonth()+1));
-        @SuppressLint("DefaultLocale") String year = String.format("%02d", datePicker.getYear());
-        return day+"/"+month+"/"+year;
+    private Date getDateFromDatePicker(DatePicker datePicker){
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year = datePicker.getYear();
+        Calendar c = Calendar.getInstance();
+        c.set(year,month,day);
+        return c.getTime();
     }
 }

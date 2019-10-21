@@ -1,79 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="0"
-        android:background="@drawable/buttons"
-        android:text="סיכומים"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"
+        app:srcCompat="@drawable/diamond_icon" />
 
-    <Button
-        android:id="@+id/btnBuy"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="0"
-        android:background="@drawable/buttons"
-        android:text="קנייה חדשה"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnSale"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="0"
-        android:background="@drawable/buttons"
-        android:text="מכירה חדשה"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnResult"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttons"
+            android:text="סיכומים"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnBuyShow"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="0"
-        android:background="@drawable/buttons"
-        android:text="טבלת קניות"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnSaleShow"
+        <Button
+            android:id="@+id/btnBuy"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="3"
+            android:background="@drawable/buttons"
+            android:text="קנייה חדשה"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSale"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="3"
+            android:background="@drawable/buttons"
+            android:text="מכירה חדשה"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="0"
-        android:background="@drawable/buttons"
-        android:text="טבלת מכירות"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBuyShow"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="5"
+            android:background="@drawable/buttons"
+            android:text="טבלת קניות"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSaleShow"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="5"
+            android:background="@drawable/buttons"
+            android:text="טבלת מכירות"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

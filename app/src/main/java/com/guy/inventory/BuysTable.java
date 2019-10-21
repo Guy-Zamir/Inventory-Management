@@ -1,7 +1,7 @@
 package com.guy.inventory;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import java.util.List;
 
-public class BuyShowActivity extends AppCompatActivity {
+public class BuysTable extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -26,7 +26,7 @@ public class BuyShowActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buy_show);
+        setContentView(R.layout.activity_buys_table);
         lvBuyList = findViewById(R.id.lvBuyList);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -45,14 +45,14 @@ public class BuyShowActivity extends AppCompatActivity {
             @Override
             public void handleResponse(List<Buy> response) {
                 InventoryApp.buys = response;
-                adapter = new BuysAdapter(BuyShowActivity.this, InventoryApp.buys);
+                adapter = new BuysAdapter(BuysTable.this, InventoryApp.buys);
                 lvBuyList.setAdapter(adapter);
                 showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(BuyShowActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(BuysTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 showProgress(false);
             }
         });
@@ -60,7 +60,7 @@ public class BuyShowActivity extends AppCompatActivity {
         lvBuyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(BuyShowActivity.this, BuyEditActivity.class);
+                Intent intent = new Intent(BuysTable.this, EditBuy.class);
                 intent.putExtra("index", position);
                 startActivityForResult(intent, 1);
             }
