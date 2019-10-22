@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.guy.inventory.R;
+import com.guy.inventory.Classes.Buy;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;

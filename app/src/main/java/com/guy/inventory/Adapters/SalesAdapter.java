@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.guy.inventory.R;
+import com.guy.inventory.Classes.Sale;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -36,7 +40,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         convertView = inflater.inflate(R.layout.sale_row_layout, parent, false);
 
         TextView tvSalePayDate = convertView.findViewById(R.id.tvSalePayDate);
-        TextView tvSaleCompany = convertView.findViewById(R.id.tvSaleCompany);
+        TextView tvSaleClientName = convertView.findViewById(R.id.tvSaleClientName);
         TextView tvSaleDate = convertView.findViewById(R.id.tvSaleDate);
         TextView tvSaleSum = convertView.findViewById(R.id.tvSaleSum);
         TextView tvSaleWeight = convertView.findViewById(R.id.tvSaleWeight);
@@ -52,7 +56,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
         String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
 
-        tvSaleCompany.setText(sales.get(position).getCompany());
+        tvSaleClientName.setText(sales.get(position).getCelint().getName());
         tvSaleDate.setText("תאריך מכירה:  " + saleDays + "/" + saleMonth);
         tvSaleSum.setText("סכום:  " + nf.format(sales.get(position).getSaleSum()) + "$");
         tvSaleWeight.setText("משקל:  " + nf.format(sales.get(position).getWeight()));

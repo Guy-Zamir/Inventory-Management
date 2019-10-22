@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities.EditActivities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,9 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Classes.Sale;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -30,14 +33,14 @@ public class EditSale extends AppCompatActivity {
     LinearLayout llSaleEdit, llSaleDetails;
     ImageView ivSaleDelete, ivSaleEdit, ivSalePaid, ivSaleDetails;
     DatePicker dpSaleEditDate;
-    EditText etSaleEditCompany, etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
-    TextView tvSaleEditCompany, tvSaleEditID, tvSaleEditWeight, tvSaleEditSum, tvSaleEditDays;
-    TextView tvSaleDetailsCompany, tvSaleDetailsBuyDate, tvSaleDetailsPayDate, tvSaleDetailsID,
+    EditText etSaleEditClientName, etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
+    TextView tvSaleEditClientName, tvSaleEditID, tvSaleEditWeight, tvSaleEditSum, tvSaleEditDays;
+    TextView tvSaleDetailsClientName, tvSaleDetailsBuyDate, tvSaleDetailsPayDate, tvSaleDetailsID,
             tvSaleDetailsPrice, tvSaleDetailsWeight, tvSaleDetailsDays, tvSaleDetailsSum;
     Button btnSaleEditSubmit;
 
     int index, days;
-    String company, id;
+    String clientName, id;
     double weight, saleSum;
     boolean toast = false, edit = false, details = true;
 
@@ -61,20 +64,20 @@ public class EditSale extends AppCompatActivity {
         llSaleDetails = findViewById(R.id.llSaleDetails);
 
         dpSaleEditDate = findViewById(R.id.dpSaleEditDate);
-        etSaleEditCompany = findViewById(R.id.etSaleEditCompany);
+        etSaleEditClientName = findViewById(R.id.etSaleEditClientName);
         etSaleEditID = findViewById(R.id.etSaleEditID);
         etSaleEditWeight = findViewById(R.id.etSaleEditWeight);
         etSaleEditSum = findViewById(R.id.etSaleEditSum);
         etSaleEditDays = findViewById(R.id.etSaleEditDays);
         btnSaleEditSubmit = findViewById(R.id.btnSaleEditSubmit);
 
-        tvSaleEditCompany = findViewById(R.id.tvSaleEditCompany);
+        tvSaleEditClientName = findViewById(R.id.tvSaleEditClientName);
         tvSaleEditID = findViewById(R.id.tvSaleEditID);
         tvSaleEditWeight = findViewById(R.id.tvSaleEditWeight);
         tvSaleEditSum = findViewById(R.id.tvSaleEditSum);
         tvSaleEditDays = findViewById(R.id.tvSaleEditDays);
 
-        tvSaleDetailsCompany = findViewById(R.id.tvSaleDetailsCompany);
+        tvSaleDetailsClientName = findViewById(R.id.tvSaleDetailsClientName);
         tvSaleDetailsBuyDate = findViewById(R.id.tvSaleDetailsBuyDate);
         tvSaleDetailsPayDate = findViewById(R.id.tvSaleDetailsPayDate);
         tvSaleDetailsID = findViewById(R.id.tvSaleDetailsID);
@@ -98,7 +101,7 @@ public class EditSale extends AppCompatActivity {
         tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
         tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
 
-        tvSaleDetailsCompany.setText("שם הספק:  " + InventoryApp.sales.get(index).getCompany());
+        tvSaleDetailsClientName.setText("שם הספק:  " + InventoryApp.sales.get(index).getCelint().getName());
         tvSaleDetailsID.setText("מספר האסמכתא:  " + InventoryApp.sales.get(index).getId());
         tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(index).getPrice()) + "$");
         tvSaleDetailsWeight.setText("משקל החבילה:  " + nf.format(InventoryApp.sales.get(index).getWeight()));
@@ -115,7 +118,7 @@ public class EditSale extends AppCompatActivity {
         } else {
             ivSalePaid.setImageResource(R.drawable.empty_dollar);
         }
-        etSaleEditCompany.setText(InventoryApp.sales.get(index).getCompany());
+        etSaleEditClientName.setText(InventoryApp.sales.get(index).getCelint().getName());
         etSaleEditID.setText(InventoryApp.sales.get(index).getId());
         etSaleEditWeight.setText(String.valueOf(InventoryApp.sales.get(index).getWeight()));
         etSaleEditSum.setText(String.valueOf(InventoryApp.sales.get(index).getSaleSum()));
@@ -231,12 +234,12 @@ public class EditSale extends AppCompatActivity {
         btnSaleEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etSaleEditCompany.getText().toString().isEmpty() || etSaleEditID.getText().toString().isEmpty() ||
+                if (etSaleEditClientName.getText().toString().isEmpty() || etSaleEditID.getText().toString().isEmpty() ||
                         etSaleEditWeight.getText().toString().isEmpty()|| etSaleEditSum.getText().toString().isEmpty()||
                     etSaleEditDays.getText().toString().isEmpty()) {
                     toast = true;
                 } else {
-                    company = etSaleEditCompany.getText().toString().trim();
+                    clientName = etSaleEditClientName.getText().toString().trim();
                     id = etSaleEditID.getText().toString().trim();
                     weight = Double.parseDouble(etSaleEditWeight.getText().toString().trim());
                     saleSum = Double.parseDouble(etSaleEditSum.getText().toString().trim());
@@ -254,7 +257,7 @@ public class EditSale extends AppCompatActivity {
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             InventoryApp.sales.get(index).setSaleDate(getDateFromDatePicker(dpSaleEditDate));
-                            InventoryApp.sales.get(index).setCompany(company);
+                            InventoryApp.sales.get(index).getCelint().setName(clientName);
                             InventoryApp.sales.get(index).setId(id);
                             InventoryApp.sales.get(index).setWeight(weight);
                             InventoryApp.sales.get(index).setSaleSum(saleSum);

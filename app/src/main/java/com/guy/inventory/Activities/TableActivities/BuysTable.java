@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities.TableActivities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,22 +14,29 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Activities.EditActivities.EditBuy;
+import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.Adapters.BuysAdapter;
+import com.guy.inventory.R;
+import com.guy.inventory.Classes.Buy;
+
 import java.util.List;
 
-public class SalesTable extends AppCompatActivity {
+public class BuysTable extends AppCompatActivity {
+
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
-    ListView lvSaleList;
-    SalesAdapter adapter;
+    ListView lvBuyList;
+    BuysAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sales_table);
+        setContentView(R.layout.activity_buys_table);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        lvSaleList = findViewById(R.id.lvSaleList);
+        lvBuyList = findViewById(R.id.lvBuyList);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
@@ -43,26 +50,26 @@ public class SalesTable extends AppCompatActivity {
         showProgress(true);
         tvLoad.setText("טוען נתונים, אנא המתן...");
 
-        Backendless.Data.of(Sale.class).find(queryBuilder, new AsyncCallback<List<Sale>>() {
+        Backendless.Data.of(Buy.class).find(queryBuilder, new AsyncCallback<List<Buy>>() {
             @Override
-            public void handleResponse(List<Sale> response) {
-                InventoryApp.sales = response;
-                adapter = new SalesAdapter(SalesTable.this, InventoryApp.sales);
-                lvSaleList.setAdapter(adapter);
+            public void handleResponse(List<Buy> response) {
+                InventoryApp.buys = response;
+                adapter = new BuysAdapter(BuysTable.this, InventoryApp.buys);
+                lvBuyList.setAdapter(adapter);
                 showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(SalesTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(BuysTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 showProgress(false);
             }
         });
 
-        lvSaleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvBuyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SalesTable.this, EditSale.class);
+                Intent intent = new Intent(BuysTable.this, EditBuy.class);
                 intent.putExtra("index", position);
                 startActivityForResult(intent, 1);
             }

@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +13,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.R;
 
 public class Register extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Classes;
 import java.util.Date;
 
 public class Buy {

@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.local.UserIdStorageFactory;
+import com.guy.inventory.R;
 
 public class Login extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities.EditActivities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,9 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Classes.Buy;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;

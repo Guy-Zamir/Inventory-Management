@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".NewBuy">
+    tools:context=".Activities.NewActivities.NewBuy">
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -36,11 +37,17 @@
         android:layout_marginTop="5dp"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/buy_icon" />
+
         <DatePicker
             android:id="@+id/dpBuyDate"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="190dp"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:gravity="center|center_horizontal|center_vertical" />

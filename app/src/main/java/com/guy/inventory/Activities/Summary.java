@@ -1,9 +1,11 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+
+import com.guy.inventory.R;
 
 public class Summary extends AppCompatActivity {
     @Override

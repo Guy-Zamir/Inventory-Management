@@ -1,9 +1,10 @@
-package com.guy.inventory;
+package com.guy.inventory.Classes;
 import java.util.Date;
 
 public class Sale {
+    private Client client;
     private double saleSum, weight, price;
-    private String company, id;
+    private String id;
     private int days;
     private boolean paid;
     private Date saleDate, payDate;
@@ -35,12 +36,12 @@ public class Sale {
         this.price = price;
     }
 
-    public String getCompany() {
-        return company;
+    public Client getCelint() {
+        return client;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCelint(Client client) {
+        this.client = client;
     }
 
     public String getId() {

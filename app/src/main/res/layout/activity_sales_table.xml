@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".SalesTable">
+    tools:context=".Activities.TableActivities.SalesTable">
 
     <ProgressBar
         android:id="@+id/login_progress"

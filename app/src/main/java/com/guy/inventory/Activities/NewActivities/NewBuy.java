@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities.NewActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,10 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Classes.Buy;
+
 import java.util.Calendar;
 import java.util.Date;
 
