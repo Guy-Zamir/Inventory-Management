@@ -61,8 +61,6 @@ public class NewSale extends AppCompatActivity {
         queryBuilder.setWhereClause(whereClause);
         queryBuilder.setGroupBy("name");
 
-        showProgress(true);
-        tvLoad.setText("טוען נתונים, אנא המתן...");
 
         Backendless.Data.of(Client.class).find(queryBuilder, new AsyncCallback<List<Client>>() {
             @Override
@@ -76,13 +74,11 @@ public class NewSale extends AppCompatActivity {
                 acClients.setAdapter(adapter);
                 acClients.setThreshold(1);
                 acClients.setAdapter(adapter);
-                showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_LONG).show();
-                showProgress(false);
             }
         });
 

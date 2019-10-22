@@ -145,7 +145,7 @@ public class EditBuy extends AppCompatActivity {
             llBuyDetailsDone.setVisibility(View.GONE);
         }
 
-        etBuyEditSupplier.setText(InventoryApp.buys.get(index).getSupplier());
+        etBuyEditSupplier.setText(InventoryApp.buys.get(index).getSupplier().getName());
         etBuyEditID.setText(InventoryApp.buys.get(index).getId());
         etBuyEditPrice.setText(String.valueOf(InventoryApp.buys.get(index).getPrice()));
         etBuyEditWeight.setText(String.valueOf(InventoryApp.buys.get(index).getWeight()));
@@ -353,7 +353,7 @@ public class EditBuy extends AppCompatActivity {
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             InventoryApp.buys.get(index).setBuyDate(getDateFromDatePicker(dpBuyEditDate));
-                            InventoryApp.buys.get(index).setSupplier(supplier);
+                            InventoryApp.buys.get(index).getSupplier().setName(supplier);
                             InventoryApp.buys.get(index).setId(id);
                             InventoryApp.buys.get(index).setWeight(weight);
                             InventoryApp.buys.get(index).setPrice(price);

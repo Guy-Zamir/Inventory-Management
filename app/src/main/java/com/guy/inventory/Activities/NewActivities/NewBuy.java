@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -14,12 +17,15 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.Classes.Supplier;
 import com.guy.inventory.R;
 import com.guy.inventory.Classes.Buy;
-
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class NewBuy extends AppCompatActivity {
 
@@ -27,12 +33,15 @@ public class NewBuy extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    DatePicker dpBuyDate;
-    EditText etBuySupplier, etBuyID, etBuyPrice, etBuyWeight, etBuyDays;
-    CheckBox cbBuyPolish;
-    Button btnBuySubmit;
+    private DatePicker dpBuyDate;
+    private EditText etBuyID, etBuyPrice, etBuyWeight, etBuyDays;
+    private CheckBox cbBuyPolish;
 
-    String supplier, id;
+    private ArrayAdapter<String> adapter;
+    private AutoCompleteTextView acSuppliers;
+    private int chosenSupplier = -1;
+
+    String id;
     boolean polish;
     double price, weight;
     int days;
@@ -43,44 +52,80 @@ public class NewBuy extends AppCompatActivity {
         setContentView(R.layout.activity_new_buy);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
         dpBuyDate = findViewById(R.id.dpBuyDate);
-        etBuySupplier = findViewById(R.id.etBuySupplier);
+        acSuppliers = findViewById(R.id.acSuppliers);
         etBuyID = findViewById(R.id.etBuyID);
         etBuyPrice = findViewById(R.id.etBuyPrice);
         etBuyWeight = findViewById(R.id.etBuyWeight);
         etBuyDays = findViewById(R.id.etBuyDays);
         cbBuyPolish = findViewById(R.id.cbBuyPolish);
-        btnBuySubmit = findViewById(R.id.btnBuySubmit);
+        Button btnBuySubmit = findViewById(R.id.btnBuySubmit);
 
+        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        queryBuilder.setWhereClause(whereClause);
+        queryBuilder.setGroupBy("name");
+
+
+        Backendless.Data.of(Supplier.class).find(queryBuilder, new AsyncCallback<List<Supplier>>() {
+            @Override
+            public void handleResponse(List<Supplier> response) {
+                ArrayList<String> supplierNames = new ArrayList<>();
+                for (Supplier supplier : response) {
+                    supplierNames.add(supplier.getName());
+                }
+                InventoryApp.suppliers = response;
+                adapter = new ArrayAdapter<>(NewBuy.this,android.R.layout.select_dialog_singlechoice, supplierNames);
+                acSuppliers.setAdapter(adapter);
+                acSuppliers.setThreshold(1);
+                acSuppliers.setAdapter(adapter);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(NewBuy.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        acSuppliers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                chosenSupplier = position;
+            }
+        });
+
+        acSuppliers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acSuppliers.showDropDown();
+            }
+        });
 
         btnBuySubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean toast = false;
+                if (chosenSupplier == -1) {
+                    Toast.makeText(NewBuy.this, "יש לבחור שם ספק קיים בלבד", Toast.LENGTH_SHORT).show();
 
-                if (etBuySupplier.getText().toString().isEmpty() || etBuyID.getText().toString().isEmpty() ||
+                } else if (etBuyID.getText().toString().isEmpty() ||
                         etBuyPrice.getText().toString().isEmpty() || etBuyWeight.getText().toString().isEmpty() ||
                         etBuyDays.getText().toString().isEmpty()){
-                    toast = true;
+
+                    Toast.makeText(NewBuy.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
                 } else {
-                    supplier = etBuySupplier.getText().toString().trim();
+
                     id = etBuyID.getText().toString().trim();
                     price = Double.parseDouble(etBuyPrice.getText().toString().trim());
                     weight = Double.parseDouble(etBuyWeight.getText().toString().trim());
                     days = Integer.valueOf(etBuyDays.getText().toString().trim());
                     polish = cbBuyPolish.isChecked();
-                }
 
-                if (toast) {
-                    Toast.makeText(NewBuy.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
-                } else {
                     Buy buy = new Buy();
                     buy.setBuyDate(getDateFromDatePicker(dpBuyDate));
-                    buy.setSupplier(supplier);
+                    buy.setSupplier(InventoryApp.suppliers.get(chosenSupplier));
                     buy.setId(id);
                     buy.setPrice(price);
                     buy.setWeight(weight);
