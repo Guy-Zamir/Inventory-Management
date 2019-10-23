@@ -10,10 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.guy.inventory.R;
 import com.guy.inventory.Classes.Sale;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -56,7 +54,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
         String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
 
-        tvSaleClientName.setText(sales.get(position).getCelint().getName());
+        tvSaleClientName.setText(sales.get(position).getClientName());
         tvSaleDate.setText("תאריך מכירה:  " + saleDays + "/" + saleMonth);
         tvSaleSum.setText("סכום:  " + nf.format(sales.get(position).getSaleSum()) + "$");
         tvSaleWeight.setText("משקל:  " + nf.format(sales.get(position).getWeight()));

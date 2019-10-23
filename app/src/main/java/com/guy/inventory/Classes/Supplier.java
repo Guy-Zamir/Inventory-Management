@@ -5,6 +5,7 @@ import java.util.Date;
 public class Supplier {
     private String name, location, building, phoneNumber, insidePhone, fax, website, details, userEmail;
     private Date created, updated;
+    private boolean home;
 
     public String getName() {
         return name;
@@ -92,5 +93,13 @@ public class Supplier {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public boolean isHome() {
+        return home;
+    }
+
+    public void setHome(boolean home) {
+        this.home = home;
     }
 }

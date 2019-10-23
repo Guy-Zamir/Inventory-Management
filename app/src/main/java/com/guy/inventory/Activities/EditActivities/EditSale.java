@@ -33,14 +33,14 @@ public class EditSale extends AppCompatActivity {
     LinearLayout llSaleEdit, llSaleDetails;
     ImageView ivSaleDelete, ivSaleEdit, ivSalePaid, ivSaleDetails;
     DatePicker dpSaleEditDate;
-    EditText etSaleEditClientName, etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
+    EditText etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
     TextView tvSaleEditClientName, tvSaleEditID, tvSaleEditWeight, tvSaleEditSum, tvSaleEditDays;
     TextView tvSaleDetailsClientName, tvSaleDetailsBuyDate, tvSaleDetailsPayDate, tvSaleDetailsID,
             tvSaleDetailsPrice, tvSaleDetailsWeight, tvSaleDetailsDays, tvSaleDetailsSum;
     Button btnSaleEditSubmit;
 
     int index, days;
-    String clientName, id;
+    String id;
     double weight, saleSum;
     boolean toast = false, edit = false, details = true;
 
@@ -64,7 +64,6 @@ public class EditSale extends AppCompatActivity {
         llSaleDetails = findViewById(R.id.llSaleDetails);
 
         dpSaleEditDate = findViewById(R.id.dpSaleEditDate);
-        etSaleEditClientName = findViewById(R.id.etSaleEditClientName);
         etSaleEditID = findViewById(R.id.etSaleEditID);
         etSaleEditWeight = findViewById(R.id.etSaleEditWeight);
         etSaleEditSum = findViewById(R.id.etSaleEditSum);
@@ -86,6 +85,8 @@ public class EditSale extends AppCompatActivity {
         tvSaleDetailsDays = findViewById(R.id.tvSaleDetailsDays);
         tvSaleDetailsSum = findViewById(R.id.tvSaleDetailsSum);
 
+        tvSaleEditClientName.setText(InventoryApp.sales.get(index).getClientName());
+
         DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
 
         Calendar saleDate = Calendar.getInstance();
@@ -101,7 +102,7 @@ public class EditSale extends AppCompatActivity {
         tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
         tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
 
-        tvSaleDetailsClientName.setText("שם הספק:  " + InventoryApp.sales.get(index).getCelint().getName());
+        tvSaleDetailsClientName.setText("שם הספק:  " + InventoryApp.sales.get(index).getClientName());
         tvSaleDetailsID.setText("מספר האסמכתא:  " + InventoryApp.sales.get(index).getId());
         tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(index).getPrice()) + "$");
         tvSaleDetailsWeight.setText("משקל החבילה:  " + nf.format(InventoryApp.sales.get(index).getWeight()));
@@ -118,7 +119,6 @@ public class EditSale extends AppCompatActivity {
         } else {
             ivSalePaid.setImageResource(R.drawable.empty_dollar);
         }
-        etSaleEditClientName.setText(InventoryApp.sales.get(index).getCelint().getName());
         etSaleEditID.setText(InventoryApp.sales.get(index).getId());
         etSaleEditWeight.setText(String.valueOf(InventoryApp.sales.get(index).getWeight()));
         etSaleEditSum.setText(String.valueOf(InventoryApp.sales.get(index).getSaleSum()));
@@ -234,12 +234,11 @@ public class EditSale extends AppCompatActivity {
         btnSaleEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etSaleEditClientName.getText().toString().isEmpty() || etSaleEditID.getText().toString().isEmpty() ||
+                if (etSaleEditID.getText().toString().isEmpty() ||
                         etSaleEditWeight.getText().toString().isEmpty()|| etSaleEditSum.getText().toString().isEmpty()||
                     etSaleEditDays.getText().toString().isEmpty()) {
                     toast = true;
                 } else {
-                    clientName = etSaleEditClientName.getText().toString().trim();
                     id = etSaleEditID.getText().toString().trim();
                     weight = Double.parseDouble(etSaleEditWeight.getText().toString().trim());
                     saleSum = Double.parseDouble(etSaleEditSum.getText().toString().trim());
@@ -257,7 +256,6 @@ public class EditSale extends AppCompatActivity {
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             InventoryApp.sales.get(index).setSaleDate(getDateFromDatePicker(dpSaleEditDate));
-                            InventoryApp.sales.get(index).getCelint().setName(clientName);
                             InventoryApp.sales.get(index).setId(id);
                             InventoryApp.sales.get(index).setWeight(weight);
                             InventoryApp.sales.get(index).setSaleSum(saleSum);

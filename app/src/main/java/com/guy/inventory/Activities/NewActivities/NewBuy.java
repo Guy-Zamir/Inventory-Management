@@ -9,11 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -35,16 +35,11 @@ public class NewBuy extends AppCompatActivity {
 
     private DatePicker dpBuyDate;
     private EditText etBuyID, etBuyPrice, etBuyWeight, etBuyDays;
-    private CheckBox cbBuyPolish;
+    private ToggleButton tbBuyPolish;
 
     private ArrayAdapter<String> adapter;
     private AutoCompleteTextView acSuppliers;
     private int chosenSupplier = -1;
-
-    String id;
-    boolean polish;
-    double price, weight;
-    int days;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +56,7 @@ public class NewBuy extends AppCompatActivity {
         etBuyPrice = findViewById(R.id.etBuyPrice);
         etBuyWeight = findViewById(R.id.etBuyWeight);
         etBuyDays = findViewById(R.id.etBuyDays);
-        cbBuyPolish = findViewById(R.id.cbBuyPolish);
+        tbBuyPolish = findViewById(R.id.tbBuyPolish);
         Button btnBuySubmit = findViewById(R.id.btnBuySubmit);
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
@@ -117,15 +112,16 @@ public class NewBuy extends AppCompatActivity {
                     Toast.makeText(NewBuy.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    id = etBuyID.getText().toString().trim();
-                    price = Double.parseDouble(etBuyPrice.getText().toString().trim());
-                    weight = Double.parseDouble(etBuyWeight.getText().toString().trim());
-                    days = Integer.valueOf(etBuyDays.getText().toString().trim());
-                    polish = cbBuyPolish.isChecked();
+                    String supplierName = InventoryApp.suppliers.get(chosenSupplier).getName();
+                    String id = etBuyID.getText().toString().trim();
+                    double price = Double.parseDouble(etBuyPrice.getText().toString().trim());
+                    double weight = Double.parseDouble(etBuyWeight.getText().toString().trim());
+                    int days = Integer.valueOf(etBuyDays.getText().toString().trim());
+                    boolean polish = !tbBuyPolish.isChecked();
 
                     Buy buy = new Buy();
+                    buy.setSupplierName(supplierName);
                     buy.setBuyDate(getDateFromDatePicker(dpBuyDate));
-                    buy.setSupplier(InventoryApp.suppliers.get(chosenSupplier));
                     buy.setId(id);
                     buy.setPrice(price);
                     buy.setWeight(weight);

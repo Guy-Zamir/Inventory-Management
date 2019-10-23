@@ -60,7 +60,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
         String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
 
 
-        tvBuySupplier.setText(buys.get(position).getSupplier().getName());
+        tvBuySupplier.setText(buys.get(position).getSupplierName());
         tvBuyDate.setText("תאריך קניה:  " + buyDays + "/" + buyMonth);
         tvBuyWeight.setText("משקל:  " + nf.format(buys.get(position).getWeight()));
         tvBuyPrice.setText("מחיר:  " + nf.format(buys.get(position).getPrice()) + "$");

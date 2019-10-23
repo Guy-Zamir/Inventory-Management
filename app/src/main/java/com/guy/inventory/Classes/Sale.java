@@ -2,9 +2,8 @@ package com.guy.inventory.Classes;
 import java.util.Date;
 
 public class Sale {
-    private Client client;
     private double saleSum, weight, price;
-    private String id;
+    private String id, clientName;
     private int days;
     private boolean paid;
     private Date saleDate, payDate;
@@ -34,14 +33,6 @@ public class Sale {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public Client getCelint() {
-        return client;
-    }
-
-    public void setCelint(Client client) {
-        this.client = client;
     }
 
     public String getId() {
@@ -114,5 +105,13 @@ public class Sale {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 }

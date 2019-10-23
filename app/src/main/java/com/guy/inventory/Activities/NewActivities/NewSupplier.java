@@ -1,7 +1,6 @@
 package com.guy.inventory.Activities.NewActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -22,8 +22,10 @@ public class NewSupplier extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
+    private ToggleButton tbNewSupplierHome;
     private EditText etNewSupplierName, etNewSupplierLocation, etNewSupplierPhoneNumber, etNewSupplierInsidePhone, etNewSupplierFax, etNewSupplierWebsite, etNewSupplierDetails;
     private String name, location, phoneNumber, insidePhone, fax, website, details;
+    private boolean home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class NewSupplier extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
+        tbNewSupplierHome = findViewById(R.id.tbNewSupplierHome);
         etNewSupplierName = findViewById(R.id.etNewSupplierName);
         etNewSupplierLocation = findViewById(R.id.etNewSupplierLocation);
         etNewSupplierPhoneNumber = findViewById(R.id.etNewSupplierPhoneNumber);
@@ -57,6 +60,7 @@ public class NewSupplier extends AppCompatActivity {
                     fax = etNewSupplierFax.getText().toString().trim();
                     website = etNewSupplierWebsite.getText().toString().trim();
                     details = etNewSupplierDetails.getText().toString().trim();
+                    home = !tbNewSupplierHome.isChecked();
 
                     Supplier supplier = new Supplier();
                     supplier.setName(name);
@@ -66,6 +70,8 @@ public class NewSupplier extends AppCompatActivity {
                     supplier.setFax(fax);
                     supplier.setWebsite(website);
                     supplier.setDetails(details);
+                    supplier.setHome(home);
+
                     supplier.setUserEmail(InventoryApp.user.getEmail());
                     showProgress(true);
                     Backendless.Persistence.save(supplier, new AsyncCallback<Supplier>() {
@@ -84,7 +90,6 @@ public class NewSupplier extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void showProgress(final boolean show) {

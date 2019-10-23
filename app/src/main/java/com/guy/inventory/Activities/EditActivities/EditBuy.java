@@ -33,14 +33,14 @@ public class EditBuy extends AppCompatActivity {
     LinearLayout llBuyEdit, llBuyDone, llBuyDetails, llBuyDetailsDone;
     ImageView ivBuyEditDelete, ivBuyEdit, ivBuyEditPaid, ivBuyEditDone, ivBuyDetails;
     DatePicker dpBuyEditDate;
-    EditText etBuyEditSupplier, etBuyEditID, etBuyEditPrice, etBuyEditWeight, etBuyEditDays, etBuyEditDoneWeight, etBuyEditWage;
+    EditText etBuyEditID, etBuyEditPrice, etBuyEditWeight, etBuyEditDays, etBuyEditDoneWeight, etBuyEditWage;
     TextView tvBuyEditSupplier, tvBuyEditID, tvBuyEditPrice, tvBuyEditWeight, tvBuyEditDays, tvBuyEditDoneWeight, tvBuyEditWage;
     TextView tvBuyDetailsSupplier, tvBuyDetailsBuyDate, tvBuyDetailsPayDate, tvBuyDetailsID,
             tvBuyDetailsPrice, tvBuyDetailsWeight, tvBuyDetailsDays, tvBuyDetailsSum, tvBuyDetailsDoneWeight, tvBuyDetailsWage, tvBuyDetailsWorkDe;
     Button btnBuyEditSubmit;
 
     int index, days;
-    String supplier, id;
+    String  id;
     double weight, doneWeight, wage, price;
     boolean toast = false ,edit = false, details = true;
 
@@ -67,7 +67,6 @@ public class EditBuy extends AppCompatActivity {
         ivBuyDetails = findViewById(R.id.ivBuyDetails);
 
         dpBuyEditDate = findViewById(R.id.dpBuyEditDate);
-        etBuyEditSupplier = findViewById(R.id.etBuyEditSupplier);
         etBuyEditID = findViewById(R.id.etBuyEditID);
         etBuyEditPrice = findViewById(R.id.etBuyEditPrice);
         etBuyEditWeight = findViewById(R.id.etBuyEditWeight);
@@ -101,6 +100,8 @@ public class EditBuy extends AppCompatActivity {
 
         index = getIntent().getIntExtra("index", 0);
 
+        tvBuyEditSupplier.setText(InventoryApp.buys.get(index).getSupplierName());
+
         if (InventoryApp.buys.get(index).isPaid()) {
             ivBuyEditPaid.setImageResource(R.drawable.full_dollar);
         } else {
@@ -129,7 +130,7 @@ public class EditBuy extends AppCompatActivity {
         tvBuyDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
         tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
 
-        tvBuyDetailsSupplier.setText("שם הספק:  " + InventoryApp.buys.get(index).getSupplier());
+        tvBuyDetailsSupplier.setText("שם הספק:  " + InventoryApp.buys.get(index).getSupplierName());
         tvBuyDetailsID.setText("מספר אסמכתא:  " + InventoryApp.buys.get(index).getId());
         tvBuyDetailsPrice.setText("מחיר לקראט:  " + nf.format(InventoryApp.buys.get(index).getPrice()) + "$");
         tvBuyDetailsWeight.setText("משקל החבילה:  " + nf.format(InventoryApp.buys.get(index).getWeight()));
@@ -145,7 +146,6 @@ public class EditBuy extends AppCompatActivity {
             llBuyDetailsDone.setVisibility(View.GONE);
         }
 
-        etBuyEditSupplier.setText(InventoryApp.buys.get(index).getSupplier().getName());
         etBuyEditID.setText(InventoryApp.buys.get(index).getId());
         etBuyEditPrice.setText(String.valueOf(InventoryApp.buys.get(index).getPrice()));
         etBuyEditWeight.setText(String.valueOf(InventoryApp.buys.get(index).getWeight()));
@@ -322,19 +322,17 @@ public class EditBuy extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!InventoryApp.buys.get(index).isDone()) {
-                    if (etBuyEditSupplier.getText().toString().isEmpty() || etBuyEditID.getText().toString().isEmpty() ||
+                    if (etBuyEditID.getText().toString().isEmpty() ||
                         etBuyEditWeight.getText().toString().isEmpty()|| etBuyEditPrice.getText().toString().isEmpty()||
                         etBuyEditDays.getText().toString().isEmpty()) {
                         toast = true;
                     }
                 } else if (etBuyEditWage.getText().toString().isEmpty() || etBuyEditDoneWeight.getText().toString().isEmpty() ||
-                        etBuyEditSupplier.getText().toString().isEmpty() || etBuyEditID.getText().toString().isEmpty() ||
-                        etBuyEditWeight.getText().toString().isEmpty()|| etBuyEditPrice.getText().toString().isEmpty()||
-                        etBuyEditDays.getText().toString().isEmpty()) {
+                        etBuyEditID.getText().toString().isEmpty() || etBuyEditWeight.getText().toString().isEmpty()||
+                        etBuyEditPrice.getText().toString().isEmpty()|| etBuyEditDays.getText().toString().isEmpty()) {
                     toast = true;
                 }
 
-                supplier = etBuyEditSupplier.getText().toString().trim();
                 id = etBuyEditID.getText().toString().trim();
                 weight = Double.parseDouble(etBuyEditWeight.getText().toString().trim());
                 price = Double.parseDouble(etBuyEditPrice.getText().toString().trim());
@@ -353,7 +351,6 @@ public class EditBuy extends AppCompatActivity {
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             InventoryApp.buys.get(index).setBuyDate(getDateFromDatePicker(dpBuyEditDate));
-                            InventoryApp.buys.get(index).getSupplier().setName(supplier);
                             InventoryApp.buys.get(index).setId(id);
                             InventoryApp.buys.get(index).setWeight(weight);
                             InventoryApp.buys.get(index).setPrice(price);

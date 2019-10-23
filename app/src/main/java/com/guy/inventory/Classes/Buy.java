@@ -2,11 +2,10 @@ package com.guy.inventory.Classes;
 import java.util.Date;
 
 public class Buy {
-    private Supplier supplier;
     private Date buyDate, payDate;
     private double price, weight, doneWeight, sum, workDepreciation, wage;
     private int days;
-    private String id;
+    private String id, supplierName;
     private boolean polish, done, paid;
 
     private Date created, updated;
@@ -66,14 +65,6 @@ public class Buy {
 
     public void setWage(double wage) {
         this.wage = wage;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
     }
 
     public String getId() {
@@ -154,5 +145,13 @@ public class Buy {
 
     public void setPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }

@@ -32,9 +32,6 @@ public class NewSale extends AppCompatActivity {
     private TextView tvLoad;
     private DatePicker dpSaleDate;
     private EditText etSaleID, etSaleSum, etSaleWeight, etSaleDays;
-    private String id;
-    private double saleSum, weight;
-    private int days;
     private ArrayAdapter<String> adapter;
     private AutoCompleteTextView acClients;
     private int chosenClient = -1;
@@ -70,7 +67,7 @@ public class NewSale extends AppCompatActivity {
                     clientNames.add(client.getName());
                 }
                 InventoryApp.clients = response;
-                adapter = new ArrayAdapter<>(NewSale.this,android.R.layout.select_dialog_singlechoice, clientNames);
+                adapter = new ArrayAdapter<>(NewSale.this, android.R.layout.select_dialog_singlechoice, clientNames);
                 acClients.setAdapter(adapter);
                 acClients.setThreshold(1);
                 acClients.setAdapter(adapter);
@@ -104,20 +101,22 @@ public class NewSale extends AppCompatActivity {
                     Toast.makeText(NewSale.this, "יש לבחור שם חברה קיים בלבד", Toast.LENGTH_SHORT).show();
 
                 } else if (acClients.getText().toString().isEmpty() || etSaleID.getText().toString().isEmpty() ||
-                        etSaleWeight.getText().toString().isEmpty() || etSaleSum.getText().toString().isEmpty()||
-                etSaleDays.getText().toString().isEmpty()) {
+                        etSaleWeight.getText().toString().isEmpty() || etSaleSum.getText().toString().isEmpty() ||
+                        etSaleDays.getText().toString().isEmpty()) {
 
                     Toast.makeText(NewSale.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    id = etSaleID.getText().toString();
-                    weight = Double.parseDouble(etSaleWeight.getText().toString());
-                    saleSum = Double.parseDouble(etSaleSum.getText().toString());
-                    days = Integer.valueOf(etSaleDays.getText().toString().trim());
+                    String clientName = InventoryApp.clients.get(chosenClient).getName();
+                    String id = etSaleID.getText().toString();
+                    double weight = Double.parseDouble(etSaleWeight.getText().toString());
+                    double saleSum = Double.parseDouble(etSaleSum.getText().toString());
+                    int days = Integer.valueOf(etSaleDays.getText().toString().trim());
 
                     Sale sale = new Sale();
+                    sale.setClientName(clientName);
                     sale.setSaleDate(getDateFromDatePicker(dpSaleDate));
-                    sale.setCelint(InventoryApp.clients.get(chosenClient));
+                    sale.setClientName(InventoryApp.clients.get(chosenClient).getName());
                     sale.setId(id);
                     sale.setSaleSum(saleSum);
                     sale.setWeight(weight);
@@ -133,15 +132,16 @@ public class NewSale extends AppCompatActivity {
                         sale.setPaid(true);
                     }
                     sale.setPayDate(addedDays);
-                    sale.setPrice((saleSum/weight));
+                    sale.setPrice((saleSum / weight));
                     sale.setUserEmail(InventoryApp.user.getEmail());
+
                     showProgress(true);
                     Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
                         @Override
                         public void handleResponse(Sale response) {
                             Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                            NewSale.this.finish();
                             showProgress(false);
+                            NewSale.this.finish();
                         }
 
                         @Override
@@ -161,12 +161,12 @@ public class NewSale extends AppCompatActivity {
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
-    private Date getDateFromDatePicker(DatePicker datePicker){
+    private Date getDateFromDatePicker(DatePicker datePicker) {
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
         int year = datePicker.getYear();
         Calendar c = Calendar.getInstance();
-        c.set(year,month,day);
+        c.set(year, month, day);
         return c.getTime();
     }
 }
