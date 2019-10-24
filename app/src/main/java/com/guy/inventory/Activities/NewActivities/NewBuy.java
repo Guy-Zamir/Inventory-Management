@@ -117,7 +117,7 @@ public class NewBuy extends AppCompatActivity {
                     double price = Double.parseDouble(etBuyPrice.getText().toString().trim());
                     double weight = Double.parseDouble(etBuyWeight.getText().toString().trim());
                     int days = Integer.valueOf(etBuyDays.getText().toString().trim());
-                    boolean polish = !tbBuyPolish.isChecked();
+                    boolean polish = tbBuyPolish.isChecked();
 
                     Buy buy = new Buy();
                     buy.setSupplierName(supplierName);

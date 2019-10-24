@@ -20,7 +20,6 @@ import com.backendless.exceptions.BackendlessFault;
 import com.guy.inventory.Activities.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Classes.Sale;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -115,9 +114,9 @@ public class EditSale extends AppCompatActivity {
         index = getIntent().getIntExtra("index", 0);
 
         if (InventoryApp.sales.get(index).isPaid()) {
-            ivSalePaid.setImageResource(R.drawable.full_dollar);
-        } else {
             ivSalePaid.setImageResource(R.drawable.empty_dollar);
+        } else {
+            ivSalePaid.setImageResource(R.drawable.full_dollar);
         }
         etSaleEditID.setText(InventoryApp.sales.get(index).getId());
         etSaleEditWeight.setText(String.valueOf(InventoryApp.sales.get(index).getWeight()));

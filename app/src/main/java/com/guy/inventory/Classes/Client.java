@@ -3,7 +3,7 @@ package com.guy.inventory.Classes;
 import java.util.Date;
 
 public class Client {
-    private String name, location, building, phoneNumber, insidePhone, fax, website, details, userEmail;
+    private String name, location, phoneNumber, insidePhone, fax, website, details, userEmail;
     private Date created, updated;
     private boolean home;
 
@@ -21,14 +21,6 @@ public class Client {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(String building) {
-        this.building = building;
     }
 
     public String getPhoneNumber() {

@@ -19,7 +19,6 @@ import com.guy.inventory.Activities.InventoryApp;
 import com.guy.inventory.Adapters.BuysAdapter;
 import com.guy.inventory.R;
 import com.guy.inventory.Classes.Buy;
-
 import java.util.List;
 
 public class BuysTable extends AppCompatActivity {

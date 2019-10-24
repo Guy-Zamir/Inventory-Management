@@ -103,17 +103,17 @@ public class EditBuy extends AppCompatActivity {
         tvBuyEditSupplier.setText(InventoryApp.buys.get(index).getSupplierName());
 
         if (InventoryApp.buys.get(index).isPaid()) {
-            ivBuyEditPaid.setImageResource(R.drawable.full_dollar);
-        } else {
             ivBuyEditPaid.setImageResource(R.drawable.empty_dollar);
+        } else {
+            ivBuyEditPaid.setImageResource(R.drawable.full_dollar);
         }
 
         if (InventoryApp.buys.get(index).isDone()) {
             llBuyDone.setVisibility(View.VISIBLE);
-            ivBuyEditDone.setImageResource(R.drawable.done_icon);
+            ivBuyEditDone.setImageResource(R.drawable.not_done_icon);
         } else {
             llBuyDone.setVisibility(View.GONE);
-            ivBuyEditDone.setImageResource(R.drawable.not_done_icon);
+            ivBuyEditDone.setImageResource(R.drawable.done_icon);
         }
         DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
 
@@ -298,11 +298,11 @@ public class EditBuy extends AppCompatActivity {
                                 if (InventoryApp.buys.get(index).isDone()) {
                                     llBuyDone.setVisibility(View.VISIBLE);
                                     llBuyDetailsDone.setVisibility(View.VISIBLE);
-                                    ivBuyEditDone.setImageResource(R.drawable.done_icon);
+                                    ivBuyEditDone.setImageResource(R.drawable.not_done_icon);
                                 } else {
                                     llBuyDone.setVisibility(View.GONE);
                                     llBuyDetailsDone.setVisibility(View.GONE);
-                                    ivBuyEditDone.setImageResource(R.drawable.not_done_icon);
+                                    ivBuyEditDone.setImageResource(R.drawable.done_icon);
                                 }
                             }
 
