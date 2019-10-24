@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.EditActivities.EditClient"></activity>
+        <activity android:name=".Activities.EditActivities.EditSupplier"></activity>
+        <activity android:name=".Activities.EditActivities.EditClient" />
         <activity android:name=".Activities.TableActivities.ClientTable" />
         <activity android:name=".Activities.NewActivities.NewClient" />
         <activity android:name=".Activities.TableActivities.SupplierTable" />

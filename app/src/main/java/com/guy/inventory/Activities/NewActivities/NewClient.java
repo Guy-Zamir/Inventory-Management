@@ -92,7 +92,6 @@ public class NewClient extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void showProgress(final boolean show) {

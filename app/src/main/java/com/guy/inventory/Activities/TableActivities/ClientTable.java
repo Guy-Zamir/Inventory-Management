@@ -15,7 +15,6 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Activities.EditActivities.EditClient;
-import com.guy.inventory.Activities.EditActivities.EditSale;
 import com.guy.inventory.Activities.InventoryApp;
 import com.guy.inventory.Adapters.ClientAdapter;
 import com.guy.inventory.Classes.Client;
@@ -41,7 +40,6 @@ public class ClientTable extends AppCompatActivity {
         tvLoad = findViewById(R.id.tvLoad);
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
         queryBuilder.setGroupBy("created");

@@ -3,9 +3,12 @@ package com.guy.inventory.Classes;
 import java.util.Date;
 
 public class Supplier {
-    private String name, location, building, phoneNumber, insidePhone, fax, website, details, userEmail;
-    private Date created, updated;
     private boolean home;
+    private String name, location, building, phoneNumber, insidePhone, fax, website, details;
+
+    private Date created, updated;
+    private String objectId, userEmail;
+
 
     public String getName() {
         return name;
@@ -101,5 +104,13 @@ public class Supplier {
 
     public void setHome(boolean home) {
         this.home = home;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

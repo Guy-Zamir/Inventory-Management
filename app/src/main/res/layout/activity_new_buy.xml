@@ -47,7 +47,7 @@
         <DatePicker
             android:id="@+id/dpBuyDate"
             android:layout_width="match_parent"
-            android:layout_height="175dp"
+            android:layout_height="130dp"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:gravity="center|center_horizontal|center_vertical" />
@@ -133,9 +133,9 @@
             android:id="@+id/btnBuySubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="0"
             android:background="@drawable/buttons"
             android:text="אשר"

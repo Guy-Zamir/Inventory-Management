@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Activities.EditActivities.EditSupplier;
 import com.guy.inventory.Activities.InventoryApp;
 import com.guy.inventory.Adapters.SupplierAdapter;
 import com.guy.inventory.Classes.Supplier;
@@ -58,6 +60,15 @@ public class SupplierTable extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 Toast.makeText(SupplierTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        lvSupplierList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SupplierTable.this, EditSupplier.class);
+                intent.putExtra("index", position);
+                startActivityForResult(intent, 1);
             }
         });
     }

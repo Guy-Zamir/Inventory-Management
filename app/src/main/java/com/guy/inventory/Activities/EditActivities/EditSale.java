@@ -41,7 +41,7 @@ public class EditSale extends AppCompatActivity {
     int index, days;
     String id;
     double weight, saleSum;
-    boolean toast = false, edit = false, details = true;
+    boolean edit = false, details = true;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -213,6 +213,7 @@ public class EditSale extends AppCompatActivity {
                             @Override
                             public void handleResponse(Long response) {
                                 showProgress(false);
+                                InventoryApp.sales.remove(index);
                                 Toast.makeText(EditSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                                 finishActivity(1);
                                 setResult(RESULT_OK);
@@ -236,17 +237,15 @@ public class EditSale extends AppCompatActivity {
                 if (etSaleEditID.getText().toString().isEmpty() ||
                         etSaleEditWeight.getText().toString().isEmpty()|| etSaleEditSum.getText().toString().isEmpty()||
                     etSaleEditDays.getText().toString().isEmpty()) {
-                    toast = true;
+
+                    Toast.makeText(EditSale.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
                 } else {
+
                     id = etSaleEditID.getText().toString().trim();
                     weight = Double.parseDouble(etSaleEditWeight.getText().toString().trim());
                     saleSum = Double.parseDouble(etSaleEditSum.getText().toString().trim());
                     days = Integer.valueOf(etSaleEditDays.getText().toString().trim());
-                }
 
-                if (toast) {
-                    Toast.makeText(EditSale.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
-                } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(EditSale.this);
                     alert.setTitle("שינוי נתונים");
                     alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");

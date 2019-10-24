@@ -41,13 +41,10 @@ public class BuysTable extends AppCompatActivity {
         tvLoad = findViewById(R.id.tvLoad);
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
         queryBuilder.setGroupBy("created");
-
         showProgress(true);
-        tvLoad.setText("טוען נתונים, אנא המתן...");
 
         Backendless.Data.of(Buy.class).find(queryBuilder, new AsyncCallback<List<Buy>>() {
             @Override

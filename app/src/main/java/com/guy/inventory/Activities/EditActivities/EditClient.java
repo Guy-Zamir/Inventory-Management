@@ -129,6 +129,7 @@ public class EditClient extends AppCompatActivity {
                             @Override
                             public void handleResponse(Long response) {
                                 showProgress(false);
+                                InventoryApp.clients.remove(index);
                                 Toast.makeText(EditClient.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                                 finishActivity(1);
                                 setResult(RESULT_OK);

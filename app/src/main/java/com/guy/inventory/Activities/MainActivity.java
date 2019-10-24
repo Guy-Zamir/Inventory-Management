@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import com.guy.inventory.Activities.NewActivities.NewBuy;
 import com.guy.inventory.Activities.NewActivities.NewClient;
 import com.guy.inventory.Activities.NewActivities.NewSale;
@@ -16,6 +15,7 @@ import com.guy.inventory.Activities.TableActivities.ClientTable;
 import com.guy.inventory.Activities.TableActivities.SalesTable;
 import com.guy.inventory.Activities.TableActivities.SupplierTable;
 import com.guy.inventory.R;
+
 
 public class MainActivity extends AppCompatActivity {
     Button btnResult, btnNewBuy, btnNewSale, btnBuyTable, btnSaleTable, btnNewSupplier, btnSupplierTable, btnNewClient, btnClientTable;

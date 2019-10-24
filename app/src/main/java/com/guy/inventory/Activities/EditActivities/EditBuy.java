@@ -250,6 +250,7 @@ public class EditBuy extends AppCompatActivity {
                             @Override
                             public void handleResponse(Long response) {
                                 showProgress(false);
+                                InventoryApp.buys.remove(index);
                                 Toast.makeText(EditBuy.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                                 finishActivity(1);
                                 setResult(RESULT_OK);
