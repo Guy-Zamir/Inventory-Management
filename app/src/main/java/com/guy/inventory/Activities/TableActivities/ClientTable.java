@@ -42,7 +42,8 @@ public class ClientTable extends AppCompatActivity {
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setGroupBy("created");
+        queryBuilder.setGroupBy("objectId");
+        queryBuilder.setPageSize(100);
 
         showProgress(true);
         tvLoad.setText("טוען נתונים, אנא המתן...");

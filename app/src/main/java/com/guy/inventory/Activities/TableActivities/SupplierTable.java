@@ -43,7 +43,8 @@ public class SupplierTable extends AppCompatActivity {
 
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setGroupBy("created");
+        queryBuilder.setGroupBy("objectId");
+        queryBuilder.setPageSize(100);
 
         showProgress(true);
         tvLoad.setText("טוען נתונים, אנא המתן...");

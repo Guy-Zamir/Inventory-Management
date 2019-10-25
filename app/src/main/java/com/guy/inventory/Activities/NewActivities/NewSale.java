@@ -56,7 +56,8 @@ public class NewSale extends AppCompatActivity {
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setGroupBy("name");
+        queryBuilder.setPageSize(100);
+        queryBuilder.setGroupBy("objectId");
 
 
         Backendless.Data.of(Client.class).find(queryBuilder, new AsyncCallback<List<Client>>() {

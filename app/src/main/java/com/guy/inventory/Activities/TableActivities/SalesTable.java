@@ -44,6 +44,7 @@ public class SalesTable extends AppCompatActivity {
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
         queryBuilder.setGroupBy("created");
+        queryBuilder.setPageSize(100);
 
         showProgress(true);
         tvLoad.setText("טוען נתונים, אנא המתן...");
