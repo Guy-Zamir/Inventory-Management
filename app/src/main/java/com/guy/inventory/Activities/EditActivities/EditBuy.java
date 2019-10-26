@@ -160,20 +160,14 @@ public class EditBuy extends AppCompatActivity {
         ivBuyEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edit = !edit;
-                details = !details;
-                if (edit) {
+                if (!edit) {
                     llBuyEdit.setVisibility(View.VISIBLE);
                     llBuyDetails.setVisibility(View.GONE);
                     if (InventoryApp.buys.get(index).isDone()) {
                         llBuyDone.setVisibility(View.VISIBLE);
                     }
-                } else {
-                    llBuyEdit.setVisibility(View.GONE);
-                    llBuyDetails.setVisibility(View.VISIBLE);
-                    if (InventoryApp.buys.get(index).isDone()) {
-                        llBuyDone.setVisibility(View.GONE);
-                    }
+                    edit = true;
+                    details = false;
                 }
             }
         });
@@ -181,13 +175,11 @@ public class EditBuy extends AppCompatActivity {
         ivBuyDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                details = !details;
-                edit = !edit;
-                if (details) {
+                if (!details) {
                     llBuyDetails.setVisibility(View.VISIBLE);
                     llBuyEdit.setVisibility(View.GONE);
-                } else {
-                    llBuyDetails.setVisibility(View.GONE);
+                    details = true;
+                    edit = false;
                 }
             }
         });

@@ -28,6 +28,7 @@ public class EditSupplier extends AppCompatActivity {
     EditText etSupplierDetailsName, etSupplierDetailsAddress, etSupplierDetailsPhone, etSupplierDetailsInsidePhone, etSupplierDetailsFax, etSupplierDetailsWebSite, etSupplierDetailsDetails;
     Button btnSupplierEditSubmit;
     int index;
+    boolean details = true, edit = false;
 
     @SuppressLint("SetTextI18n")
     @Override

@@ -130,13 +130,11 @@ public class EditSale extends AppCompatActivity {
         ivSaleDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                details = !details;
-                edit = !edit;
-                if (details) {
+                if (!details) {
                     llSaleDetails.setVisibility(View.VISIBLE);
                     llSaleEdit.setVisibility(View.GONE);
-                } else {
-                    llSaleDetails.setVisibility(View.GONE);
+                    details = true;
+                    edit = false;
                 }
             }
         });
@@ -144,13 +142,11 @@ public class EditSale extends AppCompatActivity {
         ivSaleEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edit = !edit;
-                details = !details;
-                if (edit) {
+                if (!edit) {
                     llSaleEdit.setVisibility(View.VISIBLE);
                     llSaleDetails.setVisibility(View.GONE);
-                } else {
-                    llSaleEdit.setVisibility(View.GONE);
+                    edit = true;
+                    details = false;
                 }
             }
         });

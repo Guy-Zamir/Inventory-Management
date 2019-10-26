@@ -28,6 +28,7 @@ public class EditClient extends AppCompatActivity {
     EditText etClientDetailsName, etClientDetailsAddress, etClientDetailsPhone, etClientDetailsInsidePhone, etClientDetailsFax, etClientDetailsWebSite, etClientDetailsDetails;
     Button btnClientEditSubmit;
     int index;
+    boolean details = true, edit = false;
 
     @SuppressLint("SetTextI18n")
     @Override
