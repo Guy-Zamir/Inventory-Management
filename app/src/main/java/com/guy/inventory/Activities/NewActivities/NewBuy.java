@@ -64,6 +64,7 @@ public class NewBuy extends AppCompatActivity {
         queryBuilder.setPageSize(100);
         queryBuilder.setGroupBy("objectId");
 
+        showProgress(true);
 
         Backendless.Data.of(Supplier.class).find(queryBuilder, new AsyncCallback<List<Supplier>>() {
             @Override
@@ -77,11 +78,17 @@ public class NewBuy extends AppCompatActivity {
                 acSuppliers.setAdapter(adapter);
                 acSuppliers.setThreshold(1);
                 acSuppliers.setAdapter(adapter);
+                showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(NewBuy.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+                if (fault.getCode().equals("1009")) {
+                    Toast.makeText(NewBuy.this, "טרם הוגדרו ספקים, עליך להגדיר ספק חדש לפני שמירת הקניה", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(NewBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                showProgress(false);
             }
         });
 

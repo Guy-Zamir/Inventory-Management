@@ -59,7 +59,12 @@ public class ClientTable extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(ClientTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                if (fault.getCode().equals("1009")) {
+                    Toast.makeText(ClientTable.this, "טרם נשרמו לקוחות", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ClientTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                showProgress(false);
             }
         });
 

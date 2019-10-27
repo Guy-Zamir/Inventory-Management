@@ -21,6 +21,7 @@ public class Login extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
+
     EditText etEmail, etPassword;
     Button btnLogin, btnRegister;
     TextView tvReset;

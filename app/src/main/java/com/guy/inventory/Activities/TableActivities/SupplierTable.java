@@ -60,7 +60,12 @@ public class SupplierTable extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(SupplierTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                if (fault.getCode().equals("1009")) {
+                    Toast.makeText(SupplierTable.this, "טרם נשרמו ספקים", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SupplierTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                showProgress(false);
             }
         });
 

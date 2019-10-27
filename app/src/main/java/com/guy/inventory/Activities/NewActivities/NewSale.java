@@ -59,6 +59,7 @@ public class NewSale extends AppCompatActivity {
         queryBuilder.setPageSize(100);
         queryBuilder.setGroupBy("objectId");
 
+        showProgress(true);
 
         Backendless.Data.of(Client.class).find(queryBuilder, new AsyncCallback<List<Client>>() {
             @Override
@@ -72,11 +73,17 @@ public class NewSale extends AppCompatActivity {
                 acClients.setAdapter(adapter);
                 acClients.setThreshold(1);
                 acClients.setAdapter(adapter);
+                showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+                if (fault.getCode().equals("1009")) {
+                    Toast.makeText(NewSale.this, "טרם הוגדרו לקוחות, עליך להגדיר לקוח חדש לפני שמירת המכירה", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                showProgress(false);
             }
         });
 

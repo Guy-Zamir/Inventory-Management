@@ -58,7 +58,11 @@ public class SalesTable extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(SalesTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                if (fault.getCode().equals("1009")) {
+                    Toast.makeText(SalesTable.this, "טרם נשרמו מכירות", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SalesTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
                 showProgress(false);
             }
         });

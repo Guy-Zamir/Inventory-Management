@@ -59,7 +59,11 @@ public class BuysTable extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(BuysTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                if (fault.getCode().equals("1009")) {
+                    Toast.makeText(BuysTable.this, "טרם נשרמו קניות", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BuysTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
                 showProgress(false);
             }
         });
