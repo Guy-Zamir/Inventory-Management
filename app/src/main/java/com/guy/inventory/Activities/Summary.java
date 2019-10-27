@@ -26,8 +26,23 @@ public class Summary extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    TextView tvSummaryBalance, tvSummaryAllSales, tvSummaryAllBuys, tvSummaryAllWage;
-    double salesSum = 0, saleWeight = 0, buyWeight = 0, buyDoneWeight = 0, buySum = 0, buyPolishWeight = 0, buyPolishSum = 0, wageSum = 0, wageWeight = 0;
+    TextView tvSummaryBalanceSum, tvSummaryBalanceWeight, tvSummarySaleSum, tvSummarySaleWeight, tvSummaryBuySum, tvSummaryBuyWeight, tvSummaryBuyNoSum, tvSummaryBuyNoWeight, tvSummaryBuyPolishSum, tvSummaryBuyPolishWeight,
+            tvSummaryWageSum, tvSummaryWageWeight, tvSummaryWagePer, tvSummaryWagePrice;
+
+    double balanceSum = 0;
+    double balanceWeight = 0;
+    double saleSum = 0;
+    double saleWeight = 0;
+    double buySum = 0;
+    double buyWeight = 0;
+    double buyPolishSum = 0;
+    double buyPolishWeight = 0;
+    double buyNoSum = 0;
+    double buyNoWeight = 0;
+    double wageSum = 0;
+    double wageWeight = 0;
+    double wagePer = 0;
+    double wagePrice = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -40,10 +55,20 @@ public class Summary extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        tvSummaryBalance = findViewById(R.id.tvSummaryBalance);
-        tvSummaryAllSales = findViewById(R.id.tvSummaryAllSales);
-        tvSummaryAllBuys = findViewById(R.id.tvSummaryAllBuys);
-        tvSummaryAllWage = findViewById(R.id.tvSummaryAllWage);
+        tvSummaryBalanceSum = findViewById(R.id.tvSummaryBalanceSum);
+        tvSummaryBalanceWeight = findViewById(R.id.tvSummaryBalanceWeight);
+        tvSummarySaleSum = findViewById(R.id.tvSummarySaleSum);
+        tvSummarySaleWeight = findViewById(R.id.tvSummarySaleWeight);
+        tvSummaryBuySum = findViewById(R.id.tvSummaryBuySum);
+        tvSummaryBuyWeight = findViewById(R.id.tvSummaryBuyWeight);
+        tvSummaryBuyPolishSum = findViewById(R.id.tvSummaryBuyPolishSum);
+        tvSummaryBuyPolishWeight = findViewById(R.id.tvSummaryBuyPolishWeight);
+        tvSummaryBuyNoSum = findViewById(R.id.tvSummaryBuyNoSum);
+        tvSummaryBuyNoWeight = findViewById(R.id.tvSummaryBuyNoWeight);
+        tvSummaryWageSum = findViewById(R.id.tvSummaryWageSum);
+        tvSummaryWageWeight = findViewById(R.id.tvSummaryWageWeight);
+        tvSummaryWagePer = findViewById(R.id.tvSummaryWagePer);
+        tvSummaryWagePrice = findViewById(R.id.tvSummaryWagePrice);
 
 
         showProgress(true);
@@ -147,7 +172,7 @@ public class Summary extends AppCompatActivity {
 
         if (InventoryApp.sales != null) {
             for (Sale sale : InventoryApp.sales) {
-                salesSum += sale.getSaleSum();
+                saleSum += sale.getSaleSum();
                 saleWeight += sale.getWeight();
             }
         }
@@ -155,23 +180,41 @@ public class Summary extends AppCompatActivity {
         if (InventoryApp.buys != null) {
             for (Buy buy : InventoryApp.buys) {
                 if (!buy.isPolish()) {
-                    buySum += buy.getSum();
-                    buyDoneWeight += buy.getDoneWeight();
-                    buyWeight += buy.getWeight();
-                    wageSum += (buy.getWage() * buy.getWeight());
-                } else {
-                    buyPolishSum += buy.getSum();
-                    buyPolishWeight += buy.getWeight();
-                }
+                    if (!buy.isDone()) {
+                        double buyDoneSum = 0;
+                        double buyDoneWeight = 0;
+                        buyDoneWeight += buy.getDoneWeight();
+                        buyDoneSum += buy.getSum();
+                    } else {
+                        buySum += buy.getSum();
+                        buyWeight += buy.getWeight();
+                        buyWeight += buy.getWeight();
+                        wageSum += (buy.getWage() * buy.getWeight());
+                    }
+                } else{
+                        buyPolishSum += buy.getSum();
+                        buyPolishWeight += buy.getWeight();
+                    }
             }
         }
         wageWeight = buyWeight - buyDoneWeight;
 
         DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-        tvSummaryBalance.setText("מאזן: " + nf.format(salesSum - buySum - wageSum) + "$ / " + nf.format(buyDoneWeight - saleWeight));
-        tvSummaryAllSales.setText("מכירות מתחילת השנה: " + nf.format(salesSum) + "$ / " + nf.format(saleWeight));
-        tvSummaryAllBuys.setText("קניות מתחילת השנה: " + nf.format(buySum) + "$ / " + nf.format(buyWeight));
-        tvSummaryAllWage.setText("שכר עבודה/פחת: " + nf.format(wageSum) + "$ / " + nf.format(wageWeight) + " / " + nf.format((wageWeight/ buyWeight)*100) + " % / " + nf.format(wageWeight/wageSum) + "$");
+
+        double balanceSum = 0;
+        double balanceWeight = 0;
+        double saleSum = 0;
+        double saleWeight = 0;
+        double buySum = 0;
+        double buyWeight = 0;
+        double buyPolishSum = 0;
+        double buyPolishWeight = 0;
+        double buyNoSum = 0;
+        double buyNoWeight = 0;
+        double wageSum = 0;
+        double wageWeight = 0;
+        double wagePer = 0;
+        double wagePrice = 0;
     }
 
     private void showProgress(final boolean show) {
