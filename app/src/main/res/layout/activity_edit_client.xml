@@ -104,6 +104,86 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llClientDetails"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvClientDetailsName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="חברה"
+                android:textColor="@color/colorText"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvClientDetailsSaleSum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="סכום מכירות"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvClientDetailsWeightSum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="סכום משקל"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvClientDetailsPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="ממוצע לקראט"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvClientDetailsSaleAVG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="ממוצע מכירות לחודש"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvClientDetailsWeightAVG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="ממוצע משקל לחודש"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/llClientEdit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -118,7 +198,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvClientDetailsName"
+                    android:id="@+id/tvClientEditName"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -128,7 +208,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etClientDetailsName"
+                    android:id="@+id/etClientEditName"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -149,7 +229,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvClientDetailsAddress"
+                    android:id="@+id/tvClientEditAddress"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -159,7 +239,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etClientDetailsAddress"
+                    android:id="@+id/etClientEditAddress"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -179,7 +259,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvClientDetailsPhone"
+                    android:id="@+id/tvClientEditPhone"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -189,7 +269,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etClientDetailsPhone"
+                    android:id="@+id/etClientEditPhone"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -209,7 +289,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvClientDetailsInsidePhone"
+                    android:id="@+id/tvClientEditInsidePhone"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -219,7 +299,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etClientDetailsInsidePhone"
+                    android:id="@+id/etClientEditInsidePhone"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -239,7 +319,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvClientDetailsFax"
+                    android:id="@+id/tvClientEditFax"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -249,7 +329,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etClientDetailsFax"
+                    android:id="@+id/etClientEditFax"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -269,7 +349,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvClientDetailsWebSite"
+                    android:id="@+id/tvClientEditWebSite"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -279,7 +359,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etClientDetailsWebSite"
+                    android:id="@+id/etClientEditWebSite"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -299,7 +379,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvClientDetailsDetails"
+                    android:id="@+id/tvClientEditDetails"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -309,7 +389,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etClientDetailsDetails"
+                    android:id="@+id/etClientEditDetails"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -333,35 +413,6 @@
                 android:text="אשר"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llClient123"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:text="חברה"
-                android:textColor="@color/colorText"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:text="משקל"
-                android:textColor="@color/colorText"
-                android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
 

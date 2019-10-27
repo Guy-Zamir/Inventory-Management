@@ -10,25 +10,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.Classes.Buy;
 import com.guy.inventory.Classes.Supplier;
 import com.guy.inventory.R;
+import java.text.DecimalFormat;
+import java.util.List;
 
 public class EditSupplier extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
+    LinearLayout llSupplierEdit, llSupplierDetails;
     ImageView ivSupplierDelete, ivSupplierHome, ivSupplierEdit, ivSupplierDetails;
-    EditText etSupplierDetailsName, etSupplierDetailsAddress, etSupplierDetailsPhone, etSupplierDetailsInsidePhone, etSupplierDetailsFax, etSupplierDetailsWebSite, etSupplierDetailsDetails;
+    EditText etSupplierEditName, etSupplierEditAddress, etSupplierEditPhone, etSupplierEditInsidePhone, etSupplierEditFax, etSupplierEditWebSite, etSupplierEditDetails;
+    TextView tvSupplierDetailsName, tvSupplierDetailsSaleSum, tvSupplierDetailsWeightSum, tvSupplierDetailsPrice, tvSupplierDetailsSaleAVG, tvSupplierDetailsWeightAVG;
     Button btnSupplierEditSubmit;
     int index;
     boolean details = true, edit = false;
+
+    List<Buy> buys;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -41,18 +50,28 @@ public class EditSupplier extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
+        llSupplierEdit = findViewById(R.id.llSupplierEdit);
+        llSupplierDetails = findViewById(R.id.llSupplierDetails);
+
         ivSupplierDelete = findViewById(R.id.ivSupplierDelete);
         ivSupplierHome = findViewById(R.id.ivSupplierHome);
         ivSupplierEdit = findViewById(R.id.ivSupplierEdit);
         ivSupplierDetails = findViewById(R.id.ivSupplierDetails);
 
-        etSupplierDetailsName = findViewById(R.id.etSupplierDetailsName);
-        etSupplierDetailsAddress = findViewById(R.id.etSupplierDetailsAddress);
-        etSupplierDetailsPhone = findViewById(R.id.etSupplierDetailsPhone);
-        etSupplierDetailsInsidePhone = findViewById(R.id.etSupplierDetailsInsidePhone);
-        etSupplierDetailsFax = findViewById(R.id.etSupplierDetailsFax);
-        etSupplierDetailsWebSite = findViewById(R.id.etSupplierDetailsWebSite);
-        etSupplierDetailsDetails = findViewById(R.id.etSupplierDetailsDetails);
+        etSupplierEditName = findViewById(R.id.etSupplierEditName);
+        etSupplierEditAddress = findViewById(R.id.etSupplierEditAddress);
+        etSupplierEditPhone = findViewById(R.id.etSupplierEditPhone);
+        etSupplierEditInsidePhone = findViewById(R.id.etSupplierEditInsidePhone);
+        etSupplierEditFax = findViewById(R.id.etSupplierEditFax);
+        etSupplierEditWebSite = findViewById(R.id.etSupplierEditWebSite);
+        etSupplierEditDetails = findViewById(R.id.etSupplierEditDetails);
+
+        tvSupplierDetailsName = findViewById(R.id.tvSupplierDetailsName);
+        tvSupplierDetailsSaleSum = findViewById(R.id.tvSupplierDetailsSaleSum);
+        tvSupplierDetailsWeightSum = findViewById(R.id.tvSupplierDetailsWeightSum);
+        tvSupplierDetailsPrice = findViewById(R.id.tvSupplierDetailsPrice);
+        tvSupplierDetailsSaleAVG = findViewById(R.id.tvSupplierDetailsSaleAVG);
+        tvSupplierDetailsWeightAVG = findViewById(R.id.tvSupplierDetailsWeightAVG);
 
         btnSupplierEditSubmit = findViewById(R.id.btnSupplierEditSubmit);
 
@@ -63,14 +82,60 @@ public class EditSupplier extends AppCompatActivity {
         } else {
             ivSupplierHome.setImageResource(R.drawable.home_icon);
         }
-        etSupplierDetailsName.setText(InventoryApp.suppliers.get(index).getName());
-        etSupplierDetailsAddress.setText(String.valueOf(InventoryApp.suppliers.get(index).getLocation()));
-        etSupplierDetailsPhone.setText(String.valueOf(InventoryApp.suppliers.get(index).getPhoneNumber()));
-        etSupplierDetailsInsidePhone.setText(String.valueOf(InventoryApp.suppliers.get(index).getInsidePhone()));
-        etSupplierDetailsFax.setText(String.valueOf(InventoryApp.suppliers.get(index).getFax()));
-        etSupplierDetailsWebSite.setText(String.valueOf(InventoryApp.suppliers.get(index).getWebsite()));
-        etSupplierDetailsDetails.setText(String.valueOf(InventoryApp.suppliers.get(index).getDetails()));
 
+        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        queryBuilder.setWhereClause(whereClause);
+        queryBuilder.setGroupBy("created");
+        queryBuilder.setPageSize(100);
+
+        showProgress(true);
+
+        Backendless.Data.of(Buy.class).find(queryBuilder, new AsyncCallback<List<Buy>>() {
+            @Override
+            public void handleResponse(List<Buy> response) {
+                InventoryApp.buys = response;
+                showProgress(false);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(EditSupplier.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                showProgress(false);
+            }
+        });
+
+        double saleSum = 0;
+        double weightSum = 0;
+        double price;
+//        double saleAvg;
+//        double weightAvg;
+
+        if (InventoryApp.buys != null) {
+            for (Buy buy : InventoryApp.buys) {
+                if (buy.getSupplierName().equals(InventoryApp.suppliers.get(index).getName())) {
+                    saleSum += buy.getSum();
+                    weightSum += buy.getWeight();
+                }
+            }
+        }
+
+        price = saleSum/weightSum;
+
+        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+
+        tvSupplierDetailsName.setText(InventoryApp.suppliers.get(index).getName());
+        tvSupplierDetailsSaleSum.setText("סכום קניות:  " + nf.format(saleSum) + "$");
+        tvSupplierDetailsWeightSum.setText("סכום משקל: " + nf.format(weightSum));
+        tvSupplierDetailsPrice.setText("מחיר ממוצע לקראט: " + nf.format(price) + "$");
+
+        etSupplierEditName.setText(InventoryApp.suppliers.get(index).getName());
+        etSupplierEditAddress.setText(String.valueOf(InventoryApp.suppliers.get(index).getLocation()));
+        etSupplierEditPhone.setText(String.valueOf(InventoryApp.suppliers.get(index).getPhoneNumber()));
+        etSupplierEditInsidePhone.setText(String.valueOf(InventoryApp.suppliers.get(index).getInsidePhone()));
+        etSupplierEditFax.setText(String.valueOf(InventoryApp.suppliers.get(index).getFax()));
+        etSupplierEditWebSite.setText(String.valueOf(InventoryApp.suppliers.get(index).getWebsite()));
+        etSupplierEditDetails.setText(String.valueOf(InventoryApp.suppliers.get(index).getDetails()));
 
         ivSupplierHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +179,30 @@ public class EditSupplier extends AppCompatActivity {
             }
         });
 
+        ivSupplierDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!details) {
+                    llSupplierDetails.setVisibility(View.VISIBLE);
+                    llSupplierEdit.setVisibility(View.GONE);
+                    details = true;
+                    edit = false;
+                }
+            }
+        });
+
+        ivSupplierEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!edit) {
+                    llSupplierEdit.setVisibility(View.VISIBLE);
+                    llSupplierDetails.setVisibility(View.GONE);
+                    edit = true;
+                    details = false;
+                }
+            }
+        });
+
         ivSupplierDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,16 +241,16 @@ public class EditSupplier extends AppCompatActivity {
         btnSupplierEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etSupplierDetailsName.getText().toString().isEmpty()) {
+                if (etSupplierEditName.getText().toString().isEmpty()) {
                     Toast.makeText(EditSupplier.this, "יש למלא את שם הלקוח", Toast.LENGTH_SHORT).show();
                 } else {
-                    final String name = etSupplierDetailsName.getText().toString().trim();
-                    final String location = etSupplierDetailsAddress.getText().toString().trim();
-                    final String phone = etSupplierDetailsPhone.getText().toString().trim();
-                    final String insidePhone = etSupplierDetailsInsidePhone.getText().toString().trim();
-                    final String fax = etSupplierDetailsFax.getText().toString().trim();
-                    final String webSite = etSupplierDetailsWebSite.getText().toString().trim();
-                    final String details = etSupplierDetailsDetails.getText().toString().trim();
+                    final String name = etSupplierEditName.getText().toString().trim();
+                    final String location = etSupplierEditAddress.getText().toString().trim();
+                    final String phone = etSupplierEditPhone.getText().toString().trim();
+                    final String insidePhone = etSupplierEditInsidePhone.getText().toString().trim();
+                    final String fax = etSupplierEditFax.getText().toString().trim();
+                    final String webSite = etSupplierEditWebSite.getText().toString().trim();
+                    final String details = etSupplierEditDetails.getText().toString().trim();
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(EditSupplier.this);
                     alert.setTitle("שינוי נתונים");

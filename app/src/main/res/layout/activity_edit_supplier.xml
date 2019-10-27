@@ -104,6 +104,86 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llSupplierDetails"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSupplierDetailsName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="חברה"
+                android:textColor="@color/colorText"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSupplierDetailsSaleSum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="סכום מכירות"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSupplierDetailsWeightSum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="סכום משקל"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSupplierDetailsPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="ממוצע לקראט"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSupplierDetailsSaleAVG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="ממוצע קניות לחודש"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSupplierDetailsWeightAVG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="ממוצע משקל לחודש"
+                android:textColor="@color/colorText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/llSupplierEdit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -118,7 +198,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsName"
+                    android:id="@+id/tvSupplierEditName"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -128,7 +208,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etSupplierDetailsName"
+                    android:id="@+id/etSupplierEditName"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -149,7 +229,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsAddress"
+                    android:id="@+id/tvSupplierEditAddress"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -159,7 +239,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etSupplierDetailsAddress"
+                    android:id="@+id/etSupplierEditAddress"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -179,7 +259,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsPhone"
+                    android:id="@+id/tvSupplierEditPhone"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -189,7 +269,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etSupplierDetailsPhone"
+                    android:id="@+id/etSupplierEditPhone"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -209,7 +289,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsInsidePhone"
+                    android:id="@+id/tvSupplierEditInsidePhone"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -219,7 +299,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etSupplierDetailsInsidePhone"
+                    android:id="@+id/etSupplierEditInsidePhone"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -239,7 +319,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsFax"
+                    android:id="@+id/tvSupplierEditFax"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -249,7 +329,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etSupplierDetailsFax"
+                    android:id="@+id/etSupplierEditFax"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -269,7 +349,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsWebSite"
+                    android:id="@+id/tvSupplierEditWebSite"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -279,7 +359,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etSupplierDetailsWebSite"
+                    android:id="@+id/etSupplierEditWebSite"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -299,7 +379,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsDetails"
+                    android:id="@+id/tvSupplierEditDetails"
                     android:layout_width="275dp"
                     android:layout_height="37dp"
                     android:layout_weight="1"
@@ -309,7 +389,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/etSupplierDetailsDetails"
+                    android:id="@+id/etSupplierEditDetails"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
@@ -335,12 +415,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llSupplierDetails"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

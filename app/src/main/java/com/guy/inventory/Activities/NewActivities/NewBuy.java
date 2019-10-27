@@ -1,7 +1,6 @@
 package com.guy.inventory.Activities.NewActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -89,7 +88,13 @@ public class NewBuy extends AppCompatActivity {
         acSuppliers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                chosenSupplier = position;
+                String selection = (String) parent.getItemAtPosition(position);
+                for (int i = 0; i < InventoryApp.suppliers.size(); i++) {
+                    if (InventoryApp.suppliers.get(i).getName().equals(selection)) {
+                        chosenSupplier = i;
+                        break;
+                    }
+                }
             }
         });
 

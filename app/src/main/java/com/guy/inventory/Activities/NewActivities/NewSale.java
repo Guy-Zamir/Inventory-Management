@@ -83,7 +83,13 @@ public class NewSale extends AppCompatActivity {
         acClients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                chosenClient = position;
+                String selection = (String) parent.getItemAtPosition(position);
+                for (int i = 0; i < InventoryApp.clients.size(); i++) {
+                    if (InventoryApp.clients.get(i).getName().equals(selection)) {
+                        chosenClient = i;
+                        break;
+                    }
+                }
             }
         });
 

@@ -124,7 +124,7 @@
                 android:layout_marginRight="15dp"
                 android:text="ספק"
                 android:textColor="@color/colorText"
-                android:textSize="20sp"
+                android:textSize="23sp"
                 android:textStyle="bold" />
 
             <TextView

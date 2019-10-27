@@ -10,22 +10,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Activities.InventoryApp;
 import com.guy.inventory.Classes.Client;
+import com.guy.inventory.Classes.Sale;
 import com.guy.inventory.R;
+
+import java.text.DecimalFormat;
+import java.util.List;
 
 public class EditClient extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
+    LinearLayout llClientEdit, llClientDetails;
     ImageView ivClientDelete, ivClientHome, ivClientEdit, ivClientDetails;
-    EditText etClientDetailsName, etClientDetailsAddress, etClientDetailsPhone, etClientDetailsInsidePhone, etClientDetailsFax, etClientDetailsWebSite, etClientDetailsDetails;
+    EditText etClientEditName, etClientEditAddress, etClientEditPhone, etClientEditInsidePhone, etClientEditFax, etClientEditWebSite, etClientEditDetails;
+    TextView tvClientDetailsName, tvClientDetailsSaleSum, tvClientDetailsWeightSum, tvClientDetailsPrice, tvClientDetailsSaleAVG, tvClientDetailsWeightAVG;
     Button btnClientEditSubmit;
     int index;
     boolean details = true, edit = false;
@@ -41,18 +49,28 @@ public class EditClient extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
+        llClientDetails = findViewById(R.id.llClientDetails);
+        llClientEdit = findViewById(R.id.llClientEdit);
+
         ivClientDelete = findViewById(R.id.ivClientDelete);
         ivClientHome = findViewById(R.id.ivClientHome);
         ivClientEdit = findViewById(R.id.ivClientEdit);
         ivClientDetails = findViewById(R.id.ivClientDetails);
 
-        etClientDetailsName = findViewById(R.id.etClientDetailsName);
-        etClientDetailsAddress = findViewById(R.id.etClientDetailsAddress);
-        etClientDetailsPhone = findViewById(R.id.etClientDetailsPhone);
-        etClientDetailsInsidePhone = findViewById(R.id.etClientDetailsInsidePhone);
-        etClientDetailsFax = findViewById(R.id.etClientDetailsFax);
-        etClientDetailsWebSite = findViewById(R.id.etClientDetailsWebSite);
-        etClientDetailsDetails = findViewById(R.id.etClientDetailsDetails);
+        etClientEditName = findViewById(R.id.etClientEditName);
+        etClientEditAddress = findViewById(R.id.etClientEditAddress);
+        etClientEditPhone = findViewById(R.id.etClientEditPhone);
+        etClientEditInsidePhone = findViewById(R.id.etClientEditInsidePhone);
+        etClientEditFax = findViewById(R.id.etClientEditFax);
+        etClientEditWebSite = findViewById(R.id.etClientEditWebSite);
+        etClientEditDetails = findViewById(R.id.etClientEditDetails);
+
+        tvClientDetailsName = findViewById(R.id.tvClientDetailsName);
+        tvClientDetailsSaleSum = findViewById(R.id.tvClientDetailsSaleSum);
+        tvClientDetailsWeightSum = findViewById(R.id.tvClientDetailsWeightSum);
+        tvClientDetailsPrice = findViewById(R.id.tvClientDetailsPrice);
+        tvClientDetailsSaleAVG = findViewById(R.id.tvClientDetailsSaleAVG);
+        tvClientDetailsWeightAVG = findViewById(R.id.tvClientDetailsWeightAVG);
 
         btnClientEditSubmit = findViewById(R.id.btnClientEditSubmit);
 
@@ -63,13 +81,83 @@ public class EditClient extends AppCompatActivity {
         } else {
             ivClientHome.setImageResource(R.drawable.home_icon);
         }
-        etClientDetailsName.setText(InventoryApp.clients.get(index).getName());
-        etClientDetailsAddress.setText(String.valueOf(InventoryApp.clients.get(index).getLocation()));
-        etClientDetailsPhone.setText(String.valueOf(InventoryApp.clients.get(index).getPhoneNumber()));
-        etClientDetailsInsidePhone.setText(String.valueOf(InventoryApp.clients.get(index).getInsidePhone()));
-        etClientDetailsFax.setText(String.valueOf(InventoryApp.clients.get(index).getFax()));
-        etClientDetailsWebSite.setText(String.valueOf(InventoryApp.clients.get(index).getWebsite()));
-        etClientDetailsDetails.setText(String.valueOf(InventoryApp.clients.get(index).getDetails()));
+
+        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        queryBuilder.setWhereClause(whereClause);
+        queryBuilder.setGroupBy("created");
+        queryBuilder.setPageSize(100);
+
+        showProgress(true);
+
+        Backendless.Data.of(Sale.class).find(queryBuilder, new AsyncCallback<List<Sale>>() {
+            @Override
+            public void handleResponse(List<Sale> response) {
+                InventoryApp.sales = response;
+                showProgress(false);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(EditClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                showProgress(false);
+            }
+        });
+
+        double saleSum = 0;
+        double weightSum = 0;
+        double price;
+//        double saleAvg;
+//        double weightAvg;
+        if (InventoryApp.sales != null) {
+            for (Sale sale : InventoryApp.sales) {
+                if (sale.getClientName().equals(InventoryApp.clients.get(index).getName())) {
+                    saleSum += sale.getSaleSum();
+                    weightSum += sale.getWeight();
+                }
+            }
+        }
+
+        price = saleSum/weightSum;
+
+        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+
+        tvClientDetailsName.setText(InventoryApp.clients.get(index).getName());
+        tvClientDetailsSaleSum.setText("סכום מכירות:  " + nf.format(saleSum) + "$");
+        tvClientDetailsWeightSum.setText("סכום משקל: " + nf.format(weightSum));
+        tvClientDetailsPrice.setText("מחיר ממוצע לקראט: " + nf.format(price) + "$");
+
+        etClientEditName.setText(InventoryApp.clients.get(index).getName());
+        etClientEditAddress.setText(String.valueOf(InventoryApp.clients.get(index).getLocation()));
+        etClientEditPhone.setText(String.valueOf(InventoryApp.clients.get(index).getPhoneNumber()));
+        etClientEditInsidePhone.setText(String.valueOf(InventoryApp.clients.get(index).getInsidePhone()));
+        etClientEditFax.setText(String.valueOf(InventoryApp.clients.get(index).getFax()));
+        etClientEditWebSite.setText(String.valueOf(InventoryApp.clients.get(index).getWebsite()));
+        etClientEditDetails.setText(String.valueOf(InventoryApp.clients.get(index).getDetails()));
+
+        ivClientDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!details) {
+                    llClientDetails.setVisibility(View.VISIBLE);
+                    llClientEdit.setVisibility(View.GONE);
+                    details = true;
+                    edit = false;
+                }
+            }
+        });
+
+        ivClientEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!edit) {
+                    llClientEdit.setVisibility(View.VISIBLE);
+                    llClientDetails.setVisibility(View.GONE);
+                    edit = true;
+                    details = false;
+                }
+            }
+        });
 
 
         ivClientHome.setOnClickListener(new View.OnClickListener() {
@@ -152,16 +240,16 @@ public class EditClient extends AppCompatActivity {
         btnClientEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etClientDetailsName.getText().toString().isEmpty()) {
+                if (etClientEditName.getText().toString().isEmpty()) {
                     Toast.makeText(EditClient.this, "יש למלא את שם הלקוח", Toast.LENGTH_SHORT).show();
                 } else {
-                    final String name = etClientDetailsName.getText().toString().trim();
-                    final String location = etClientDetailsAddress.getText().toString().trim();
-                    final String phone = etClientDetailsPhone.getText().toString().trim();
-                    final String insidePhone = etClientDetailsInsidePhone.getText().toString().trim();
-                    final String fax = etClientDetailsFax.getText().toString().trim();
-                    final String webSite = etClientDetailsWebSite.getText().toString().trim();
-                    final String details = etClientDetailsDetails.getText().toString().trim();
+                    final String name = etClientEditName.getText().toString().trim();
+                    final String location = etClientEditAddress.getText().toString().trim();
+                    final String phone = etClientEditPhone.getText().toString().trim();
+                    final String insidePhone = etClientEditInsidePhone.getText().toString().trim();
+                    final String fax = etClientEditFax.getText().toString().trim();
+                    final String webSite = etClientEditWebSite.getText().toString().trim();
+                    final String details = etClientEditDetails.getText().toString().trim();
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(EditClient.this);
                     alert.setTitle("שינוי נתונים");
