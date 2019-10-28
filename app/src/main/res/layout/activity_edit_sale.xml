@@ -40,7 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -48,9 +48,9 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="7dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:layout_weight="3"
                 android:background="@drawable/buttons"
                 android:foregroundGravity="center"
@@ -63,22 +63,33 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="7dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:layout_weight="3"
                 android:background="@drawable/buttons"
                 android:foregroundGravity="center"
                 app:srcCompat="@drawable/full_dollar" />
 
             <ImageView
+                android:id="@+id/ivSaleEditPolish"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="3"
+                android:background="@drawable/buttons"
+                app:srcCompat="@drawable/rough_icon" />
+
+            <ImageView
                 android:id="@+id/ivSaleEdit"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="7dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:layout_weight="3"
                 android:background="@drawable/buttons"
                 android:foregroundGravity="center"
@@ -91,9 +102,9 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="7dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="7dp"
                 android:layout_weight="3"
                 android:background="@drawable/buttons"
                 android:foregroundGravity="center"

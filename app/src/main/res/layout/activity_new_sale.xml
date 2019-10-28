@@ -40,7 +40,7 @@
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
+            android:layout_height="100dp"
             app:srcCompat="@drawable/sale_icon" />
 
         <DatePicker
@@ -111,6 +111,22 @@
             android:gravity="center_horizontal|center_vertical"
             android:hint="מספר ימים"
             android:inputType="number" />
+
+        <ToggleButton
+            android:id="@+id/tbSalePolish"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0"
+            android:background="@drawable/buttons"
+            android:textColor="#ffffff"
+            android:textOff="מלוטש"
+            android:textOn="גלם"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnSaleSubmit"

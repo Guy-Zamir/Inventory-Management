@@ -5,7 +5,7 @@ public class Sale {
     private double saleSum, weight, price;
     private String id, clientName;
     private int days;
-    private boolean paid;
+    private boolean paid, polish;
     private Date saleDate, payDate;
 
     private Date created, updated;
@@ -113,5 +113,13 @@ public class Sale {
 
     public void setClientName(String clientName) {
         this.clientName = clientName;
+    }
+
+    public boolean isPolish() {
+        return polish;
+    }
+
+    public void setPolish(boolean polish) {
+        this.polish = polish;
     }
 }

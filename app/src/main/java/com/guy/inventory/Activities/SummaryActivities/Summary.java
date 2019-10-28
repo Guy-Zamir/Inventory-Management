@@ -1,23 +1,25 @@
-package com.guy.inventory.Activities;
+package com.guy.inventory.Activities.SummaryActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Activities.InventoryApp;
 import com.guy.inventory.Classes.Buy;
 import com.guy.inventory.Classes.Client;
 import com.guy.inventory.Classes.Sale;
 import com.guy.inventory.Classes.Supplier;
 import com.guy.inventory.R;
-
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -26,25 +28,45 @@ public class Summary extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    TextView tvSummaryBalanceSum, tvSummaryBalanceWeight, tvSummarySaleSum, tvSummarySaleWeight, tvSummaryBuySum, tvSummaryBuyWeight, tvSummaryBuyNoSum, tvSummaryBuyNoWeight, tvSummaryBuyPolishSum, tvSummaryBuyPolishWeight,
-            tvSummaryWageSum, tvSummaryWageWeight, tvSummaryWagePer, tvSummaryWagePrice;
+    TextView tvSummaryBalanceSum, tvSummaryBalanceWeight, tvSummaryBalancePrice, tvSummaryBalanceRoughSum,
+            tvSummaryBalanceRoughWeight, tvSummaryBalanceRoughPrice, tvSummaryBalancePolishSum,
+            tvSummaryBalancePolishWeight, tvSummaryBalancePolishPrice;
 
-    double balanceSum = 0;
-    double balanceWeight = 0;
-    double saleSum = 0;
-    double saleWeight = 0;
-    double buySum = 0;
-    double buyWeight = 0;
-    double buyPolishSum = 0;
-    double buyPolishWeight = 0;
-    double buyNoSum = 0;
-    double buyNoWeight = 0;
-    double wageSum = 0;
-    double wageWeight = 0;
-    double wagePer = 0;
-    double wagePrice = 0;
 
-    @SuppressLint("SetTextI18n")
+    Button btnSummaryBuy, btnSummarySale, btnSummaryWage;
+
+    double balanceSum;
+    double balanceWeight;
+    double balancePolishSum;
+    double balancePolishWeight;
+    double balanceRoughSum;
+    double balanceRoughWeight;
+    double saleSum;
+    double saleWeight;
+    double buySum;
+    double buyWeight;
+    double buyPolishSum;
+    double buyPolishWeight;
+    double wageSum;
+    double wageWeight;
+    double wagePer;
+    double wagePrice;
+    double balancePrice;
+    double balancePolishPrice;
+    double balanceRoughPrice;
+    double buyPrice;
+    double buyPolishPrice;
+    double buyRoughPrice;
+    double salePrice;
+    double salePolishPrice;
+    double saleRoughPrice;
+    double buyRoughSum;
+    double buyRoughWeight;
+    double salePolishSum;
+    double salePolishWeight;
+    double saleRoughSum;
+    double saleRoughWeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,21 +77,19 @@ public class Summary extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
+        btnSummaryBuy = findViewById(R.id.btnSummaryBuy);
+        btnSummarySale = findViewById(R.id.btnSummarySale);
+        btnSummaryWage = findViewById(R.id.btnSummaryWage);
+
         tvSummaryBalanceSum = findViewById(R.id.tvSummaryBalanceSum);
         tvSummaryBalanceWeight = findViewById(R.id.tvSummaryBalanceWeight);
-        tvSummarySaleSum = findViewById(R.id.tvSummarySaleSum);
-        tvSummarySaleWeight = findViewById(R.id.tvSummarySaleWeight);
-        tvSummaryBuySum = findViewById(R.id.tvSummaryBuySum);
-        tvSummaryBuyWeight = findViewById(R.id.tvSummaryBuyWeight);
-        tvSummaryBuyPolishSum = findViewById(R.id.tvSummaryBuyPolishSum);
-        tvSummaryBuyPolishWeight = findViewById(R.id.tvSummaryBuyPolishWeight);
-        tvSummaryBuyNoSum = findViewById(R.id.tvSummaryBuyNoSum);
-        tvSummaryBuyNoWeight = findViewById(R.id.tvSummaryBuyNoWeight);
-        tvSummaryWageSum = findViewById(R.id.tvSummaryWageSum);
-        tvSummaryWageWeight = findViewById(R.id.tvSummaryWageWeight);
-        tvSummaryWagePer = findViewById(R.id.tvSummaryWagePer);
-        tvSummaryWagePrice = findViewById(R.id.tvSummaryWagePrice);
-
+        tvSummaryBalancePrice = findViewById(R.id.tvSummaryBalancePrice);
+        tvSummaryBalanceRoughSum = findViewById(R.id.tvSummaryBalanceRoughSum);
+        tvSummaryBalanceRoughWeight = findViewById(R.id.tvSummaryBalanceRoughWeight);
+        tvSummaryBalanceRoughPrice = findViewById(R.id.tvSummaryBalanceRoughPrice);
+        tvSummaryBalancePolishSum = findViewById(R.id.tvSummaryBalancePolishSum);
+        tvSummaryBalancePolishWeight = findViewById(R.id.tvSummaryBalancePolishWeight);
+        tvSummaryBalancePolishPrice = findViewById(R.id.tvSummaryBalancePolishPrice);
 
         showProgress(true);
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
@@ -118,6 +138,7 @@ public class Summary extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(List<Sale> response) {
                                         InventoryApp.sales = response;
+                                        display();
                                         showProgress(false);
                                     }
 
@@ -170,10 +191,50 @@ public class Summary extends AppCompatActivity {
             }
         });
 
+
+
+        btnSummaryBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Summary.this, BuySummary.class);
+                startActivity(intent);
+            }
+        });
+
+        btnSummarySale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Summary.this, SaleSummary.class);
+                startActivity(intent);
+
+            }
+        });
+
+        btnSummaryWage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Summary.this, WageSummary.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void display() {
+
+        double doneOrgWeight = 0;
+        double doneWeight = 0;
+        double doneSum = 0;
+
         if (InventoryApp.sales != null) {
             for (Sale sale : InventoryApp.sales) {
-                saleSum += sale.getSaleSum();
-                saleWeight += sale.getWeight();
+                if (sale.isPolish()) {
+                    salePolishSum += sale.getSaleSum();
+                    salePolishWeight += sale.getWeight();
+                } else {
+                    saleRoughSum += sale.getSaleSum();
+                    saleRoughWeight += sale.getWeight();
+                }
             }
         }
 
@@ -181,40 +242,49 @@ public class Summary extends AppCompatActivity {
             for (Buy buy : InventoryApp.buys) {
                 if (!buy.isPolish()) {
                     if (!buy.isDone()) {
-                        double buyDoneSum = 0;
-                        double buyDoneWeight = 0;
-                        buyDoneWeight += buy.getDoneWeight();
-                        buyDoneSum += buy.getSum();
+                        balanceRoughWeight += buy.getWeight();
+                        balanceRoughSum += buy.getSum();
                     } else {
-                        buySum += buy.getSum();
-                        buyWeight += buy.getWeight();
-                        buyWeight += buy.getWeight();
+                        doneSum += buy.getSum();
+                        doneOrgWeight += buy.getWeight();
+                        doneWeight += buy.getDoneWeight();
                         wageSum += (buy.getWage() * buy.getWeight());
+                        wageWeight += buy.getWeight();
                     }
-                } else{
-                        buyPolishSum += buy.getSum();
-                        buyPolishWeight += buy.getWeight();
-                    }
+                } else {
+                    buyPolishSum += buy.getSum();
+                    buyPolishWeight += buy.getWeight();
+                }
             }
         }
-        wageWeight = buyWeight - buyDoneWeight;
+
+        buySum = doneSum + balanceRoughSum + buyPolishSum;
+        buyWeight = doneOrgWeight + balanceRoughWeight + buyPolishWeight;
+        wagePer = doneWeight/doneOrgWeight;
+        wagePrice = wageSum/doneOrgWeight;
+
+        saleSum = salePolishSum + saleRoughSum;
+        saleWeight = salePolishWeight + salePolishWeight;
+
+        balancePolishSum = doneSum + buyPolishSum - saleSum - wageSum;
+        balancePolishWeight = doneWeight + buyPolishWeight - saleWeight;
+
+        balanceSum = balancePolishSum + balanceRoughSum;
+        balanceWeight = balancePolishWeight + balanceRoughWeight;
+
+        balancePrice = balanceSum/balanceWeight;
+        balancePolishPrice = balancePolishSum/balancePolishWeight;
+        balanceRoughPrice = balanceRoughSum/balanceRoughWeight;
+
+        buyPrice = buySum/buyPrice;
+        buyPolishPrice = buyPolishSum/buyPolishWeight;
+        buyRoughPrice = buyRoughSum/buyRoughWeight;
+
+        salePrice = saleSum/saleWeight;
+        salePolishPrice = salePolishSum/salePolishWeight;
+        saleRoughPrice = saleRoughSum/saleRoughWeight;
 
         DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-
-        double balanceSum = 0;
-        double balanceWeight = 0;
-        double saleSum = 0;
-        double saleWeight = 0;
-        double buySum = 0;
-        double buyWeight = 0;
-        double buyPolishSum = 0;
-        double buyPolishWeight = 0;
-        double buyNoSum = 0;
-        double buyNoWeight = 0;
-        double wageSum = 0;
-        double wageWeight = 0;
-        double wagePer = 0;
-        double wagePrice = 0;
     }
 
     private void showProgress(final boolean show) {

@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.EditActivities.EditSupplier"></activity>
+        <activity android:name=".Activities.SummaryActivities.WageSummary"></activity>
+        <activity android:name=".Activities.SummaryActivities.SaleSummary" />
+        <activity android:name=".Activities.SummaryActivities.BuySummary" />
+        <activity android:name=".Activities.EditActivities.EditSupplier" />
         <activity android:name=".Activities.EditActivities.EditClient" />
         <activity android:name=".Activities.TableActivities.ClientTable" />
         <activity android:name=".Activities.NewActivities.NewClient" />
@@ -32,7 +35,7 @@
         <activity android:name=".Activities.EditActivities.EditBuy" />
         <activity android:name=".Activities.TableActivities.SalesTable" />
         <activity android:name=".Activities.TableActivities.BuysTable" />
-        <activity android:name=".Activities.Summary" />
+        <activity android:name=".Activities.SummaryActivities.Summary" />
         <activity android:name=".Activities.NewActivities.NewSale" />
         <activity android:name=".Activities.NewActivities.NewBuy" />
         <activity android:name=".Activities.MainActivity" />

@@ -30,7 +30,7 @@ public class EditSale extends AppCompatActivity {
     private TextView tvLoad;
 
     LinearLayout llSaleEdit, llSaleDetails;
-    ImageView ivSaleDelete, ivSaleEdit, ivSalePaid, ivSaleDetails;
+    ImageView ivSaleDelete, ivSaleEdit, ivSalePaid, ivSaleDetails, ivSaleEditPolish;
     DatePicker dpSaleEditDate;
     EditText etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
     TextView tvSaleEditClientName, tvSaleEditID, tvSaleEditWeight, tvSaleEditSum, tvSaleEditDays;
@@ -58,6 +58,7 @@ public class EditSale extends AppCompatActivity {
         ivSaleEdit = findViewById(R.id.ivSaleEdit);
         ivSalePaid = findViewById(R.id.ivSalePaid);
         ivSaleDetails = findViewById(R.id.ivSaleDetails);
+        ivSaleEditPolish = findViewById(R.id.ivSaleEditPolish);
 
         llSaleEdit = findViewById(R.id.llSaleEdit);
         llSaleDetails = findViewById(R.id.llSaleDetails);
@@ -83,6 +84,8 @@ public class EditSale extends AppCompatActivity {
         tvSaleDetailsWeight = findViewById(R.id.tvSaleDetailsWeight);
         tvSaleDetailsDays = findViewById(R.id.tvSaleDetailsDays);
         tvSaleDetailsSum = findViewById(R.id.tvSaleDetailsSum);
+
+        index = getIntent().getIntExtra("index", 0);
 
         tvSaleEditClientName.setText(InventoryApp.sales.get(index).getClientName());
 
@@ -111,13 +114,18 @@ public class EditSale extends AppCompatActivity {
         llSaleEdit.setVisibility(View.GONE);
         llSaleDetails.setVisibility(View.VISIBLE);
 
-        index = getIntent().getIntExtra("index", 0);
-
         if (InventoryApp.sales.get(index).isPaid()) {
             ivSalePaid.setImageResource(R.drawable.empty_dollar);
         } else {
             ivSalePaid.setImageResource(R.drawable.full_dollar);
         }
+
+        if (InventoryApp.sales.get(index).isPolish()) {
+            ivSaleEditPolish.setImageResource(R.drawable.rough_icon);
+        } else {
+            ivSaleEditPolish.setImageResource(R.drawable.diamond_icon);
+        }
+
         etSaleEditID.setText(InventoryApp.sales.get(index).getId());
         etSaleEditWeight.setText(String.valueOf(InventoryApp.sales.get(index).getWeight()));
         etSaleEditSum.setText(String.valueOf(InventoryApp.sales.get(index).getSaleSum()));
@@ -148,6 +156,48 @@ public class EditSale extends AppCompatActivity {
                     edit = true;
                     details = false;
                 }
+            }
+        });
+
+        ivSaleEditPolish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(EditSale.this);
+                alert.setTitle("התראת שינוי");
+                if (InventoryApp.sales.get(index).isPolish()) {
+                    alert.setMessage("האם אתה בטוח שברצונך לסמן את המכירה כגלם?");
+                } else {
+                    alert.setMessage("האם אתה בטוח שברצונך לסמן את המכירה כמלוטש?");
+                }
+                alert.setNegativeButton(android.R.string.no, null);
+                alert.setIcon(android.R.drawable.ic_dialog_alert);
+                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (InventoryApp.sales.get(index).isPolish()) {
+                            InventoryApp.sales.get(index).setPolish(false);
+                        } else {
+                            InventoryApp.sales.get(index).setPolish(true);
+                        }
+                        showProgress(true);
+                        tvLoad.setText("מעדכן את הנתונים...");
+                        Backendless.Persistence.save(InventoryApp.sales.get(index), new AsyncCallback<Sale>() {
+                            @Override
+                            public void handleResponse(Sale response) {
+                                Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
+                                finishActivity(1);
+                                EditSale.this.finish();
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                showProgress(false);
+                                Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                alert.show();
             }
         });
 

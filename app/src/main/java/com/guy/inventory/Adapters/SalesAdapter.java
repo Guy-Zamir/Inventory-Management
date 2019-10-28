@@ -43,6 +43,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         TextView tvSaleSum = convertView.findViewById(R.id.tvSaleSum);
         TextView tvSaleWeight = convertView.findViewById(R.id.tvSaleWeight);
         ImageView ivSaleTablePaid = convertView.findViewById(R.id.ivSaleTablePaid);
+        ImageView ivSaleTableRough = convertView.findViewById(R.id.ivSaleTableRough);
 
         Calendar saleDate = Calendar.getInstance();
         saleDate.setTime(sales.get(position).getSaleDate());
@@ -64,6 +65,12 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
             ivSaleTablePaid.setVisibility(View.VISIBLE);
         } else {
             ivSaleTablePaid.setVisibility(View.GONE);
+        }
+
+        if (sales.get(position).isPolish()) {
+            ivSaleTableRough.setVisibility(View.GONE);
+        } else {
+            ivSaleTableRough.setVisibility(View.VISIBLE);
         }
 
         return convertView;

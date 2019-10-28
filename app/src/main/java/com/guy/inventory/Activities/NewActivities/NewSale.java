@@ -12,6 +12,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -31,6 +33,7 @@ public class NewSale extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
     private DatePicker dpSaleDate;
+    private ToggleButton tbSalePolish;
     private EditText etSaleID, etSaleSum, etSaleWeight, etSaleDays;
     private ArrayAdapter<String> adapter;
     private AutoCompleteTextView acClients;
@@ -45,6 +48,8 @@ public class NewSale extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
+
+        tbSalePolish = findViewById(R.id.tbSalePolish);
         dpSaleDate = findViewById(R.id.dpSaleDate);
         etSaleID = findViewById(R.id.etSaleID);
         etSaleSum = findViewById(R.id.etSaleSum);
@@ -126,6 +131,7 @@ public class NewSale extends AppCompatActivity {
                     double weight = Double.parseDouble(etSaleWeight.getText().toString());
                     double saleSum = Double.parseDouble(etSaleSum.getText().toString());
                     int days = Integer.valueOf(etSaleDays.getText().toString().trim());
+                    boolean polish = !tbSalePolish.isChecked();
 
                     Sale sale = new Sale();
                     sale.setClientName(clientName);
@@ -135,6 +141,7 @@ public class NewSale extends AppCompatActivity {
                     sale.setSaleSum(saleSum);
                     sale.setWeight(weight);
                     sale.setDays(days);
+                    sale.setPolish(polish);
 
                     Calendar cAddedDays = Calendar.getInstance();
                     cAddedDays.setTime(sale.getSaleDate());

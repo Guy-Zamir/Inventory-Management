@@ -10,6 +10,7 @@ import com.guy.inventory.Activities.NewActivities.NewBuy;
 import com.guy.inventory.Activities.NewActivities.NewClient;
 import com.guy.inventory.Activities.NewActivities.NewSale;
 import com.guy.inventory.Activities.NewActivities.NewSupplier;
+import com.guy.inventory.Activities.SummaryActivities.Summary;
 import com.guy.inventory.Activities.TableActivities.BuysTable;
 import com.guy.inventory.Activities.TableActivities.ClientTable;
 import com.guy.inventory.Activities.TableActivities.SalesTable;
