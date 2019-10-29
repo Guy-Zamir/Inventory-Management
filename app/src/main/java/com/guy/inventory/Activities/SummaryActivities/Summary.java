@@ -34,7 +34,6 @@ public class Summary extends AppCompatActivity {
 
 
     Button btnSummaryBuy, btnSummarySale, btnSummaryWage;
-
     double balanceSum;
     double balanceWeight;
     double balancePolishSum;
@@ -192,11 +191,19 @@ public class Summary extends AppCompatActivity {
         });
 
 
-
         btnSummaryBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Summary.this, BuySummary.class);
+                intent.putExtra("buySum", buySum);
+                intent.putExtra("buyWeight", buyWeight);
+                intent.putExtra("buyPrice", buyPrice);
+                intent.putExtra("buyRoughSum", buyRoughSum);
+                intent.putExtra("buyRoughWeight", buyRoughWeight);
+                intent.putExtra("buyRoughPrice", buyRoughPrice);
+                intent.putExtra("buyPolishSum", buyPolishSum);
+                intent.putExtra("buyPolishWeight", buyPolishWeight);
+                intent.putExtra("buyPolishPrice", buyPolishPrice);
                 startActivity(intent);
             }
         });
@@ -205,6 +212,15 @@ public class Summary extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Summary.this, SaleSummary.class);
+                intent.putExtra("saleSum", saleSum);
+                intent.putExtra("saleWeight", saleWeight);
+                intent.putExtra("salePrice", salePrice);
+                intent.putExtra("saleRoughSum", saleRoughSum);
+                intent.putExtra("saleRoughWeight", saleRoughWeight);
+                intent.putExtra("saleRoughPrice", saleRoughPrice);
+                intent.putExtra("salePolishSum", salePolishSum);
+                intent.putExtra("salePolishWeight", salePolishWeight);
+                intent.putExtra("salePolishPrice", salePolishPrice);
                 startActivity(intent);
 
             }
@@ -214,6 +230,10 @@ public class Summary extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Summary.this, WageSummary.class);
+                intent.putExtra("wageSum", wageSum);
+                intent.putExtra("wageWeight", wageWeight);
+                intent.putExtra("wagePrice", wagePrice);
+                intent.putExtra("wagePer", wagePer);
                 startActivity(intent);
             }
         });
@@ -221,7 +241,6 @@ public class Summary extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void display() {
-
         double doneOrgWeight = 0;
         double doneWeight = 0;
         double doneSum = 0;
@@ -249,7 +268,6 @@ public class Summary extends AppCompatActivity {
                         doneOrgWeight += buy.getWeight();
                         doneWeight += buy.getDoneWeight();
                         wageSum += (buy.getWage() * buy.getWeight());
-                        wageWeight += buy.getWeight();
                     }
                 } else {
                     buyPolishSum += buy.getSum();
@@ -260,11 +278,14 @@ public class Summary extends AppCompatActivity {
 
         buySum = doneSum + balanceRoughSum + buyPolishSum;
         buyWeight = doneOrgWeight + balanceRoughWeight + buyPolishWeight;
+        buyPrice = buySum/buyWeight;
+
+        wageWeight = doneOrgWeight - doneWeight;
         wagePer = doneWeight/doneOrgWeight;
         wagePrice = wageSum/doneOrgWeight;
 
         saleSum = salePolishSum + saleRoughSum;
-        saleWeight = salePolishWeight + salePolishWeight;
+        saleWeight = salePolishWeight + saleRoughWeight;
 
         balancePolishSum = doneSum + buyPolishSum - saleSum - wageSum;
         balancePolishWeight = doneWeight + buyPolishWeight - saleWeight;
@@ -280,11 +301,25 @@ public class Summary extends AppCompatActivity {
         buyPolishPrice = buyPolishSum/buyPolishWeight;
         buyRoughPrice = buyRoughSum/buyRoughWeight;
 
+        buyRoughSum = balanceRoughSum + doneSum;
+        buyRoughWeight = balanceRoughWeight + doneOrgWeight;
+        buyRoughPrice = buyRoughSum/buyRoughWeight;
+
         salePrice = saleSum/saleWeight;
         salePolishPrice = salePolishSum/salePolishWeight;
         saleRoughPrice = saleRoughSum/saleRoughWeight;
 
         DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+
+        tvSummaryBalanceSum.setText("סכום:  " + nf.format(balanceSum) + "$");
+        tvSummaryBalanceWeight.setText("משקל:  " + nf.format(balanceWeight));
+        tvSummaryBalancePrice.setText("מחיר ממוצע:  " + nf.format(balancePrice) + "$");
+        tvSummaryBalanceRoughSum.setText("סכום:  " + nf.format(balanceRoughSum) + "$");
+        tvSummaryBalanceRoughWeight.setText("משקל:  " + nf.format(balanceRoughWeight));
+        tvSummaryBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(balanceRoughPrice) + "$");
+        tvSummaryBalancePolishSum.setText("סכום:  " + nf.format(balancePolishSum) + "$");
+        tvSummaryBalancePolishWeight.setText("משקל:  " + nf.format(balancePolishWeight));
+        tvSummaryBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(balancePolishPrice) + "$");
     }
 
     private void showProgress(final boolean show) {
