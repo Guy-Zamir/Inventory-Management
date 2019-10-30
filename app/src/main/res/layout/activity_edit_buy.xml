@@ -25,7 +25,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_horizontal"
-        android:text="טוען..."
+        android:text="@string/org_loading"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:visibility="gone" />
@@ -34,7 +34,6 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -118,10 +117,11 @@
             <TextView
                 android:id="@+id/tvBuyDetailsSupplier"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1.3"
                 android:text="ספק"
                 android:textColor="@color/colorText"
                 android:textSize="23sp"
@@ -130,91 +130,93 @@
             <TextView
                 android:id="@+id/tvBuyDetailsBuyDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1.3"
                 android:text="תאריך קניה"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvBuyDetailsPayDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1.3"
                 android:text="תאריך פקיעה"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvBuyDetailsID"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1.3"
                 android:text="אסמכתא"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvBuyDetailsPrice"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1.3"
                 android:text="מחיר"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvBuyDetailsWeight"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1.3"
                 android:text="משקל"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvBuyDetailsDays"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1.3"
                 android:text="ימים"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvBuyDetailsSum"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1.3"
                 android:text="סכום"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:id="@+id/llBuyDetailsDone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -224,10 +226,10 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
+                    android:layout_weight="1"
                     android:text="אחוז ליטוש"
                     android:textColor="@color/colorText"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tvBuyDetailsWage"
@@ -236,10 +238,10 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
+                    android:layout_weight="1"
                     android:text="שכר עבודה"
                     android:textColor="@color/colorText"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tvBuyDetailsDoneWeight"
@@ -248,10 +250,10 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="15dp"
+                    android:layout_weight="1"
                     android:text="משקל גמור"
                     android:textColor="@color/colorText"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -265,217 +267,234 @@
             <DatePicker
                 android:id="@+id/dpBuyEditDate"
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
+                android:layout_height="120dp"
                 android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"
                 android:gravity="center|center_horizontal|center_vertical" />
 
+            <TextView
+                android:id="@+id/tvBuyEditSupplier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="bottom|center_horizontal"
+                android:text="שם הספק:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <LinearLayout
-                android:layout_width="375dp"
-                android:layout_height="55dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="10"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvBuyEditSupplier"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
-                    android:text="שם הספק:"
+                    android:id="@+id/tvBuyEditID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
+                    android:gravity="bottom"
+                    android:text="מספר אסמכתא:"
                     android:textColor="#000000"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textSize="16sp" />
 
+                <EditText
+                    android:id="@+id/etBuyEditID"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:ems="10"
+                    android:gravity="bottom"
+                    android:inputType="textPersonName"
+                    android:textSize="16sp" />
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="10dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvBuyEditID"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="מספר אסמכתא:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/etBuyEditID"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="textPersonName" />
-        </LinearLayout>
+                android:layout_height="0dp"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="10"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="10dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvBuyEditPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
+                    android:gravity="bottom"
+                    android:text="מחיר לקראט:"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tvBuyEditPrice"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="מחיר לקראט:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
+                <EditText
+                    android:id="@+id/etBuyEditPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:ems="10"
+                    android:gravity="bottom"
+                    android:inputType="numberDecimal"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/etBuyEditPrice"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="numberDecimal" />
-        </LinearLayout>
+                android:layout_height="0dp"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="10"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="10dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvBuyEditWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
+                    android:gravity="bottom"
+                    android:text="משקל החבילה:"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tvBuyEditWeight"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="משקל החבילה:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
+                <EditText
+                    android:id="@+id/etBuyEditWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:ems="10"
+                    android:gravity="bottom"
+                    android:inputType="numberDecimal"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/etBuyEditWeight"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="numberDecimal" />
-        </LinearLayout>
+                android:layout_height="0dp"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="10"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="375dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_marginTop="10dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tvBuyEditDays"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
+                    android:gravity="bottom"
+                    android:text="מספר הימים:"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tvBuyEditDays"
-                android:layout_width="275dp"
-                android:layout_height="37dp"
-                android:layout_weight="1"
-                android:gravity="bottom|center|center_horizontal|center_vertical"
-                android:text="מספר הימים:"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/etBuyEditDays"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="start"
-                android:inputType="numberDecimal" />
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/etBuyEditDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:ems="10"
+                    android:gravity="bottom"
+                    android:inputType="numberDecimal"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llBuyDone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="375dp"
-                    android:layout_height="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center|center_horizontal|center_vertical"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tvBuyEditDoneWeight"
-                        android:layout_width="275dp"
-                        android:layout_height="37dp"
-                        android:layout_weight="1"
-                        android:gravity="bottom|center|center_horizontal|center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="7dp"
+                        android:gravity="bottom"
                         android:text="משקל גמור:"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <EditText
                         android:id="@+id/etBuyEditDoneWeight"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:ems="10"
-                        android:gravity="start"
-                        android:inputType="numberDecimal" />
+                        android:gravity="bottom"
+                        android:inputType="numberDecimal"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="375dp"
-                    android:layout_height="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center|center_horizontal|center_vertical"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tvBuyEditWage"
-                        android:layout_width="275dp"
-                        android:layout_height="37dp"
-                        android:layout_weight="1"
-                        android:gravity="bottom|center|center_horizontal|center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="7dp"
+                        android:gravity="bottom"
                         android:text="שכר עבודה:"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <EditText
                         android:id="@+id/etBuyEditWage"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_gravity="bottom"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:ems="10"
-                        android:gravity="start"
-                        android:inputType="numberDecimal" />
+                        android:gravity="bottom"
+                        android:inputType="numberDecimal"
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -486,7 +505,8 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="0.3"
                 android:background="@drawable/buttons"
                 android:clickable="true"
                 android:text="אשר"

@@ -25,7 +25,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_horizontal"
-        android:text="טוען..."
+        android:text="@string/org_loading"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:visibility="gone" />
@@ -34,7 +34,6 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -118,6 +117,7 @@
             android:id="@+id/llSaleDetails"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical">
 
             <TextView
@@ -127,6 +127,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="חברה"
                 android:textColor="@color/colorText"
                 android:textSize="23sp"
@@ -139,10 +140,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="תאריך קניה"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSaleDetailsPayDate"
@@ -151,10 +152,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="תאריך פקיעה"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSaleDetailsID"
@@ -163,10 +164,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="חשבונית"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSaleDetailsPrice"
@@ -175,10 +176,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="מחיר"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSaleDetailsWeight"
@@ -187,10 +188,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="משקל"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSaleDetailsDays"
@@ -199,10 +200,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="ימים"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSaleDetailsSum"
@@ -211,10 +212,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="סכום"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -222,43 +223,34 @@
             android:id="@+id/llSaleEdit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical">
 
             <DatePicker
                 android:id="@+id/dpSaleEditDate"
                 android:layout_width="match_parent"
-                android:layout_height="190dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="5dp"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"
                 android:gravity="center|center_horizontal|center_vertical" />
 
-            <LinearLayout
-                android:layout_width="375dp"
-                android:layout_height="55dp"
-                android:layout_gravity="center|center_horizontal|center_vertical"
-                android:layout_marginTop="15dp"
-                android:gravity="center|center_horizontal|center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvSaleEditClientName"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
-                    android:text="שם החברה:"
-                    android:textColor="#000000"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvSaleEditClientName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|center|center_horizontal|center_vertical"
+                android:text="שם החברה:"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="375dp"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="15dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
@@ -277,7 +269,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="0dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -285,10 +278,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="375dp"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="15dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
@@ -307,7 +301,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="0dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -315,10 +310,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="375dp"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="15dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
@@ -337,7 +333,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="0dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -345,10 +342,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="375dp"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="15dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
@@ -367,7 +365,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="0dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -381,7 +380,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 android:background="@drawable/buttons"
                 android:clickable="true"
                 android:text="אשר"

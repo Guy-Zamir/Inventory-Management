@@ -25,7 +25,7 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_horizontal"
-        android:text="טוען..."
+        android:text="@string/org_loading"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:visibility="gone" />
@@ -34,13 +34,12 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -107,6 +106,7 @@
             android:id="@+id/llSupplierDetails"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical">
 
             <TextView
@@ -116,6 +116,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="חברה"
                 android:textColor="@color/colorText"
                 android:textSize="23sp"
@@ -128,10 +129,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="סכום מכירות"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSupplierDetailsWeightSum"
@@ -140,10 +141,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="סכום משקל"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSupplierDetailsPrice"
@@ -152,10 +153,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="ממוצע לקראט"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSupplierDetailsSaleAVG"
@@ -164,10 +165,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="ממוצע קניות לחודש"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvSupplierDetailsWeightAVG"
@@ -176,10 +177,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="15dp"
+                android:layout_weight="1"
                 android:text="ממוצע משקל לחודש"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -187,6 +188,7 @@
             android:id="@+id/llSupplierEdit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -194,14 +196,15 @@
                 android:layout_height="55dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="18dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSupplierEditName"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
                     android:gravity="bottom|center|center_horizontal|center_vertical"
                     android:text="שם הספק:"
                     android:textColor="#000000"
@@ -212,7 +215,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -225,14 +229,15 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="18dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSupplierEditAddress"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
                     android:gravity="bottom|center|center_horizontal|center_vertical"
                     android:text="כתובת:"
                     android:textColor="#000000"
@@ -243,7 +248,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -255,14 +261,15 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="18dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSupplierEditPhone"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
                     android:gravity="bottom|center|center_horizontal|center_vertical"
                     android:text="טלפון נייד:"
                     android:textColor="#000000"
@@ -273,7 +280,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -285,14 +293,15 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="18dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSupplierEditInsidePhone"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
                     android:gravity="bottom|center|center_horizontal|center_vertical"
                     android:text="טלפון פנימי:"
                     android:textColor="#000000"
@@ -303,7 +312,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -315,14 +325,15 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="18dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSupplierEditFax"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
                     android:gravity="bottom|center|center_horizontal|center_vertical"
                     android:text="פקס:"
                     android:textColor="#000000"
@@ -333,7 +344,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -345,14 +357,15 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="18dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSupplierEditWebSite"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
                     android:gravity="bottom|center|center_horizontal|center_vertical"
                     android:text="אתר אינטרנט:"
                     android:textColor="#000000"
@@ -363,7 +376,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -375,14 +389,15 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginTop="18dp"
+                android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSupplierEditDetails"
-                    android:layout_width="275dp"
-                    android:layout_height="37dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
                     android:gravity="bottom|center|center_horizontal|center_vertical"
                     android:text="פרטים נוספים:"
                     android:textColor="#000000"
@@ -393,7 +408,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="start"
@@ -407,7 +423,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 android:background="@drawable/buttons"
                 android:clickable="true"
                 android:text="אשר"
