@@ -40,8 +40,8 @@
             android:id="@+id/imageView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/worker_icon" />
 
@@ -49,13 +49,13 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text="הזן את המשקל הגמור או את אחוז הליטוש"
             android:textColor="@color/colorText"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,7 +64,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:gravity="center|center_horizontal|center_vertical"
             android:orientation="horizontal">
@@ -96,13 +96,13 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text="הזן את שכר העבודה לקראט"
             android:textColor="@color/colorText"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,7 +111,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="150dp"
             android:layout_weight="1"
             android:gravity="center|center_horizontal|center_vertical"
             android:orientation="horizontal">
