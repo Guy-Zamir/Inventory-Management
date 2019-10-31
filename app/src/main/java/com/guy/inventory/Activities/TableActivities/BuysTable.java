@@ -15,7 +15,9 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Activities.EditActivities.EditBuy;
+import com.guy.inventory.Activities.EditActivities.EditBuyDone;
 import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.Adapters.BuyDoneAdapter;
 import com.guy.inventory.Adapters.BuysAdapter;
 import com.guy.inventory.R;
 import com.guy.inventory.Classes.Buy;
@@ -26,8 +28,9 @@ public class BuysTable extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
-    ListView lvBuyList;
-    BuysAdapter adapter;
+    ListView lvBuyList, lvBuyDone;
+    BuysAdapter adapterBuy;
+    BuyDoneAdapter adapterDone;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class BuysTable extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         lvBuyList = findViewById(R.id.lvBuyList);
+        lvBuyDone = findViewById(R.id.lvBuyDone);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
@@ -52,8 +56,10 @@ public class BuysTable extends AppCompatActivity {
             @Override
             public void handleResponse(List<Buy> response) {
                 InventoryApp.buys = response;
-                adapter = new BuysAdapter(BuysTable.this, InventoryApp.buys);
-                lvBuyList.setAdapter(adapter);
+                adapterBuy = new BuysAdapter(BuysTable.this, InventoryApp.buys);
+                adapterDone = new BuyDoneAdapter(BuysTable.this, InventoryApp.buys);
+                lvBuyList.setAdapter(adapterBuy);
+                lvBuyDone.setAdapter(adapterDone);
                 showProgress(false);
             }
 
@@ -76,13 +82,23 @@ public class BuysTable extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+
+        lvBuyDone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(BuysTable.this, EditBuyDone.class);
+                intent.putExtra("index", position);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            adapter.notifyDataSetChanged();
+            adapterBuy.notifyDataSetChanged();
+            adapterDone.notifyDataSetChanged();
         }
     }
 

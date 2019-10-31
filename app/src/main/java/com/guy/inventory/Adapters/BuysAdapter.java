@@ -10,10 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.guy.inventory.R;
 import com.guy.inventory.Classes.Buy;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -42,12 +40,8 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
         TextView tvBuyPrice = convertView.findViewById(R.id.tvBuyPrice);
         TextView tvBuySupplier = convertView.findViewById(R.id.tvBuySupplier);
         TextView tvBuyDate = convertView.findViewById(R.id.tvBuyDate);
-        TextView tvBuyWeight = convertView.findViewById(R.id.tvBuyWeight);
-        TextView tvBuyPayDate = convertView.findViewById(R.id.tvBuyPayDate);
         ImageView ivBuyTablePolish = convertView.findViewById(R.id.ivBuyTablePolish);
         ImageView ivBuyTablePaid = convertView.findViewById(R.id.ivBuyTablePaid);
-        ImageView ivBuyTableDone = convertView.findViewById(R.id.ivBuyTableDone);
-
 
         Calendar saleDate = Calendar.getInstance();
         saleDate.setTime(buys.get(position).getBuyDate());
@@ -56,15 +50,10 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
 
         Calendar payDate = Calendar.getInstance();
         payDate.setTime(buys.get(position).getPayDate());
-        String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
-        String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
-
 
         tvBuySupplier.setText(buys.get(position).getSupplierName());
         tvBuyDate.setText("תאריך קניה:  " + buyDays + "/" + buyMonth);
-        tvBuyWeight.setText("משקל:  " + nf.format(buys.get(position).getWeight()));
         tvBuyPrice.setText("מחיר:  " + nf.format(buys.get(position).getPrice()) + "$");
-        tvBuyPayDate.setText("תאריך פקיעה:  " + payDays + "/" + payMonth);
 
         if (buys.get(position).isPolish()) {
             ivBuyTablePolish.setVisibility(View.VISIBLE);
@@ -76,12 +65,6 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
             ivBuyTablePaid.setVisibility(View.VISIBLE);
         } else {
             ivBuyTablePaid.setVisibility(View.GONE);
-        }
-
-        if (buys.get(position).isDone()) {
-            ivBuyTableDone.setVisibility(View.VISIBLE);
-        } else {
-            ivBuyTableDone.setVisibility(View.GONE);
         }
 
         return convertView;

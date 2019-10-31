@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.SummaryActivities.WageSummary"></activity>
+        <activity android:name=".Activities.EditActivities.EditBuyDone"></activity>
+        <activity android:name=".Activities.SummaryActivities.WageSummary" />
         <activity android:name=".Activities.SummaryActivities.SaleSummary" />
         <activity android:name=".Activities.SummaryActivities.BuySummary" />
         <activity android:name=".Activities.EditActivities.EditSupplier" />

@@ -8,28 +8,24 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="380dp"
-        android:layout_height="120dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/table_row"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="10"
+            android:background="@drawable/table_row"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -63,15 +59,6 @@
                     android:foregroundGravity="center_vertical|center|center_horizontal"
                     app:srcCompat="@drawable/full_dollar" />
 
-                <ImageView
-                    android:id="@+id/ivBuyTableDone"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center|center_horizontal|center_vertical"
-                    android:layout_marginRight="5dp"
-                    android:foregroundGravity="center_vertical|center|center_horizontal"
-                    app:srcCompat="@drawable/done_icon" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -86,7 +73,7 @@
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_marginLeft="7dp"
                     android:layout_marginRight="7dp"
-                    android:layout_weight="5"
+                    android:layout_weight="3"
                     android:fontFamily="sans-serif-smallcaps"
                     android:text="TextView"
                     android:textColor="@color/colorText"
@@ -107,41 +94,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="3dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvBuyPayDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginRight="7dp"
-                    android:layout_weight="5"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:text="TextView"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tvBuyWeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginRight="7dp"
-                    android:layout_weight="5"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:text="TextView"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
+
 </LinearLayout>
