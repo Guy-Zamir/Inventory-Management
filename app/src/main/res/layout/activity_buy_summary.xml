@@ -43,7 +43,7 @@
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="מאזן קניות"
+            android:text="@string/buy_balance"
             android:textColor="@color/colorText"
             android:textSize="28sp"
             android:textStyle="bold" />

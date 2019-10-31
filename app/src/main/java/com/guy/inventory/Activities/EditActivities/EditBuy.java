@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
@@ -37,6 +38,8 @@ public class EditBuy extends AppCompatActivity {
     TextView tvBuyEditSupplier, tvBuyEditID, tvBuyEditPrice, tvBuyEditWeight, tvBuyEditDays, tvBuyEditDoneWeight, tvBuyEditWage;
     TextView tvBuyDetailsSupplier, tvBuyDetailsBuyDate, tvBuyDetailsPayDate, tvBuyDetailsID,
             tvBuyDetailsPrice, tvBuyDetailsWeight, tvBuyDetailsDays, tvBuyDetailsSum, tvBuyDetailsDoneWeight, tvBuyDetailsWage, tvBuyDetailsWorkDe;
+
+    Switch swBuyEditDoneWeight;
     Button btnBuyEditSubmit;
 
     int index, days;
@@ -80,7 +83,7 @@ public class EditBuy extends AppCompatActivity {
         tvBuyEditPrice = findViewById(R.id.tvBuyEditPrice);
         tvBuyEditWeight = findViewById(R.id.tvBuyEditWeight);
         tvBuyEditDays = findViewById(R.id.tvBuyEditDays);
-        tvBuyEditDoneWeight = findViewById(R.id.tvBuyEditDoneWeight);
+        swBuyEditDoneWeight = findViewById(R.id.swBuyEditDoneWeight);
         tvBuyEditWage = findViewById(R.id.tvBuyEditWage);
 
         tvBuyDetailsSupplier = findViewById(R.id.tvBuyDetailsSupplier);
@@ -115,7 +118,21 @@ public class EditBuy extends AppCompatActivity {
             llBuyDone.setVisibility(View.GONE);
             ivBuyEditDone.setImageResource(R.drawable.done_icon);
         }
-        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+
+        final DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+
+        swBuyEditDoneWeight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (swBuyEditDoneWeight.isChecked()) {
+                    etBuyEditDoneWeight.setText(nf.format((InventoryApp.buys.get(index).getDoneWeight()/InventoryApp.buys.get(index).getWeight())*100));
+                    swBuyEditDoneWeight.setText("אחוז ליטוש");
+                } else {
+                    etBuyEditDoneWeight.setText(nf.format(InventoryApp.buys.get(index).getDoneWeight()));
+                    swBuyEditDoneWeight.setText("משקל גמור");
+                }
+            }
+        });
 
         Calendar saleDate = Calendar.getInstance();
         saleDate.setTime(InventoryApp.buys.get(index).getBuyDate());
@@ -150,8 +167,8 @@ public class EditBuy extends AppCompatActivity {
         etBuyEditPrice.setText(String.valueOf(InventoryApp.buys.get(index).getPrice()));
         etBuyEditWeight.setText(String.valueOf(InventoryApp.buys.get(index).getWeight()));
         etBuyEditDays.setText(String.valueOf(InventoryApp.buys.get(index).getDays()));
-        etBuyEditDoneWeight.setText(String.valueOf(InventoryApp.buys.get(index).getDoneWeight()));
         etBuyEditWage.setText(String.valueOf(InventoryApp.buys.get(index).getWage()));
+        etBuyEditDoneWeight.setText(nf.format(InventoryApp.buys.get(index).getDoneWeight()));
 
         Calendar date = Calendar.getInstance();
         date.setTime(InventoryApp.buys.get(index).getBuyDate());
@@ -331,7 +348,11 @@ public class EditBuy extends AppCompatActivity {
                 price = Double.parseDouble(etBuyEditPrice.getText().toString().trim());
                 days = Integer.valueOf(etBuyEditDays.getText().toString().trim());
                 wage = Double.parseDouble(etBuyEditWage.getText().toString().trim());
-                doneWeight = Double.parseDouble(etBuyEditDoneWeight.getText().toString().trim());
+                if (swBuyEditDoneWeight.isChecked()) {
+                    doneWeight = (Double.parseDouble(etBuyEditDoneWeight.getText().toString().trim())/100)*InventoryApp.buys.get(index).getWeight();
+                } else {
+                    doneWeight = Double.parseDouble(etBuyEditDoneWeight.getText().toString().trim());
+                }
 
                 if (toast) {
                     Toast.makeText(EditBuy.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
