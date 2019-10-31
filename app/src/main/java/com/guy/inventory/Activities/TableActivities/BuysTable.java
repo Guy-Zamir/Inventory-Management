@@ -1,7 +1,10 @@
 package com.guy.inventory.Activities.TableActivities;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -86,12 +89,49 @@ public class BuysTable extends AppCompatActivity {
         lvBuyDone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(BuysTable.this, EditBuyDone.class);
-                intent.putExtra("index", position);
-                startActivityForResult(intent, 1);
+                final int index = position;
+                AlertDialog.Builder alert = new AlertDialog.Builder(BuysTable.this);
+                alert.setTitle("שינוי נתונים");
+                if (InventoryApp.buys.get(index).isDone()) {
+                    alert.setMessage("האם אתה בטוח שברצונך לשנות את החבילה ללא גמורה?");
+                } else {
+                    alert.setMessage("האם אתה בטוח שברצונך לשנות את החבילה לגמורה?");
+                }
+                alert.setNegativeButton(android.R.string.no, null);
+                alert.setIcon(android.R.drawable.ic_dialog_alert);
+                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (InventoryApp.buys.get(index).isDone()) {
+                            InventoryApp.buys.get(index).setDone(false);
+                        } else {
+                            InventoryApp.buys.get(index).setDone(true);
+                        }
+                        showProgress(true);
+                        Backendless.Persistence.save(InventoryApp.buys.get(index), new AsyncCallback<Buy>() {
+                            @Override
+                            public void handleResponse(Buy response) {
+                                showProgress(false);
+                                if (InventoryApp.buys.get(index).isDone()) {
+                                    Intent intent = new Intent(BuysTable.this, EditBuyDone.class);
+                                    intent.putExtra("index", index);
+                                    startActivityForResult(intent, 1);
+                                } else {
+                                    Toast.makeText(BuysTable.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                    adapterDone.notifyDataSetChanged();
+                                }
+                            }
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                showProgress(false);
+                                Toast.makeText(BuysTable.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                alert.show();
             }
-        });
-    }
+    });
+}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

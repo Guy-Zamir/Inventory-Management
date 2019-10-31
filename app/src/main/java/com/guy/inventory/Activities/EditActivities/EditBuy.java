@@ -32,7 +32,7 @@ public class EditBuy extends AppCompatActivity {
     private TextView tvLoad;
 
     LinearLayout llBuyEdit, llBuyDone, llBuyDetails, llBuyDetailsDone;
-    ImageView ivBuyEditDelete, ivBuyEdit, ivBuyEditPaid, ivBuyEditDone, ivBuyDetails;
+    ImageView ivBuyEditDelete, ivBuyEdit, ivBuyEditPaid, ivBuyDetails;
     DatePicker dpBuyEditDate;
     EditText etBuyEditID, etBuyEditPrice, etBuyEditWeight, etBuyEditDays, etBuyEditDoneWeight, etBuyEditWage;
     TextView tvBuyEditSupplier, tvBuyEditID, tvBuyEditPrice, tvBuyEditWeight, tvBuyEditDays, tvBuyEditWage;
@@ -66,7 +66,6 @@ public class EditBuy extends AppCompatActivity {
         ivBuyEditDelete = findViewById(R.id.ivBuyEditDelete);
         ivBuyEdit = findViewById(R.id.ivBuyEdit);
         ivBuyEditPaid = findViewById(R.id.ivBuyEditPaid);
-        ivBuyEditDone = findViewById(R.id.ivBuyEditDone);
         ivBuyDetails = findViewById(R.id.ivBuyDetails);
 
         dpBuyEditDate = findViewById(R.id.dpBuyEditDate);
@@ -109,14 +108,6 @@ public class EditBuy extends AppCompatActivity {
             ivBuyEditPaid.setImageResource(R.drawable.empty_dollar);
         } else {
             ivBuyEditPaid.setImageResource(R.drawable.full_dollar);
-        }
-
-        if (InventoryApp.buys.get(index).isDone()) {
-            llBuyDone.setVisibility(View.VISIBLE);
-            ivBuyEditDone.setImageResource(R.drawable.not_done_icon);
-        } else {
-            llBuyDone.setVisibility(View.GONE);
-            ivBuyEditDone.setImageResource(R.drawable.done_icon);
         }
 
         final DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
@@ -277,57 +268,6 @@ public class EditBuy extends AppCompatActivity {
             }
         });
 
-        ivBuyEditDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(EditBuy.this);
-                alert.setTitle("התראת שינוי");
-                if (InventoryApp.buys.get(index).isDone()) {
-                    alert.setMessage("האם אתה בטוח שברצונך לסמן את החבילה כלא גמורה?");
-                } else {
-                    alert.setMessage("האם אתה בטוח שברצונך לסמן את החבילה כגמורה??");
-                }
-                alert.setNegativeButton(android.R.string.no, null);
-                alert.setIcon(android.R.drawable.ic_dialog_alert);
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (InventoryApp.buys.get(index).isDone()) {
-                            InventoryApp.buys.get(index).setDone(false);
-                            InventoryApp.buys.get(index).setDoneWeight(0);
-                            InventoryApp.buys.get(index).setWage(0);
-                        } else {
-                            InventoryApp.buys.get(index).setDone(true);
-                        }
-                        showProgress(true);
-                        tvLoad.setText("מעדכן את הנתונים...");
-                        Backendless.Persistence.save(InventoryApp.buys.get(index), new AsyncCallback<Buy>() {
-                            @Override
-                            public void handleResponse(Buy response) {
-                                showProgress(false);
-                                Toast.makeText(EditBuy.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
-                                if (InventoryApp.buys.get(index).isDone()) {
-                                    llBuyDone.setVisibility(View.VISIBLE);
-                                    llBuyDetailsDone.setVisibility(View.VISIBLE);
-                                    ivBuyEditDone.setImageResource(R.drawable.not_done_icon);
-                                } else {
-                                    llBuyDone.setVisibility(View.GONE);
-                                    llBuyDetailsDone.setVisibility(View.GONE);
-                                    ivBuyEditDone.setImageResource(R.drawable.done_icon);
-                                }
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(EditBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                alert.show();
-            }
-        });
-
         btnBuyEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -386,9 +326,11 @@ public class EditBuy extends AppCompatActivity {
                             }
 
                             InventoryApp.buys.get(index).setSum(price*weight);
+                            showProgress(true);
                             Backendless.Persistence.save(InventoryApp.buys.get(index), new AsyncCallback<Buy>() {
                                 @Override
                                 public void handleResponse(Buy response) {
+                                    showProgress(false);
                                     Toast.makeText(EditBuy.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                     setResult(RESULT_OK);
                                     finishActivity(1);
