@@ -62,7 +62,7 @@ public class NewSupplier extends AppCompatActivity {
                     details = etNewSupplierDetails.getText().toString().trim();
                     home = !tbNewSupplierHome.isChecked();
 
-                    Supplier supplier = new Supplier();
+                    final Supplier supplier = new Supplier();
                     supplier.setName(name);
                     supplier.setLocation(location);
                     supplier.setPhoneNumber(phoneNumber);
@@ -77,6 +77,7 @@ public class NewSupplier extends AppCompatActivity {
                     Backendless.Persistence.save(supplier, new AsyncCallback<Supplier>() {
                         @Override
                         public void handleResponse(Supplier response) {
+                            InventoryApp.suppliers.add(supplier);
                             Toast.makeText(NewSupplier.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                             NewSupplier.this.finish();
                             showProgress(false);

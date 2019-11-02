@@ -133,7 +133,7 @@ public class NewSale extends AppCompatActivity {
                     int days = Integer.valueOf(etSaleDays.getText().toString().trim());
                     boolean polish = !tbSalePolish.isChecked();
 
-                    Sale sale = new Sale();
+                    final Sale sale = new Sale();
                     sale.setClientName(clientName);
                     sale.setSaleDate(getDateFromDatePicker(dpSaleDate));
                     sale.setClientName(InventoryApp.clients.get(chosenClient).getName());
@@ -160,6 +160,7 @@ public class NewSale extends AppCompatActivity {
                     Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
                         @Override
                         public void handleResponse(Sale response) {
+                            InventoryApp.sales.add(sale);
                             Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                             showProgress(false);
                             NewSale.this.finish();

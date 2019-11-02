@@ -132,7 +132,7 @@ public class NewBuy extends AppCompatActivity {
                     int days = Integer.valueOf(etBuyDays.getText().toString().trim());
                     boolean polish = tbBuyPolish.isChecked();
 
-                    Buy buy = new Buy();
+                    final Buy buy = new Buy();
                     buy.setSupplierName(supplierName);
                     buy.setBuyDate(getDateFromDatePicker(dpBuyDate));
                     buy.setId(id);
@@ -158,6 +158,7 @@ public class NewBuy extends AppCompatActivity {
                     Backendless.Persistence.save(buy, new AsyncCallback<Buy>() {
                         @Override
                         public void handleResponse(Buy response) {
+                            InventoryApp.buys.add(buy);
                             Toast.makeText(NewBuy.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             finishActivity(1);

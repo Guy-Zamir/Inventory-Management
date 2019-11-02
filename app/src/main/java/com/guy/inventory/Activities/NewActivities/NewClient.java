@@ -63,7 +63,7 @@ public class NewClient extends AppCompatActivity {
                     details = etNewClientDetails.getText().toString().trim();
                     home = !tbNewClientHome.isChecked();
 
-                    Client client = new Client();
+                    final Client client = new Client();
                     client.setName(name);
                     client.setLocation(location);
                     client.setPhoneNumber(phoneNumber);
@@ -78,6 +78,7 @@ public class NewClient extends AppCompatActivity {
                     Backendless.Persistence.save(client, new AsyncCallback<Client>() {
                         @Override
                         public void handleResponse(Client response) {
+                            InventoryApp.clients.add(client);
                             Toast.makeText(NewClient.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                             NewClient.this.finish();
                             showProgress(false);

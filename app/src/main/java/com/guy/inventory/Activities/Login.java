@@ -50,7 +50,6 @@ public class Login extends AppCompatActivity {
 
                     String name = etEmail.getText().toString().trim();
                     String password = etPassword.getText().toString().trim();
-
                     showProgress(true);
 
                     Backendless.UserService.login(name, password, new AsyncCallback<BackendlessUser>() {
@@ -63,6 +62,7 @@ public class Login extends AppCompatActivity {
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
+                            showProgress(false);
                             Toast.makeText(Login.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }, true);

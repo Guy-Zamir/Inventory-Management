@@ -1,10 +1,14 @@
 package com.guy.inventory.Activities.TableActivities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,6 +20,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Activities.EditActivities.EditSale;
 import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.Activities.NewActivities.NewSale;
 import com.guy.inventory.Adapters.SalesAdapter;
 import com.guy.inventory.R;
 import com.guy.inventory.Classes.Sale;
@@ -38,6 +43,9 @@ public class SalesTable extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("מכירות");
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
@@ -75,6 +83,24 @@ public class SalesTable extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tables, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.newIcon:
+                Intent intent = new Intent(SalesTable.this, NewSale.class);
+                startActivityForResult(intent, 1);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -6,9 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import com.guy.inventory.Activities.NewActivities.NewClient;
-import com.guy.inventory.Activities.NewActivities.NewSale;
-import com.guy.inventory.Activities.NewActivities.NewSupplier;
 import com.guy.inventory.Activities.SummaryActivities.Summary;
 import com.guy.inventory.Activities.TableActivities.BuysTable;
 import com.guy.inventory.Activities.TableActivities.ClientTable;
@@ -18,7 +15,7 @@ import com.guy.inventory.R;
 
 
 public class MainActivity extends AppCompatActivity {
-    Button btnResult, btnNewSale, btnBuyTable, btnSaleTable, btnNewSupplier, btnSupplierTable, btnNewClient, btnClientTable;
+    Button btnResult, btnBuyTable, btnSaleTable, btnSupplierTable, btnClientTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,26 +24,15 @@ public class MainActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         btnResult = findViewById(R.id.btnResult);
-        btnNewSale = findViewById(R.id.btnNewSale);
         btnBuyTable = findViewById(R.id.btnBuyTable);
         btnSaleTable = findViewById(R.id.btnSaleTable);
-        btnNewSupplier = findViewById(R.id.btnNewSupplier);
         btnSupplierTable = findViewById(R.id.btnSupplierTable);
-        btnNewClient = findViewById(R.id.btnNewClient);
         btnClientTable = findViewById(R.id.btnClientTable);
 
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Summary.class);
-                startActivity(intent);
-            }
-        });
-
-        btnNewSale.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewSale.class);
                 startActivity(intent);
             }
         });
@@ -63,22 +49,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SalesTable.class);
-                startActivity(intent);
-            }
-        });
-
-        btnNewSupplier.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewSupplier.class);
-                startActivity(intent);
-            }
-        });
-
-        btnNewClient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewClient.class);
                 startActivity(intent);
             }
         });
