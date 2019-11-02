@@ -159,6 +159,8 @@ public class NewBuy extends AppCompatActivity {
                         @Override
                         public void handleResponse(Buy response) {
                             Toast.makeText(NewBuy.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finishActivity(1);
                             NewBuy.this.finish();
                             showProgress(false);
                         }

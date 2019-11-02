@@ -1,6 +1,8 @@
 package com.guy.inventory.Activities.TableActivities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,8 +10,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +25,7 @@ import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Activities.EditActivities.EditBuy;
 import com.guy.inventory.Activities.EditActivities.EditBuyDone;
 import com.guy.inventory.Activities.InventoryApp;
+import com.guy.inventory.Activities.NewActivities.NewBuy;
 import com.guy.inventory.Adapters.BuyDoneAdapter;
 import com.guy.inventory.Adapters.BuysAdapter;
 import com.guy.inventory.R;
@@ -31,6 +37,7 @@ public class BuysTable extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
+
     ListView lvBuyList, lvBuyDone;
     BuysAdapter adapterBuy;
     BuyDoneAdapter adapterDone;
@@ -46,6 +53,9 @@ public class BuysTable extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("קניות");
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
@@ -99,7 +109,7 @@ public class BuysTable extends AppCompatActivity {
                 }
                 alert.setNegativeButton(android.R.string.no, null);
                 alert.setIcon(android.R.drawable.ic_dialog_alert);
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                alert.setPositiveButton(android.R.string.yes,  new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (InventoryApp.buys.get(index).isDone()) {
                             InventoryApp.buys.get(index).setDone(false);
@@ -132,6 +142,24 @@ public class BuysTable extends AppCompatActivity {
             }
     });
 }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.buys_table, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.newBuy:
+                Intent intent = new Intent(BuysTable.this, NewBuy.class);
+                startActivityForResult(intent, 1);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

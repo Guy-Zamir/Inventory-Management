@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import com.guy.inventory.Activities.NewActivities.NewBuy;
 import com.guy.inventory.Activities.NewActivities.NewClient;
 import com.guy.inventory.Activities.NewActivities.NewSale;
 import com.guy.inventory.Activities.NewActivities.NewSupplier;
@@ -19,7 +18,7 @@ import com.guy.inventory.R;
 
 
 public class MainActivity extends AppCompatActivity {
-    Button btnResult, btnNewBuy, btnNewSale, btnBuyTable, btnSaleTable, btnNewSupplier, btnSupplierTable, btnNewClient, btnClientTable;
+    Button btnResult, btnNewSale, btnBuyTable, btnSaleTable, btnNewSupplier, btnSupplierTable, btnNewClient, btnClientTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         btnResult = findViewById(R.id.btnResult);
-        btnNewBuy = findViewById(R.id.btnNewBuy);
         btnNewSale = findViewById(R.id.btnNewSale);
         btnBuyTable = findViewById(R.id.btnBuyTable);
         btnSaleTable = findViewById(R.id.btnSaleTable);
@@ -41,14 +39,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Summary.class);
-                startActivity(intent);
-            }
-        });
-
-        btnNewBuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewBuy.class);
                 startActivity(intent);
             }
         });

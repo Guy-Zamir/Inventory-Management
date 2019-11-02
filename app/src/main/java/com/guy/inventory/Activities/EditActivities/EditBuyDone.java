@@ -58,10 +58,10 @@ public class EditBuyDone extends AppCompatActivity {
             public void onClick(View v) {
                 if (swBuyEditDoneWeight2.isChecked()) {
                     etBuyEditDoneWeight2.setText(nf.format((InventoryApp.buys.get(index).getDoneWeight()/InventoryApp.buys.get(index).getWeight())*100));
-                    swBuyEditDoneWeight2.setText("אחוז ליטוש");
+                    swBuyEditDoneWeight2.setText("אחוז ליטוש ");
                 } else {
                     etBuyEditDoneWeight2.setText(nf.format(InventoryApp.buys.get(index).getDoneWeight()));
-                    swBuyEditDoneWeight2.setText("משקל גמור");
+                    swBuyEditDoneWeight2.setText("משקל גמור ");
                 }
             }
         });
