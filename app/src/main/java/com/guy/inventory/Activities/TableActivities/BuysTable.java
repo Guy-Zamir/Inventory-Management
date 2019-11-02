@@ -5,10 +5,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,14 +57,15 @@ public class BuysTable extends AppCompatActivity {
         tvLoad = findViewById(R.id.tvLoad);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setTitle("קניות");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
         queryBuilder.setGroupBy("created");
         queryBuilder.setPageSize(100);
-
         showProgress(true);
 
         Backendless.Data.of(Buy.class).find(queryBuilder, new AsyncCallback<List<Buy>>() {
@@ -143,7 +148,7 @@ public class BuysTable extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.tables, menu);
+        getMenuInflater().inflate(R.menu.table_action_bar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -157,6 +162,12 @@ public class BuysTable extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     @Override

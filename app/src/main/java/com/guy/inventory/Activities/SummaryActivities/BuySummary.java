@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.SummaryActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -41,6 +42,11 @@ public class BuySummary extends AppCompatActivity {
         tvSummaryBuyPolishWeight = findViewById(R.id.tvSummaryBuyPolishWeight);
         tvSummaryBuyPolishPrice = findViewById(R.id.tvSummaryBuyPolishPrice);
 
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("מאזן קניות");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         buySum = getIntent().getDoubleExtra("buySum", 0);
         buyWeight = getIntent().getDoubleExtra("buyWeight", 0);
         buyPrice = getIntent().getDoubleExtra("buyPrice", 0);
@@ -62,5 +68,11 @@ public class BuySummary extends AppCompatActivity {
         tvSummaryBuyPolishSum.setText("סכום:  " + nf.format(buyPolishSum) + "$");
         tvSummaryBuyPolishWeight.setText("משקל:  " + nf.format(buyPolishWeight));
         tvSummaryBuyPolishPrice.setText("מחיר ממוצע:  " + nf.format(buyPolishPrice) + "$");
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 }

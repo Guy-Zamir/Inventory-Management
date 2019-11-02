@@ -1,7 +1,7 @@
 package com.guy.inventory.Activities.SummaryActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -89,6 +89,11 @@ public class Summary extends AppCompatActivity {
         tvSummaryBalancePolishSum = findViewById(R.id.tvSummaryBalancePolishSum);
         tvSummaryBalancePolishWeight = findViewById(R.id.tvSummaryBalancePolishWeight);
         tvSummaryBalancePolishPrice = findViewById(R.id.tvSummaryBalancePolishPrice);
+
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("מאזן סחורות");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         showProgress(true);
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
@@ -287,7 +292,7 @@ public class Summary extends AppCompatActivity {
         saleSum = salePolishSum + saleRoughSum;
         saleWeight = salePolishWeight + saleRoughWeight;
 
-        balancePolishSum = doneSum + buyPolishSum - saleSum - wageSum;
+        balancePolishSum = doneSum + buyPolishSum - saleSum + wageSum;
         balancePolishWeight = doneWeight + buyPolishWeight - saleWeight;
 
         balanceSum = balancePolishSum + balanceRoughSum;
@@ -326,5 +331,11 @@ public class Summary extends AppCompatActivity {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 }

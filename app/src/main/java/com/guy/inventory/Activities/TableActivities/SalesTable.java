@@ -45,7 +45,10 @@ public class SalesTable extends AppCompatActivity {
         tvLoad = findViewById(R.id.tvLoad);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setTitle("מכירות");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
@@ -87,7 +90,7 @@ public class SalesTable extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.tables, menu);
+        getMenuInflater().inflate(R.menu.table_action_bar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -101,6 +104,12 @@ public class SalesTable extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     @Override

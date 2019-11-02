@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.EditActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
@@ -74,6 +75,11 @@ public class EditClient extends AppCompatActivity {
 
         btnClientEditSubmit = findViewById(R.id.btnClientEditSubmit);
 
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("נתוני לקוח");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         index = getIntent().getIntExtra("index", 0);
 
         if (InventoryApp.clients.get(index).isHome()) {
@@ -107,8 +113,7 @@ public class EditClient extends AppCompatActivity {
         double saleSum = 0;
         double weightSum = 0;
         double price;
-//        double saleAvg;
-//        double weightAvg;
+
         if (InventoryApp.sales != null) {
             for (Sale sale : InventoryApp.sales) {
                 if (sale.getClientName().equals(InventoryApp.clients.get(index).getName())) {
@@ -286,6 +291,12 @@ public class EditClient extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void showProgress(final boolean show) {

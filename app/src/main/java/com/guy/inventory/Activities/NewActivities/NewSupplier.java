@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.NewActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -47,6 +48,11 @@ public class NewSupplier extends AppCompatActivity {
         etNewSupplierDetails = findViewById(R.id.etNewSupplierDetails);
         Button btnNewSupplierSubmit = findViewById(R.id.btnNewSupplierSubmit);
 
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("ספק חדש");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         btnNewSupplierSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +97,12 @@ public class NewSupplier extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void showProgress(final boolean show) {

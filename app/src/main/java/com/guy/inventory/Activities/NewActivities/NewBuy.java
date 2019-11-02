@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.NewActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -57,6 +58,11 @@ public class NewBuy extends AppCompatActivity {
         etBuyDays = findViewById(R.id.etBuyDays);
         tbBuyPolish = findViewById(R.id.tbBuyPolish);
         Button btnBuySubmit = findViewById(R.id.btnBuySubmit);
+
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("קניה חדשה");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
@@ -174,6 +180,12 @@ public class NewBuy extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void showProgress(final boolean show) {

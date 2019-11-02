@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -28,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
         btnSaleTable = findViewById(R.id.btnSaleTable);
         btnSupplierTable = findViewById(R.id.btnSupplierTable);
         btnClientTable = findViewById(R.id.btnClientTable);
+
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("ניהול מלאי");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,4 +75,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
 }

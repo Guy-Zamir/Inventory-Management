@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.NewActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -48,6 +49,11 @@ public class NewClient extends AppCompatActivity {
         etNewClientDetails = findViewById(R.id.etNewClientDetails);
         Button btnNewClientSubmit = findViewById(R.id.btnNewClientSubmit);
 
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("לקוח חדש");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         btnNewClientSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +99,12 @@ public class NewClient extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void showProgress(final boolean show) {

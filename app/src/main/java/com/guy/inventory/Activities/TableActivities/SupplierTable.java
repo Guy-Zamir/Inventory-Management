@@ -20,7 +20,6 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Activities.EditActivities.EditSupplier;
 import com.guy.inventory.Activities.InventoryApp;
-import com.guy.inventory.Activities.NewActivities.NewSale;
 import com.guy.inventory.Activities.NewActivities.NewSupplier;
 import com.guy.inventory.Adapters.SupplierAdapter;
 import com.guy.inventory.Classes.Supplier;
@@ -46,7 +45,10 @@ public class SupplierTable extends AppCompatActivity {
         tvLoad = findViewById(R.id.tvLoad);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setTitle("ספקים");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
@@ -89,7 +91,7 @@ public class SupplierTable extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.tables, menu);
+        getMenuInflater().inflate(R.menu.table_action_bar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -103,6 +105,12 @@ public class SupplierTable extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     @Override

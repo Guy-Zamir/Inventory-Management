@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.EditActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
@@ -84,6 +85,11 @@ public class EditSale extends AppCompatActivity {
         tvSaleDetailsWeight = findViewById(R.id.tvSaleDetailsWeight);
         tvSaleDetailsDays = findViewById(R.id.tvSaleDetailsDays);
         tvSaleDetailsSum = findViewById(R.id.tvSaleDetailsSum);
+
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("נתוני מכירה");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         index = getIntent().getIntExtra("index", 0);
 
@@ -336,6 +342,12 @@ public class EditSale extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void showProgress(final boolean show) {

@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.EditActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -99,6 +100,11 @@ public class EditBuy extends AppCompatActivity {
 
         llBuyEdit.setVisibility(View.GONE);
         llBuyDetails.setVisibility(View.VISIBLE);
+
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("נתוני קניה");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         index = getIntent().getIntExtra("index", 0);
 
@@ -349,6 +355,12 @@ public class EditBuy extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void showProgress(final boolean show) {

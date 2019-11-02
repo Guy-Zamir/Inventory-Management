@@ -1,5 +1,5 @@
 package com.guy.inventory.Activities.EditActivities;
-
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
@@ -37,8 +37,6 @@ public class EditSupplier extends AppCompatActivity {
     int index;
     boolean details = true, edit = false;
 
-    List<Buy> buys;
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +73,11 @@ public class EditSupplier extends AppCompatActivity {
 
         btnSupplierEditSubmit = findViewById(R.id.btnSupplierEditSubmit);
 
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("נתוני ספק");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         index = getIntent().getIntExtra("index", 0);
 
         if (InventoryApp.suppliers.get(index).isHome()) {
@@ -108,8 +111,6 @@ public class EditSupplier extends AppCompatActivity {
         double saleSum = 0;
         double weightSum = 0;
         double price;
-//        double saleAvg;
-//        double weightAvg;
 
         if (InventoryApp.buys != null) {
             for (Buy buy : InventoryApp.buys) {
@@ -287,6 +288,12 @@ public class EditSupplier extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void showProgress(final boolean show) {

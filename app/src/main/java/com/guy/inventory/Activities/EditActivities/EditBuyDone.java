@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.EditActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,6 +47,11 @@ public class EditBuyDone extends AppCompatActivity {
         etBuyEditDoneWeight2 = findViewById(R.id.etBuyEditDoneWeight2);
         swBuyEditDoneWeight2 = findViewById(R.id.swBuyEditDoneWeight2);
         btnBuyDoneSubmit = findViewById(R.id.btnBuyDoneSubmit);
+
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("נתוני קניה");
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         index = getIntent().getIntExtra("index", 0);
         final DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
@@ -112,6 +118,12 @@ public class EditBuyDone extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void showProgress(final boolean show) {

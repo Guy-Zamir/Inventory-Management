@@ -1,5 +1,6 @@
 package com.guy.inventory.Activities.SummaryActivities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
@@ -40,6 +41,11 @@ public class SaleSummary extends AppCompatActivity {
         tvSummarySalePolishWeight = findViewById(R.id.tvSummarySalePolishWeight);
         tvSummarySalePolishPrice = findViewById(R.id.tvSummarySalePolishPrice);
 
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("מאזן מכירות");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         saleSum = getIntent().getDoubleExtra("saleSum", 0);
         saleWeight = getIntent().getDoubleExtra("saleWeight", 0);
         salePrice = getIntent().getDoubleExtra("salePrice", 0);
@@ -61,5 +67,11 @@ public class SaleSummary extends AppCompatActivity {
         tvSummarySalePolishSum.setText("סכום:  " + nf.format(salePolishSum) + "$");
         tvSummarySalePolishWeight.setText("משקל:  " + nf.format(salePolishWeight));
         tvSummarySalePolishPrice.setText("מחיר ממוצע:  " + nf.format(salePolishPrice) + "$");
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 }
