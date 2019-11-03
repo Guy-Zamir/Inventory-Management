@@ -6,40 +6,39 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".Activities.InventoryApp"
+        android:name=".InventoryApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/diamond_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.EditActivities.EditBuyDone"></activity>
-        <activity android:name=".Activities.SummaryActivities.WageSummary" />
-        <activity android:name=".Activities.SummaryActivities.SaleSummary" />
-        <activity android:name=".Activities.SummaryActivities.BuySummary" />
-        <activity android:name=".Activities.EditActivities.EditSupplier" />
-        <activity android:name=".Activities.EditActivities.EditClient" />
-        <activity android:name=".Activities.TableActivities.ClientTable" />
-        <activity android:name=".Activities.NewActivities.NewClient" />
-        <activity android:name=".Activities.TableActivities.SupplierTable" />
-        <activity android:name=".Activities.NewActivities.NewSupplier" />
-        <activity android:name=".Activities.Register" />
-        <activity android:name=".Activities.Login">
+        <activity android:name=".EditBuyDone"/>
+        <activity android:name=".SummaryWage" />
+        <activity android:name=".SummarySale" />
+        <activity android:name=".SummaryBuy" />
+        <activity android:name=".EditSupplier" />
+        <activity android:name=".EditClient" />
+        <activity android:name=".TableClient" />
+        <activity android:name=".NewClient" />
+        <activity android:name=".SupplierTable" />
+        <activity android:name=".NewSupplier" />
+        <activity android:name=".Register" />
+        <activity android:name=".EditSale" />
+        <activity android:name=".EditBuy" />
+        <activity android:name=".TableSale" />
+        <activity android:name=".TableBuy" />
+        <activity android:name=".Summary" />
+        <activity android:name=".NewSale" />
+        <activity android:name=".NewBuy" />
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.EditActivities.EditSale" />
-        <activity android:name=".Activities.EditActivities.EditBuy" />
-        <activity android:name=".Activities.TableActivities.SalesTable" />
-        <activity android:name=".Activities.TableActivities.BuysTable" />
-        <activity android:name=".Activities.SummaryActivities.Summary" />
-        <activity android:name=".Activities.NewActivities.NewSale" />
-        <activity android:name=".Activities.NewActivities.NewBuy" />
-        <activity android:name=".Activities.MainActivity" />
     </application>
-
 </manifest>

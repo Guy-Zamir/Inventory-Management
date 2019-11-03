@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".Activities.EditActivities.EditSupplier">
+    tools:context=".EditSupplier">
 
     <ProgressBar
         android:id="@+id/login_progress"
