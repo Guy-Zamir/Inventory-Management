@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,16 +32,10 @@ public class AdapterSupplier extends ArrayAdapter<Supplier> {
 
         TextView tvSupplierName = convertView.findViewById(R.id.tvSupplierName);
         TextView tvSupplierDetails = convertView.findViewById(R.id.tvSupplierDetails);
-        ImageView ivSupplierTableHome = convertView.findViewById(R.id.ivSupplierTableHome);
 
         tvSupplierName.setText(suppliers.get(position).getName());
         tvSupplierDetails.setText(suppliers.get(position).getDetails());
 
-        if (suppliers.get(position).isHome()) {
-            ivSupplierTableHome.setImageResource(R.drawable.home_icon);
-        } else {
-            ivSupplierTableHome.setImageResource(R.drawable.export_icon);
-        }
         return convertView;
     }
 }

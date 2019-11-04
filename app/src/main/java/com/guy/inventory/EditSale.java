@@ -11,15 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -28,19 +24,14 @@ public class EditSale extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    LinearLayout llSaleEdit, llSaleDetails;
-    ImageView ivSaleDelete, ivSaleEdit, ivSalePaid, ivSaleDetails, ivSaleEditPolish;
     DatePicker dpSaleEditDate;
     EditText etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
     TextView tvSaleEditClientName, tvSaleEditID, tvSaleEditWeight, tvSaleEditSum, tvSaleEditDays;
-    TextView tvSaleDetailsClientName, tvSaleDetailsBuyDate, tvSaleDetailsPayDate, tvSaleDetailsID,
-            tvSaleDetailsPrice, tvSaleDetailsWeight, tvSaleDetailsDays, tvSaleDetailsSum;
     Button btnSaleEditSubmit;
 
     int index, days;
     String id;
     double weight, saleSum;
-    boolean edit = false, details = true;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -52,15 +43,6 @@ public class EditSale extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
-
-        ivSaleDelete = findViewById(R.id.ivSaleDelete);
-        ivSaleEdit = findViewById(R.id.ivSaleEdit);
-        ivSalePaid = findViewById(R.id.ivSalePaid);
-        ivSaleDetails = findViewById(R.id.ivSaleDetails);
-        ivSaleEditPolish = findViewById(R.id.ivSaleEditPolish);
-
-        llSaleEdit = findViewById(R.id.llSaleEdit);
-        llSaleDetails = findViewById(R.id.llSaleDetails);
 
         dpSaleEditDate = findViewById(R.id.dpSaleEditDate);
         etSaleEditID = findViewById(R.id.etSaleEditID);
@@ -75,60 +57,13 @@ public class EditSale extends AppCompatActivity {
         tvSaleEditSum = findViewById(R.id.tvSaleEditSum);
         tvSaleEditDays = findViewById(R.id.tvSaleEditDays);
 
-        tvSaleDetailsClientName = findViewById(R.id.tvSaleDetailsClientName);
-        tvSaleDetailsBuyDate = findViewById(R.id.tvSaleDetailsBuyDate);
-        tvSaleDetailsPayDate = findViewById(R.id.tvSaleDetailsPayDate);
-        tvSaleDetailsID = findViewById(R.id.tvSaleDetailsID);
-        tvSaleDetailsPrice = findViewById(R.id.tvSaleDetailsPrice);
-        tvSaleDetailsWeight = findViewById(R.id.tvSaleDetailsWeight);
-        tvSaleDetailsDays = findViewById(R.id.tvSaleDetailsDays);
-        tvSaleDetailsSum = findViewById(R.id.tvSaleDetailsSum);
-
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("נתוני מכירה");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         index = getIntent().getIntExtra("index", 0);
-
         tvSaleEditClientName.setText(InventoryApp.sales.get(index).getClientName());
-
-        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-
-        Calendar saleDate = Calendar.getInstance();
-        saleDate.setTime(InventoryApp.sales.get(index).getSaleDate());
-        @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
-        @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
-
-        Calendar payDate = Calendar.getInstance();
-        payDate.setTime(InventoryApp.sales.get(index).getPayDate());
-        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
-        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
-
-        tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
-        tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
-
-        tvSaleDetailsClientName.setText("שם הספק:  " + InventoryApp.sales.get(index).getClientName());
-        tvSaleDetailsID.setText("מספר האסמכתא:  " + InventoryApp.sales.get(index).getId());
-        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(index).getPrice()) + "$");
-        tvSaleDetailsWeight.setText("משקל החבילה:  " + nf.format(InventoryApp.sales.get(index).getWeight()));
-        tvSaleDetailsDays.setText("מספר הימים:  " + nf.format(InventoryApp.sales.get(index).getDays()));
-        tvSaleDetailsSum.setText("סכום העסקה:  " + nf.format(InventoryApp.sales.get(index).getSaleSum()) + "$");
-
-        llSaleEdit.setVisibility(View.GONE);
-        llSaleDetails.setVisibility(View.VISIBLE);
-
-        if (InventoryApp.sales.get(index).isPaid()) {
-            ivSalePaid.setImageResource(R.drawable.empty_dollar);
-        } else {
-            ivSalePaid.setImageResource(R.drawable.full_dollar);
-        }
-
-        if (InventoryApp.sales.get(index).isPolish()) {
-            ivSaleEditPolish.setImageResource(R.drawable.rough_icon);
-        } else {
-            ivSaleEditPolish.setImageResource(R.drawable.diamond_icon);
-        }
 
         etSaleEditID.setText(InventoryApp.sales.get(index).getId());
         etSaleEditWeight.setText(String.valueOf(InventoryApp.sales.get(index).getWeight()));
@@ -138,148 +73,6 @@ public class EditSale extends AppCompatActivity {
         Calendar date = Calendar.getInstance();
         date.setTime(InventoryApp.sales.get(index).getSaleDate());
         dpSaleEditDate.updateDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-
-        ivSaleDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!details) {
-                    llSaleDetails.setVisibility(View.VISIBLE);
-                    llSaleEdit.setVisibility(View.GONE);
-                    details = true;
-                    edit = false;
-                }
-            }
-        });
-
-        ivSaleEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!edit) {
-                    llSaleEdit.setVisibility(View.VISIBLE);
-                    llSaleDetails.setVisibility(View.GONE);
-                    edit = true;
-                    details = false;
-                }
-            }
-        });
-
-        ivSaleEditPolish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(EditSale.this);
-                alert.setTitle("התראת שינוי");
-                if (InventoryApp.sales.get(index).isPolish()) {
-                    alert.setMessage("האם אתה בטוח שברצונך לסמן את המכירה כגלם?");
-                } else {
-                    alert.setMessage("האם אתה בטוח שברצונך לסמן את המכירה כמלוטש?");
-                }
-                alert.setNegativeButton(android.R.string.no, null);
-                alert.setIcon(android.R.drawable.ic_dialog_alert);
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (InventoryApp.sales.get(index).isPolish()) {
-                            InventoryApp.sales.get(index).setPolish(false);
-                        } else {
-                            InventoryApp.sales.get(index).setPolish(true);
-                        }
-                        showProgress(true);
-                        tvLoad.setText("מעדכן את הנתונים...");
-                        Backendless.Persistence.save(InventoryApp.sales.get(index), new AsyncCallback<Sale>() {
-                            @Override
-                            public void handleResponse(Sale response) {
-                                Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK);
-                                finishActivity(1);
-                                EditSale.this.finish();
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                alert.show();
-            }
-        });
-
-        ivSalePaid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(EditSale.this);
-                alert.setTitle("התראת שינוי");
-                if (InventoryApp.sales.get(index).isPaid()) {
-                    alert.setMessage("האם אתה בטוח שברצונך לבטל את קבלת התשלום על המכירה?");
-                } else {
-                    alert.setMessage("האם אתה בטוח שברצונך לסמן את המכירה כשולמה?");
-                }
-                alert.setNegativeButton(android.R.string.no, null);
-                alert.setIcon(android.R.drawable.ic_dialog_alert);
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (InventoryApp.sales.get(index).isPaid()) {
-                            InventoryApp.sales.get(index).setPaid(false);
-                        } else {
-                            InventoryApp.sales.get(index).setPaid(true);
-                        }
-                        showProgress(true);
-                        tvLoad.setText("מעדכן את הנתונים...");
-                        Backendless.Persistence.save(InventoryApp.sales.get(index), new AsyncCallback<Sale>() {
-                            @Override
-                            public void handleResponse(Sale response) {
-                                Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK);
-                                finishActivity(1);
-                                EditSale.this.finish();
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                alert.show();
-            }
-        });
-
-        ivSaleDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(EditSale.this);
-                alert.setTitle("התראת מחיקה");
-                alert.setMessage("האם אתה בטוח שברצונך למחוק את הנתונים המסומנים?");
-                alert.setNegativeButton(android.R.string.no, null);
-                alert.setIcon(android.R.drawable.ic_dialog_alert);
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        showProgress(true);
-                        tvLoad.setText("מוחק את הנתונים אנא המתן...");
-                        Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(index), new AsyncCallback<Long>() {
-                            @Override
-                            public void handleResponse(Long response) {
-                                showProgress(false);
-                                InventoryApp.sales.remove(index);
-                                Toast.makeText(EditSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                finishActivity(1);
-                                setResult(RESULT_OK);
-                                EditSale.this.finish();
-                            }
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        }
-                    });
-                    alert.show();
-                }
-        });
 
         btnSaleEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

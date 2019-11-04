@@ -2,8 +2,21 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/deleteIcon"
+        android:icon="@drawable/delete_icon1"
+        android:title="@string/app_name"
+        android:orderInCategory="0"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/editIcon"
+        android:icon="@drawable/edit1_icon"
+        android:title="@string/app_name"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/newIcon"
         android:icon="@drawable/new_icon"
         android:title="@string/app_name"
+        android:orderInCategory="2"
         app:showAsAction="ifRoom" />
 </menu>

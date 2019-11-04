@@ -83,6 +83,8 @@ public class NewClient extends AppCompatActivity {
                         public void handleResponse(Client response) {
                             InventoryApp.clients.add(client);
                             Toast.makeText(NewClient.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finishActivity(1);
                             NewClient.this.finish();
                             showProgress(false);
                         }

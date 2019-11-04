@@ -54,7 +54,7 @@
                 android:background="@drawable/buttons"
                 android:outlineAmbientShadowColor="@color/colorPrimary"
                 android:outlineSpotShadowColor="@color/colorPrimaryDark"
-                app:srcCompat="@drawable/delete_icon" />
+                app:srcCompat="@drawable/delete_icon1" />
 
             <ImageView
                 android:id="@+id/ivBuyEditPaid"
@@ -79,7 +79,7 @@
                 android:background="@drawable/buttons"
                 android:outlineAmbientShadowColor="@color/colorPrimary"
                 android:outlineSpotShadowColor="@color/colorPrimaryDark"
-                app:srcCompat="@drawable/edit_icon" />
+                app:srcCompat="@drawable/edit1_icon" />
 
             <ImageView
                 android:id="@+id/ivBuyDetails"

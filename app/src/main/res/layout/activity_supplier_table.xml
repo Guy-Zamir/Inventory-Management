@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".SupplierTable">
+    tools:context=".TableSupplier">
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -33,14 +33,110 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:baselineAligned="false">
 
         <ListView
             android:id="@+id/lvSupplierList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_weight="7">
 
         </ListView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/llSupplierDetails"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSupplierDetailsName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="חברה"
+                    android:textColor="@color/colorText"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSupplierDetailsPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="ממוצע לקראט"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvSupplierDetailsWeightAVG"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="ממוצע משקל לחודש"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvSupplierDetailsWeightSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="סכום משקל"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvSupplierDetailsSaleAVG"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="ממוצע קניות לחודש"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvSupplierDetailsSaleSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="סכום מכירות"
+                    android:textColor="@color/colorText"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

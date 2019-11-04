@@ -33,16 +33,9 @@ public class AdapterClient extends ArrayAdapter<Client> {
 
         TextView tvClientName = convertView.findViewById(R.id.tvClientName);
         TextView tvClientDetails = convertView.findViewById(R.id.tvClientDetails);
-        ImageView ivClientTableHome = convertView.findViewById(R.id.ivClientTableHome);
 
         tvClientName.setText(clients.get(position).getName());
         tvClientDetails.setText(clients.get(position).getDetails());
-
-        if (clients.get(position).isHome()) {
-            ivClientTableHome.setImageResource(R.drawable.home_icon);
-        } else {
-            ivClientTableHome.setImageResource(R.drawable.export_icon);
-        }
 
         return convertView;
     }

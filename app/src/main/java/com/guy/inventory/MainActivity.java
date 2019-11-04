@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         btnSupplierTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SupplierTable.class);
+                Intent intent = new Intent(MainActivity.this, TableSupplier.class);
                 startActivity(intent);
             }
         });

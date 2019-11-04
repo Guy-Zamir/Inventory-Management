@@ -22,7 +22,7 @@
         <activity android:name=".EditClient" />
         <activity android:name=".TableClient" />
         <activity android:name=".NewClient" />
-        <activity android:name=".SupplierTable" />
+        <activity android:name=".TableSupplier" />
         <activity android:name=".NewSupplier" />
         <activity android:name=".Register" />
         <activity android:name=".EditSale" />

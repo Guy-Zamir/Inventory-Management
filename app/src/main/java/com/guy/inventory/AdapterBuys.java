@@ -39,8 +39,6 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         TextView tvBuyPrice = convertView.findViewById(R.id.tvBuyPrice);
         TextView tvBuySupplier = convertView.findViewById(R.id.tvBuySupplier);
         TextView tvBuyDate = convertView.findViewById(R.id.tvBuyDate);
-        ImageView ivBuyTablePolish = convertView.findViewById(R.id.ivBuyTablePolish);
-        ImageView ivBuyTablePaid = convertView.findViewById(R.id.ivBuyTablePaid);
 
         Calendar saleDate = Calendar.getInstance();
         saleDate.setTime(buys.get(position).getBuyDate());
@@ -53,18 +51,6 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         tvBuySupplier.setText(buys.get(position).getSupplierName());
         tvBuyDate.setText("תאריך קניה:  " + buyDays + "/" + buyMonth);
         tvBuyPrice.setText("מחיר:  " + nf.format(buys.get(position).getPrice()) + "$");
-
-        if (buys.get(position).isPolish()) {
-            ivBuyTablePolish.setVisibility(View.VISIBLE);
-        } else {
-            ivBuyTablePolish.setVisibility(View.GONE);
-        }
-
-        if (buys.get(position).isPaid()) {
-            ivBuyTablePaid.setVisibility(View.VISIBLE);
-        } else {
-            ivBuyTablePaid.setVisibility(View.GONE);
-        }
 
         return convertView;
     }

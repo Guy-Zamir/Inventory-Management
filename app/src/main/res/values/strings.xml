@@ -8,4 +8,7 @@
     <string name="sales">מכירות</string>
     <string name="suppliers">ספקים</string>
     <string name="clients">לקוחות</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="textView">TextView</string>
 </resources>

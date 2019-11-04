@@ -165,6 +165,8 @@ public class NewSale extends AppCompatActivity {
                         public void handleResponse(Sale response) {
                             InventoryApp.sales.add(sale);
                             Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finishActivity(1);
                             showProgress(false);
                             NewSale.this.finish();
                         }

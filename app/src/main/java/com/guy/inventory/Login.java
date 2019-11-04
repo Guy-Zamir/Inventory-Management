@@ -35,10 +35,13 @@ public class Login extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
         tvReset = findViewById(R.id.tvReset);
+
         etEmail = findViewById(R.id.etLoginEmail);
         etPassword = findViewById(R.id.etLoginPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnLoginRegister);
+
+        showProgress(true);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +105,6 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        showProgress(true);
         Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
             @Override
             public void handleResponse(Boolean response) {
@@ -111,8 +113,9 @@ public class Login extends AppCompatActivity {
                     Backendless.Data.of(BackendlessUser.class).findById(objectUserId, new AsyncCallback<BackendlessUser>() {
                         @Override
                         public void handleResponse(BackendlessUser response) {
-                            showProgress(false);
-                            etEmail.setText(response.getEmail());
+                            InventoryApp.user = response;
+                            startActivity(new Intent(Login.this, MainActivity.class));
+                            Login.this.finish();
                         }
 
                         @Override

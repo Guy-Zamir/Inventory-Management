@@ -82,6 +82,8 @@ public class NewSupplier extends AppCompatActivity {
                         public void handleResponse(Supplier response) {
                             InventoryApp.suppliers.add(supplier);
                             Toast.makeText(NewSupplier.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finishActivity(1);
                             NewSupplier.this.finish();
                             showProgress(false);
                         }
