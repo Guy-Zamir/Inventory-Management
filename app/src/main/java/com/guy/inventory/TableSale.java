@@ -151,36 +151,41 @@ public class TableSale extends AppCompatActivity {
                 }
 
             case R.id.deleteIcon:
-                AlertDialog.Builder alert = new AlertDialog.Builder(TableSale.this);
-                alert.setTitle("התראת מחיקה");
-                alert.setMessage("האם אתה בטוח שברצונך למחוק את המכירה המסומנת?");
-                alert.setNegativeButton(android.R.string.no, null);
-                alert.setIcon(android.R.drawable.ic_dialog_alert);
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        showProgress(true);
-                        tvLoad.setText("מוחק את הנתונים אנא המתן...");
-                        Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(selectedItem), new AsyncCallback<Long>() {
-                            @Override
-                            public void handleResponse(Long response) {
-                                InventoryApp.sales.remove(selectedItem);
-                                Toast.makeText(TableSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                adapter.notifyDataSetChanged();
-                                showProgress(false);
-                            }
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                alert.show();
+                if (selectedItem == -1) {
+                    Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(TableSale.this);
+                    alert.setTitle("התראת מחיקה");
+                    alert.setMessage("האם אתה בטוח שברצונך למחוק את המכירה המסומנת?");
+                    alert.setNegativeButton(android.R.string.no, null);
+                    alert.setIcon(android.R.drawable.ic_dialog_alert);
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            showProgress(true);
+                            tvLoad.setText("מוחק את הנתונים אנא המתן...");
+                            Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(selectedItem), new AsyncCallback<Long>() {
+                                @Override
+                                public void handleResponse(Long response) {
+                                    InventoryApp.sales.remove(selectedItem);
+                                    Toast.makeText(TableSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                    adapter.notifyDataSetChanged();
+                                    showProgress(false);
+                                }
+
+                                @Override
+                                public void handleFault(BackendlessFault fault) {
+                                    showProgress(false);
+                                    Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                    alert.show();
+                }
+        }
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public boolean onSupportNavigateUp(){

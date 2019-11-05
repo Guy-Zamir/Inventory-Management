@@ -71,7 +71,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsPrice"
+                    android:id="@+id/tvSupplierDetailsSaleSum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -79,20 +79,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:gravity="center_horizontal"
-                    android:text="ממוצע לקראט"
-                    android:textColor="@color/colorText"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/tvSupplierDetailsWeightAVG"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="ממוצע משקל לחודש"
+                    android:text="סכום מכירות"
                     android:textColor="@color/colorText"
                     android:textSize="18sp" />
 
@@ -110,7 +97,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/tvSupplierDetailsSaleAVG"
+                    android:id="@+id/tvSupplierDetailsPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
@@ -118,22 +105,10 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:gravity="center_horizontal"
-                    android:text="ממוצע קניות לחודש"
+                    android:text="ממוצע לקראט"
                     android:textColor="@color/colorText"
                     android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/tvSupplierDetailsSaleSum"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="סכום מכירות"
-                    android:textColor="@color/colorText"
-                    android:textSize="18sp" />
             </LinearLayout>
 
         </LinearLayout>

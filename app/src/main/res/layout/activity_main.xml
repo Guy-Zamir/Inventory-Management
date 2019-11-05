@@ -19,7 +19,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="10dp"
-        android:layout_weight="1"
+        android:layout_weight="0.7"
         android:contentDescription="@string/todo"
         app:srcCompat="@drawable/diamond_icon" />
 
@@ -34,79 +34,93 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="20dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:background="@drawable/buttons"
-        android:text="@string/summary"
+        android:text="@string/balance"
         android:textColor="#FFFFFF"
-        android:textSize="23sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnBuyTable"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_weight="1.5"
-        android:background="@drawable/buttons"
-        android:text="@string/buys"
-        android:textColor="#FFFFFF"
-        android:textSize="23sp"
-        android:textStyle="bold" />
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnSaleTable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_weight="1.5"
-        android:background="@drawable/buttons"
-        android:text="@string/sales"
-        android:textColor="#FFFFFF"
-        android:textSize="23sp"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnBuyTable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/buttons"
+            android:text="@string/buys"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnSupplierTable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_weight="1.5"
-        android:background="@drawable/buttons"
-        android:text="@string/suppliers"
-        android:textColor="#FFFFFF"
-        android:textSize="23sp"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnSaleTable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/buttons"
+            android:text="@string/sales"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnClientTable"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_weight="1.5"
-        android:background="@drawable/buttons"
-        android:text="@string/clients"
-        android:textColor="#FFFFFF"
-        android:textSize="23sp"
-        android:textStyle="bold" />
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSupplierTable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/buttons"
+            android:text="@string/suppliers"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnClientTable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/buttons"
+            android:text="@string/clients"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

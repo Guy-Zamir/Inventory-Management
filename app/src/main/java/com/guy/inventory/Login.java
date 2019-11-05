@@ -107,7 +107,7 @@ public class Login extends AppCompatActivity {
 
         Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
             @Override
-            public void handleResponse(Boolean response) {
+            public void handleResponse(final Boolean response) {
                 if (response) {
                     String objectUserId = UserIdStorageFactory.instance().getStorage().get();
                     Backendless.Data.of(BackendlessUser.class).findById(objectUserId, new AsyncCallback<BackendlessUser>() {
@@ -121,6 +121,7 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void handleFault(BackendlessFault fault) {
                             Toast.makeText(Login.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            etEmail.setText(InventoryApp.user.getEmail());
                             showProgress(false);
                         }
                     });

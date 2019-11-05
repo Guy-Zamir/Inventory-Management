@@ -15,9 +15,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".EditBuyDone"/>
-        <activity android:name=".SummaryWage" />
-        <activity android:name=".SummarySale" />
-        <activity android:name=".SummaryBuy" />
         <activity android:name=".EditSupplier" />
         <activity android:name=".EditClient" />
         <activity android:name=".TableClient" />
@@ -29,7 +26,7 @@
         <activity android:name=".EditBuy" />
         <activity android:name=".TableSale" />
         <activity android:name=".TableBuy" />
-        <activity android:name=".Summary" />
+        <activity android:name=".Balance" />
         <activity android:name=".NewSale" />
         <activity android:name=".NewBuy" />
         <activity android:name=".MainActivity"/>

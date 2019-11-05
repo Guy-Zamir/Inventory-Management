@@ -30,13 +30,9 @@ public class TableSupplier extends AppCompatActivity {
     private TextView tvLoad;
 
     LinearLayout llSupplierDetails;
-    TextView tvSupplierDetailsName, tvSupplierDetailsSaleSum, tvSupplierDetailsWeightSum, tvSupplierDetailsPrice, tvSupplierDetailsSaleAVG, tvSupplierDetailsWeightAVG;
+    TextView tvSupplierDetailsName, tvSupplierDetailsSaleSum, tvSupplierDetailsWeightSum, tvSupplierDetailsPrice;
     ListView lvSupplierList;
     AdapterSupplier adapter;
-
-    double saleSum = 0;
-    double weightSum = 0;
-    double price;
 
     int selectedItem = -1;
 
@@ -55,8 +51,6 @@ public class TableSupplier extends AppCompatActivity {
         tvSupplierDetailsSaleSum = findViewById(R.id.tvSupplierDetailsSaleSum);
         tvSupplierDetailsWeightSum = findViewById(R.id.tvSupplierDetailsWeightSum);
         tvSupplierDetailsPrice = findViewById(R.id.tvSupplierDetailsPrice);
-        tvSupplierDetailsSaleAVG = findViewById(R.id.tvSupplierDetailsSaleAVG);
-        tvSupplierDetailsWeightAVG = findViewById(R.id.tvSupplierDetailsWeightAVG);
 
         llSupplierDetails = findViewById(R.id.llSupplierDetails);
 
@@ -68,7 +62,7 @@ public class TableSupplier extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        final DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
         queryBuilder.setGroupBy("objectId");
         queryBuilder.setPageSize(100);
@@ -82,7 +76,19 @@ public class TableSupplier extends AppCompatActivity {
                 InventoryApp.suppliers = response;
                 adapter = new AdapterSupplier(TableSupplier.this, InventoryApp.suppliers);
                 lvSupplierList.setAdapter(adapter);
-                showProgress(false);
+                Backendless.Data.of(Buy.class).find(queryBuilder, new AsyncCallback<List<Buy>>() {
+                    @Override
+                    public void handleResponse(List<Buy> response) {
+                        InventoryApp.buys = response;
+                        showProgress(false);
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(TableSupplier.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        showProgress(false);
+                    }
+                });
             }
 
             @Override
@@ -102,6 +108,10 @@ public class TableSupplier extends AppCompatActivity {
                 view.setSelected(true);
                 selectedItem = position;
                 llSupplierDetails.setVisibility(View.VISIBLE);
+                double saleSum = 0;
+                double weightSum = 0;
+                double price;
+
                 if (InventoryApp.buys != null) {
                     for (Buy buy : InventoryApp.buys) {
                         if (buy.getSupplierName().equals(InventoryApp.suppliers.get(selectedItem).getName())) {
@@ -111,12 +121,10 @@ public class TableSupplier extends AppCompatActivity {
                     }
                 }
                 price = saleSum/weightSum;
-
                 DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-
                 tvSupplierDetailsName.setText(InventoryApp.suppliers.get(selectedItem).getName());
-                tvSupplierDetailsSaleSum.setText("סכום קניות:  " + nf.format(saleSum) + "$");
-                tvSupplierDetailsWeightSum.setText("סכום משקל: " + nf.format(weightSum));
+                tvSupplierDetailsSaleSum.setText("סכום שנקנה:  " + nf.format(saleSum) + "$");
+                tvSupplierDetailsWeightSum.setText("משקל שנקנה: " + nf.format(weightSum));
                 tvSupplierDetailsPrice.setText("מחיר ממוצע לקראט: " + nf.format(price) + "$");
             }
         });
@@ -149,32 +157,37 @@ public class TableSupplier extends AppCompatActivity {
                 }
 
             case R.id.deleteIcon:
-                AlertDialog.Builder alert = new AlertDialog.Builder(TableSupplier.this);
-                alert.setTitle("התראת מחיקה");
-                alert.setMessage("האם אתה בטוח שברצונך למחוק את הספק המסומן");
-                alert.setNegativeButton(android.R.string.no, null);
-                alert.setIcon(android.R.drawable.ic_dialog_alert);
-                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        showProgress(true);
-                        tvLoad.setText("מוחק את הנתונים אנא המתן...");
-                        Backendless.Persistence.of(Supplier.class).remove(InventoryApp.suppliers.get(selectedItem), new AsyncCallback<Long>() {
-                            @Override
-                            public void handleResponse(Long response) {
-                                InventoryApp.suppliers.remove(selectedItem);
-                                Toast.makeText(TableSupplier.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                adapter.notifyDataSetChanged();
-                                showProgress(false);
-                            }
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(TableSupplier.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                alert.show();
+                if (selectedItem == -1) {
+                    Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(TableSupplier.this);
+                    alert.setTitle("התראת מחיקה");
+                    alert.setMessage("האם אתה בטוח שברצונך למחוק את הספק המסומן");
+                    alert.setNegativeButton(android.R.string.no, null);
+                    alert.setIcon(android.R.drawable.ic_dialog_alert);
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            showProgress(true);
+                            tvLoad.setText("מוחק את הנתונים אנא המתן...");
+                            Backendless.Persistence.of(Supplier.class).remove(InventoryApp.suppliers.get(selectedItem), new AsyncCallback<Long>() {
+                                @Override
+                                public void handleResponse(Long response) {
+                                    InventoryApp.suppliers.remove(selectedItem);
+                                    Toast.makeText(TableSupplier.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                    adapter.notifyDataSetChanged();
+                                    showProgress(false);
+                                }
+
+                                @Override
+                                public void handleFault(BackendlessFault fault) {
+                                    showProgress(false);
+                                    Toast.makeText(TableSupplier.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                    alert.show();
+                }
         }
         return super.onOptionsItemSelected(item);
     }

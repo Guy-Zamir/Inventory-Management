@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".Summary">
+    tools:context=".Balance">
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -32,33 +32,74 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvSummaryBalance"
+            <Button
+                android:id="@+id/btnBalanceGoods"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="מאזן סחורות"
-                android:textColor="@color/colorText"
-                android:textSize="28sp"
+                android:background="@drawable/table_row"
+                android:text="סחורות"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnBalanceBuy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:text="קניות"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnBalanceSale"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:text="מכירות"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnBalanceTax"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:text="מס"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="100000"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -76,7 +117,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalanceSum"
+                    android:id="@+id/tvBalanceSum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -85,10 +126,10 @@
                     android:layout_weight="1"
                     android:text="סכום"
                     android:textColor="@color/colorText"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalanceWeight"
+                    android:id="@+id/tvBalanceWeight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -98,10 +139,10 @@
                     android:baselineAligned="false"
                     android:text="משקל"
                     android:textColor="@color/colorText"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalancePrice"
+                    android:id="@+id/tvBalancePrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -111,14 +152,13 @@
                     android:baselineAligned="false"
                     android:text="מחיר"
                     android:textColor="@color/colorText"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -136,7 +176,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalancePolishSum"
+                    android:id="@+id/tvBalancePolishSum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -145,10 +185,10 @@
                     android:layout_weight="1"
                     android:text="סכום"
                     android:textColor="@color/colorText"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalancePolishWeight"
+                    android:id="@+id/tvBalancePolishWeight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -157,10 +197,10 @@
                     android:layout_weight="1"
                     android:text="משקל"
                     android:textColor="@color/colorText"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalancePolishPrice"
+                    android:id="@+id/tvBalancePolishPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -169,14 +209,13 @@
                     android:layout_weight="1"
                     android:text="מחיר"
                     android:textColor="@color/colorText"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -194,7 +233,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalanceRoughSum"
+                    android:id="@+id/tvBalanceRoughSum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -203,10 +242,10 @@
                     android:layout_weight="1"
                     android:text="סכום"
                     android:textColor="@color/colorText"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalanceRoughWeight"
+                    android:id="@+id/tvBalanceRoughWeight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -215,10 +254,10 @@
                     android:layout_weight="1"
                     android:text="משקל"
                     android:textColor="@color/colorText"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/tvSummaryBalanceRoughPrice"
+                    android:id="@+id/tvBalanceRoughPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -227,52 +266,82 @@
                     android:layout_weight="1"
                     android:text="מחיר"
                     android:textColor="@color/colorText"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llBalanceWage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="שכר עבודה"
+                    android:textColor="@color/colorText"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBalanceWagePrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="מחיר ממוצע"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvBalanceWagePre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="אחוז פחת ממוצע"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvBalanceWageWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="משקל פחת"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvBalanceWageSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="סכום"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp" />
+
             </LinearLayout>
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btnSummaryBuy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/buttons"
-            android:text="קניות"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnSummarySale"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/buttons"
-            android:text="מכירות"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnSummaryWage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/buttons"
-            android:text="פחת/שכר עבודה"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
 
     </LinearLayout>
 </LinearLayout>

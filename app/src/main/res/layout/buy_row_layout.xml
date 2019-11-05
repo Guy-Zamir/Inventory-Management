@@ -5,47 +5,62 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:background="@drawable/table_row"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tvBuySupplier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:fontFamily="sans-serif-smallcaps"
-        android:gravity="center_horizontal"
-        android:text="@string/textView"
-        android:textColor="@color/colorText"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvBuyDate"
-            android:layout_width="match_parent"
+            android:id="@+id/tvBuySupplier"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center_horizontal"
             android:text="@string/textView"
             android:textColor="@color/colorText"
-            android:textSize="16sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvBuyPrice"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginTop="2dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:text="@string/textView"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvBuyDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="@string/textView"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvBuyPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="@string/textView"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+        </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivDone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="3"
+        app:srcCompat="@drawable/done1_icon" />
 
 </LinearLayout>

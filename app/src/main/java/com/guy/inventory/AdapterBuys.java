@@ -39,6 +39,7 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         TextView tvBuyPrice = convertView.findViewById(R.id.tvBuyPrice);
         TextView tvBuySupplier = convertView.findViewById(R.id.tvBuySupplier);
         TextView tvBuyDate = convertView.findViewById(R.id.tvBuyDate);
+        ImageView ivDone = convertView.findViewById(R.id.ivDone);
 
         Calendar saleDate = Calendar.getInstance();
         saleDate.setTime(buys.get(position).getBuyDate());
@@ -51,6 +52,12 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         tvBuySupplier.setText(buys.get(position).getSupplierName());
         tvBuyDate.setText("תאריך קניה:  " + buyDays + "/" + buyMonth);
         tvBuyPrice.setText("מחיר:  " + nf.format(buys.get(position).getPrice()) + "$");
+
+        if (InventoryApp.buys.get(position).isDone()) {
+            ivDone.setImageResource(R.drawable.done1_icon);
+        } else {
+            ivDone.setImageResource(R.drawable.not_done1_icon);
+        }
 
         return convertView;
     }
