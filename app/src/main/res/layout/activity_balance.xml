@@ -42,9 +42,9 @@
 
             <Button
                 android:id="@+id/btnBalanceGoods"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/table_row"
                 android:text="סחורות"
@@ -54,9 +54,9 @@
 
             <Button
                 android:id="@+id/btnBalanceBuy"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/table_row"
                 android:text="קניות"
@@ -66,9 +66,9 @@
 
             <Button
                 android:id="@+id/btnBalanceSale"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/table_row"
                 android:text="מכירות"
@@ -78,9 +78,9 @@
 
             <Button
                 android:id="@+id/btnBalanceTax"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/table_row"
                 android:text="מס"
@@ -92,16 +92,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
             android:layout_weight="100000"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -110,7 +108,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="גלם ומלוטש"
                     android:textColor="@color/colorText"
                     android:textSize="20sp"
@@ -123,7 +120,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="סכום"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -135,7 +131,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:baselineAligned="false"
                     android:text="משקל"
                     android:textColor="@color/colorText"
@@ -148,19 +143,29 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:baselineAligned="false"
                     android:text="מחיר"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvBalanceProfit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:baselineAligned="false"
+                    android:text="רווחים לפני הוצאות ושכר עבודה"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -169,7 +174,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="מלוטש"
                     android:textColor="@color/colorText"
                     android:textSize="20sp"
@@ -182,7 +186,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="סכום"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -194,7 +197,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="משקל"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -206,7 +208,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="מחיר"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -214,10 +215,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -226,7 +226,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="גלם"
                     android:textColor="@color/colorText"
                     android:textSize="20sp"
@@ -239,7 +238,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="סכום"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -251,7 +249,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="משקל"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -263,7 +260,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="מחיר"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -272,10 +268,9 @@
             <LinearLayout
                 android:id="@+id/llBalanceWage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -285,7 +280,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="שכר עבודה"
                     android:textColor="@color/colorText"
                     android:textSize="20sp"
@@ -298,7 +292,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="מחיר ממוצע"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -310,7 +303,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="אחוז פחת ממוצע"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -322,7 +314,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="משקל פחת"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
@@ -334,7 +325,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
                     android:text="סכום"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />

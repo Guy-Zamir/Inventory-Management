@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,7 @@ import java.util.List;
 public class AdapterSales extends ArrayAdapter<Sale> {
     private Context context;
     private List<Sale> sales;
+    private int selectedPosition = -1;
 
     public AdapterSales(Context context, List<Sale> list) {
         super(context, R.layout.sale_row_layout, list);
@@ -39,6 +40,16 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         TextView tvSaleDate = convertView.findViewById(R.id.tvSaleDate);
         TextView tvSaleSum = convertView.findViewById(R.id.tvSaleSum);
 
+        TextView tvSaleDetailsBuyDate = convertView.findViewById(R.id.tvSaleDetailsBuyDate);
+        TextView tvSaleDetailsPayDate = convertView.findViewById(R.id.tvSaleDetailsPayDate);
+        TextView tvSaleDetailsID = convertView.findViewById(R.id.tvSaleDetailsID);
+        TextView tvSaleDetailsPrice = convertView.findViewById(R.id.tvSaleDetailsPrice);
+        TextView tvSaleDetailsWeight = convertView.findViewById(R.id.tvSaleDetailsWeight);
+        TextView tvSaleDetailsDays = convertView.findViewById(R.id.tvSaleDetailsDays);
+        TextView tvSaleDetailsSum = convertView.findViewById(R.id.tvSaleDetailsSum);
+
+        LinearLayout llSaleDetails = convertView.findViewById(R.id.llSaleDetails);
+
         Calendar saleDate = Calendar.getInstance();
         saleDate.setTime(sales.get(position).getSaleDate());
         String saleDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
@@ -48,8 +59,37 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         tvSaleDate.setText("תאריך מכירה:  " + saleDays + "/" + saleMonth);
         tvSaleSum.setText("סכום:  " + nf.format(sales.get(position).getSaleSum()) + "$");
 
+        saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
+        @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
+        @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
+        @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
+
+        Calendar payDate = Calendar.getInstance();
+        payDate.setTime(InventoryApp.sales.get(position).getPayDate());
+        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
+        @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
+
+        tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
+        tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
+
+        tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
+        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
+        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()));
+        tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
+        tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
+
+        if (position == selectedPosition) {
+            llSaleDetails.setVisibility(View.VISIBLE);
+        } else {
+            llSaleDetails.setVisibility(View.GONE);
+        }
+
         return convertView;
     }
 
+    public void setSelectedPosition(int pos) {
+        selectedPosition = pos;
+    }
 }
 

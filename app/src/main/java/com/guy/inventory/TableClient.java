@@ -31,7 +31,9 @@ public class TableClient extends AppCompatActivity {
     private TextView tvLoad;
 
     LinearLayout llClientDetails;
-    TextView tvClientDetailsName, tvClientDetailsSaleSum, tvClientDetailsWeightSum, tvClientDetailsPrice;
+    TextView tvClientDetailsName, tvClientDetailsSaleSum, tvClientDetailsWeightSum, tvClientDetailsPrice,
+            tvClientDetailsLocation, tvClientDetailsPhoneNumber, tvClientDetailsInsidePhone, tvClientDetailsFax,
+            tvClientDetailsWebSite, tvClientDetailsDetails;
     ListView lvClientList;
     AdapterClient adapter;
 
@@ -41,13 +43,18 @@ public class TableClient extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_table);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         lvClientList = findViewById(R.id.lvClientList);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
+        tvClientDetailsLocation = findViewById(R.id.tvClientDetailsLocation);
+        tvClientDetailsPhoneNumber = findViewById(R.id.tvClientDetailsPhoneNumber);
+        tvClientDetailsInsidePhone = findViewById(R.id.tvClientDetailsInsidePhone);
+        tvClientDetailsFax = findViewById(R.id.tvClientDetailsFax);
+        tvClientDetailsWebSite = findViewById(R.id.tvClientDetailsWebSite);
+        tvClientDetailsDetails = findViewById(R.id.tvClientDetailsDetails);
         tvClientDetailsName = findViewById(R.id.tvClientDetailsName);
         tvClientDetailsSaleSum = findViewById(R.id.tvClientDetailsSaleSum);
         tvClientDetailsWeightSum = findViewById(R.id.tvClientDetailsWeightSum);
@@ -55,7 +62,10 @@ public class TableClient extends AppCompatActivity {
 
         llClientDetails = findViewById(R.id.llClientDetails);
 
-        llClientDetails.setVisibility(View.GONE);
+        // In Land
+        if (findViewById(R.id.client_table_land) != null) {
+            llClientDetails.setVisibility(View.VISIBLE);
+        }
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -109,26 +119,42 @@ public class TableClient extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
                 selectedItem = position;
-                llClientDetails.setVisibility(View.VISIBLE);
+                if (findViewById(R.id.client_table_land) != null) {
+                    llClientDetails.setVisibility(View.VISIBLE);
 
-                double saleSum = 0;
-                double weightSum = 0;
-                double price;
+                    double saleSum = 0;
+                    double weightSum = 0;
+                    double price;
 
-                if (InventoryApp.sales != null) {
-                    for (Sale sale : InventoryApp.sales) {
-                        if (sale.getClientName().equals(InventoryApp.clients.get(selectedItem).getName())) {
-                            saleSum += sale.getSaleSum();
-                            weightSum += sale.getWeight();
+                    if (InventoryApp.sales != null) {
+                        for (Sale sale : InventoryApp.sales) {
+                            if (sale.getClientName().equals(InventoryApp.clients.get(selectedItem).getName())) {
+                                saleSum += sale.getSaleSum();
+                                weightSum += sale.getWeight();
+                            }
                         }
                     }
+                    if (weightSum == 0) {
+                        price = 0;
+                    } else {
+                        price = saleSum / weightSum;
+                    }
+                    DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
+                    tvClientDetailsName.setText(InventoryApp.clients.get(selectedItem).getName());
+                    tvClientDetailsLocation.setText("כתובת:  " + InventoryApp.clients.get(selectedItem).getLocation());
+                    tvClientDetailsPhoneNumber.setText("טלפון:  " + InventoryApp.clients.get(selectedItem).getPhoneNumber());
+                    tvClientDetailsInsidePhone.setText("טלפון פנימי:  " + InventoryApp.clients.get(selectedItem).getInsidePhone());
+                    tvClientDetailsFax.setText("פקס:  " + InventoryApp.clients.get(selectedItem).getFax());
+                    tvClientDetailsWebSite.setText("כתובת אתר אינטרנט:  " + InventoryApp.clients.get(selectedItem).getWebsite());
+                    tvClientDetailsDetails.setText("פרטים נוספים:  " + InventoryApp.clients.get(selectedItem).getDetails());
+
+                    tvClientDetailsSaleSum.setText("סכום שנקנה:  " + nf.format(saleSum) + "$");
+                    tvClientDetailsWeightSum.setText("משקל שנקנה: " + nf.format(weightSum));
+                    tvClientDetailsPrice.setText("מחיר ממוצע לקראט: " + nf.format(price) + "$");
+                } else {
+                    adapter.setSelectedPosition(position);
+                    adapter.notifyDataSetChanged();
                 }
-                price = saleSum/weightSum;
-                DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-                tvClientDetailsName.setText(InventoryApp.clients.get(selectedItem).getName());
-                tvClientDetailsSaleSum.setText("סכום שנמכר:  " + nf.format(saleSum) + "$");
-                tvClientDetailsWeightSum.setText("משקל שנמכר: " + nf.format(weightSum));
-                tvClientDetailsPrice.setText("מחיר ממוצע לקראט: " + nf.format(price) + "$");
             }
         });
 

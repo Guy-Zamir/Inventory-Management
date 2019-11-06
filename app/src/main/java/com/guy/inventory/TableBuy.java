@@ -22,7 +22,6 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -46,7 +45,6 @@ public class TableBuy extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buys_table);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         lvBuyList = findViewById(R.id.lvBuyList);
         mLoginFormView = findViewById(R.id.login_form);
@@ -67,7 +65,10 @@ public class TableBuy extends AppCompatActivity {
         tvBuyDetailsWage = findViewById(R.id.tvBuyDetailsWage);
         tvBuyDetailsWorkDe = findViewById(R.id.tvBuyDetailsWorkDe);
 
-        llBuyDetails.setVisibility(View.GONE);
+        // In Land
+        if (findViewById(R.id.table_buys_layout_land) != null) {
+            llBuyDetails.setVisibility(View.VISIBLE);
+        }
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -107,33 +108,41 @@ public class TableBuy extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
                 selectedItem = position;
-                llBuyDetails.setVisibility(View.VISIBLE);
 
-                final DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-                Calendar saleDate = Calendar.getInstance();
-                saleDate.setTime(InventoryApp.buys.get(selectedItem).getBuyDate());
-                @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
-                @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
+                if (findViewById(R.id.table_buys_layout_land) != null) {
 
-                Calendar payDate = Calendar.getInstance();
-                payDate.setTime(InventoryApp.buys.get(selectedItem).getPayDate());
-                @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
-                @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
+                    llBuyDetails.setVisibility(View.VISIBLE);
 
-                tvBuyDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
-                tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
+                    final DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
+                    Calendar saleDate = Calendar.getInstance();
+                    saleDate.setTime(InventoryApp.buys.get(selectedItem).getBuyDate());
+                    @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
+                    @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
 
-                tvBuyDetailsSupplier.setText(InventoryApp.buys.get(selectedItem).getSupplierName());
-                tvBuyDetailsID.setText("מספר אסמכתא:  " + InventoryApp.buys.get(selectedItem).getId());
-                tvBuyDetailsPrice.setText("מחיר לקראט:  " + nf.format(InventoryApp.buys.get(selectedItem).getPrice()) + "$");
-                tvBuyDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.buys.get(selectedItem).getWeight()) + " קראט ");
-                tvBuyDetailsDays.setText("מספר ימים:  " + InventoryApp.buys.get(selectedItem).getDays());
-                tvBuyDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.buys.get(selectedItem).getSum()) + "$");
-                tvBuyDetailsDoneWeight.setText("משקל גמור:  " + nf.format(InventoryApp.buys.get(selectedItem).getDoneWeight()) + " קראט ");
-                tvBuyDetailsWage.setText("שכר עבודה:  " + nf.format(InventoryApp.buys.get(selectedItem).getWage()) + "$" + " , " +
-                        nf.format(InventoryApp.buys.get(selectedItem).getWage()/InventoryApp.buys.get(selectedItem).getPrice()*100) + "%" + " , " +
-                        nf.format(InventoryApp.buys.get(selectedItem).getWage()*InventoryApp.buys.get(selectedItem).getWeight()) + "$");
-                tvBuyDetailsWorkDe.setText("אחוז ליטוש:  " + nf.format(InventoryApp.buys.get(selectedItem).getWorkDepreciation()*100) + "%");
+                    Calendar payDate = Calendar.getInstance();
+                    payDate.setTime(InventoryApp.buys.get(selectedItem).getPayDate());
+                    @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+                    @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
+
+                    tvBuyDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
+                    tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
+
+                    tvBuyDetailsSupplier.setText(InventoryApp.buys.get(selectedItem).getSupplierName());
+                    tvBuyDetailsID.setText("מספר אסמכתא:  " + InventoryApp.buys.get(selectedItem).getId());
+                    tvBuyDetailsPrice.setText("מחיר לקראט:  " + nf.format(InventoryApp.buys.get(selectedItem).getPrice()) + "$");
+                    tvBuyDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.buys.get(selectedItem).getWeight()) + " קראט ");
+                    tvBuyDetailsDays.setText("מספר ימים:  " + InventoryApp.buys.get(selectedItem).getDays());
+                    tvBuyDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.buys.get(selectedItem).getSum()) + "$");
+                    tvBuyDetailsDoneWeight.setText("משקל גמור:  " + nf.format(InventoryApp.buys.get(selectedItem).getDoneWeight()) + " קראט ");
+                    tvBuyDetailsWage.setText("שכר עבודה:  " + nf.format(InventoryApp.buys.get(selectedItem).getWage()) + "$" + " , " +
+                            nf.format(InventoryApp.buys.get(selectedItem).getWage() / InventoryApp.buys.get(selectedItem).getPrice() * 100) + "%" + " , " +
+                            nf.format(InventoryApp.buys.get(selectedItem).getWage() * InventoryApp.buys.get(selectedItem).getWeight()) + "$");
+                    tvBuyDetailsWorkDe.setText("אחוז ליטוש:  " + nf.format(InventoryApp.buys.get(selectedItem).getWorkDepreciation() * 100) + "%");
+
+                } else {
+                    adapter.setSelectedPosition(position);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
 }
@@ -247,8 +256,10 @@ public class TableBuy extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            adapter.notifyDataSetChanged();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 

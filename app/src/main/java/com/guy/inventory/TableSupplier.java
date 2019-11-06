@@ -30,7 +30,9 @@ public class TableSupplier extends AppCompatActivity {
     private TextView tvLoad;
 
     LinearLayout llSupplierDetails;
-    TextView tvSupplierDetailsName, tvSupplierDetailsSaleSum, tvSupplierDetailsWeightSum, tvSupplierDetailsPrice;
+    TextView tvSupplierDetailsName, tvSupplierDetailsSaleSum, tvSupplierDetailsWeightSum, tvSupplierDetailsPrice,
+            tvSupplierDetailsLocation, tvSupplierDetailsPhoneNumber, tvSupplierDetailsInsidePhone, tvSupplierDetailsFax,
+            tvSupplierDetailsWebSite, tvSupplierDetailsDetails;
     ListView lvSupplierList;
     AdapterSupplier adapter;
 
@@ -47,6 +49,12 @@ public class TableSupplier extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
+        tvSupplierDetailsLocation = findViewById(R.id.tvSupplierDetailsLocation);
+        tvSupplierDetailsPhoneNumber = findViewById(R.id.tvSupplierDetailsPhoneNumber);
+        tvSupplierDetailsInsidePhone = findViewById(R.id.tvSupplierDetailsInsidePhone);
+        tvSupplierDetailsFax = findViewById(R.id.tvSupplierDetailsFax);
+        tvSupplierDetailsWebSite = findViewById(R.id.tvSupplierDetailsWebSite);
+        tvSupplierDetailsDetails = findViewById(R.id.tvSupplierDetailsDetails);
         tvSupplierDetailsName = findViewById(R.id.tvSupplierDetailsName);
         tvSupplierDetailsSaleSum = findViewById(R.id.tvSupplierDetailsSaleSum);
         tvSupplierDetailsWeightSum = findViewById(R.id.tvSupplierDetailsWeightSum);
@@ -54,7 +62,10 @@ public class TableSupplier extends AppCompatActivity {
 
         llSupplierDetails = findViewById(R.id.llSupplierDetails);
 
-        llSupplierDetails.setVisibility(View.GONE);
+        // In Land
+        if (findViewById(R.id.supplier_table_land) != null) {
+            llSupplierDetails.setVisibility(View.VISIBLE);
+        }
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -107,29 +118,45 @@ public class TableSupplier extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
                 selectedItem = position;
-                llSupplierDetails.setVisibility(View.VISIBLE);
-                double saleSum = 0;
-                double weightSum = 0;
-                double price;
 
-                if (InventoryApp.buys != null) {
-                    for (Buy buy : InventoryApp.buys) {
-                        if (buy.getSupplierName().equals(InventoryApp.suppliers.get(selectedItem).getName())) {
-                            saleSum += buy.getSum();
-                            weightSum += buy.getWeight();
+                if (findViewById(R.id.supplier_table_land) != null) {
+                    llSupplierDetails.setVisibility(View.VISIBLE);
+
+                    double saleSum = 0;
+                    double weightSum = 0;
+                    double price;
+
+                    if (InventoryApp.buys != null) {
+                        for (Buy buy : InventoryApp.buys) {
+                            if (buy.getSupplierName().equals(InventoryApp.suppliers.get(selectedItem).getName())) {
+                                saleSum += buy.getSum();
+                                weightSum += buy.getWeight();
+                            }
                         }
                     }
+                    if (weightSum == 0) {
+                        price = 0;
+                    } else {
+                        price = saleSum / weightSum;
+                    }
+                    DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
+                    tvSupplierDetailsName.setText(InventoryApp.suppliers.get(selectedItem).getName());
+                    tvSupplierDetailsLocation.setText("כתובת:  " + InventoryApp.suppliers.get(selectedItem).getLocation());
+                    tvSupplierDetailsPhoneNumber.setText("טלפון:  " + InventoryApp.suppliers.get(selectedItem).getPhoneNumber());
+                    tvSupplierDetailsInsidePhone.setText("טלפון פנימי:  " + InventoryApp.suppliers.get(selectedItem).getInsidePhone());
+                    tvSupplierDetailsFax.setText("פקס:  " + InventoryApp.suppliers.get(selectedItem).getFax());
+                    tvSupplierDetailsWebSite.setText("כתובת אתר אינטרנט:  " + InventoryApp.suppliers.get(selectedItem).getWebsite());
+                    tvSupplierDetailsDetails.setText("פרטים נוספים:  " + InventoryApp.suppliers.get(selectedItem).getDetails());
+
+                    tvSupplierDetailsSaleSum.setText("סכום שנקנה:  " + nf.format(saleSum) + "$");
+                    tvSupplierDetailsWeightSum.setText("משקל שנקנה: " + nf.format(weightSum));
+                    tvSupplierDetailsPrice.setText("מחיר ממוצע לקראט: " + nf.format(price) + "$");
+                } else {
+                    adapter.setSelectedPosition(position);
+                    adapter.notifyDataSetChanged();
                 }
-                price = saleSum/weightSum;
-                DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-                tvSupplierDetailsName.setText(InventoryApp.suppliers.get(selectedItem).getName());
-                tvSupplierDetailsSaleSum.setText("סכום שנקנה:  " + nf.format(saleSum) + "$");
-                tvSupplierDetailsWeightSum.setText("משקל שנקנה: " + nf.format(weightSum));
-                tvSupplierDetailsPrice.setText("מחיר ממוצע לקראט: " + nf.format(price) + "$");
             }
         });
-
-
     }
 
     @Override

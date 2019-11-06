@@ -27,7 +27,7 @@ public class Balance extends AppCompatActivity {
     TextView tvBalanceSum, tvBalanceWeight, tvBalancePrice,
             tvBalancePolishSum, tvBalancePolishWeight, tvBalancePolishPrice,
             tvBalanceRoughSum, tvBalanceRoughWeight, tvBalanceRoughPrice,
-            tvBalanceWagePrice, tvBalanceWagePre, tvBalanceWageWeight, tvBalanceWageSum;
+            tvBalanceWagePrice, tvBalanceWagePre, tvBalanceWageWeight, tvBalanceWageSum, tvBalanceProfit;
 
     Button btnBalanceBuy, btnBalanceSale, btnBalanceGoods, btnBalanceTax;
 
@@ -48,6 +48,8 @@ public class Balance extends AppCompatActivity {
     double taxPolishSum, taxPolishWeight, taxPolishPrice;
 
     double wageSum, wageWeight, wagePer, wagePrice;
+
+    double profit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class Balance extends AppCompatActivity {
         tvBalanceWageWeight = findViewById(R.id.tvBalanceWageWeight);
         tvBalanceWagePre = findViewById(R.id.tvBalanceWagePre);
         tvBalanceWagePrice = findViewById(R.id.tvBalanceWagePrice);
+        tvBalanceProfit = findViewById(R.id.tvBalanceProfit);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -134,7 +137,7 @@ public class Balance extends AppCompatActivity {
                                         InventoryApp.sales = response;
                                         getInfo();
                                         btnBalanceGoods.setSelected(true);
-                                        display(balanceSum, balanceWeight, balancePrice, balanceRoughSum, balanceRoughWeight, balanceRoughPrice, balancePolishSum, balancePolishWeight, balancePolishPrice, true);
+                                        display(balanceSum, balanceWeight, balancePrice, balanceRoughSum, balanceRoughWeight, balanceRoughPrice, balancePolishSum, balancePolishWeight, balancePolishPrice, true, false);
                                         showProgress(false);
                                     }
 
@@ -191,7 +194,7 @@ public class Balance extends AppCompatActivity {
         btnBalanceBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(buySum, buyWeight, buyPrice, buyRoughSum, buyRoughWeight, buyRoughPrice, buyPolishSum, buyPolishWeight, buyPolishPrice, false);
+                display(buySum, buyWeight, buyPrice, buyRoughSum, buyRoughWeight, buyRoughPrice, buyPolishSum, buyPolishWeight, buyPolishPrice, false, false);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(false);
                 btnBalanceSale.setSelected(false);
@@ -202,7 +205,7 @@ public class Balance extends AppCompatActivity {
         btnBalanceSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(saleSum, saleWeight, salePrice, saleRoughSum, saleRoughWeight, saleRoughPrice, salePolishSum, salePolishWeight, salePolishPrice, false);
+                display(saleSum, saleWeight, salePrice, saleRoughSum, saleRoughWeight, saleRoughPrice, salePolishSum, salePolishWeight, salePolishPrice, false, false);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(false);
                 btnBalanceSale.setSelected(true);
@@ -213,7 +216,7 @@ public class Balance extends AppCompatActivity {
         btnBalanceGoods.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(balanceSum, balanceWeight, balancePrice, balanceRoughSum, balanceRoughWeight, balanceRoughPrice, balancePolishSum, balancePolishWeight, balancePolishPrice, true);
+                display(balanceSum, balanceWeight, balancePrice, balanceRoughSum, balanceRoughWeight, balanceRoughPrice, balancePolishSum, balancePolishWeight, balancePolishPrice, true, false);
                 btnBalanceGoods.setSelected(true);
                 btnBalanceTax.setSelected(false);
                 btnBalanceSale.setSelected(false);
@@ -224,7 +227,7 @@ public class Balance extends AppCompatActivity {
         btnBalanceTax.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(taxSum, taxWeight, taxPrice, taxRoughSum, taxRoughWeight, taxRoughPrice, taxPolishSum, taxPolishWeight, taxPolishPrice, true);
+                display(taxSum, taxWeight, taxPrice, taxRoughSum, taxRoughWeight, taxRoughPrice, taxPolishSum, taxPolishWeight, taxPolishPrice, true, true);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(true);
                 btnBalanceSale.setSelected(false);
@@ -293,36 +296,68 @@ public class Balance extends AppCompatActivity {
 
         saleRoughSum = allRoughSaleSum;
         saleRoughWeight = allRoughSaleWeight;
-        saleRoughPrice = saleRoughSum/saleRoughWeight;
+        if (saleRoughWeight == 0) {
+            saleRoughPrice = 0;
+        } else {
+            saleRoughPrice = saleRoughSum / saleRoughWeight;
+        }
 
         salePolishSum = allPolishSaleSum;
         salePolishWeight = allPolishSaleWeight;
-        salePolishPrice = salePolishSum/salePolishWeight;
+        if (salePolishWeight == 0) {
+            salePolishPrice = 0;
+        } else {
+            salePolishPrice = salePolishSum/salePolishWeight;
+        }
 
         saleSum = salePolishSum + saleRoughSum;
         saleWeight = saleRoughWeight + salePolishWeight;
-        salePrice = saleSum/saleWeight;
+        if (saleWeight == 0) {
+            salePrice = 0;
+        } else {
+            salePrice = saleSum/saleWeight;
+        }
 
 
 
         buyRoughSum = allNotDoneRoughBuySum + allRoughBuyDoneSum;
         buyRoughWeight = allRoughBuyDoneOrgWeight + allNotDoneRoughBuyWeight;
-        buyRoughPrice = buyRoughSum/buyRoughWeight;
+        if (buyRoughWeight == 0) {
+            buyRoughPrice = 0;
+        } else {
+            buyRoughPrice = buyRoughSum/buyRoughWeight;
+        }
 
         buyPolishSum = allPolishBuySum;
         buyPolishWeight = allPolishBuyWeight;
-        buyPolishPrice = buyPolishSum/buyPolishWeight;
+        if (buyPolishWeight == 0) {
+            buyPolishPrice = 0;
+        } else {
+            buyPolishPrice = buyPolishSum/buyPolishWeight;
+        }
 
         buySum = buyRoughSum + buyPolishSum;
         buyWeight = buyRoughWeight + buyPolishWeight;
-        buyPrice = buySum/buyWeight;
+        if (buyWeight == 0) {
+            buyPrice = 0;
+        } else {
+            buyPrice = buySum/buyWeight;
+        }
 
 
 
         wageSum = allWageSum;
         wageWeight = allRoughBuyDoneOrgWeight - allRoughBuyDoneWeight;
-        wagePer = 1-(allRoughBuyDoneWeight/allRoughBuyDoneOrgWeight);
-        wagePrice = wageSum/allRoughBuyDoneOrgWeight;
+        if (allRoughBuyDoneOrgWeight == 0) {
+            wagePer = 0;
+        } else {
+            wagePer = 1 - (allRoughBuyDoneWeight / allRoughBuyDoneOrgWeight);
+        }
+        if (allRoughBuyDoneOrgWeight == 0) {
+            wagePrice = 0;
+        } else {
+            wagePrice = wageSum/allRoughBuyDoneOrgWeight;
+        }
 
 
 
@@ -375,10 +410,12 @@ public class Balance extends AppCompatActivity {
             taxPrice = taxSum / taxWeight;
         }
 
+        profit = balanceSum - taxSum;
+
     }
 
     @SuppressLint("SetTextI18n")
-    public void display(double sum, double weight, double price, double roughSum, double roughWeight, double roughPrice, double polishSum, double polishWeight, double polishPrice, boolean wage) {
+    public void display(double sum, double weight, double price, double roughSum, double roughWeight, double roughPrice, double polishSum, double polishWeight, double polishPrice, boolean wage, boolean forTax) {
         DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
         tvBalanceSum.setText("סכום:  " + nf.format(sum) + "$");
         tvBalanceWeight.setText("משקל:  " + nf.format(weight) + " קראט ");
@@ -398,6 +435,13 @@ public class Balance extends AppCompatActivity {
             tvBalanceWagePrice.setText("מחיר ממוצע:  " + nf.format(wagePrice) + "$");
         } else {
             llBalanceWage.setVisibility(View.GONE);
+        }
+
+        if (forTax) {
+            tvBalanceProfit.setVisibility(View.GONE);
+            tvBalanceProfit.setText("רווחים לפני הוצאות ושכר עבודה  " + nf.format(profit) + "$");
+        } else {
+            tvBalanceProfit.setVisibility(View.GONE);
         }
 }
     private void showProgress(final boolean show) {

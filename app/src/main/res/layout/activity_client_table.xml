@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
+    android:id="@+id/client_table_port"
     tools:context=".TableClient">
 
     <ProgressBar
@@ -44,70 +45,6 @@
             android:layout_weight="7">
 
         </ListView>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/llClientDetails"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvClientDetailsName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="חברה"
-                    android:textColor="@color/colorText"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvClientDetailsSaleSum"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="סכום מכירות"
-                    android:textColor="@color/colorText"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/tvClientDetailsWeightSum"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="סכום משקל"
-                    android:textColor="@color/colorText"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/tvClientDetailsPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="ממוצע לקראט"
-                    android:textColor="@color/colorText"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

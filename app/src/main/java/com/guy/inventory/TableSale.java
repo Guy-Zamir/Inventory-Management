@@ -58,7 +58,10 @@ public class TableSale extends AppCompatActivity {
         tvSaleDetailsSum = findViewById(R.id.tvSaleDetailsSum);
         llSaleDetails = findViewById(R.id.llSaleDetails);
 
-        llSaleDetails.setVisibility(View.GONE);
+        // In Land
+        if (findViewById(R.id.table_sales_layout_land) != null) {
+            llSaleDetails.setVisibility(View.VISIBLE);
+        }
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -98,30 +101,38 @@ public class TableSale extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
                 selectedItem = position;
-                llSaleDetails.setVisibility(View.VISIBLE);
 
-                DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-                Calendar saleDate = Calendar.getInstance();
-                saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
-                @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
-                @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
-                @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
+                if (findViewById(R.id.table_sales_layout_land) != null) {
+                    llSaleDetails.setVisibility(View.VISIBLE);
 
-                Calendar payDate = Calendar.getInstance();
-                payDate.setTime(InventoryApp.sales.get(position).getPayDate());
-                @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
-                @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
-                @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
+                    DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+                    Calendar saleDate = Calendar.getInstance();
+                    saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
+                    @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
+                    @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
+                    @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
 
-                tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
-                tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
+                    Calendar payDate = Calendar.getInstance();
+                    payDate.setTime(InventoryApp.sales.get(position).getPayDate());
+                    @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+                    @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
+                    @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
-                tvSaleDetailsClientName.setText(InventoryApp.sales.get(position).getClientName());
-                tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
-                tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
-                tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()));
-                tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
-                tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
+                    tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
+                    tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
+
+                    tvSaleDetailsClientName.setText(InventoryApp.sales.get(position).getClientName());
+                    tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
+                    tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
+                    tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()));
+                    tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
+                    tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
+
+                    // In Port
+                } else {
+                    adapter.setSelectedPosition(position);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
