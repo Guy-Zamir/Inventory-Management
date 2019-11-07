@@ -37,13 +37,13 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/ivExport"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0.1"
             app:srcCompat="@drawable/sale_icon" />
 
         <DatePicker
@@ -53,10 +53,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:gravity="center|center_horizontal|center_vertical" />
+
+        <Switch
+            android:id="@+id/swSalePolish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.1"
+            android:text="  מלוטש   "
+            android:textSize="18sp" />
 
         <AutoCompleteTextView
             android:id="@+id/acClients"
@@ -65,8 +74,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
+            android:layout_weight="10"
+            android:gravity="bottom|center_horizontal"
             android:hint="שם חברה"
             android:inputType="text">
 
@@ -79,9 +88,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="מספר חשבונית"
             android:inputType="number" />
 
@@ -92,9 +101,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="משקל חבילה"
             android:inputType="numberDecimal" />
 
@@ -105,9 +114,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="סכום המכירה"
             android:inputType="numberDecimal" />
 
@@ -118,27 +127,11 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="מספר ימים"
             android:inputType="number" />
-
-        <ToggleButton
-            android:id="@+id/tbSalePolish"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/buttons"
-            android:textColor="#ffffff"
-            android:textOff="מלוטש"
-            android:textOn="גלם"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnSaleSubmit"
@@ -148,7 +141,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="20dp"
-            android:layout_weight="1"
+            android:layout_weight="10"
             android:background="@drawable/buttons"
             android:text="אשר"
             android:textColor="#FFFFFF"

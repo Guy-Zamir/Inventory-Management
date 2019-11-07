@@ -3,7 +3,6 @@ package com.guy.inventory;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -52,20 +50,14 @@ public class EditBuyDone extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         index = getIntent().getIntExtra("index", 0);
-        final DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-
-        etBuyEditWage2.setText(String.valueOf(InventoryApp.buys.get(index).getWage()));
-        etBuyEditDoneWeight2.setText(nf.format(InventoryApp.buys.get(index).getDoneWeight()));
 
         swBuyEditDoneWeight2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (swBuyEditDoneWeight2.isChecked()) {
-                    etBuyEditDoneWeight2.setText(nf.format((InventoryApp.buys.get(index).getDoneWeight()/InventoryApp.buys.get(index).getWeight())*100));
-                    swBuyEditDoneWeight2.setText("אחוז ליטוש ");
+                    swBuyEditDoneWeight2.setText(" אחוז ליטוש  ");
                 } else {
-                    etBuyEditDoneWeight2.setText(nf.format(InventoryApp.buys.get(index).getDoneWeight()));
-                    swBuyEditDoneWeight2.setText("משקל גמור ");
+                    swBuyEditDoneWeight2.setText("  משקל גמור  ");
                 }
             }
         });

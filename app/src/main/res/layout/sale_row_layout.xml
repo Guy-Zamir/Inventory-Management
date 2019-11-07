@@ -14,7 +14,7 @@
         android:layout_marginTop="5dp"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_horizontal"
-        android:text="@string/textView"
+        android:text="שם"
         android:textColor="@color/colorText"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -22,7 +22,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -33,7 +32,7 @@
             android:layout_marginTop="2dp"
             android:fontFamily="sans-serif-smallcaps"
             android:gravity="center_horizontal"
-            android:text="@string/textView"
+            android:text="תאריך מכירה"
             android:textColor="@color/colorText"
             android:textSize="16sp" />
 
@@ -45,7 +44,7 @@
             android:layout_marginTop="2dp"
             android:fontFamily="sans-serif-smallcaps"
             android:gravity="center_horizontal"
-            android:text="@string/textView"
+            android:text="סכום עסקה"
             android:textColor="@color/colorText"
             android:textSize="16sp" />
 
@@ -58,6 +57,20 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvSaleDetailsPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="מחיר"
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/tvSaleDetailsWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,6 +78,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
             android:layout_marginRight="10dp"
+            android:fontFamily="sans-serif-smallcaps"
             android:gravity="center_horizontal|center_vertical"
             android:text="משקל"
             android:textColor="@color/colorText"
@@ -78,47 +92,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
             android:layout_marginRight="10dp"
+            android:fontFamily="sans-serif-smallcaps"
             android:gravity="center_horizontal|center_vertical"
             android:text="חשבונית"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSaleDetailsPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="מחיר"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSaleDetailsBuyDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="תאריך קניה"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSaleDetailsPayDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="תאריך פקיעה"
             android:textColor="@color/colorText"
             android:textSize="16sp" />
 
@@ -130,23 +106,26 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
             android:layout_marginRight="10dp"
+            android:fontFamily="sans-serif-smallcaps"
             android:gravity="center_horizontal|center_vertical"
             android:text="ימים"
             android:textColor="@color/colorText"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvSaleDetailsSum"
+            android:id="@+id/tvSaleDetailsPayDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
             android:layout_marginRight="10dp"
+            android:fontFamily="sans-serif-smallcaps"
             android:gravity="center_horizontal|center_vertical"
-            android:text="סכום"
+            android:text="תאריך פקיעה"
             android:textColor="@color/colorText"
             android:textSize="16sp" />
+
     </LinearLayout>
 
 </LinearLayout>

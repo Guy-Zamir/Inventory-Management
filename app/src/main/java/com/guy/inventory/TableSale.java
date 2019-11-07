@@ -35,8 +35,11 @@ public class TableSale extends AppCompatActivity {
 
     ListView lvSaleList;
     LinearLayout llSaleDetails;
-    AdapterSales adapter;
+
+    AdapterSales adapterSales;
+    AdapterExports adapterExports;
     int selectedItem = -1;
+    boolean exports;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,37 +66,78 @@ public class TableSale extends AppCompatActivity {
             llSaleDetails.setVisibility(View.VISIBLE);
         }
 
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("מכירות");
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        // If the activity is an Export or not
+        exports = getIntent().getBooleanExtra("exports", false);
 
-        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setGroupBy("created");
-        queryBuilder.setPageSize(100);
-        showProgress(true);
+        // An Export Sale
+        if (exports) {
+            ActionBar actionBar = getSupportActionBar();
+            assert actionBar != null;
+            actionBar.setTitle("יצואים");
+            actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Backendless.Data.of(Sale.class).find(queryBuilder, new AsyncCallback<List<Sale>>() {
-            @Override
-            public void handleResponse(List<Sale> response) {
-                InventoryApp.sales = response;
-                adapter = new AdapterSales(TableSale.this, InventoryApp.sales);
-                lvSaleList.setAdapter(adapter);
-                showProgress(false);
-            }
+            String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+            DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+            queryBuilder.setWhereClause(whereClause);
+            queryBuilder.setGroupBy("created");
+            queryBuilder.setPageSize(100);
+            showProgress(true);
 
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableSale.this, "טרם נשרמו מכירות", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            Backendless.Data.of(Export.class).find(queryBuilder, new AsyncCallback<List<Export>>() {
+                @Override
+                public void handleResponse(List<Export> response) {
+                    InventoryApp.exports = response;
+                    adapterExports = new AdapterExports(TableSale.this, InventoryApp.exports);
+                    lvSaleList.setAdapter(adapterExports);
+                    showProgress(false);
                 }
-                showProgress(false);
-            }
-        });
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    if (fault.getCode().equals("1009")) {
+                        Toast.makeText(TableSale.this, "טרם נשרמו מכירות", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    showProgress(false);
+                }
+            });
+
+        // Not an Export Sale
+        } else {
+
+            ActionBar actionBar = getSupportActionBar();
+            assert actionBar != null;
+            actionBar.setTitle("מכירות");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+            String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+            DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+            queryBuilder.setWhereClause(whereClause);
+            queryBuilder.setGroupBy("created");
+            queryBuilder.setPageSize(100);
+            showProgress(true);
+
+            Backendless.Data.of(Sale.class).find(queryBuilder, new AsyncCallback<List<Sale>>() {
+                @Override
+                public void handleResponse(List<Sale> response) {
+                    InventoryApp.sales = response;
+                    adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                    lvSaleList.setAdapter(adapterSales);
+                    showProgress(false);
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    if (fault.getCode().equals("1009")) {
+                        Toast.makeText(TableSale.this, "טרם נשרמו מכירות", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    showProgress(false);
+                }
+            });
+        }
 
         lvSaleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
@@ -104,34 +148,62 @@ public class TableSale extends AppCompatActivity {
 
                 if (findViewById(R.id.table_sales_layout_land) != null) {
                     llSaleDetails.setVisibility(View.VISIBLE);
+                    DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
+                    if (exports) {
+                        Calendar saleDate = Calendar.getInstance();
+                        saleDate.setTime(InventoryApp.exports.get(position).getSaleDate());
+                        @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
+                        @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
+                        @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
 
-                    DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
-                    Calendar saleDate = Calendar.getInstance();
-                    saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
-                    @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
-                    @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
-                    @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
+                        Calendar payDate = Calendar.getInstance();
+                        payDate.setTime(InventoryApp.exports.get(position).getPayDate());
+                        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+                        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
+                        @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
-                    Calendar payDate = Calendar.getInstance();
-                    payDate.setTime(InventoryApp.sales.get(position).getPayDate());
-                    @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
-                    @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
-                    @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
+                        tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
+                        tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth + "/" + payYear);
 
-                    tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
-                    tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
+                        tvSaleDetailsClientName.setText(InventoryApp.exports.get(position).getClientName());
+                        tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.exports.get(position).getId());
+                        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.exports.get(position).getPrice()) + "$");
+                        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.exports.get(position).getWeight()));
+                        tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.exports.get(position).getDays()));
+                        tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.exports.get(position).getSaleSum()) + "$");
+                    } else {
+                        Calendar saleDate = Calendar.getInstance();
+                        saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
+                        @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
+                        @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
+                        @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
 
-                    tvSaleDetailsClientName.setText(InventoryApp.sales.get(position).getClientName());
-                    tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
-                    tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
-                    tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()));
-                    tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
-                    tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
+                        Calendar payDate = Calendar.getInstance();
+                        payDate.setTime(InventoryApp.sales.get(position).getPayDate());
+                        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+                        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
+                        @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
+
+                        tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
+                        tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth + "/" + payYear);
+
+                        tvSaleDetailsClientName.setText(InventoryApp.sales.get(position).getClientName());
+                        tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
+                        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
+                        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()));
+                        tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
+                        tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
+                    }
 
                     // In Port
                 } else {
-                    adapter.setSelectedPosition(position);
-                    adapter.notifyDataSetChanged();
+                    if (exports) {
+                        adapterExports.setSelectedPosition(position);
+                        adapterExports.notifyDataSetChanged();
+                    } else {
+                        adapterSales.setSelectedPosition(position);
+                        adapterSales.notifyDataSetChanged();
+                    }
                 }
             }
         });
@@ -148,6 +220,11 @@ public class TableSale extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.newIcon:
                 Intent newSale = new Intent(TableSale.this, NewSale.class);
+                if (exports) {
+                    newSale.putExtra("export", true);
+                } else {
+                    newSale.putExtra("export", false);
+                }
                 startActivityForResult(newSale, 1);
                 break;
 
@@ -157,6 +234,11 @@ public class TableSale extends AppCompatActivity {
                 } else {
                     Intent editSale = new Intent(TableSale.this, EditSale.class);
                     editSale.putExtra("index", selectedItem);
+                    if (exports) {
+                        editSale.putExtra("export", true);
+                    } else {
+                        editSale.putExtra("export", false);
+                    }
                     startActivityForResult(editSale, 1);
                     break;
                 }
@@ -174,21 +256,42 @@ public class TableSale extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             showProgress(true);
                             tvLoad.setText("מוחק את הנתונים אנא המתן...");
-                            Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(selectedItem), new AsyncCallback<Long>() {
-                                @Override
-                                public void handleResponse(Long response) {
-                                    InventoryApp.sales.remove(selectedItem);
-                                    Toast.makeText(TableSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                    adapter.notifyDataSetChanged();
-                                    showProgress(false);
-                                }
 
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    showProgress(false);
-                                    Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            if (exports) {
+
+                                Backendless.Persistence.of(Export.class).remove(InventoryApp.exports.get(selectedItem), new AsyncCallback<Long>() {
+                                    @Override
+                                    public void handleResponse(Long response) {
+                                        InventoryApp.exports.remove(selectedItem);
+                                        Toast.makeText(TableSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                        adapterExports.notifyDataSetChanged();
+                                        showProgress(false);
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } else {
+                                Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(selectedItem), new AsyncCallback<Long>() {
+                                    @Override
+                                    public void handleResponse(Long response) {
+                                        InventoryApp.sales.remove(selectedItem);
+                                        Toast.makeText(TableSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                        adapterSales.notifyDataSetChanged();
+                                        showProgress(false);
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         }
                     });
                     alert.show();
@@ -208,7 +311,11 @@ public class TableSale extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            adapter.notifyDataSetChanged();
+            if (exports) {
+                adapterExports.notifyDataSetChanged();
+            } else {
+                adapterSales.notifyDataSetChanged();
+            }
         }
     }
 

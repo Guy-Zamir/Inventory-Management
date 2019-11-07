@@ -28,7 +28,7 @@ public class EditBuy extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    LinearLayout llBuyEdit, llBuyDone, llBuyDetails, llBuyDetailsDone;
+    LinearLayout llBuyEdit, llBuyDone;
     DatePicker dpBuyEditDate;
     EditText etBuyEditID, etBuyEditPrice, etBuyEditWeight, etBuyEditDays, etBuyEditDoneWeight, etBuyEditWage;
 
@@ -55,8 +55,6 @@ public class EditBuy extends AppCompatActivity {
 
         llBuyEdit = findViewById(R.id.llBuyEdit);
         llBuyDone = findViewById(R.id.llBuyDone);
-        llBuyDetails = findViewById(R.id.llBuyDetails);
-        llBuyDetailsDone = findViewById(R.id.llBuyDetailsDone);
 
         dpBuyEditDate = findViewById(R.id.dpBuyEditDate);
         etBuyEditID = findViewById(R.id.etBuyEditID);
@@ -83,6 +81,10 @@ public class EditBuy extends AppCompatActivity {
         index = getIntent().getIntExtra("index", 0);
         tvBuyEditSupplier.setText(InventoryApp.buys.get(index).getSupplierName());
         final DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+
+        if (!InventoryApp.buys.get(index).isDone()) {
+            llBuyDone.setVisibility(View.GONE);
+        }
 
         swBuyEditDoneWeight.setOnClickListener(new View.OnClickListener() {
             @Override

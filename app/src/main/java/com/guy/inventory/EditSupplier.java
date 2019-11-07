@@ -9,8 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
@@ -44,6 +43,7 @@ public class EditSupplier extends AppCompatActivity {
         etSupplierEditFax = findViewById(R.id.etSupplierEditFax);
         etSupplierEditWebSite = findViewById(R.id.etSupplierEditWebSite);
         etSupplierEditDetails = findViewById(R.id.etSupplierEditDetails);
+
 
         btnSupplierEditSubmit = findViewById(R.id.btnSupplierEditSubmit);
 

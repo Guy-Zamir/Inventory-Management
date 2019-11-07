@@ -118,14 +118,16 @@ public class TableBuy extends AppCompatActivity {
                     saleDate.setTime(InventoryApp.buys.get(selectedItem).getBuyDate());
                     @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
                     @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
+                    @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
 
                     Calendar payDate = Calendar.getInstance();
                     payDate.setTime(InventoryApp.buys.get(selectedItem).getPayDate());
                     @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
                     @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
+                    @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
-                    tvBuyDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
-                    tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
+                    tvBuyDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth+ "/" + buyYear);
+                    tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
 
                     tvBuyDetailsSupplier.setText(InventoryApp.buys.get(selectedItem).getSupplierName());
                     tvBuyDetailsID.setText("מספר אסמכתא:  " + InventoryApp.buys.get(selectedItem).getId());
@@ -177,7 +179,7 @@ public class TableBuy extends AppCompatActivity {
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(TableBuy.this);
                     alert.setTitle("התראת מחיקה");
-                    alert.setMessage("האם אתה בטוח שברצונך למחוק את המכירה המסומנת?");
+                    alert.setMessage("האם אתה בטוח שברצונך למחוק את הקניה המסומנת?");
                     alert.setNegativeButton(android.R.string.no, null);
                     alert.setIcon(android.R.drawable.ic_dialog_alert);
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -207,12 +209,12 @@ public class TableBuy extends AppCompatActivity {
 
             case R.id.doneIcon:
                 if (selectedItem == -1) {
-                    Toast.makeText(this, "יש לחבור חבילה לא גמורה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "יש לחבור חבילה שלא נכנסה לעבודה", Toast.LENGTH_SHORT).show();
                 } else {
                     if (!InventoryApp.buys.get(selectedItem).isDone()) {
                         AlertDialog.Builder alert2 = new AlertDialog.Builder(TableBuy.this);
                         alert2.setTitle("שינוי נתונים");
-                        alert2.setMessage("האם אתה בטוח שברצונך לשנות את החבילה לגמורה?");
+                        alert2.setMessage("האם אתה בטוח שברצונך להכניס את החבילה לעבודה?");
                         alert2.setNegativeButton(android.R.string.no, null);
                         alert2.setIcon(android.R.drawable.ic_dialog_alert);
 

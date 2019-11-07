@@ -3,12 +3,10 @@ package com.guy.inventory;
 import java.util.Date;
 
 public class Supplier {
-    private boolean home;
     private String name, location, building, phoneNumber, insidePhone, fax, website, details;
 
     private Date created, updated;
     private String objectId, userEmail;
-
 
     public String getName() {
         return name;
@@ -96,14 +94,6 @@ public class Supplier {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
-    }
-
-    public boolean isHome() {
-        return home;
-    }
-
-    public void setHome(boolean home) {
-        this.home = home;
     }
 
     public String getObjectId() {

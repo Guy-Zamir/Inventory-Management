@@ -52,11 +52,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="שם"
             android:inputType="textPersonName" />
 
@@ -69,7 +68,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="כתובת"
             android:inputType="textPersonName" />
 
@@ -82,7 +81,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="טלפון"
             android:inputType="number" />
 
@@ -95,7 +94,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="טלפון פנימי"
             android:inputType="number" />
 
@@ -108,7 +107,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="פקס"
             android:inputType="number" />
 
@@ -121,7 +120,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="כתובת אתר אינטרנט"
             android:inputType="text" />
 
@@ -134,25 +133,9 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="bottom|center_horizontal"
             android:hint="פרטים נוספים"
             android:inputType="text" />
-
-        <ToggleButton
-            android:id="@+id/tbNewClientHome"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/buttons"
-            android:textColor="#ffffff"
-            android:textOff="לקוח מקומי"
-            android:textOn="לקוח ביצוא"
-            android:textSize="16sp"
-            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnNewClientSubmit"

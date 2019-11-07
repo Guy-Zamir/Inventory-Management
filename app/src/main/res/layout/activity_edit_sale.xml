@@ -69,31 +69,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSaleEditID"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom|center_horizontal"
                     android:text="מספר חשבונית:"
                     android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/etSaleEditID"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="textPersonName" />
             </LinearLayout>
 
@@ -101,31 +101,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSaleEditWeight"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom|center_horizontal"
                     android:text="משקל החבילה:"
                     android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/etSaleEditWeight"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="numberDecimal" />
             </LinearLayout>
 
@@ -133,31 +133,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSaleEditSum"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom|center_horizontal"
                     android:text="סכום המכירה:"
                     android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/etSaleEditSum"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="numberDecimal" />
             </LinearLayout>
 
@@ -165,31 +165,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvSaleEditDays"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom|center_horizontal"
                     android:text="מספר הימים:"
                     android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/etSaleEditDays"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="numberDecimal" />
             </LinearLayout>
 

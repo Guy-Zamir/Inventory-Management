@@ -1,11 +1,11 @@
 package com.guy.inventory;
 import java.util.Date;
 
-public class Sale {
+public class Export {
     private double saleSum, weight, price;
     private String id, clientName;
     private int days;
-    private boolean paid, polish, export;
+    private boolean paid, polish;
     private Date saleDate, payDate;
 
     private Date created, updated;

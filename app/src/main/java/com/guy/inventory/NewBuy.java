@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -32,7 +33,7 @@ public class NewBuy extends AppCompatActivity {
 
     private DatePicker dpBuyDate;
     private EditText etBuyID, etBuyPrice, etBuyWeight, etBuyDays;
-    private ToggleButton tbBuyPolish;
+    private Switch swBuyPolish;
 
     private ArrayAdapter<String> adapter;
     private AutoCompleteTextView acSuppliers;
@@ -53,7 +54,7 @@ public class NewBuy extends AppCompatActivity {
         etBuyPrice = findViewById(R.id.etBuyPrice);
         etBuyWeight = findViewById(R.id.etBuyWeight);
         etBuyDays = findViewById(R.id.etBuyDays);
-        tbBuyPolish = findViewById(R.id.tbBuyPolish);
+        swBuyPolish = findViewById(R.id.swBuyPolish);
         Button btnBuySubmit = findViewById(R.id.btnBuySubmit);
 
         final ActionBar actionBar = getSupportActionBar();
@@ -95,6 +96,17 @@ public class NewBuy extends AppCompatActivity {
             }
         });
 
+        swBuyPolish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (swBuyPolish.isChecked()) {
+                    swBuyPolish.setText(" מלוטש  ");
+                } else {
+                    swBuyPolish.setText("  גלם  ");
+                }
+            }
+        });
+
         acSuppliers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -133,7 +145,7 @@ public class NewBuy extends AppCompatActivity {
                     double price = Double.parseDouble(etBuyPrice.getText().toString().trim());
                     double weight = Double.parseDouble(etBuyWeight.getText().toString().trim());
                     int days = Integer.valueOf(etBuyDays.getText().toString().trim());
-                    boolean polish = tbBuyPolish.isChecked();
+                    boolean polish = swBuyPolish.isChecked();
 
                     final Buy buy = new Buy();
                     buy.setSupplierName(supplierName);

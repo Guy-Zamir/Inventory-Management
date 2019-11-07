@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnResult, btnBuyTable, btnSaleTable, btnSupplierTable, btnClientTable;
+    Button btnResult, btnBuyTable, btnSaleTable, btnSupplierTable, btnClientTable, btnExportTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         btnSaleTable = findViewById(R.id.btnSaleTable);
         btnSupplierTable = findViewById(R.id.btnSupplierTable);
         btnClientTable = findViewById(R.id.btnClientTable);
+        btnExportTable = findViewById(R.id.btnExportTable);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, TableSale.class);
+                intent.putExtra("exports", false);
                 startActivity(intent);
             }
         });
@@ -64,6 +66,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, TableClient.class);
+                startActivity(intent);
+            }
+        });
+
+        btnExportTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TableSale.class);
+                intent.putExtra("exports", true);
                 startActivity(intent);
             }
         });

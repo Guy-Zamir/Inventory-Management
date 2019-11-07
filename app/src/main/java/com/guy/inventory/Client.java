@@ -3,7 +3,6 @@ package com.guy.inventory;
 import java.util.Date;
 
 public class Client {
-    private boolean home;
     private String name, location, phoneNumber, insidePhone, fax, website, details;
 
     private Date created, updated;
@@ -87,14 +86,6 @@ public class Client {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
-    }
-
-    public boolean isHome() {
-        return home;
-    }
-
-    public void setHome(boolean home) {
-        this.home = home;
     }
 
     public String getObjectId() {

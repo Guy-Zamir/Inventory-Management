@@ -42,11 +42,10 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         TextView tvBuySupplier = convertView.findViewById(R.id.tvBuySupplier);
         TextView tvBuyDate = convertView.findViewById(R.id.tvBuyDate);
         ImageView ivDone = convertView.findViewById(R.id.ivDone);
+        ImageView ivPolish = convertView.findViewById(R.id.ivWorkPolish);
 
-        TextView tvBuyDetailsBuyDate = convertView.findViewById(R.id.tvBuyDetailsBuyDate);
         TextView tvBuyDetailsPayDate = convertView.findViewById(R.id.tvBuyDetailsPayDate);
         TextView tvBuyDetailsID = convertView.findViewById(R.id.tvBuyDetailsID);
-        TextView tvBuyDetailsPrice = convertView.findViewById(R.id.tvBuyDetailsPrice);
         TextView tvBuyDetailsWeight = convertView.findViewById(R.id.tvBuyDetailsWeight);
         TextView tvBuyDetailsDays = convertView.findViewById(R.id.tvBuyDetailsDays);
         TextView tvBuyDetailsSum = convertView.findViewById(R.id.tvBuyDetailsSum);
@@ -60,23 +59,23 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         saleDate.setTime(buys.get(position).getBuyDate());
         String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
         String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH)+1);
+        String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
 
         Calendar payDate = Calendar.getInstance();
         payDate.setTime(buys.get(position).getPayDate());
 
         tvBuySupplier.setText(buys.get(position).getSupplierName());
-        tvBuyDate.setText("תאריך קניה:  " + buyDays + "/" + buyMonth);
-        tvBuyPrice.setText("מחיר:  " + nf.format(buys.get(position).getPrice()) + "$");
+        tvBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth+ "/" + buyYear);
+        tvBuyPrice.setText("מחיר לקראט:  " + nf.format(buys.get(position).getPrice()) + "$");
 
         payDate.setTime(InventoryApp.buys.get(position).getPayDate());
-        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
-        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
+        String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+        String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
+        String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
-        tvBuyDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth);
-        tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth);
+        tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
 
         tvBuyDetailsID.setText("מספר אסמכתא:  " + InventoryApp.buys.get(position).getId());
-        tvBuyDetailsPrice.setText("מחיר לקראט:  " + nf.format(InventoryApp.buys.get(position).getPrice()) + "$");
         tvBuyDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.buys.get(position).getWeight()) + " קראט ");
         tvBuyDetailsDays.setText("מספר ימים:  " + InventoryApp.buys.get(position).getDays());
         tvBuyDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.buys.get(position).getSum()) + "$");
@@ -88,8 +87,16 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
 
         if (InventoryApp.buys.get(position).isDone()) {
             ivDone.setImageResource(R.drawable.done1_icon);
-        } else {
+        }
+
+        if (!InventoryApp.buys.get(position).isDone()){
             ivDone.setImageResource(R.drawable.not_done1_icon);
+        }
+
+        if (InventoryApp.buys.get(position).isPolish()) {
+            ivPolish.setImageResource(R.drawable.diamond1_icon);
+        } else {
+            ivPolish.setVisibility(View.INVISIBLE);
         }
 
         if (position == selectedPosition) {

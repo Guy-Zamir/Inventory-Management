@@ -32,6 +32,7 @@ public class EditSale extends AppCompatActivity {
     int index, days;
     String id;
     double weight, saleSum;
+    boolean export = false;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -63,16 +64,30 @@ public class EditSale extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         index = getIntent().getIntExtra("index", 0);
-        tvSaleEditClientName.setText(InventoryApp.sales.get(index).getClientName());
+        export = getIntent().getBooleanExtra("export", false);
 
-        etSaleEditID.setText(InventoryApp.sales.get(index).getId());
-        etSaleEditWeight.setText(String.valueOf(InventoryApp.sales.get(index).getWeight()));
-        etSaleEditSum.setText(String.valueOf(InventoryApp.sales.get(index).getSaleSum()));
-        etSaleEditDays.setText(String.valueOf(InventoryApp.sales.get(index).getDays()));
+        if (export) {
 
-        Calendar date = Calendar.getInstance();
-        date.setTime(InventoryApp.sales.get(index).getSaleDate());
-        dpSaleEditDate.updateDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+            tvSaleEditClientName.setText(InventoryApp.exports.get(index).getClientName());
+            etSaleEditID.setText(InventoryApp.exports.get(index).getId());
+            etSaleEditWeight.setText(String.valueOf(InventoryApp.exports.get(index).getWeight()));
+            etSaleEditSum.setText(String.valueOf(InventoryApp.exports.get(index).getSaleSum()));
+            etSaleEditDays.setText(String.valueOf(InventoryApp.exports.get(index).getDays()));
+            Calendar date = Calendar.getInstance();
+            date.setTime(InventoryApp.exports.get(index).getSaleDate());
+            dpSaleEditDate.updateDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+
+        } else {
+
+            tvSaleEditClientName.setText(InventoryApp.sales.get(index).getClientName());
+            etSaleEditID.setText(InventoryApp.sales.get(index).getId());
+            etSaleEditWeight.setText(String.valueOf(InventoryApp.sales.get(index).getWeight()));
+            etSaleEditSum.setText(String.valueOf(InventoryApp.sales.get(index).getSaleSum()));
+            etSaleEditDays.setText(String.valueOf(InventoryApp.sales.get(index).getDays()));
+            Calendar date = Calendar.getInstance();
+            date.setTime(InventoryApp.sales.get(index).getSaleDate());
+            dpSaleEditDate.updateDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+        }
 
         btnSaleEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +95,8 @@ public class EditSale extends AppCompatActivity {
                 if (etSaleEditID.getText().toString().isEmpty() ||
                         etSaleEditWeight.getText().toString().isEmpty()|| etSaleEditSum.getText().toString().isEmpty()||
                     etSaleEditDays.getText().toString().isEmpty()) {
-
                     Toast.makeText(EditSale.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+
                 } else {
 
                     id = etSaleEditID.getText().toString().trim();
@@ -95,38 +110,76 @@ public class EditSale extends AppCompatActivity {
                     alert.setNegativeButton(android.R.string.no, null);
                     alert.setIcon(android.R.drawable.ic_dialog_alert);
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
                         public void onClick(DialogInterface dialog, int which) {
-                            InventoryApp.sales.get(index).setSaleDate(getDateFromDatePicker(dpSaleEditDate));
-                            InventoryApp.sales.get(index).setId(id);
-                            InventoryApp.sales.get(index).setWeight(weight);
-                            InventoryApp.sales.get(index).setSaleSum(saleSum);
-                            InventoryApp.sales.get(index).setDays(days);
 
-                            Calendar addedDays = Calendar.getInstance();
-                            addedDays.setTime(InventoryApp.sales.get(index).getSaleDate());
-                            addedDays.add(Calendar.DATE, days);
-                            Date now = new Date();
-                            InventoryApp.sales.get(index).setPayDate(addedDays.getTime());
-                            if (now.after(addedDays.getTime())) {
-                                InventoryApp.sales.get(index).setPaid(true);
+                            if (export) {
+
+                                InventoryApp.exports.get(index).setSaleDate(getDateFromDatePicker(dpSaleEditDate));
+                                InventoryApp.exports.get(index).setId(id);
+                                InventoryApp.exports.get(index).setWeight(weight);
+                                InventoryApp.exports.get(index).setSaleSum(saleSum);
+                                InventoryApp.exports.get(index).setDays(days);
+
+                                Calendar addedDays = Calendar.getInstance();
+                                addedDays.setTime(InventoryApp.exports.get(index).getSaleDate());
+                                addedDays.add(Calendar.DATE, days);
+                                Date now = new Date();
+                                InventoryApp.exports.get(index).setPayDate(addedDays.getTime());
+                                if (now.after(addedDays.getTime())) {
+                                    InventoryApp.exports.get(index).setPaid(true);
+                                }
+
+                                InventoryApp.exports.get(index).setPrice(saleSum / weight);
+                                Backendless.Persistence.save(InventoryApp.exports.get(index), new AsyncCallback<Export>() {
+                                    @Override
+                                    public void handleResponse(Export response) {
+                                        Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                        setResult(RESULT_OK);
+                                        finishActivity(1);
+                                        EditSale.this.finish();
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } else {
+                                InventoryApp.sales.get(index).setSaleDate(getDateFromDatePicker(dpSaleEditDate));
+                                InventoryApp.sales.get(index).setId(id);
+                                InventoryApp.sales.get(index).setWeight(weight);
+                                InventoryApp.sales.get(index).setSaleSum(saleSum);
+                                InventoryApp.sales.get(index).setDays(days);
+
+                                Calendar addedDays = Calendar.getInstance();
+                                addedDays.setTime(InventoryApp.sales.get(index).getSaleDate());
+                                addedDays.add(Calendar.DATE, days);
+                                Date now = new Date();
+                                InventoryApp.sales.get(index).setPayDate(addedDays.getTime());
+                                if (now.after(addedDays.getTime())) {
+                                    InventoryApp.sales.get(index).setPaid(true);
+                                }
+
+                                InventoryApp.sales.get(index).setPrice(saleSum / weight);
+                                Backendless.Persistence.save(InventoryApp.sales.get(index), new AsyncCallback<Sale>() {
+                                    @Override
+                                    public void handleResponse(Sale response) {
+                                        Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                        setResult(RESULT_OK);
+                                        finishActivity(1);
+                                        EditSale.this.finish();
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
-
-                            InventoryApp.sales.get(index).setPrice(saleSum/weight);
-                            Backendless.Persistence.save(InventoryApp.sales.get(index), new AsyncCallback<Sale>() {
-                                @Override
-                                public void handleResponse(Sale response) {
-                                    Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
-                                    setResult(RESULT_OK);
-                                    finishActivity(1);
-                                    EditSale.this.finish();
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    showProgress(false);
-                                    Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
                         }
                     });
                         alert.show();

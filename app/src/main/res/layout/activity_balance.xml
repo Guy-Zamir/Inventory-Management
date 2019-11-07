@@ -103,6 +103,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvBalanceHeadline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -148,17 +149,6 @@
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/tvBalanceProfit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:baselineAligned="false"
-                    android:text="רווחים לפני הוצאות ושכר עבודה"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -169,6 +159,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvPolishHeadline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -221,6 +212,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvRoughHeadline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -274,7 +266,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/tvWageHeadline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"

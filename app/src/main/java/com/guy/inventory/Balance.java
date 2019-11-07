@@ -27,7 +27,8 @@ public class Balance extends AppCompatActivity {
     TextView tvBalanceSum, tvBalanceWeight, tvBalancePrice,
             tvBalancePolishSum, tvBalancePolishWeight, tvBalancePolishPrice,
             tvBalanceRoughSum, tvBalanceRoughWeight, tvBalanceRoughPrice,
-            tvBalanceWagePrice, tvBalanceWagePre, tvBalanceWageWeight, tvBalanceWageSum, tvBalanceProfit;
+            tvBalanceWagePrice, tvBalanceWagePre, tvBalanceWageWeight, tvBalanceWageSum,
+            tvBalanceProfit, tvWageHeadline, tvBalanceHeadline, tvPolishHeadline, tvRoughHeadline;
 
     Button btnBalanceBuy, btnBalanceSale, btnBalanceGoods, btnBalanceTax;
 
@@ -38,6 +39,8 @@ public class Balance extends AppCompatActivity {
     double saleSum, saleWeight, salePrice;
     double saleRoughSum, saleRoughWeight, saleRoughPrice;
     double salePolishSum, salePolishWeight, salePolishPrice;
+
+    double exportSum, exportWeight, exportPrice;
 
     double buySum, buyWeight, buyPrice;
     double buyRoughSum, buyRoughWeight, buyRoughPrice;
@@ -81,7 +84,10 @@ public class Balance extends AppCompatActivity {
         tvBalanceWageWeight = findViewById(R.id.tvBalanceWageWeight);
         tvBalanceWagePre = findViewById(R.id.tvBalanceWagePre);
         tvBalanceWagePrice = findViewById(R.id.tvBalanceWagePrice);
-        tvBalanceProfit = findViewById(R.id.tvBalanceProfit);
+        tvWageHeadline = findViewById(R.id.tvWageHeadline);
+        tvBalanceHeadline = findViewById(R.id.tvBalanceHeadline);
+        tvPolishHeadline = findViewById(R.id.tvPolishHeadline);
+        tvRoughHeadline = findViewById(R.id.tvRoughHeadline);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -135,10 +141,29 @@ public class Balance extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(List<Sale> response) {
                                         InventoryApp.sales = response;
-                                        getInfo();
-                                        btnBalanceGoods.setSelected(true);
-                                        display(balanceSum, balanceWeight, balancePrice, balanceRoughSum, balanceRoughWeight, balanceRoughPrice, balancePolishSum, balancePolishWeight, balancePolishPrice, true, false);
-                                        showProgress(false);
+
+                                        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+                                        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+                                        queryBuilder.setWhereClause(whereClause);
+                                        queryBuilder.setGroupBy("created");
+                                        queryBuilder.setPageSize(100);
+
+                                        Backendless.Data.of(Export.class).find(queryBuilder, new AsyncCallback<List<Export>>() {
+                                            @Override
+                                            public void handleResponse(List<Export> response) {
+                                                InventoryApp.exports = response;
+                                                getInfo();
+                                                btnBalanceGoods.setSelected(true);
+                                                display(0);
+                                                showProgress(false);
+                                            }
+
+                                            @Override
+                                            public void handleFault(BackendlessFault fault) {
+
+                                            }
+                                        });
+
                                     }
 
                                     @Override
@@ -190,11 +215,21 @@ public class Balance extends AppCompatActivity {
             }
         });
 
+        btnBalanceGoods.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                display(0);
+                btnBalanceGoods.setSelected(true);
+                btnBalanceTax.setSelected(false);
+                btnBalanceSale.setSelected(false);
+                btnBalanceBuy.setSelected(false);
+            }
+        });
 
         btnBalanceBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(buySum, buyWeight, buyPrice, buyRoughSum, buyRoughWeight, buyRoughPrice, buyPolishSum, buyPolishWeight, buyPolishPrice, false, false);
+                display(1);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(false);
                 btnBalanceSale.setSelected(false);
@@ -205,7 +240,7 @@ public class Balance extends AppCompatActivity {
         btnBalanceSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(saleSum, saleWeight, salePrice, saleRoughSum, saleRoughWeight, saleRoughPrice, salePolishSum, salePolishWeight, salePolishPrice, false, false);
+                display(2);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(false);
                 btnBalanceSale.setSelected(true);
@@ -213,21 +248,11 @@ public class Balance extends AppCompatActivity {
             }
         });
 
-        btnBalanceGoods.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display(balanceSum, balanceWeight, balancePrice, balanceRoughSum, balanceRoughWeight, balanceRoughPrice, balancePolishSum, balancePolishWeight, balancePolishPrice, true, false);
-                btnBalanceGoods.setSelected(true);
-                btnBalanceTax.setSelected(false);
-                btnBalanceSale.setSelected(false);
-                btnBalanceBuy.setSelected(false);
-            }
-        });
 
         btnBalanceTax.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(taxSum, taxWeight, taxPrice, taxRoughSum, taxRoughWeight, taxRoughPrice, taxPolishSum, taxPolishWeight, taxPolishPrice, true, true);
+                display(3);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(true);
                 btnBalanceSale.setSelected(false);
@@ -241,6 +266,9 @@ public class Balance extends AppCompatActivity {
 
         double allPolishSaleSum = 0;
         double allPolishSaleWeight = 0;
+
+        double allPolishExportSum = 0;
+        double allPolishExportWeight = 0;
 
         double allRoughSaleSum = 0;
         double allRoughSaleWeight = 0;
@@ -256,6 +284,15 @@ public class Balance extends AppCompatActivity {
         double allPolishBuyWeight = 0;
 
         double allWageSum = 0;
+
+        if (InventoryApp.exports != null) {
+            for (Export export : InventoryApp.exports) {
+                if (export.isPolish()) {
+                    allPolishExportSum += export.getSaleSum();
+                    allPolishExportWeight += export.getWeight();
+                }
+            }
+        }
 
         if (InventoryApp.sales != null) {
             for (Sale sale : InventoryApp.sales) {
@@ -275,8 +312,8 @@ public class Balance extends AppCompatActivity {
 
                     // Buy Rough Not Done
                     if (!buy.isDone()) {
-                        allNotDoneRoughBuySum += buy.getWeight();
-                        allNotDoneRoughBuyWeight += buy.getSum();
+                        allNotDoneRoughBuySum += buy.getSum();
+                        allNotDoneRoughBuyWeight += buy.getWeight();
 
                         // Buy Done Rough
                     } else {
@@ -294,6 +331,15 @@ public class Balance extends AppCompatActivity {
             }
         }
 
+        exportSum =  allPolishExportSum;
+        exportWeight = allPolishExportWeight;
+        if (allPolishExportWeight == 0) {
+            exportPrice = 0;
+        } else {
+            exportPrice = exportSum/exportWeight;
+        }
+
+
         saleRoughSum = allRoughSaleSum;
         saleRoughWeight = allRoughSaleWeight;
         if (saleRoughWeight == 0) {
@@ -310,8 +356,8 @@ public class Balance extends AppCompatActivity {
             salePolishPrice = salePolishSum/salePolishWeight;
         }
 
-        saleSum = salePolishSum + saleRoughSum;
-        saleWeight = saleRoughWeight + salePolishWeight;
+        saleSum = salePolishSum + saleRoughSum + exportSum;
+        saleWeight = saleRoughWeight + salePolishWeight + exportWeight;
         if (saleWeight == 0) {
             salePrice = 0;
         } else {
@@ -369,8 +415,8 @@ public class Balance extends AppCompatActivity {
             balanceRoughPrice = balanceRoughSum / balanceRoughWeight;
         }
 
-        balancePolishSum = allRoughBuyDoneSum + buyPolishSum - salePolishSum + wageSum;
-        balancePolishWeight = allRoughBuyDoneWeight + buyPolishWeight - salePolishWeight;
+        balancePolishSum = allRoughBuyDoneSum + buyPolishSum - salePolishSum - exportSum + wageSum;
+        balancePolishWeight = allRoughBuyDoneWeight + buyPolishWeight - salePolishWeight - exportWeight;
         if (balancePolishWeight == 0) {
             balancePolishPrice = 0;
         } else {
@@ -411,38 +457,105 @@ public class Balance extends AppCompatActivity {
         }
 
         profit = balanceSum - taxSum;
-
     }
 
     @SuppressLint("SetTextI18n")
-    public void display(double sum, double weight, double price, double roughSum, double roughWeight, double roughPrice, double polishSum, double polishWeight, double polishPrice, boolean wage, boolean forTax) {
+    public void display(int head) {
+
         DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
-        tvBalanceSum.setText("סכום:  " + nf.format(sum) + "$");
-        tvBalanceWeight.setText("משקל:  " + nf.format(weight) + " קראט ");
-        tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(price) + "$");
-        tvBalanceRoughSum.setText("סכום:  " + nf.format(roughSum) + "$");
-        tvBalanceRoughWeight.setText("משקל:  " + nf.format(roughWeight)+ " קראט ");
-        tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(roughPrice) + "$");
-        tvBalancePolishSum.setText("סכום:  " + nf.format(polishSum) + "$");
-        tvBalancePolishWeight.setText("משקל:  " + nf.format(polishWeight)+ " קראט ");
-        tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(polishPrice) + "$");
 
-        if (wage) {
-            llBalanceWage.setVisibility(View.VISIBLE);
-            tvBalanceWageSum.setText("סכום:  " + nf.format(wageSum) + "$");
-            tvBalanceWageWeight.setText("משקל:  " + nf.format(wageWeight)+ " קראט ");
-            tvBalanceWagePre.setText("אחוז פחת ממוצע:  " + nf.format((wagePer)*100) + "%");
-            tvBalanceWagePrice.setText("מחיר ממוצע:  " + nf.format(wagePrice) + "$");
-        } else {
-            llBalanceWage.setVisibility(View.GONE);
+        switch (head) {
+            case 0:
+                tvBalanceHeadline.setText("מאזן כולל");
+                tvPolishHeadline.setText("מאזן מלוטש");
+                tvRoughHeadline.setText("מאזן גלם");
+                tvWageHeadline.setText("סיכום שכר עבודה");
+
+                tvBalanceSum.setText("סכום:  " + nf.format(balanceSum) + "$");
+                tvBalanceWeight.setText("משקל:  " + nf.format(balanceWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(balancePrice) + "$");
+                tvBalanceRoughSum.setText("סכום:  " + nf.format(balanceRoughSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + nf.format(balanceRoughWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(balanceRoughPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + nf.format(balancePolishSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + nf.format(balancePolishWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(balancePolishPrice) + "$");
+
+                llBalanceWage.setVisibility(View.VISIBLE);
+                tvBalanceWageSum.setText("מחיר ממוצע:  " + nf.format(wagePrice) + "$");
+                tvBalanceWageWeight.setText("משקל:  " + nf.format(wageWeight) + " קראט ");
+                tvBalanceWagePre.setText("אחוז פחת ממוצע:  " + nf.format((wagePer) * 100) + "%");
+                tvBalanceWagePrice.setText("סכום:  " + nf.format(wageSum) + "$");
+                break;
+
+            case 1:
+                tvBalanceHeadline.setText("כלל הסחורות שניקנו");
+                tvPolishHeadline.setText("קניית מלוטש");
+                tvRoughHeadline.setText("קניית גלם");
+
+                tvBalanceSum.setText("סכום:  " + nf.format(buySum) + "$");
+                tvBalanceWeight.setText("משקל:  " + nf.format(buyWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(buyPrice) + "$");
+                tvBalanceRoughSum.setText("סכום:  " + nf.format(buyRoughSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + nf.format(buyRoughWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(buyRoughPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + nf.format(buyPolishSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + nf.format(buyPolishWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(buyPolishPrice) + "$");
+
+                llBalanceWage.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                tvBalanceHeadline.setText("סחורות שנמכרו");
+                tvPolishHeadline.setText("מכירת מלוטש בארץ");
+                tvRoughHeadline.setText("מכירת מלוטש ביצוא");
+                tvWageHeadline.setText("מכירת גלם");
+
+                tvBalanceSum.setText("סכום:  " + nf.format(saleSum) + "$");
+                tvBalanceWeight.setText("משקל:  " + nf.format(saleWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(salePrice) + "$");
+
+                tvBalancePolishSum.setText("סכום:  " + nf.format(salePolishSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + nf.format(salePolishWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(salePolishPrice) + "$");
+
+                tvBalanceRoughSum.setText("סכום:  " + nf.format(exportSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + nf.format(exportWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(exportPrice) + "$");
+
+                llBalanceWage.setVisibility(View.VISIBLE);
+                tvBalanceWageSum.setText("סכום:  " + nf.format(saleRoughSum) + "$");
+                tvBalanceWageWeight.setText("משקל:  " + nf.format(saleRoughWeight) + " קראט ");
+                tvBalanceWagePre.setVisibility(View.GONE);
+                tvBalanceWagePrice.setText("מחיר ממוצע:  " + nf.format(saleRoughPrice) + "$");
+                break;
+
+            case 3:
+                tvBalanceHeadline.setText("מאזן כולל");
+                tvPolishHeadline.setText("מאזן מלוטש");
+                tvRoughHeadline.setText("מאזן גלם");
+                tvWageHeadline.setText("סיכום שכר עבודה");
+
+                tvBalanceSum.setText("סכום:  " + nf.format(taxSum) + "$");
+                tvBalanceWeight.setText("משקל:  " + nf.format(taxWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(taxPrice) + "$");
+                tvBalanceRoughSum.setText("סכום:  " + nf.format(taxRoughSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + nf.format(taxRoughWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(taxRoughPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + nf.format(taxPolishSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + nf.format(taxPolishWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(taxPolishPrice) + "$");
+
+                llBalanceWage.setVisibility(View.VISIBLE);
+                tvWageHeadline.setText("שכר עבודה");
+                tvBalanceWageSum.setText("מחיר ממוצע:  " + nf.format(wagePrice) + "$");
+                tvBalanceWageWeight.setText("משקל:  " + nf.format(wageWeight) + " קראט ");
+                tvBalanceWagePre.setText("אחוז פחת ממוצע:  " + nf.format((wagePer) * 100) + "%");
+                tvBalanceWagePrice.setText("סכום:  " + nf.format(wageSum) + "$");
+                break;
         }
 
-        if (forTax) {
-            tvBalanceProfit.setVisibility(View.GONE);
-            tvBalanceProfit.setText("רווחים לפני הוצאות ושכר עבודה  " + nf.format(profit) + "$");
-        } else {
-            tvBalanceProfit.setVisibility(View.GONE);
-        }
 }
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);

@@ -14,15 +14,14 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class AdapterSales extends ArrayAdapter<Sale> {
+public class AdapterExports extends ArrayAdapter<Export> {
     private Context context;
-    private List<Sale> sales;
+    private List<Export> exports;
     private int selectedPosition = -1;
-    private boolean exportTable = true;
 
-    public AdapterSales(Context context, List<Sale> list) {
+    public AdapterExports(Context context, List<Export> list) {
         super(context, R.layout.sale_row_layout, list);
-        this.sales = list;
+        this.exports = list;
         this.context = context;
     }
 
@@ -50,29 +49,29 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         LinearLayout llSaleDetails = convertView.findViewById(R.id.llSaleDetails);
 
         Calendar saleDate = Calendar.getInstance();
-        saleDate.setTime(sales.get(position).getSaleDate());
+        saleDate.setTime(exports.get(position).getSaleDate());
 
-        saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
+        saleDate.setTime(InventoryApp.exports.get(position).getSaleDate());
         String saleDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
         String saleMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
         String saleYear = String.format("%02d", saleDate.get(Calendar.YEAR));
 
-        tvSaleClientName.setText(sales.get(position).getClientName());
+        tvSaleClientName.setText(exports.get(position).getClientName());
 
         tvSaleDate.setText("תאריך מכירה:  " + saleDays + "/" + saleMonth + "/" + saleYear);
-        tvSaleSum.setText("סכום עסקה:  " + nf.format(sales.get(position).getSaleSum()) + "$");
+        tvSaleSum.setText("סכום עסקה:  " + nf.format(exports.get(position).getSaleSum()) + "$");
 
         Calendar payDate = Calendar.getInstance();
-        payDate.setTime(InventoryApp.sales.get(position).getPayDate());
+        payDate.setTime(InventoryApp.exports.get(position).getPayDate());
         String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
         String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
         String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
         tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
-        tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
-        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
-        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()));
-        tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
+        tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.exports.get(position).getId());
+        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.exports.get(position).getPrice()) + "$");
+        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.exports.get(position).getWeight()));
+        tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.exports.get(position).getDays()));
 
         if (position == selectedPosition) {
             llSaleDetails.setVisibility(View.VISIBLE);

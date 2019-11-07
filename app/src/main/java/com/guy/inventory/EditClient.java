@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
@@ -24,7 +24,6 @@ public class EditClient extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    LinearLayout llClientEdit, llClientDetails;
     EditText etClientEditName, etClientEditAddress, etClientEditPhone, etClientEditInsidePhone, etClientEditFax, etClientEditWebSite, etClientEditDetails;
     Button btnClientEditSubmit;
     int index;
@@ -39,9 +38,6 @@ public class EditClient extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
-
-        llClientDetails = findViewById(R.id.llClientDetails);
-        llClientEdit = findViewById(R.id.llClientEdit);
 
         etClientEditName = findViewById(R.id.etClientEditName);
         etClientEditAddress = findViewById(R.id.etClientEditAddress);

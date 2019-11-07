@@ -47,7 +47,6 @@
                 android:layout_width="375dp"
                 android:layout_height="55dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
-                android:layout_marginTop="18dp"
                 android:layout_weight="1"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
@@ -56,7 +55,8 @@
                     android:id="@+id/tvSupplierEditName"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom"
                     android:text="שם הספק:"
                     android:textColor="#000000"
                     android:textSize="18sp" />
@@ -70,7 +70,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="textPersonName" />
 
             </LinearLayout>
@@ -88,7 +88,8 @@
                     android:id="@+id/tvSupplierEditAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom"
                     android:text="כתובת:"
                     android:textColor="#000000"
                     android:textSize="18sp" />
@@ -102,7 +103,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="textPersonName" />
             </LinearLayout>
 
@@ -119,7 +120,8 @@
                     android:id="@+id/tvSupplierEditPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom"
                     android:text="טלפון נייד:"
                     android:textColor="#000000"
                     android:textSize="18sp" />
@@ -133,7 +135,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="numberDecimal" />
             </LinearLayout>
 
@@ -150,7 +152,8 @@
                     android:id="@+id/tvSupplierEditInsidePhone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom"
                     android:text="טלפון פנימי:"
                     android:textColor="#000000"
                     android:textSize="18sp" />
@@ -164,7 +167,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="numberDecimal" />
             </LinearLayout>
 
@@ -181,7 +184,8 @@
                     android:id="@+id/tvSupplierEditFax"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom"
                     android:text="פקס:"
                     android:textColor="#000000"
                     android:textSize="18sp" />
@@ -195,7 +199,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="numberDecimal" />
             </LinearLayout>
 
@@ -212,7 +216,8 @@
                     android:id="@+id/tvSupplierEditWebSite"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom"
                     android:text="אתר אינטרנט:"
                     android:textColor="#000000"
                     android:textSize="18sp" />
@@ -226,7 +231,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="numberDecimal" />
             </LinearLayout>
 
@@ -243,7 +248,8 @@
                     android:id="@+id/tvSupplierEditDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="bottom|center|center_horizontal|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="bottom"
                     android:text="פרטים נוספים:"
                     android:textColor="#000000"
                     android:textSize="18sp" />
@@ -257,7 +263,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:gravity="start"
+                    android:gravity="bottom"
                     android:inputType="numberDecimal" />
             </LinearLayout>
 

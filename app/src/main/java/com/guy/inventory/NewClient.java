@@ -9,8 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -21,10 +19,8 @@ public class NewClient extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    private ToggleButton tbNewClientHome;
     private EditText etNewClientName, etNewClientLocation, etNewClientPhoneNumber, etNewClientInsidePhone, etNewClientFax, etNewClientWebsite, etNewClientDetails;
     private String name, location, phoneNumber, insidePhone, fax, website, details;
-    private boolean home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +32,6 @@ public class NewClient extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        tbNewClientHome = findViewById(R.id.tbNewClientHome);
         etNewClientName = findViewById(R.id.etNewClientName);
         etNewClientLocation = findViewById(R.id.etNewClientLocation);
         etNewClientPhoneNumber = findViewById(R.id.etNewClientPhoneNumber);
@@ -64,7 +59,6 @@ public class NewClient extends AppCompatActivity {
                     fax = etNewClientFax.getText().toString().trim();
                     website = etNewClientWebsite.getText().toString().trim();
                     details = etNewClientDetails.getText().toString().trim();
-                    home = !tbNewClientHome.isChecked();
 
                     final Client client = new Client();
                     client.setName(name);
@@ -74,8 +68,6 @@ public class NewClient extends AppCompatActivity {
                     client.setFax(fax);
                     client.setWebsite(website);
                     client.setDetails(details);
-                    client.setHome(home);
-
                     client.setUserEmail(InventoryApp.user.getEmail());
                     showProgress(true);
                     Backendless.Persistence.save(client, new AsyncCallback<Client>() {

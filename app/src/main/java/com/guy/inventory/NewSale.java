@@ -11,15 +11,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,11 +29,12 @@ public class NewSale extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
     private DatePicker dpSaleDate;
-    private ToggleButton tbSalePolish;
+    private Switch swSalePolish;
     private EditText etSaleID, etSaleSum, etSaleWeight, etSaleDays;
     private ArrayAdapter<String> adapter;
     private AutoCompleteTextView acClients;
     private int chosenClient = -1;
+    private boolean isExport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class NewSale extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        tbSalePolish = findViewById(R.id.tbSalePolish);
+        swSalePolish = findViewById(R.id.swSalePolish);
         dpSaleDate = findViewById(R.id.dpSaleDate);
         etSaleID = findViewById(R.id.etSaleID);
         etSaleSum = findViewById(R.id.etSaleSum);
@@ -56,9 +55,16 @@ public class NewSale extends AppCompatActivity {
         acClients = findViewById(R.id.acClients);
         Button btnSaleSubmit = findViewById(R.id.btnSaleSubmit);
 
+        isExport = getIntent().getBooleanExtra("export", false);
+
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("מכירה חדשה");
+        if (isExport) {
+            actionBar.setTitle("יצוא חדש");
+            swSalePolish.setVisibility(View.GONE);
+        } else {
+            actionBar.setTitle("מכירה חדשה");
+        }
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
@@ -92,6 +98,17 @@ public class NewSale extends AppCompatActivity {
                     Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
+            }
+        });
+
+        swSalePolish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (swSalePolish.isChecked()) {
+                    swSalePolish.setText(" גלם  ");
+                } else {
+                    swSalePolish.setText("  מלוטש  ");
+                }
             }
         });
 
@@ -129,59 +146,107 @@ public class NewSale extends AppCompatActivity {
                     Toast.makeText(NewSale.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    String clientName = InventoryApp.clients.get(chosenClient).getName();
-                    String id = etSaleID.getText().toString();
-                    double weight = Double.parseDouble(etSaleWeight.getText().toString());
-                    double saleSum = Double.parseDouble(etSaleSum.getText().toString());
-                    int days = Integer.valueOf(etSaleDays.getText().toString().trim());
-                    boolean polish = !tbSalePolish.isChecked();
+                    final String clientName = InventoryApp.clients.get(chosenClient).getName();
+                    final String id = etSaleID.getText().toString();
+                    final double weight = Double.parseDouble(etSaleWeight.getText().toString());
+                    final double saleSum = Double.parseDouble(etSaleSum.getText().toString());
+                    final int days = Integer.valueOf(etSaleDays.getText().toString().trim());
+                    final boolean polish = !swSalePolish.isChecked();
 
-                    final Sale sale = new Sale();
-                    sale.setClientName(clientName);
-                    sale.setSaleDate(getDateFromDatePicker(dpSaleDate));
-                    sale.setClientName(InventoryApp.clients.get(chosenClient).getName());
-                    sale.setId(id);
-                    sale.setSaleSum(saleSum);
-                    sale.setWeight(weight);
-                    sale.setDays(days);
-                    sale.setPolish(polish);
+                    // An Export sale
+                    if (isExport) {
 
-                    Calendar cAddedDays = Calendar.getInstance();
-                    cAddedDays.setTime(sale.getSaleDate());
-                    cAddedDays.add(Calendar.DATE, days);
-                    Date addedDays = new Date();
-                    addedDays.setTime(cAddedDays.getTimeInMillis());
-                    Date now = new Date();
-                    if (now.after(addedDays)) {
-                        sale.setPaid(true);
+                        final Export export = new Export();
+                        export.setClientName(clientName);
+                        export.setSaleDate(getDateFromDatePicker(dpSaleDate));
+                        export.setClientName(InventoryApp.clients.get(chosenClient).getName());
+                        export.setId(id);
+                        export.setSaleSum(saleSum);
+                        export.setWeight(weight);
+                        export.setDays(days);
+                        export.setPolish(polish);
+
+                        Calendar cAddedDays = Calendar.getInstance();
+                        cAddedDays.setTime(export.getSaleDate());
+                        cAddedDays.add(Calendar.DATE, days);
+                        Date addedDays = new Date();
+                        addedDays.setTime(cAddedDays.getTimeInMillis());
+                        Date now = new Date();
+                        if (now.after(addedDays)) {
+                            export.setPaid(true);
+                        }
+                        export.setPayDate(addedDays);
+                        export.setPrice((saleSum / weight));
+                        export.setUserEmail(InventoryApp.user.getEmail());
+
+                        showProgress(true);
+                        Backendless.Persistence.save(export, new AsyncCallback<Export>() {
+                            @Override
+                            public void handleResponse(Export response) {
+                                InventoryApp.exports.add(export);
+                                Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
+                                finishActivity(1);
+                                showProgress(false);
+                                NewSale.this.finish();
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                showProgress(false);
+                                Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        // Not an Export sale
+                    } else {
+
+                        final Sale sale = new Sale();
+                        sale.setClientName(clientName);
+                        sale.setSaleDate(getDateFromDatePicker(dpSaleDate));
+                        sale.setClientName(InventoryApp.clients.get(chosenClient).getName());
+                        sale.setId(id);
+                        sale.setSaleSum(saleSum);
+                        sale.setWeight(weight);
+                        sale.setDays(days);
+                        sale.setPolish(polish);
+
+                        Calendar cAddedDays = Calendar.getInstance();
+                        cAddedDays.setTime(sale.getSaleDate());
+                        cAddedDays.add(Calendar.DATE, days);
+                        Date addedDays = new Date();
+                        addedDays.setTime(cAddedDays.getTimeInMillis());
+                        Date now = new Date();
+                        if (now.after(addedDays)) {
+                            sale.setPaid(true);
+                        }
+                        sale.setPayDate(addedDays);
+                        sale.setPrice((saleSum / weight));
+                        sale.setUserEmail(InventoryApp.user.getEmail());
+
+                        showProgress(true);
+                        Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
+                            @Override
+                            public void handleResponse(Sale response) {
+                                InventoryApp.sales.add(sale);
+                                Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
+                                finishActivity(1);
+                                showProgress(false);
+                                NewSale.this.finish();
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                showProgress(false);
+                                Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                    sale.setPayDate(addedDays);
-                    sale.setPrice((saleSum / weight));
-                    sale.setUserEmail(InventoryApp.user.getEmail());
-
-                    showProgress(true);
-                    Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
-                        @Override
-                        public void handleResponse(Sale response) {
-                            InventoryApp.sales.add(sale);
-                            Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
-                            finishActivity(1);
-                            showProgress(false);
-                            NewSale.this.finish();
-                        }
-
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            showProgress(false);
-                            Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
                 }
             }
         });
     }
-
     @Override
     public boolean onSupportNavigateUp(){
         finish();

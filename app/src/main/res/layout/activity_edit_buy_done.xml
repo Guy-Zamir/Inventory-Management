@@ -37,14 +37,12 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/ivWorkPolish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="100000000"
-            app:srcCompat="@drawable/worker_icon" />
+            android:layout_weight="1"
+            app:srcCompat="@drawable/diamond1_black_icon" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,7 +52,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_weight="0.000000001"
+            android:layout_weight="0.1"
             android:gravity="center|center_horizontal|center_vertical"
             android:orientation="horizontal">
 
@@ -62,10 +60,12 @@
                 android:id="@+id/swBuyEditDoneWeight2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="bottom"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:gravity="bottom|center_horizontal"
                 android:showText="false"
                 android:switchTextAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:text="משקל גמור "
+                android:text="  משקל גמור  "
                 android:textIsSelectable="false"
                 android:textSize="18sp" />
 
@@ -73,7 +73,7 @@
                 android:id="@+id/etBuyEditDoneWeight2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:ems="10"
@@ -90,7 +90,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
-            android:layout_weight="0.000000001"
+            android:layout_weight="0.1"
             android:gravity="center|center_horizontal|center_vertical"
             android:orientation="horizontal">
 
@@ -98,9 +98,9 @@
                 android:id="@+id/tvBuyEditWage"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="7dp"
-                android:gravity="bottom|center_horizontal"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:gravity="bottom"
                 android:text="שכר עבודה:"
                 android:textColor="#000000"
                 android:textSize="18sp" />
@@ -109,7 +109,7 @@
                 android:id="@+id/etBuyEditWage2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:ems="10"
@@ -128,8 +128,8 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="0.000000001"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="0.1"
             android:background="@drawable/buttons"
             android:text="אשר"
             android:textColor="#FFFFFF"
