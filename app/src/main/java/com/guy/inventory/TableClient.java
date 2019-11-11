@@ -64,7 +64,7 @@ public class TableClient extends AppCompatActivity {
 
         llClientDetails = findViewById(R.id.llClientDetails);
 
-        // In Land
+        // In Land Mode
         if (findViewById(R.id.client_table_land) != null) {
             llClientDetails.setVisibility(View.VISIBLE);
         }
