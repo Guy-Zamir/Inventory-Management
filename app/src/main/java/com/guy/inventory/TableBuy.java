@@ -78,7 +78,7 @@ public class TableBuy extends AppCompatActivity {
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setGroupBy("created");
+        queryBuilder.setSortBy("buyDate DESC");
         queryBuilder.setPageSize(100);
         showProgress(true);
 

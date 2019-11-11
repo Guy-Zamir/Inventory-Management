@@ -75,7 +75,7 @@ public class TableSupplier extends AppCompatActivity {
         String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
         final DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setGroupBy("objectId");
+        queryBuilder.setSortBy("name");
         queryBuilder.setPageSize(100);
 
         showProgress(true);
@@ -87,7 +87,14 @@ public class TableSupplier extends AppCompatActivity {
                 InventoryApp.suppliers = response;
                 adapter = new AdapterSupplier(TableSupplier.this, InventoryApp.suppliers);
                 lvSupplierList.setAdapter(adapter);
-                Backendless.Data.of(Buy.class).find(queryBuilder, new AsyncCallback<List<Buy>>() {
+
+                String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+                final DataQueryBuilder buyBuilder = DataQueryBuilder.create();
+                buyBuilder.setWhereClause(whereClause);
+                buyBuilder.setSortBy("buyDate DESC");
+                buyBuilder.setPageSize(100);
+
+                Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
                     @Override
                     public void handleResponse(List<Buy> response) {
                         InventoryApp.buys = response;

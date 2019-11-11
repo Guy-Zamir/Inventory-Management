@@ -71,7 +71,7 @@ public class NewSale extends AppCompatActivity {
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setWhereClause(whereClause);
         queryBuilder.setPageSize(100);
-        queryBuilder.setGroupBy("objectId");
+        queryBuilder.setGroupBy("name");
 
         showProgress(true);
 
