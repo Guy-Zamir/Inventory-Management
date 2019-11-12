@@ -18,7 +18,6 @@ public class AdapterSales extends ArrayAdapter<Sale> {
     private Context context;
     private List<Sale> sales;
     private int selectedPosition = -1;
-    private boolean exportTable = true;
 
     public AdapterSales(Context context, List<Sale> list) {
         super(context, R.layout.sale_row_layout, list);
@@ -50,17 +49,10 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         LinearLayout llSaleDetails = convertView.findViewById(R.id.llSaleDetails);
 
         Calendar saleDate = Calendar.getInstance();
-        saleDate.setTime(sales.get(position).getSaleDate());
-
         saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
         String saleDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
         String saleMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
         String saleYear = String.format("%02d", saleDate.get(Calendar.YEAR));
-
-        tvSaleClientName.setText(sales.get(position).getClientName());
-
-        tvSaleDate.setText("תאריך מכירה:  " + saleDays + "/" + saleMonth + "/" + saleYear);
-        tvSaleSum.setText("סכום עסקה:  " + nf.format(sales.get(position).getSaleSum()) + "$");
 
         Calendar payDate = Calendar.getInstance();
         payDate.setTime(InventoryApp.sales.get(position).getPayDate());
@@ -68,6 +60,9 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
         String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
+        tvSaleClientName.setText(sales.get(position).getClientName());
+        tvSaleDate.setText("תאריך מכירה:  " + saleDays + "/" + saleMonth + "/" + saleYear);
+        tvSaleSum.setText("סכום עסקה:  " + nf.format(sales.get(position).getSaleSum()) + "$");
         tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
         tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
         tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");

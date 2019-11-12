@@ -56,28 +56,6 @@ public class EditClient extends AppCompatActivity {
 
         index = getIntent().getIntExtra("index", 0);
 
-        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setSortBy("name");
-        queryBuilder.setPageSize(100);
-
-        showProgress(true);
-
-        Backendless.Data.of(Sale.class).find(queryBuilder, new AsyncCallback<List<Sale>>() {
-            @Override
-            public void handleResponse(List<Sale> response) {
-                InventoryApp.sales = response;
-                showProgress(false);
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(EditClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                showProgress(false);
-            }
-        });
-
         etClientEditName.setText(InventoryApp.clients.get(index).getName());
         etClientEditAddress.setText(String.valueOf(InventoryApp.clients.get(index).getLocation()));
         etClientEditPhone.setText(String.valueOf(InventoryApp.clients.get(index).getPhoneNumber()));
@@ -114,6 +92,8 @@ public class EditClient extends AppCompatActivity {
                             InventoryApp.clients.get(index).setFax(fax);
                             InventoryApp.clients.get(index).setWebsite(webSite);
                             InventoryApp.clients.get(index).setDetails(details);
+
+                            showProgress(true);
                             Backendless.Persistence.save(InventoryApp.clients.get(index), new AsyncCallback<Client>() {
                                 @Override
                                 public void handleResponse(Client response) {

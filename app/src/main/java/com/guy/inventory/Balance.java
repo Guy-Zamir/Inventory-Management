@@ -594,7 +594,7 @@ public class Balance extends AppCompatActivity {
                 tvRoughHeadline.setText("מאזן גלם");
                 tvWageHeadline.setText("סיכום שכר עבודה");
 
-                tvBalanceSum.setText("רווח:  " + nf.format(taxSum) + "$");
+                tvBalanceSum.setText("סכום:  " + nf.format(taxSum) + "$");
                 tvBalanceWeight.setText("משקל:  " + nf.format(taxWeight) + " קראט ");
                 tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(taxPrice) + "$");
                 tvBalanceRoughSum.setText("סכום:  " + nf.format(taxRoughSum) + "$");

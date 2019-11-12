@@ -90,6 +90,8 @@ public class EditSupplier extends AppCompatActivity {
                             InventoryApp.suppliers.get(index).setFax(fax);
                             InventoryApp.suppliers.get(index).setWebsite(webSite);
                             InventoryApp.suppliers.get(index).setDetails(details);
+
+                            showProgress(true);
                             Backendless.Persistence.save(InventoryApp.suppliers.get(index), new AsyncCallback<Supplier>() {
                                 @Override
                                 public void handleResponse(Supplier response) {

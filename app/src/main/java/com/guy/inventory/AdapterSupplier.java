@@ -10,8 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class AdapterSupplier extends ArrayAdapter<Supplier> {

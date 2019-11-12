@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -63,18 +62,15 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
 
         Calendar payDate = Calendar.getInstance();
         payDate.setTime(buys.get(position).getPayDate());
-
-        tvBuySupplier.setText(buys.get(position).getSupplierName());
-        tvBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth+ "/" + buyYear);
-        tvBuyPrice.setText("מחיר לקראט:  " + nf.format(buys.get(position).getPrice()) + "$");
-
         payDate.setTime(InventoryApp.buys.get(position).getPayDate());
         String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
         String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
         String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
+        tvBuySupplier.setText(buys.get(position).getSupplierName());
+        tvBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth+ "/" + buyYear);
+        tvBuyPrice.setText("מחיר לקראט:  " + nf.format(buys.get(position).getPrice()) + "$");
         tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
-
         tvBuyDetailsID.setText("מספר אסמכתא:  " + InventoryApp.buys.get(position).getId());
         tvBuyDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.buys.get(position).getWeight()) + " קראט ");
         tvBuyDetailsDays.setText("מספר ימים:  " + InventoryApp.buys.get(position).getDays());

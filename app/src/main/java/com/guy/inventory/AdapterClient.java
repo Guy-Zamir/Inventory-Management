@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -42,7 +41,6 @@ public class AdapterClient extends ArrayAdapter<Client> {
         TextView tvClientDetailsWebSite = convertView.findViewById(R.id.tvClientDetailsWebSite);
 
         LinearLayout llClientDetails = convertView.findViewById(R.id.llClientDetails);
-
         tvClientName.setText(InventoryApp.clients.get(position).getName());
         tvClientDetailsLocation.setText("כתובת:  " + InventoryApp.clients.get(position).getLocation());
         tvClientDetailsPhoneNumber.setText("טלפון:  " + InventoryApp.clients.get(position).getPhoneNumber());

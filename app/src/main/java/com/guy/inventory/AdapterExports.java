@@ -50,16 +50,10 @@ public class AdapterExports extends ArrayAdapter<Export> {
 
         Calendar saleDate = Calendar.getInstance();
         saleDate.setTime(exports.get(position).getSaleDate());
-
         saleDate.setTime(InventoryApp.exports.get(position).getSaleDate());
         String saleDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
         String saleMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
         String saleYear = String.format("%02d", saleDate.get(Calendar.YEAR));
-
-        tvSaleClientName.setText(exports.get(position).getClientName());
-
-        tvSaleDate.setText("תאריך מכירה:  " + saleDays + "/" + saleMonth + "/" + saleYear);
-        tvSaleSum.setText("סכום עסקה:  " + nf.format(exports.get(position).getSaleSum()) + "$");
 
         Calendar payDate = Calendar.getInstance();
         payDate.setTime(InventoryApp.exports.get(position).getPayDate());
@@ -67,6 +61,9 @@ public class AdapterExports extends ArrayAdapter<Export> {
         String payMonth = String.format("%02d", payDate.get(Calendar.MONTH)+1);
         String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
+        tvSaleClientName.setText(exports.get(position).getClientName());
+        tvSaleDate.setText("תאריך מכירה:  " + saleDays + "/" + saleMonth + "/" + saleYear);
+        tvSaleSum.setText("סכום עסקה:  " + nf.format(exports.get(position).getSaleSum()) + "$");
         tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
         tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.exports.get(position).getId());
         tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.exports.get(position).getPrice()) + "$");

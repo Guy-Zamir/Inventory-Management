@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +39,9 @@ public class TableBuy extends AppCompatActivity {
     AdapterBuys adapter;
 
     int selectedItem = -1;
+
+    final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final DataQueryBuilder buyBuilder = DataQueryBuilder.create();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -75,32 +77,7 @@ public class TableBuy extends AppCompatActivity {
         actionBar.setTitle("קניות");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setSortBy("buyDate DESC");
-        queryBuilder.setPageSize(100);
-        showProgress(true);
-
-        Backendless.Data.of(Buy.class).find(queryBuilder, new AsyncCallback<List<Buy>>() {
-            @Override
-            public void handleResponse(List<Buy> response) {
-                InventoryApp.buys = response;
-                adapter = new AdapterBuys(TableBuy.this, InventoryApp.buys);
-                lvBuyList.setAdapter(adapter);
-                showProgress(false);
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableBuy.this, "טרם נשרמו קניות", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(TableBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                showProgress(false);
-            }
-        });
+        getBuys("buyDate DESC");
 
         lvBuyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
@@ -245,6 +222,17 @@ public class TableBuy extends AppCompatActivity {
                         Toast.makeText(this, "יש לחבור חבילה לא גמורה", Toast.LENGTH_SHORT).show();
                     }
                 }
+            case R.id.dateOrderIcon:
+                getBuys("buyDate DESC");
+                break;
+
+            case R.id.nameOrderIcon:
+                getBuys("supplierName");
+                break;
+
+            case R.id.priceOrderIcon:
+                getBuys("price DESC");
+                break;
         }
                 return super.onOptionsItemSelected(item);
         }
@@ -269,5 +257,32 @@ public class TableBuy extends AppCompatActivity {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    private void getBuys(String order) {
+        buyBuilder.setWhereClause(whereClause);
+        buyBuilder.setSortBy(order);
+        buyBuilder.setPageSize(100);
+        showProgress(true);
+
+        Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
+            @Override
+            public void handleResponse(List<Buy> response) {
+                InventoryApp.buys = response;
+                adapter = new AdapterBuys(TableBuy.this, InventoryApp.buys);
+                lvBuyList.setAdapter(adapter);
+                showProgress(false);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                if (fault.getCode().equals("1009")) {
+                    Toast.makeText(TableBuy.this, "טרם נשרמו קניות", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(TableBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                showProgress(false);
+            }
+        });
     }
 }

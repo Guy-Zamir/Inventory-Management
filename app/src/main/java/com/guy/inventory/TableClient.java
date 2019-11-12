@@ -40,6 +40,8 @@ public class TableClient extends AppCompatActivity {
     int selectedItem = -1;
 
     final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
+    final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
+    final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,103 +76,20 @@ public class TableClient extends AppCompatActivity {
         actionBar.setTitle("לקוחות");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-        final DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setSortBy("name");
-        queryBuilder.setPageSize(100);
+        clientBuilder.setWhereClause(whereClause);
+        clientBuilder.setSortBy("name");
+        clientBuilder.setPageSize(100);
 
         showProgress(true);
         tvLoad.setText("טוען נתונים, אנא המתן...");
 
-        Backendless.Data.of(Client.class).find(queryBuilder, new AsyncCallback<List<Client>>() {
+        Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
             @Override
             public void handleResponse(List<Client> response) {
                 InventoryApp.clients = response;
                 adapter = new AdapterClient(TableClient.this, InventoryApp.clients);
                 lvClientList.setAdapter(adapter);
-
-                saleBuilder.setWhereClause(whereClause);
-                saleBuilder.setSortBy("saleDate DESC");
-                saleBuilder.setPageSize(100);
-
-                Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                    int offset = 0;
-                    @Override
-                    public void handleResponse(List<Sale> response) {
-                        // Up to 100
-                        InventoryApp.sales = response;
-
-                        if (InventoryApp.sales.size() == pageSize) {
-                            offset += InventoryApp.sales.size();
-                            saleBuilder.setOffset(offset);
-
-                            Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                @Override
-                                public void handleResponse(List<Sale> response) {
-                                    // Up to 200
-                                    InventoryApp.sales.addAll(response);
-
-                                    if (InventoryApp.sales.size() == pageSize * 2) {
-                                        offset += InventoryApp.sales.size();
-                                        saleBuilder.setOffset(offset);
-
-                                        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                            @Override
-                                            public void handleResponse(List<Sale> response) {
-                                                // Up to 300
-                                                InventoryApp.sales.addAll(response);
-
-                                                if (InventoryApp.sales.size() == pageSize * 3) {
-                                                    offset += InventoryApp.sales.size();
-                                                    saleBuilder.setOffset(offset);
-
-                                                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                        @Override
-                                                        public void handleResponse(List<Sale> response) {
-                                                            // Up to 400
-                                                            InventoryApp.sales.addAll(response);
-                                                            showProgress(false);
-                                                        }
-
-                                                        @Override
-                                                        public void handleFault(BackendlessFault fault) {
-                                                            Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                            showProgress(false);
-                                                        }
-                                                    });
-                                                } else {
-                                                    showProgress(false);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void handleFault(BackendlessFault fault) {
-                                                Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                showProgress(false);
-                                            }
-                                        });
-                                    } else {
-                                        showProgress(false);
-                                    }
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                    showProgress(false);
-                                }
-                            });
-                        } else {
-                            showProgress(false);
-                        }
-                    }
-                    @Override
-                    public void handleFault (BackendlessFault fault){
-                        Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                        showProgress(false);
-                    }
-                });
+                getSales("saleDate");
             }
 
             @Override
@@ -309,5 +228,92 @@ public class TableClient extends AppCompatActivity {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    private void getSales(String order) {
+        saleBuilder.setOffset(0);
+        saleBuilder.setWhereClause(whereClause);
+        saleBuilder.setSortBy(order);
+        saleBuilder.setPageSize(100);
+
+        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+            int offset = 0;
+
+            @Override
+            public void handleResponse(List<Sale> response) {
+                // Up to 100
+                InventoryApp.sales = response;
+
+                if (InventoryApp.sales.size() == pageSize) {
+                    offset += InventoryApp.sales.size();
+                    saleBuilder.setOffset(offset);
+
+                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                        @Override
+                        public void handleResponse(List<Sale> response) {
+                            // Up to 200
+                            InventoryApp.sales.addAll(response);
+
+                            if (InventoryApp.sales.size() == pageSize * 2) {
+                                offset += InventoryApp.sales.size();
+                                saleBuilder.setOffset(offset);
+
+                                Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                    @Override
+                                    public void handleResponse(List<Sale> response) {
+                                        // Up to 300
+                                        InventoryApp.sales.addAll(response);
+
+                                        if (InventoryApp.sales.size() == pageSize * 3) {
+                                            offset += InventoryApp.sales.size();
+                                            saleBuilder.setOffset(offset);
+
+                                            Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                                @Override
+                                                public void handleResponse(List<Sale> response) {
+                                                    // Up to 400
+                                                    InventoryApp.sales.addAll(response);
+                                                    showProgress(false);
+                                                }
+
+                                                @Override
+                                                public void handleFault(BackendlessFault fault) {
+                                                    Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    showProgress(false);
+                                                }
+                                            });
+                                        } else {
+                                            showProgress(false);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        showProgress(false);
+                                    }
+                                });
+                            } else {
+                                showProgress(false);
+                            }
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+                        }
+                    });
+                } else {
+                    showProgress(false);
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                showProgress(false);
+            }
+        });
     }
 }
