@@ -23,15 +23,15 @@
         android:id="@+id/nameOrderIcon"
         android:title="סדר לפי שם"
         android:orderInCategory="2"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="" />
     <item
         android:id="@+id/dateOrderIcon"
         android:title="סדר לפי תאריך"
         android:orderInCategory="2"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="" />
     <item
         android:id="@+id/sumOrderIcon"
         android:title="סדר לפי סכום"
         android:orderInCategory="2"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="" />
 </menu>

@@ -20,7 +20,9 @@ public class NewClient extends AppCompatActivity {
     private TextView tvLoad;
 
     private EditText etNewClientName, etNewClientLocation, etNewClientPhoneNumber, etNewClientInsidePhone, etNewClientFax, etNewClientWebsite, etNewClientDetails;
-    private String name, location, phoneNumber, insidePhone, fax, website, details;
+    private String name, location, phoneNumber, insidePhone, fax, website, details, supplier;
+
+    private boolean client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +43,15 @@ public class NewClient extends AppCompatActivity {
         etNewClientDetails = findViewById(R.id.etNewClientDetails);
         Button btnNewClientSubmit = findViewById(R.id.btnNewClientSubmit);
 
+        client = getIntent().getBooleanExtra("client", true);
+
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("לקוח חדש");
+        if (client) {
+            actionBar.setTitle("לקוח חדש");
+        } else {
+            actionBar.setTitle("ספק חדש");
+        }
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         btnNewClientSubmit.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +60,7 @@ public class NewClient extends AppCompatActivity {
                 if (etNewClientName.getText().toString().isEmpty()) {
                     Toast.makeText(NewClient.this, "יש להזין את שם החברה", Toast.LENGTH_SHORT).show();
                 } else {
+
                     name = etNewClientName.getText().toString().trim();
                     location = etNewClientLocation.getText().toString().trim();
                     phoneNumber = etNewClientPhoneNumber.getText().toString().trim();
@@ -59,6 +68,12 @@ public class NewClient extends AppCompatActivity {
                     fax = etNewClientFax.getText().toString().trim();
                     website = etNewClientWebsite.getText().toString().trim();
                     details = etNewClientDetails.getText().toString().trim();
+
+                    if (client) {
+                        supplier = "client";
+                    } else {
+                        supplier = "supplier";
+                    }
 
                     final Client client = new Client();
                     client.setName(name);
@@ -68,6 +83,7 @@ public class NewClient extends AppCompatActivity {
                     client.setFax(fax);
                     client.setWebsite(website);
                     client.setDetails(details);
+                    client.setSupplier(supplier);
                     client.setUserEmail(InventoryApp.user.getEmail());
                     showProgress(true);
                     Backendless.Persistence.save(client, new AsyncCallback<Client>() {

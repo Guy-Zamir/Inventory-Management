@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnResult, btnBuyTable, btnSaleTable, btnSupplierTable, btnClientTable, btnExportTable;
+    Button btnResult, btnBuyTable, btnSaleTable, btnSupplierTable, btnClientTable, btnExportTable,
+    btnSortingTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         btnSupplierTable = findViewById(R.id.btnSupplierTable);
         btnClientTable = findViewById(R.id.btnClientTable);
         btnExportTable = findViewById(R.id.btnExportTable);
+        btnSortingTable = findViewById(R.id.btnSortingTable);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -57,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         btnSupplierTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TableSupplier.class);
+                Intent intent = new Intent(MainActivity.this, TableClient.class);
+                intent.putExtra("client", false);
                 startActivity(intent);
             }
         });
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, TableClient.class);
+                intent.putExtra("client", true);
                 startActivity(intent);
             }
         });
@@ -75,6 +79,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, TableSale.class);
                 intent.putExtra("exports", true);
+                startActivity(intent);
+            }
+        });
+
+        btnSortingTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TableSorting.class);
                 startActivity(intent);
             }
         });

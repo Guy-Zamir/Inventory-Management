@@ -29,15 +29,15 @@
         android:id="@+id/nameOrderIcon"
         android:title="סדר לפי שם"
         android:orderInCategory="2"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="" />
     <item
         android:id="@+id/dateOrderIcon"
         android:title="סדר לפי תאריך"
         android:orderInCategory="2"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="" />
     <item
         android:id="@+id/priceOrderIcon"
         android:title="סדר לפי מחיר"
         android:orderInCategory="2"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="" />
 </menu>

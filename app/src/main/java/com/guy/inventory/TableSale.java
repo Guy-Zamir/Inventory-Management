@@ -302,19 +302,13 @@ public class TableSale extends AppCompatActivity {
         }
     }
 
-    private void showProgress(final boolean show) {
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-    }
-
     private void getSales(String order) {
         saleBuilder.setOffset(0);
         saleBuilder.setWhereClause(whereClause);
         saleBuilder.setSortBy(order);
         saleBuilder.setPageSize(pageSize);
-        showProgress(true);
 
+        showProgress(true);
         Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
             int offset = 0;
 
@@ -322,31 +316,43 @@ public class TableSale extends AppCompatActivity {
             public void handleResponse(List<Sale> response) {
                 // Up to 100
                 InventoryApp.sales = response;
+                adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                lvSaleList.setAdapter(adapterSales);
+                showProgress(false);
 
                 if (InventoryApp.sales.size() == pageSize) {
                     offset += InventoryApp.sales.size();
                     saleBuilder.setOffset(offset);
 
+                    showProgress(true);
                     Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
                         @Override
                         public void handleResponse(List<Sale> response) {
                             // Up to 200
                             InventoryApp.sales.addAll(response);
+                            adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                            lvSaleList.setAdapter(adapterSales);
+                            showProgress(false);
 
                             if (InventoryApp.sales.size() == pageSize * 2) {
                                 offset += InventoryApp.sales.size();
                                 saleBuilder.setOffset(offset);
 
+                                showProgress(true);
                                 Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
                                     @Override
                                     public void handleResponse(List<Sale> response) {
                                         // Up to 300
                                         InventoryApp.sales.addAll(response);
+                                        adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                        lvSaleList.setAdapter(adapterSales);
+                                        showProgress(false);
 
                                         if (InventoryApp.sales.size() == pageSize * 3) {
                                             offset += InventoryApp.sales.size();
                                             saleBuilder.setOffset(offset);
 
+                                            showProgress(true);
                                             Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
                                                 @Override
                                                 public void handleResponse(List<Sale> response) {
@@ -355,6 +361,7 @@ public class TableSale extends AppCompatActivity {
                                                     adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
                                                     lvSaleList.setAdapter(adapterSales);
                                                     showProgress(false);
+
                                                 }
 
                                                 @Override
@@ -363,10 +370,6 @@ public class TableSale extends AppCompatActivity {
                                                     showProgress(false);
                                                 }
                                             });
-                                        } else {
-                                            adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
-                                            lvSaleList.setAdapter(adapterSales);
-                                            showProgress(false);
                                         }
                                     }
 
@@ -376,10 +379,6 @@ public class TableSale extends AppCompatActivity {
                                         showProgress(false);
                                     }
                                 });
-                            } else {
-                                adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
-                                lvSaleList.setAdapter(adapterSales);
-                                showProgress(false);
                             }
                         }
 
@@ -389,10 +388,6 @@ public class TableSale extends AppCompatActivity {
                             showProgress(false);
                         }
                     });
-                } else {
-                    adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
-                    lvSaleList.setAdapter(adapterSales);
-                    showProgress(false);
                 }
             }
 
@@ -435,4 +430,11 @@ public class TableSale extends AppCompatActivity {
             }
         });
     }
+
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
 }

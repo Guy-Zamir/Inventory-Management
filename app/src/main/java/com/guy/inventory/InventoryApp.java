@@ -9,7 +9,7 @@ import java.util.List;
 public class InventoryApp extends Application {
 
     public static BackendlessUser user;
-    public static List<Supplier> suppliers;
+    public static List<Sort> sorts;
     public static List<Client> clients;
     public static List<Buy> buys;
     public static List<Sale> sales;

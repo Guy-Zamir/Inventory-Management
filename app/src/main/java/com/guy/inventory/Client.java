@@ -3,7 +3,7 @@ package com.guy.inventory;
 import java.util.Date;
 
 public class Client {
-    private String name, location, phoneNumber, insidePhone, fax, website, details;
+    private String name, location, phoneNumber, insidePhone, fax, website, details, supplier;
 
     private Date created, updated;
     private String objectId, userEmail;
@@ -94,5 +94,13 @@ public class Client {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
     }
 }

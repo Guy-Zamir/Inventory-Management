@@ -14,13 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".EditBuyDone"/>
-        <activity android:name=".EditSupplier" />
+        <activity android:name=".TableSorting"></activity>
+        <activity android:name=".EditBuyDone" />
         <activity android:name=".EditClient" />
         <activity android:name=".TableClient" />
         <activity android:name=".NewClient" />
-        <activity android:name=".TableSupplier" />
-        <activity android:name=".NewSupplier" />
         <activity android:name=".Register" />
         <activity android:name=".EditSale" />
         <activity android:name=".EditBuy" />
@@ -29,7 +27,7 @@
         <activity android:name=".Balance" />
         <activity android:name=".NewSale" />
         <activity android:name=".NewBuy" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,4 +36,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

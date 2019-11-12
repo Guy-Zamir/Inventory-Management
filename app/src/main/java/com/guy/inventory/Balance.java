@@ -23,6 +23,10 @@ public class Balance extends AppCompatActivity {
     private TextView tvLoad;
 
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
+    final DataQueryBuilder exportBuilder = DataQueryBuilder.create();
+    final DataQueryBuilder buyBuilder = DataQueryBuilder.create();
+    final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
 
     LinearLayout llBalanceWage;
 
@@ -99,162 +103,36 @@ public class Balance extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         showProgress(true);
-        final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
+
         clientBuilder.setWhereClause(whereClause);
         clientBuilder.setSortBy("name");
         clientBuilder.setPageSize(pageSize);
 
-        final DataQueryBuilder supplierBuilder = DataQueryBuilder.create();
-        supplierBuilder.setWhereClause(whereClause);
-        supplierBuilder.setSortBy("name");
-        supplierBuilder.setPageSize(pageSize);
-
-        final DataQueryBuilder buyBuilder = DataQueryBuilder.create();
         buyBuilder.setWhereClause(whereClause);
         buyBuilder.setSortBy("buyDate DESC");
         buyBuilder.setPageSize(pageSize);
 
-        final DataQueryBuilder exportBuilder = DataQueryBuilder.create();
         exportBuilder.setWhereClause(whereClause);
         exportBuilder.setSortBy("saleDate DESC");
         exportBuilder.setPageSize(pageSize);
 
-        final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
-        saleBuilder.setWhereClause(whereClause);
-        saleBuilder.setSortBy("saleDate DESC");
-        saleBuilder.setPageSize(pageSize);
-
         showProgress(true);
-        tvLoad.setText("טוען נתונים, אנא המתן...");
 
         Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
             @Override
             public void handleResponse(List<Client> response) {
                 InventoryApp.clients = response;
 
-                Backendless.Data.of(Supplier.class).find(supplierBuilder, new AsyncCallback<List<Supplier>>() {
+                Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
                     @Override
-                    public void handleResponse(List<Supplier> response) {
-                        InventoryApp.suppliers = response;
+                    public void handleResponse(List<Buy> response) {
+                        InventoryApp.buys = response;
 
-                        Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
+                        Backendless.Data.of(Export.class).find(exportBuilder, new AsyncCallback<List<Export>>() {
                             @Override
-                            public void handleResponse(List<Buy> response) {
-                                InventoryApp.buys = response;
-
-                                Backendless.Data.of(Export.class).find(exportBuilder, new AsyncCallback<List<Export>>() {
-                                    @Override
-                                    public void handleResponse(List<Export> response) {
-                                        InventoryApp.exports = response;
-
-                                        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                            int offset = 0;
-
-                                            @Override
-                                            // First 100
-                                            public void handleResponse(List<Sale> response) {
-                                                InventoryApp.sales = response;
-
-                                                if (InventoryApp.sales.size() == pageSize) {
-                                                    offset += InventoryApp.sales.size();
-                                                    saleBuilder.setOffset(offset);
-
-
-                                                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                        @Override
-                                                        // 200
-                                                        public void handleResponse(List<Sale> response) {
-                                                            InventoryApp.sales.addAll(response);
-
-                                                            if (InventoryApp.sales.size() == (pageSize * 2)) {
-                                                                offset += InventoryApp.sales.size();
-                                                                saleBuilder.setOffset(offset);
-
-                                                                Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                                    @Override
-                                                                    // 300
-                                                                    public void handleResponse(List<Sale> response) {
-                                                                        InventoryApp.sales.addAll(response);
-
-                                                                        if (InventoryApp.sales.size() == pageSize * 3) {
-                                                                            offset += InventoryApp.sales.size();
-                                                                            saleBuilder.setOffset(offset);
-
-                                                                            Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                                                @Override
-                                                                                // 400
-                                                                                public void handleResponse(List<Sale> response) {
-                                                                                    InventoryApp.sales.addAll(response);
-                                                                                    getInfo();
-                                                                                    display(0);
-                                                                                    btnBalanceGoods.setSelected(true);
-                                                                                    showProgress(false);
-                                                                                }
-
-                                                                                @Override
-                                                                                public void handleFault(BackendlessFault fault) {
-                                                                                    showProgress(false);
-                                                                                    Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                }
-                                                                            });
-                                                                        } else {
-                                                                            getInfo();
-                                                                            display(0);
-                                                                            btnBalanceGoods.setSelected(true);
-                                                                            showProgress(false);
-                                                                        }
-                                                                    }
-
-                                                                    @Override
-                                                                    public void handleFault(BackendlessFault fault) {
-                                                                        showProgress(false);
-                                                                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                });
-                                                            } else {
-                                                                getInfo();
-                                                                display(0);
-                                                                btnBalanceGoods.setSelected(true);
-                                                                showProgress(false);
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void handleFault(BackendlessFault fault) {
-                                                            showProgress(false);
-                                                            Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                                } else {
-                                                    getInfo();
-                                                    display(0);
-                                                    btnBalanceGoods.setSelected(true);
-                                                    showProgress(false);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void handleFault(BackendlessFault fault) {
-                                                showProgress(false);
-                                                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault fault) {
-                                        showProgress(false);
-                                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault fault) {
-                                        showProgress(false);
-                                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                            public void handleResponse(List<Export> response) {
+                                InventoryApp.exports = response;
+                                getSales("saleDate DESC");
                             }
 
                             @Override
@@ -271,6 +149,14 @@ public class Balance extends AppCompatActivity {
                         Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                showProgress(false);
+                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btnBalanceGoods.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,12 +274,12 @@ public class Balance extends AppCompatActivity {
             }
         }
 
-        exportSum =  allPolishExportSum;
+        exportSum = allPolishExportSum;
         exportWeight = allPolishExportWeight;
         if (allPolishExportWeight == 0) {
             exportPrice = 0;
         } else {
-            exportPrice = exportSum/exportWeight;
+            exportPrice = exportSum / exportWeight;
         }
 
 
@@ -410,7 +296,7 @@ public class Balance extends AppCompatActivity {
         if (salePolishWeight == 0) {
             salePolishPrice = 0;
         } else {
-            salePolishPrice = salePolishSum/salePolishWeight;
+            salePolishPrice = salePolishSum / salePolishWeight;
         }
 
         saleSum = salePolishSum + saleRoughSum + exportSum;
@@ -418,9 +304,8 @@ public class Balance extends AppCompatActivity {
         if (saleWeight == 0) {
             salePrice = 0;
         } else {
-            salePrice = saleSum/saleWeight;
+            salePrice = saleSum / saleWeight;
         }
-
 
 
         buyRoughSum = allNotDoneRoughBuySum + allRoughBuyDoneSum;
@@ -428,7 +313,7 @@ public class Balance extends AppCompatActivity {
         if (buyRoughWeight == 0) {
             buyRoughPrice = 0;
         } else {
-            buyRoughPrice = buyRoughSum/buyRoughWeight;
+            buyRoughPrice = buyRoughSum / buyRoughWeight;
         }
 
         buyPolishSum = allPolishBuySum;
@@ -436,7 +321,7 @@ public class Balance extends AppCompatActivity {
         if (buyPolishWeight == 0) {
             buyPolishPrice = 0;
         } else {
-            buyPolishPrice = buyPolishSum/buyPolishWeight;
+            buyPolishPrice = buyPolishSum / buyPolishWeight;
         }
 
         buySum = buyRoughSum + buyPolishSum;
@@ -444,9 +329,8 @@ public class Balance extends AppCompatActivity {
         if (buyWeight == 0) {
             buyPrice = 0;
         } else {
-            buyPrice = buySum/buyWeight;
+            buyPrice = buySum / buyWeight;
         }
-
 
 
         wageSum = allWageSum;
@@ -459,9 +343,8 @@ public class Balance extends AppCompatActivity {
         if (allRoughBuyDoneOrgWeight == 0) {
             wagePrice = 0;
         } else {
-            wagePrice = wageSum/allRoughBuyDoneOrgWeight;
+            wagePrice = wageSum / allRoughBuyDoneOrgWeight;
         }
-
 
 
         balanceRoughSum = allNotDoneRoughBuySum - saleRoughSum;
@@ -487,7 +370,6 @@ public class Balance extends AppCompatActivity {
         } else {
             balancePrice = balanceSum / balanceWeight;
         }
-
 
 
         if (allNotDoneRoughBuyWeight == 0) {
@@ -611,7 +493,108 @@ public class Balance extends AppCompatActivity {
                 tvBalanceWagePrice.setText("סכום:  " + nf.format(wageSum) + "$");
                 break;
         }
-}
+    }
+
+    private void getSales(String order) {
+        saleBuilder.setOffset(0);
+        saleBuilder.setWhereClause(whereClause);
+        saleBuilder.setSortBy(order);
+        saleBuilder.setPageSize(pageSize);
+        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+            int offset = 0;
+            @Override
+            // First 100
+            public void handleResponse(List<Sale> response) {
+                InventoryApp.sales = response;
+
+                if (InventoryApp.sales.size() == pageSize) {
+                    offset += InventoryApp.sales.size();
+                    saleBuilder.setOffset(offset);
+
+                    showProgress(true);
+                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                        @Override
+                        // 200
+                        public void handleResponse(List<Sale> response) {
+                            InventoryApp.sales.addAll(response);
+
+                            if (InventoryApp.sales.size() == (pageSize * 2)) {
+                                offset += InventoryApp.sales.size();
+                                saleBuilder.setOffset(offset);
+
+                                showProgress(true);
+                                Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                    @Override
+                                    // 300
+                                    public void handleResponse(List<Sale> response) {
+                                        InventoryApp.sales.addAll(response);
+
+                                        if (InventoryApp.sales.size() == pageSize * 3) {
+                                            offset += InventoryApp.sales.size();
+                                            saleBuilder.setOffset(offset);
+
+                                            showProgress(true);
+                                            Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                                @Override
+                                                // 400
+                                                public void handleResponse(List<Sale> response) {
+                                                    InventoryApp.sales.addAll(response);
+                                                    getInfo();
+                                                    display(0);
+                                                    btnBalanceGoods.setSelected(true);
+                                                    showProgress(false);
+                                                }
+
+                                                @Override
+                                                public void handleFault(BackendlessFault fault) {
+                                                    showProgress(false);
+                                                    Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        } else {
+                                            getInfo();
+                                            display(0);
+                                            btnBalanceGoods.setSelected(true);
+                                            showProgress(false);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                getInfo();
+                                display(0);
+                                btnBalanceGoods.setSelected(true);
+                                showProgress(false);
+                            }
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            showProgress(false);
+                            Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    getInfo();
+                    display(0);
+                    btnBalanceGoods.setSelected(true);
+                    showProgress(false);
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                showProgress(false);
+                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);

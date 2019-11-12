@@ -14,12 +14,10 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +36,11 @@ public class NewBuy extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private AutoCompleteTextView acSuppliers;
     private int chosenSupplier = -1;
+
+    private String aSupplier = "supplier";
+    final DataQueryBuilder supplierBuilder = DataQueryBuilder.create();
+    final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final String supplierClause = "supplier = '" + aSupplier + "'";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,24 +65,22 @@ public class NewBuy extends AppCompatActivity {
         actionBar.setTitle("קניה חדשה");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setPageSize(100);
-        queryBuilder.setGroupBy("objectId");
+        supplierBuilder.setWhereClause(whereClause);
+        supplierBuilder.setHavingClause(supplierClause);
+        supplierBuilder.setPageSize(100);
+        supplierBuilder.setSortBy("name");
 
         showProgress(true);
 
-        Backendless.Data.of(Supplier.class).find(queryBuilder, new AsyncCallback<List<Supplier>>() {
+        Backendless.Data.of(Client.class).find(supplierBuilder, new AsyncCallback<List<Client>>() {
             @Override
-            public void handleResponse(List<Supplier> response) {
+            public void handleResponse(List<Client> response) {
                 ArrayList<String> supplierNames = new ArrayList<>();
-                for (Supplier supplier : response) {
+                for (Client supplier : response) {
                     supplierNames.add(supplier.getName());
                 }
-                InventoryApp.suppliers = response;
+                InventoryApp.clients = response;
                 adapter = new ArrayAdapter<>(NewBuy.this,android.R.layout.select_dialog_singlechoice, supplierNames);
-                acSuppliers.setAdapter(adapter);
                 acSuppliers.setThreshold(1);
                 acSuppliers.setAdapter(adapter);
                 showProgress(false);
@@ -111,8 +112,8 @@ public class NewBuy extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
-                for (int i = 0; i < InventoryApp.suppliers.size(); i++) {
-                    if (InventoryApp.suppliers.get(i).getName().equals(selection)) {
+                for (int i = 0; i < InventoryApp.clients.size(); i++) {
+                    if (InventoryApp.clients.get(i).getName().equals(selection)) {
                         chosenSupplier = i;
                         break;
                     }
@@ -140,7 +141,7 @@ public class NewBuy extends AppCompatActivity {
                     Toast.makeText(NewBuy.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    String supplierName = InventoryApp.suppliers.get(chosenSupplier).getName();
+                    String supplierName = InventoryApp.clients.get(chosenSupplier).getName();
                     String id = etBuyID.getText().toString().trim();
                     double price = Double.parseDouble(etBuyPrice.getText().toString().trim());
                     double weight = Double.parseDouble(etBuyWeight.getText().toString().trim());

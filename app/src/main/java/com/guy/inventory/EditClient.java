@@ -10,14 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.DataQueryBuilder;
-import java.util.List;
 
 public class EditClient extends AppCompatActivity {
     private View mProgressView;
@@ -27,6 +24,7 @@ public class EditClient extends AppCompatActivity {
     EditText etClientEditName, etClientEditAddress, etClientEditPhone, etClientEditInsidePhone, etClientEditFax, etClientEditWebSite, etClientEditDetails;
     Button btnClientEditSubmit;
     int index;
+    boolean client;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -49,12 +47,17 @@ public class EditClient extends AppCompatActivity {
 
         btnClientEditSubmit = findViewById(R.id.btnClientEditSubmit);
 
+        client = getIntent().getBooleanExtra("client", true);
+        index = getIntent().getIntExtra("index", 0);
+
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("נתוני לקוח");
+        if (client) {
+            actionBar.setTitle("נתוני לקוח");
+        } else {
+            actionBar.setTitle("נתוני ספק");
+        }
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        index = getIntent().getIntExtra("index", 0);
 
         etClientEditName.setText(InventoryApp.clients.get(index).getName());
         etClientEditAddress.setText(String.valueOf(InventoryApp.clients.get(index).getLocation()));
@@ -68,7 +71,7 @@ public class EditClient extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (etClientEditName.getText().toString().isEmpty()) {
-                    Toast.makeText(EditClient.this, "יש למלא את שם הלקוח", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditClient.this, "יש למלא שם", Toast.LENGTH_SHORT).show();
                 } else {
                     final String name = etClientEditName.getText().toString().trim();
                     final String location = etClientEditAddress.getText().toString().trim();

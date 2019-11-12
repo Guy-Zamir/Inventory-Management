@@ -5,9 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,123 +19,56 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+
 import java.util.List;
 
-public class TableClient extends AppCompatActivity {
+public class TableSorting extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
     LinearLayout llClientDetails;
-    TextView tvClientDetailsName, tvClientDetailsLocation, tvClientDetailsPhoneNumber,
-            tvClientDetailsInsidePhone, tvClientDetailsFax,
-            tvClientDetailsWebSite, tvClientDetailsDetails;
-    ListView lvClientList;
+
+    ListView lvSortList;
     AdapterClient adapter;
 
     int pageSize = 100;
     int selectedItem = -1;
 
-    boolean client;
-
-    String aSupplier = "supplier";
-    String aClient = "client";
-
-    final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
-    final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
+    final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-    final String supplierClause = "supplier = '" + aSupplier + "'";
-    final String clientClause = "supplier = '" + aClient + "'";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_table);
+        setContentView(R.layout.activity_table_sorting);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        lvClientList = findViewById(R.id.lvClientList);
+        lvSortList = findViewById(R.id.lvClientList);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        tvClientDetailsLocation = findViewById(R.id.tvClientDetailsLocation);
-        tvClientDetailsPhoneNumber = findViewById(R.id.tvClientDetailsPhoneNumber);
-        tvClientDetailsInsidePhone = findViewById(R.id.tvClientDetailsInsidePhone);
-        tvClientDetailsFax = findViewById(R.id.tvClientDetailsFax);
-        tvClientDetailsWebSite = findViewById(R.id.tvClientDetailsWebSite);
-        tvClientDetailsDetails = findViewById(R.id.tvClientDetailsDetails);
-        tvClientDetailsName = findViewById(R.id.tvClientDetailsName);
         llClientDetails = findViewById(R.id.llClientDetails);
-
-        client = getIntent().getBooleanExtra("client", true);
-
-        // In Land Mode
-        if (findViewById(R.id.client_table_land) != null) {
-            llClientDetails.setVisibility(View.VISIBLE);
-        }
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        if (client) {
-            actionBar.setTitle("לקוחות");
-        } else {
-            actionBar.setTitle("ספקים");
-        }
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        clientBuilder.setWhereClause(whereClause);
-        clientBuilder.setSortBy("name");
-        if (client) {
-            clientBuilder.setHavingClause(clientClause);
-        } else {
-            clientBuilder.setHavingClause(supplierClause);
-        }
-        clientBuilder.setPageSize(100);
+        actionBar.setTitle("מיונים");
 
         showProgress(true);
-        Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
-            @Override
-            public void handleResponse(List<Client> response) {
-                InventoryApp.clients = response;
-                adapter = new AdapterClient(TableClient.this, InventoryApp.clients);
-                lvClientList.setAdapter(adapter);
-            }
 
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableClient.this, "טרם נשרמו לקוחות", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                showProgress(false);
-            }
-        });
-
-        lvClientList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvSortList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
                 selectedItem = position;
-                if (findViewById(R.id.client_table_land) != null) {
-                    llClientDetails.setVisibility(View.VISIBLE);
-
-                    tvClientDetailsName.setText(InventoryApp.clients.get(selectedItem).getName());
-                    tvClientDetailsLocation.setText("כתובת:  " + InventoryApp.clients.get(selectedItem).getLocation());
-                    tvClientDetailsPhoneNumber.setText("טלפון:  " + InventoryApp.clients.get(selectedItem).getPhoneNumber());
-                    tvClientDetailsInsidePhone.setText("טלפון פנימי:  " + InventoryApp.clients.get(selectedItem).getInsidePhone());
-                    tvClientDetailsFax.setText("פקס:  " + InventoryApp.clients.get(selectedItem).getFax());
-                    tvClientDetailsWebSite.setText("כתובת אתר אינטרנט:  " + InventoryApp.clients.get(selectedItem).getWebsite());
-                    tvClientDetailsDetails.setText("פרטים נוספים:  " + InventoryApp.clients.get(selectedItem).getDetails());
-
-                } else {
-                    adapter.setSelectedPosition(position);
-                    adapter.notifyDataSetChanged();
-                }
+                llClientDetails.setVisibility(View.VISIBLE);
             }
         });
 
@@ -149,7 +84,7 @@ public class TableClient extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newIcon:
-                Intent intent = new Intent(TableClient.this, NewClient.class);
+                Intent intent = new Intent(TableSorting.this, NewClient.class);
                 startActivityForResult(intent, 1);
                 break;
 
@@ -157,9 +92,8 @@ public class TableClient extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent editClient = new Intent(TableClient.this, EditClient.class);
+                    Intent editClient = new Intent(TableSorting.this, EditClient.class);
                     editClient.putExtra("index", selectedItem);
-                    editClient.putExtra("client", client);
                     startActivityForResult(editClient, 1);
                     break;
                 }
@@ -168,7 +102,7 @@ public class TableClient extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
                 } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(TableClient.this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(TableSorting.this);
                     alert.setTitle("התראת מחיקה");
                     alert.setMessage("האם אתה בטוח שברצונך למחוק את הספק המסומן");
                     alert.setNegativeButton(android.R.string.no, null);
@@ -181,7 +115,7 @@ public class TableClient extends AppCompatActivity {
                                 @Override
                                 public void handleResponse(Long response) {
                                     InventoryApp.clients.remove(selectedItem);
-                                    Toast.makeText(TableClient.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TableSorting.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                                     adapter.notifyDataSetChanged();
                                     showProgress(false);
                                 }
@@ -189,7 +123,7 @@ public class TableClient extends AppCompatActivity {
                                 @Override
                                 public void handleFault(BackendlessFault fault) {
                                     showProgress(false);
-                                    Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TableSorting.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -197,8 +131,8 @@ public class TableClient extends AppCompatActivity {
                     alert.show();
                 }
         }
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public boolean onSupportNavigateUp(){

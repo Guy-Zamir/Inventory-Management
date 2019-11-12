@@ -36,6 +36,11 @@ public class NewSale extends AppCompatActivity {
     private int chosenClient = -1;
     private boolean isExport;
 
+    private String aClient = "client";
+    final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
+    final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final String clientClause = "supplier = '" + aClient + "'";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,15 +72,14 @@ public class NewSale extends AppCompatActivity {
         }
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        queryBuilder.setWhereClause(whereClause);
-        queryBuilder.setPageSize(100);
-        queryBuilder.setGroupBy("name");
+        clientBuilder.setWhereClause(whereClause);
+        clientBuilder.setHavingClause(clientClause);
+        clientBuilder.setPageSize(100);
+        clientBuilder.setSortBy("name");
 
         showProgress(true);
 
-        Backendless.Data.of(Client.class).find(queryBuilder, new AsyncCallback<List<Client>>() {
+        Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
             @Override
             public void handleResponse(List<Client> response) {
                 ArrayList<String> clientNames = new ArrayList<>();
@@ -84,7 +88,6 @@ public class NewSale extends AppCompatActivity {
                 }
                 InventoryApp.clients = response;
                 adapter = new ArrayAdapter<>(NewSale.this, android.R.layout.select_dialog_singlechoice, clientNames);
-                acClients.setAdapter(adapter);
                 acClients.setThreshold(1);
                 acClients.setAdapter(adapter);
                 showProgress(false);
