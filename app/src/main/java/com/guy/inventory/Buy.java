@@ -15,7 +15,7 @@ public class Buy {
         return price;
     }
 
-    public void setPrice(double price) {
+    void setPrice(double price) {
         this.price = price;
     }
 
@@ -23,31 +23,31 @@ public class Buy {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    void setWeight(double weight) {
         this.weight = weight;
     }
 
-    public double getDoneWeight() {
+    double getDoneWeight() {
         return doneWeight;
     }
 
-    public void setDoneWeight(double doneWeight) {
+    void setDoneWeight(double doneWeight) {
         this.doneWeight = doneWeight;
     }
 
-    public double getSum() {
+    double getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    void setSum(double sum) {
         this.sum = sum;
     }
 
-    public double getWorkDepreciation() {
+    double getWorkDepreciation() {
         return workDepreciation;
     }
 
-    public void setWorkDepreciation(double workDepreciation) {
+    void setWorkDepreciation(double workDepreciation) {
         this.workDepreciation = workDepreciation;
     }
 
@@ -55,15 +55,15 @@ public class Buy {
         return days;
     }
 
-    public void setDays(int days) {
+    void setDays(int days) {
         this.days = days;
     }
 
-    public double getWage() {
+    double getWage() {
         return wage;
     }
 
-    public void setWage(double wage) {
+    void setWage(double wage) {
         this.wage = wage;
     }
 
@@ -75,35 +75,35 @@ public class Buy {
         this.id = id;
     }
 
-    public Date getBuyDate() {
+    Date getBuyDate() {
         return buyDate;
     }
 
-    public void setBuyDate(Date buyDate) {
+    void setBuyDate(Date buyDate) {
         this.buyDate = buyDate;
     }
 
-    public Date getPayDate() {
+    Date getPayDate() {
         return payDate;
     }
 
-    public void setPayDate(Date payDate) {
+    void setPayDate(Date payDate) {
         this.payDate = payDate;
     }
 
-    public boolean isPolish() {
+    boolean isPolish() {
         return polish;
     }
 
-    public void setPolish(boolean polish) {
+    void setPolish(boolean polish) {
         this.polish = polish;
     }
 
-    public boolean isDone() {
+    boolean isDone() {
         return done;
     }
 
-    public void setDone(boolean done) {
+    void setDone(boolean done) {
         this.done = done;
     }
 
@@ -143,15 +143,15 @@ public class Buy {
         return paid;
     }
 
-    public void setPaid(boolean paid) {
+    void setPaid(boolean paid) {
         this.paid = paid;
     }
 
-    public String getSupplierName() {
+    String getSupplierName() {
         return supplierName;
     }
 
-    public void setSupplierName(String supplierName) {
+    void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
     }
 }

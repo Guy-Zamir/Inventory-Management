@@ -42,10 +42,9 @@
 
             <Button
                 android:id="@+id/btnBalanceGoods"
-                android:layout_width="wrap_content"
+                android:layout_width="102.5dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
-                android:layout_weight="1"
                 android:background="@drawable/table_row"
                 android:text="סחורות"
                 android:textColor="#FFFFFF"
@@ -54,10 +53,9 @@
 
             <Button
                 android:id="@+id/btnBalanceBuy"
-                android:layout_width="wrap_content"
+                android:layout_width="102.5dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
-                android:layout_weight="1"
                 android:background="@drawable/table_row"
                 android:text="קניות"
                 android:textColor="#FFFFFF"
@@ -66,10 +64,9 @@
 
             <Button
                 android:id="@+id/btnBalanceSale"
-                android:layout_width="wrap_content"
+                android:layout_width="102.5dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
-                android:layout_weight="1"
                 android:background="@drawable/table_row"
                 android:text="מכירות"
                 android:textColor="#FFFFFF"
@@ -78,10 +75,9 @@
 
             <Button
                 android:id="@+id/btnBalanceTax"
-                android:layout_width="wrap_content"
+                android:layout_width="102.5dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
-                android:layout_weight="1"
                 android:background="@drawable/table_row"
                 android:text="מס"
                 android:textColor="#FFFFFF"

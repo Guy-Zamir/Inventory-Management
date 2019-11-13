@@ -132,7 +132,7 @@ public class Balance extends AppCompatActivity {
                             @Override
                             public void handleResponse(List<Export> response) {
                                 InventoryApp.exports = response;
-                                getSales("saleDate DESC");
+                                getSales();
                             }
 
                             @Override
@@ -495,10 +495,10 @@ public class Balance extends AppCompatActivity {
         }
     }
 
-    private void getSales(String order) {
+    private void getSales() {
         saleBuilder.setOffset(0);
         saleBuilder.setWhereClause(whereClause);
-        saleBuilder.setSortBy(order);
+        saleBuilder.setSortBy("saleDate DESC");
         saleBuilder.setPageSize(pageSize);
         Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
             int offset = 0;

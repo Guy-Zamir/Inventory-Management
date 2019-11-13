@@ -63,7 +63,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
-                android:text="ספק"
+                android:text="@string/supplier"
                 android:textColor="@color/colorText"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -76,7 +76,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
-                android:text="תאריך קניה"
+                android:text="@string/buyDate"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -88,7 +88,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
-                android:text="תאריך פקיעה"
+                android:text="@string/payDate"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -100,7 +100,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
-                android:text="אסמכתא"
+                android:text="@string/ID"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -112,7 +112,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
-                android:text="מחיר"
+                android:text="@string/Price"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -124,7 +124,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
-                android:text="משקל"
+                android:text="@string/Weight"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -136,7 +136,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
-                android:text="ימים"
+                android:text="@string/Days"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -148,7 +148,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
                 android:gravity="center_horizontal"
-                android:text="סכום"
+                android:text="@string/Sum"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -167,7 +167,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="15dp"
                     android:gravity="center_horizontal"
-                    android:text="אחוז ליטוש"
+                    android:text="@string/WorkDec"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
 
@@ -179,7 +179,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="15dp"
                     android:gravity="center_horizontal"
-                    android:text="שכר עבודה"
+                    android:text="@string/Wage"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
 
@@ -191,7 +191,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="15dp"
                     android:gravity="center_horizontal"
-                    android:text="משקל גמור"
+                    android:text="@string/DoneWeight"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
             </LinearLayout>

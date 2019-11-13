@@ -19,7 +19,7 @@ public class AdapterExports extends ArrayAdapter<Export> {
     private List<Export> exports;
     private int selectedPosition = -1;
 
-    public AdapterExports(Context context, List<Export> list) {
+    AdapterExports(Context context, List<Export> list) {
         super(context, R.layout.sale_row_layout, list);
         this.exports = list;
         this.context = context;

@@ -12,4 +12,27 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="textView">TextView</string>
     <string name="sorting">מיונים</string>
+    <string name="supplier">ספק</string>
+    <string name="buyDate">תאריך קניה</string>
+    <string name="payDate">תאריך פקיעה</string>
+    <string name="ID">אסמכתא</string>
+    <string name="Price">מחיר</string>
+    <string name="Weight">משקל</string>
+    <string name="Days">ימים</string>
+    <string name="Sum">סכום</string>
+    <string name="WorkDec">אחוז ליטוש</string>
+    <string name="Wage">שכר עבודה:</string>
+    <string name="DoneWeight">משקל גמור</string>
+    <string name="ClientName">חברה</string>
+    <string name="Location">כתובת</string>
+    <string name="Phone">טלפון</string>
+    <string name="InsidePhone">טלפון פנימי</string>
+    <string name="Fax">פקס</string>
+    <string name="WebSite">כתובת אתר אינטרנט</string>
+    <string name="Details">פרטים נוספים</string>
+    <string name="SupplierName">שם הספק:</string>
+    <string name="PackageWeight">משקל החבילה:</string>
+    <string name="PricePerKarat">מחיר לקראט:</string>
+    <string name="NumberOfDays">מספר הימים:</string>
+    <string name="Submit">אשר</string>
 </resources>

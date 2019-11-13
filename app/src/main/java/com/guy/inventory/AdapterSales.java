@@ -19,7 +19,7 @@ public class AdapterSales extends ArrayAdapter<Sale> {
     private List<Sale> sales;
     private int selectedPosition = -1;
 
-    public AdapterSales(Context context, List<Sale> list) {
+    AdapterSales(Context context, List<Sale> list) {
         super(context, R.layout.sale_row_layout, list);
         this.sales = list;
         this.context = context;

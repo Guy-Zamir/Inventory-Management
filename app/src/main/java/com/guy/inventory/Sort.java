@@ -33,27 +33,27 @@ public class Sort {
         this.name = name;
     }
 
-    public String getSize() {
+    String getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    void setSize(String size) {
         this.size = size;
     }
 
-    public String getShape() {
+    String getShape() {
         return shape;
     }
 
-    public void setShape(String shape) {
+    void setShape(String shape) {
         this.shape = shape;
     }
 
-    public String getClarity() {
+    String getClarity() {
         return clarity;
     }
 
-    public void setClarity(String clarity) {
+    void setClarity(String clarity) {
         this.clarity = clarity;
     }
 

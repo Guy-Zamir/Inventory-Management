@@ -21,7 +21,8 @@ public class EditClient extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    EditText etClientEditName, etClientEditAddress, etClientEditPhone, etClientEditInsidePhone, etClientEditFax, etClientEditWebSite, etClientEditDetails;
+    EditText etClientEditAddress, etClientEditPhone, etClientEditInsidePhone, etClientEditFax, etClientEditWebSite, etClientEditDetails;
+    TextView tvClientEditName;
     Button btnClientEditSubmit;
     int index;
     boolean client;
@@ -37,7 +38,7 @@ public class EditClient extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        etClientEditName = findViewById(R.id.etClientEditName);
+        tvClientEditName = findViewById(R.id.tvClientEditName);
         etClientEditAddress = findViewById(R.id.etClientEditAddress);
         etClientEditPhone = findViewById(R.id.etClientEditPhone);
         etClientEditInsidePhone = findViewById(R.id.etClientEditInsidePhone);
@@ -59,7 +60,7 @@ public class EditClient extends AppCompatActivity {
         }
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        etClientEditName.setText(InventoryApp.clients.get(index).getName());
+        tvClientEditName.setText(InventoryApp.clients.get(index).getName());
         etClientEditAddress.setText(String.valueOf(InventoryApp.clients.get(index).getLocation()));
         etClientEditPhone.setText(String.valueOf(InventoryApp.clients.get(index).getPhoneNumber()));
         etClientEditInsidePhone.setText(String.valueOf(InventoryApp.clients.get(index).getInsidePhone()));
@@ -70,10 +71,6 @@ public class EditClient extends AppCompatActivity {
         btnClientEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etClientEditName.getText().toString().isEmpty()) {
-                    Toast.makeText(EditClient.this, "יש למלא שם", Toast.LENGTH_SHORT).show();
-                } else {
-                    final String name = etClientEditName.getText().toString().trim();
                     final String location = etClientEditAddress.getText().toString().trim();
                     final String phone = etClientEditPhone.getText().toString().trim();
                     final String insidePhone = etClientEditInsidePhone.getText().toString().trim();
@@ -88,7 +85,6 @@ public class EditClient extends AppCompatActivity {
                     alert.setIcon(android.R.drawable.ic_dialog_alert);
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            InventoryApp.clients.get(index).setName(name);
                             InventoryApp.clients.get(index).setLocation(location);
                             InventoryApp.clients.get(index).setPhoneNumber(phone);
                             InventoryApp.clients.get(index).setInsidePhone(insidePhone);
@@ -115,7 +111,6 @@ public class EditClient extends AppCompatActivity {
                         }
                     });
                     alert.show();
-                }
             }
         });
     }

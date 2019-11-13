@@ -64,7 +64,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_horizontal"
-                android:text="חברה"
+                android:text="@string/ClientName"
                 android:textColor="@color/colorText"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -78,7 +78,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_horizontal"
-                android:text="כתובת"
+                android:text="@string/Location"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -91,7 +91,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_horizontal"
-                android:text="טלפון"
+                android:text="@string/Phone"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -104,7 +104,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_horizontal"
-                android:text="טלפון פנימי"
+                android:text="@string/InsidePhone"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -117,7 +117,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_horizontal"
-                android:text="פקס"
+                android:text="@string/Fax"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -130,7 +130,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_horizontal"
-                android:text="כתובת אתר אינטרנט"
+                android:text="@string/WebSite"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -143,7 +143,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_horizontal"
-                android:text="פרטים נוספים"
+                android:text="@string/Details"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 

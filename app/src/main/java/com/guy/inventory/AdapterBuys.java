@@ -20,7 +20,7 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
     private List<Buy> buys;
     private int selectedPosition = -1;
 
-    public AdapterBuys(Context context, List<Buy> list) {
+    AdapterBuys(Context context, List<Buy> list) {
         super(context, R.layout.buy_row_layout, list);
         this.buys = list;
         this.context = context;
@@ -104,7 +104,7 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         return convertView;
     }
 
-    public void setSelectedPosition(int pos) {
+    void setSelectedPosition(int pos) {
         selectedPosition = pos;
     }
 }

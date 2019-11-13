@@ -164,9 +164,11 @@ public class EditSale extends AppCompatActivity {
                                 }
 
                                 InventoryApp.sales.get(index).setPrice(saleSum / weight);
+                                showProgress(true);
                                 Backendless.Persistence.save(InventoryApp.sales.get(index), new AsyncCallback<Sale>() {
                                     @Override
                                     public void handleResponse(Sale response) {
+                                        showProgress(false);
                                         Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                         setResult(RESULT_OK);
                                         finishActivity(1);

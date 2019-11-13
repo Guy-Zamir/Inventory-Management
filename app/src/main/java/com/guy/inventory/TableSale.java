@@ -46,7 +46,6 @@ public class TableSale extends AppCompatActivity {
     final DataQueryBuilder exportBuilder = DataQueryBuilder.create();
     final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,8 +16,6 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
-import java.text.DecimalFormat;
-
 public class EditBuyDone extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;

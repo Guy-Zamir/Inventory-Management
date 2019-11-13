@@ -3,10 +3,8 @@ package com.guy.inventory;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,7 +41,6 @@ public class TableClient extends AppCompatActivity {
     String aSupplier = "supplier";
     String aClient = "client";
 
-    final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
     final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     final String supplierClause = "supplier = '" + aSupplier + "'";
@@ -91,7 +88,7 @@ public class TableClient extends AppCompatActivity {
         } else {
             clientBuilder.setHavingClause(supplierClause);
         }
-        clientBuilder.setPageSize(100);
+        clientBuilder.setPageSize(pageSize);
 
         showProgress(true);
         Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
@@ -100,6 +97,7 @@ public class TableClient extends AppCompatActivity {
                 InventoryApp.clients = response;
                 adapter = new AdapterClient(TableClient.this, InventoryApp.clients);
                 lvClientList.setAdapter(adapter);
+                showProgress(false);
             }
 
             @Override
@@ -162,39 +160,6 @@ public class TableClient extends AppCompatActivity {
                     editClient.putExtra("client", client);
                     startActivityForResult(editClient, 1);
                     break;
-                }
-
-            case R.id.deleteIcon:
-                if (selectedItem == -1) {
-                    Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
-                } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(TableClient.this);
-                    alert.setTitle("התראת מחיקה");
-                    alert.setMessage("האם אתה בטוח שברצונך למחוק את הספק המסומן");
-                    alert.setNegativeButton(android.R.string.no, null);
-                    alert.setIcon(android.R.drawable.ic_dialog_alert);
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            showProgress(true);
-                            tvLoad.setText("מוחק את הנתונים אנא המתן...");
-                            Backendless.Persistence.of(Client.class).remove(InventoryApp.clients.get(selectedItem), new AsyncCallback<Long>() {
-                                @Override
-                                public void handleResponse(Long response) {
-                                    InventoryApp.clients.remove(selectedItem);
-                                    Toast.makeText(TableClient.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                    adapter.notifyDataSetChanged();
-                                    showProgress(false);
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    showProgress(false);
-                                    Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                    alert.show();
                 }
         }
                 return super.onOptionsItemSelected(item);

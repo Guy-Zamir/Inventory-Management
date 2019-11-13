@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +27,7 @@ public class EditBuy extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    LinearLayout llBuyEdit, llBuyDone;
+    LinearLayout llBuyDone;
     DatePicker dpBuyEditDate;
     EditText etBuyEditID, etBuyEditPrice, etBuyEditWeight, etBuyEditDays, etBuyEditDoneWeight, etBuyEditWage;
 
@@ -53,7 +52,6 @@ public class EditBuy extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        llBuyEdit = findViewById(R.id.llBuyEdit);
         llBuyDone = findViewById(R.id.llBuyDone);
 
         dpBuyEditDate = findViewById(R.id.dpBuyEditDate);

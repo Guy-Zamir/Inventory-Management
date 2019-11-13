@@ -18,13 +18,14 @@ public class AdapterClient extends ArrayAdapter<Client> {
     private List<Client> clients;
     private int selectedPosition = -1;
 
-    public AdapterClient(Context context, List<Client> list) {
+    AdapterClient(Context context, List<Client> list) {
         super(context, R.layout.client_row_layout, list);
         this.clients = list;
         this.context = context;
     }
 
     @SuppressLint({"ViewHolder", "SetTextI18n"})
+    @NonNull
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,7 +59,7 @@ public class AdapterClient extends ArrayAdapter<Client> {
         return convertView;
     }
 
-    public void setSelectedPosition(int pos) {
+    void setSelectedPosition(int pos) {
         selectedPosition = pos;
     }
 }
