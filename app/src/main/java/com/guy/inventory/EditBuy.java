@@ -69,7 +69,7 @@ public class EditBuy extends AppCompatActivity {
         tvBuyEditWeight = findViewById(R.id.tvBuyEditWeight);
         tvBuyEditDays = findViewById(R.id.tvBuyEditDays);
         swBuyEditDoneWeight = findViewById(R.id.swBuyEditDoneWeight);
-        tvBuyEditWage = findViewById(R.id.tvBuyEditWage);
+        tvBuyEditWage = findViewById(R.id.tvDoneWage);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;

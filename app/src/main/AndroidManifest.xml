@@ -17,7 +17,7 @@
         <activity android:name=".EditSort"></activity>
         <activity android:name=".NewSort" />
         <activity android:name=".TableSorting" />
-        <activity android:name=".EditBuyDone" />
+        <activity android:name=".Done" />
         <activity android:name=".EditClient" />
         <activity android:name=".TableClient" />
         <activity android:name=".NewClient" />

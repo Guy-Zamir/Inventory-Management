@@ -36,7 +36,7 @@ public class TableBuy extends AppCompatActivity {
 
     ListView lvBuyList;
     LinearLayout llBuyDetails;
-    AdapterBuys adapter;
+    AdapterBuys adapterBuys;
 
     int selectedItem = -1;
 
@@ -119,8 +119,8 @@ public class TableBuy extends AppCompatActivity {
                     tvBuyDetailsWorkDe.setText("אחוז ליטוש:  " + nf.format(InventoryApp.buys.get(selectedItem).getWorkDepreciation() * 100) + "%");
 
                 } else {
-                    adapter.setSelectedPosition(position);
-                    adapter.notifyDataSetChanged();
+                    adapterBuys.setSelectedPosition(position);
+                    adapterBuys.notifyDataSetChanged();
                 }
             }
         });
@@ -138,6 +138,7 @@ public class TableBuy extends AppCompatActivity {
             case R.id.newIcon:
                 Intent intent = new Intent(TableBuy.this, NewBuy.class);
                 startActivityForResult(intent, 1);
+
                 break;
 
             case R.id.editIcon:
@@ -147,8 +148,9 @@ public class TableBuy extends AppCompatActivity {
                     Intent editBuy = new Intent(TableBuy.this, EditBuy.class);
                     editBuy.putExtra("index", selectedItem);
                     startActivityForResult(editBuy, 1);
-                    break;
                 }
+
+                break;
 
             case R.id.deleteIcon:
                 if (selectedItem == -1) {
@@ -168,7 +170,7 @@ public class TableBuy extends AppCompatActivity {
                                 public void handleResponse(Long response) {
                                     InventoryApp.buys.remove(selectedItem);
                                     Toast.makeText(TableBuy.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                    adapter.notifyDataSetChanged();
+                                    adapterBuys.notifyDataSetChanged();
                                     showProgress(false);
                                 }
 
@@ -182,6 +184,7 @@ public class TableBuy extends AppCompatActivity {
                     });
                     alert.show();
                 }
+
                 break;
 
             case R.id.doneIcon:
@@ -203,9 +206,9 @@ public class TableBuy extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(Buy response) {
                                         showProgress(false);
-                                        Intent intent = new Intent(TableBuy.this, EditBuyDone.class);
-                                        intent.putExtra("index", selectedItem);
-                                        startActivityForResult(intent, 1);
+                                        Intent doneIntent = new Intent(TableBuy.this, Done.class);
+                                        doneIntent.putExtra("index", selectedItem);
+                                        startActivityForResult(doneIntent, 1);
                                     }
 
                                     @Override
@@ -222,6 +225,9 @@ public class TableBuy extends AppCompatActivity {
                         Toast.makeText(this, "יש לחבור חבילה לא גמורה", Toast.LENGTH_SHORT).show();
                     }
                 }
+
+                break;
+
             case R.id.dateOrderIcon:
                 getBuys("buyDate DESC");
                 break;
@@ -248,7 +254,7 @@ public class TableBuy extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
-                adapter.notifyDataSetChanged();
+                adapterBuys.notifyDataSetChanged();
             }
         }
     }
@@ -269,8 +275,8 @@ public class TableBuy extends AppCompatActivity {
             @Override
             public void handleResponse(List<Buy> response) {
                 InventoryApp.buys = response;
-                adapter = new AdapterBuys(TableBuy.this, InventoryApp.buys);
-                lvBuyList.setAdapter(adapter);
+                adapterBuys = new AdapterBuys(TableBuy.this, InventoryApp.buys);
+                lvBuyList.setAdapter(adapterBuys);
                 showProgress(false);
             }
 

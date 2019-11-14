@@ -45,6 +45,7 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         TextView tvSaleDetailsPrice = convertView.findViewById(R.id.tvSaleDetailsPrice);
         TextView tvSaleDetailsWeight = convertView.findViewById(R.id.tvSaleDetailsWeight);
         TextView tvSaleDetailsDays = convertView.findViewById(R.id.tvSaleDetailsDays);
+        TextView tvSaleDetailsNum = convertView.findViewById(R.id.tvSaleDetailsNum);
 
         LinearLayout llSaleDetails = convertView.findViewById(R.id.llSaleDetails);
 
@@ -68,6 +69,7 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
         tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()));
         tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
+        tvSaleDetailsNum.setText("מספר מכירה במערכת:  " + (position+1));
 
         if (position == selectedPosition) {
             llSaleDetails.setVisibility(View.VISIBLE);

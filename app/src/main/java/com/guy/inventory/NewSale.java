@@ -31,7 +31,7 @@ public class NewSale extends AppCompatActivity {
     private DatePicker dpSaleDate;
     private Switch swSalePolish;
     private EditText etSaleID, etSaleSum, etSaleWeight, etSaleDays;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> clientAdapter;
     private AutoCompleteTextView acClients;
     private int chosenClient = -1;
     private boolean isExport;
@@ -87,9 +87,9 @@ public class NewSale extends AppCompatActivity {
                     clientNames.add(client.getName());
                 }
                 InventoryApp.clients = response;
-                adapter = new ArrayAdapter<>(NewSale.this, android.R.layout.select_dialog_singlechoice, clientNames);
+                clientAdapter = new ArrayAdapter<>(NewSale.this, android.R.layout.select_dialog_singlechoice, clientNames);
                 acClients.setThreshold(1);
-                acClients.setAdapter(adapter);
+                acClients.setAdapter(clientAdapter);
                 showProgress(false);
             }
 

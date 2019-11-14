@@ -5,33 +5,33 @@
         android:id="@+id/deleteIcon"
         android:icon="@drawable/delete_icon1"
         android:title="@string/app_name"
-        android:orderInCategory="0"
+        android:orderInCategory="1"
         app:showAsAction="always" />
     <item
         android:id="@+id/editIcon"
         android:icon="@drawable/edit1_icon"
         android:title="@string/app_name"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         app:showAsAction="always" />
     <item
         android:id="@+id/newIcon"
         android:icon="@drawable/new_icon"
         android:title="@string/app_name"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         app:showAsAction="always" />
     <item
         android:id="@+id/nameOrderIcon"
         android:title="סדר לפי שם"
-        android:orderInCategory="2"
+        android:orderInCategory="4"
         app:showAsAction="" />
     <item
         android:id="@+id/dateOrderIcon"
         android:title="סדר לפי תאריך"
-        android:orderInCategory="2"
+        android:orderInCategory="5"
         app:showAsAction="" />
     <item
         android:id="@+id/sumOrderIcon"
         android:title="סדר לפי סכום"
-        android:orderInCategory="2"
+        android:orderInCategory="6"
         app:showAsAction="" />
 </menu>

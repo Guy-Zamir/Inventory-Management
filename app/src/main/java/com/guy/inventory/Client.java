@@ -16,51 +16,51 @@ public class Client {
         this.name = name;
     }
 
-    String getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    void setLocation(String location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    String getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    String getInsidePhone() {
+    public String getInsidePhone() {
         return insidePhone;
     }
 
-    void setInsidePhone(String insidePhone) {
+    public void setInsidePhone(String insidePhone) {
         this.insidePhone = insidePhone;
     }
 
-    String getFax() {
+    public String getFax() {
         return fax;
     }
 
-    void setFax(String fax) {
+    public void setFax(String fax) {
         this.fax = fax;
     }
 
-    String getWebsite() {
+    public String getWebsite() {
         return website;
     }
 
-    void setWebsite(String website) {
+    public void setWebsite(String website) {
         this.website = website;
     }
 
-    String getDetails() {
+    public String getDetails() {
         return details;
     }
 
-    void setDetails(String details) {
+    public void setDetails(String details) {
         this.details = details;
     }
 
@@ -100,7 +100,7 @@ public class Client {
         return supplier;
     }
 
-    void setSupplier(String supplier) {
+    public void setSupplier(String supplier) {
         this.supplier = supplier;
     }
 }

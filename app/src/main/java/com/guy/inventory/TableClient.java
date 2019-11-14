@@ -159,8 +159,10 @@ public class TableClient extends AppCompatActivity {
                     editClient.putExtra("index", selectedItem);
                     editClient.putExtra("client", client);
                     startActivityForResult(editClient, 1);
-                    break;
+
                 }
+                break;
+
         }
                 return super.onOptionsItemSelected(item);
         }

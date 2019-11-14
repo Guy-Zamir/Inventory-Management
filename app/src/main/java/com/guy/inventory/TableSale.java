@@ -31,7 +31,8 @@ public class TableSale extends AppCompatActivity {
     private TextView tvLoad;
 
     TextView tvSaleDetailsClientName, tvSaleDetailsBuyDate, tvSaleDetailsPayDate, tvSaleDetailsID,
-            tvSaleDetailsPrice, tvSaleDetailsWeight, tvSaleDetailsDays, tvSaleDetailsSum;
+            tvSaleDetailsPrice, tvSaleDetailsWeight, tvSaleDetailsDays, tvSaleDetailsSum,
+            tvSaleDetailsSaleSum, tvSaleDetailsWeightSum, tvSaleDetailsAvgPrice;
 
     ListView lvSaleList;
     LinearLayout llSaleDetails;
@@ -57,6 +58,9 @@ public class TableSale extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
+        tvSaleDetailsAvgPrice = findViewById(R.id.tvSaleDetailsAvgPrice);
+        tvSaleDetailsSaleSum = findViewById(R.id.tvSaleDetailsSaleSum);
+        tvSaleDetailsWeightSum = findViewById(R.id.tvSaleDetailsWeightSum);
         tvSaleDetailsClientName = findViewById(R.id.tvSaleDetailsClientName);
         tvSaleDetailsBuyDate = findViewById(R.id.tvSaleDetailsBuyDate);
         tvSaleDetailsPayDate = findViewById(R.id.tvSaleDetailsPayDate);
@@ -105,6 +109,22 @@ public class TableSale extends AppCompatActivity {
                 if (findViewById(R.id.table_sales_layout_land) != null) {
                     llSaleDetails.setVisibility(View.VISIBLE);
                     DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
+                    double saleSum = 0;
+                    double weightSum = 0;
+                    for (Sale sale : InventoryApp.sales) {
+                        if (InventoryApp.sales.get(position).getClientName().equals(sale.getClientName())) {
+                            saleSum += sale.getSaleSum();
+                            weightSum += sale.getWeight();
+                        }
+                    }
+
+                    double avgPrice;
+                    if (weightSum == 0) {
+                        avgPrice = 0;
+                    } else {
+                        avgPrice = saleSum / weightSum;
+                    }
+
                     if (exports) {
                         Calendar saleDate = Calendar.getInstance();
                         saleDate.setTime(InventoryApp.exports.get(position).getSaleDate());
@@ -127,6 +147,8 @@ public class TableSale extends AppCompatActivity {
                         tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.exports.get(position).getWeight()));
                         tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.exports.get(position).getDays()));
                         tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.exports.get(position).getSaleSum()) + "$");
+                        tvSaleDetailsSaleSum.setText("סה\"כ סכום שנמכר:  " + nf.format(saleSum) + "$");
+                        tvSaleDetailsWeightSum.setText("סה\"כ משקל שנמכר:  " + nf.format(weightSum) + "$");
 
                     } else {
 
@@ -148,9 +170,12 @@ public class TableSale extends AppCompatActivity {
                         tvSaleDetailsClientName.setText(InventoryApp.sales.get(position).getClientName());
                         tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
                         tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
-                        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()));
+                        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()) + " קראט ");
                         tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
                         tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
+                        tvSaleDetailsSaleSum.setText("סה\"כ סכום שנמכר:  " + nf.format(saleSum) + "$");
+                        tvSaleDetailsWeightSum.setText("סה\"כ משקל שנמכר:  " + nf.format(weightSum) + " קראט ");
+                        tvSaleDetailsAvgPrice.setText("מחיר ממוצע שנמכר:  " + nf.format(avgPrice) + "$");
                     }
 
                     // In Port
@@ -198,8 +223,8 @@ public class TableSale extends AppCompatActivity {
                         editSale.putExtra("export", false);
                     }
                     startActivityForResult(editSale, 1);
-                    break;
                 }
+                break;
 
             case R.id.deleteIcon:
                 if (selectedItem == -1) {
@@ -254,6 +279,7 @@ public class TableSale extends AppCompatActivity {
                     });
                     alert.show();
                 }
+                break;
 
             case R.id.dateOrderIcon:
                 if (exports) {
@@ -315,52 +341,178 @@ public class TableSale extends AppCompatActivity {
             public void handleResponse(List<Sale> response) {
                 // Up to 100
                 InventoryApp.sales = response;
-                adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
-                lvSaleList.setAdapter(adapterSales);
-                showProgress(false);
 
                 if (InventoryApp.sales.size() == pageSize) {
                     offset += InventoryApp.sales.size();
                     saleBuilder.setOffset(offset);
 
-                    showProgress(true);
                     Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
                         @Override
                         public void handleResponse(List<Sale> response) {
                             // Up to 200
                             InventoryApp.sales.addAll(response);
-                            adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
-                            lvSaleList.setAdapter(adapterSales);
-                            showProgress(false);
 
-                            if (InventoryApp.sales.size() == pageSize * 2) {
-                                offset += InventoryApp.sales.size();
+                            if (InventoryApp.sales.size() == (pageSize * 2)) {
+                                offset += pageSize;
                                 saleBuilder.setOffset(offset);
 
-                                showProgress(true);
                                 Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
                                     @Override
                                     public void handleResponse(List<Sale> response) {
                                         // Up to 300
                                         InventoryApp.sales.addAll(response);
-                                        adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
-                                        lvSaleList.setAdapter(adapterSales);
-                                        showProgress(false);
 
                                         if (InventoryApp.sales.size() == pageSize * 3) {
-                                            offset += InventoryApp.sales.size();
+                                            offset += pageSize;
                                             saleBuilder.setOffset(offset);
 
-                                            showProgress(true);
                                             Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
                                                 @Override
                                                 public void handleResponse(List<Sale> response) {
                                                     // Up to 400
                                                     InventoryApp.sales.addAll(response);
-                                                    adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
-                                                    lvSaleList.setAdapter(adapterSales);
-                                                    showProgress(false);
 
+                                                    if (InventoryApp.sales.size() == pageSize * 4) {
+                                                        offset += pageSize;
+                                                        saleBuilder.setOffset(offset);
+
+                                                        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                                            @Override
+                                                            public void handleResponse(List<Sale> response) {
+                                                                // Up to 500
+                                                                InventoryApp.sales.addAll(response);
+
+                                                                if (InventoryApp.sales.size() == pageSize * 5) {
+                                                                    offset += pageSize;
+                                                                    saleBuilder.setOffset(offset);
+
+                                                                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                                                        @Override
+                                                                        public void handleResponse(List<Sale> response) {
+                                                                            // Up to 600
+                                                                            InventoryApp.sales.addAll(response);
+
+                                                                            if (InventoryApp.sales.size() == pageSize * 6) {
+                                                                                offset += pageSize;
+                                                                                saleBuilder.setOffset(offset);
+
+                                                                                Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                                                                    @Override
+                                                                                    public void handleResponse(List<Sale> response) {
+                                                                                        // Up to 700
+                                                                                        InventoryApp.sales.addAll(response);
+
+                                                                                        if (InventoryApp.sales.size() == pageSize * 7) {
+                                                                                            offset += pageSize;
+                                                                                            saleBuilder.setOffset(offset);
+
+                                                                                            Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                                                                                @Override
+                                                                                                public void handleResponse(List<Sale> response) {
+                                                                                                    // Up to 800
+                                                                                                    InventoryApp.sales.addAll(response);
+
+                                                                                                    if (InventoryApp.sales.size() == pageSize * 8) {
+                                                                                                        offset += pageSize;
+                                                                                                        saleBuilder.setOffset(offset);
+
+                                                                                                        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                                                                                            @Override
+                                                                                                            public void handleResponse(List<Sale> response) {
+                                                                                                                // Up to 900
+                                                                                                                InventoryApp.sales.addAll(response);
+
+                                                                                                                if (InventoryApp.sales.size() == pageSize * 9) {
+                                                                                                                    offset += pageSize;
+                                                                                                                    saleBuilder.setOffset(offset);
+
+                                                                                                                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
+                                                                                                                        @Override
+                                                                                                                        public void handleResponse(List<Sale> response) {
+                                                                                                                            // Up to 1000
+                                                                                                                            InventoryApp.sales.addAll(response);
+                                                                                                                            adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                                                                                                            lvSaleList.setAdapter(adapterSales);
+                                                                                                                            showProgress(false);
+
+                                                                                                                        }
+
+                                                                                                                        @Override
+                                                                                                                        public void handleFault(BackendlessFault fault) {
+                                                                                                                            Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                                                            showProgress(false);
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                } else {
+                                                                                                                    adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                                                                                                    lvSaleList.setAdapter(adapterSales);
+                                                                                                                    showProgress(false);
+                                                                                                                }
+                                                                                                            }
+
+                                                                                                            @Override
+                                                                                                            public void handleFault(BackendlessFault fault) {
+                                                                                                                Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                                                showProgress(false);
+                                                                                                            }
+                                                                                                        });
+                                                                                                    } else {
+                                                                                                        adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                                                                                        lvSaleList.setAdapter(adapterSales);
+                                                                                                        showProgress(false);
+                                                                                                    }
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void handleFault(BackendlessFault fault) {
+                                                                                                    Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                                    showProgress(false);
+                                                                                                }
+                                                                                            });
+                                                                                        } else {
+                                                                                            adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                                                                            lvSaleList.setAdapter(adapterSales);
+                                                                                            showProgress(false);
+                                                                                        }
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void handleFault(BackendlessFault fault) {
+                                                                                        Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                        showProgress(false);
+                                                                                    }
+                                                                                });
+                                                                            } else {
+                                                                                adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                                                                lvSaleList.setAdapter(adapterSales);
+                                                                                showProgress(false);
+                                                                            }
+                                                                        }
+
+                                                                        @Override
+                                                                        public void handleFault(BackendlessFault fault) {
+                                                                            Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                            showProgress(false);
+                                                                        }
+                                                                    });
+                                                                } else {
+                                                                    adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                                                    lvSaleList.setAdapter(adapterSales);
+                                                                    showProgress(false);
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void handleFault(BackendlessFault fault) {
+                                                                Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                showProgress(false);
+                                                            }
+                                                        });
+                                                    } else {
+                                                        adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                                        lvSaleList.setAdapter(adapterSales);
+                                                        showProgress(false);
+                                                    }
                                                 }
 
                                                 @Override
@@ -369,6 +521,10 @@ public class TableSale extends AppCompatActivity {
                                                     showProgress(false);
                                                 }
                                             });
+                                        } else {
+                                            adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                            lvSaleList.setAdapter(adapterSales);
+                                            showProgress(false);
                                         }
                                     }
 
@@ -378,6 +534,10 @@ public class TableSale extends AppCompatActivity {
                                         showProgress(false);
                                     }
                                 });
+                            } else {
+                                adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                                lvSaleList.setAdapter(adapterSales);
+                                showProgress(false);
                             }
                         }
 
@@ -387,6 +547,10 @@ public class TableSale extends AppCompatActivity {
                             showProgress(false);
                         }
                     });
+                } else {
+                    adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
+                    lvSaleList.setAdapter(adapterSales);
+                    showProgress(false);
                 }
             }
 

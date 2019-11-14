@@ -107,8 +107,9 @@ public class TableSorting extends AppCompatActivity {
                     Intent editSort = new Intent(TableSorting.this, EditSort.class);
                     editSort.putExtra("index", selectedItem);
                     startActivityForResult(editSort, 1);
-                    break;
                 }
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }

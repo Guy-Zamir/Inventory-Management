@@ -11,11 +11,11 @@ public class Sale {
     private Date created, updated;
     private String objectId, userEmail;
 
-    double getSaleSum() {
+    public double getSaleSum() {
         return saleSum;
     }
 
-    void setSaleSum(double saleSum) {
+    public void setSaleSum(double saleSum) {
         this.saleSum = saleSum;
     }
 
@@ -23,7 +23,7 @@ public class Sale {
         return weight;
     }
 
-    void setWeight(double weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
@@ -31,7 +31,7 @@ public class Sale {
         return price;
     }
 
-    void setPrice(double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -47,7 +47,7 @@ public class Sale {
         return days;
     }
 
-    void setDays(int days) {
+    public void setDays(int days) {
         this.days = days;
     }
 
@@ -55,23 +55,23 @@ public class Sale {
         return paid;
     }
 
-    void setPaid(boolean paid) {
+    public void setPaid(boolean paid) {
         this.paid = paid;
     }
 
-    Date getSaleDate() {
+    public Date getSaleDate() {
         return saleDate;
     }
 
-    void setSaleDate(Date saleDate) {
+    public void setSaleDate(Date saleDate) {
         this.saleDate = saleDate;
     }
 
-    Date getPayDate() {
+    public Date getPayDate() {
         return payDate;
     }
 
-    void setPayDate(Date payDate) {
+    public void setPayDate(Date payDate) {
         this.payDate = payDate;
     }
 
@@ -107,19 +107,19 @@ public class Sale {
         this.userEmail = userEmail;
     }
 
-    String getClientName() {
+    public String getClientName() {
         return clientName;
     }
 
-    void setClientName(String clientName) {
+    public void setClientName(String clientName) {
         this.clientName = clientName;
     }
 
-    boolean isPolish() {
+    public boolean isPolish() {
         return polish;
     }
 
-    void setPolish(boolean polish) {
+    public void setPolish(boolean polish) {
         this.polish = polish;
     }
 }
