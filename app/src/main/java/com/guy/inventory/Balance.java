@@ -16,6 +16,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 
 public class Balance extends AppCompatActivity {
     private View mProgressView;
@@ -23,10 +24,6 @@ public class Balance extends AppCompatActivity {
     private TextView tvLoad;
 
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-    final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
-    final DataQueryBuilder exportBuilder = DataQueryBuilder.create();
-    final DataQueryBuilder buyBuilder = DataQueryBuilder.create();
-    final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
 
     LinearLayout llBalanceWage;
 
@@ -40,27 +37,48 @@ public class Balance extends AppCompatActivity {
 
     int pageSize = 100;
 
-    double balanceSum, balanceWeight, balancePrice;
-    double balancePolishSum, balancePolishWeight, balancePolishPrice;
-    double balanceRoughSum, balanceRoughWeight, balanceRoughPrice;
+    // all the calculated values
+    private double balanceSum, balanceWeight, balancePrice;
+    private double balancePolishSum, balancePolishWeight, balancePolishPrice;
+    private double balanceRoughSum, balanceRoughWeight, balanceRoughPrice;
 
-    double saleSum, saleWeight, salePrice;
-    double saleRoughSum, saleRoughWeight, saleRoughPrice;
-    double salePolishSum, salePolishWeight, salePolishPrice;
+    private double saleSum, saleWeight, salePrice;
+    private double saleRoughSum, saleRoughWeight, saleRoughPrice;
+    private double salePolishSum, salePolishWeight, salePolishPrice;
 
-    double exportSum, exportWeight, exportPrice;
+    private double exportSum, exportWeight, exportPrice;
 
-    double buySum, buyWeight, buyPrice;
-    double buyRoughSum, buyRoughWeight, buyRoughPrice;
-    double buyPolishSum, buyPolishWeight, buyPolishPrice;
+    private double buySum, buyWeight, buyPrice;
+    private double buyRoughSum, buyRoughWeight, buyRoughPrice;
+    private double buyPolishSum, buyPolishWeight, buyPolishPrice;
 
-    double taxSum, taxWeight, taxPrice;
-    double taxRoughSum, taxRoughWeight, taxRoughPrice;
-    double taxPolishSum, taxPolishWeight, taxPolishPrice;
+    private double taxSum, taxWeight, taxPrice;
+    private double taxRoughSum, taxRoughWeight, taxRoughPrice;
+    private double taxPolishSum, taxPolishWeight, taxPolishPrice;
 
-    double wageSum, wageWeight, wagePer, wagePrice;
+    private double wageSum, wageWeight, wagePer, wagePrice;
 
-    double profit;
+    // all the original values
+    private double allPolishSaleSum = 0;
+    private double allPolishSaleWeight = 0;
+
+    private double allPolishExportSum = 0;
+    private double allPolishExportWeight = 0;
+
+    private double allRoughSaleSum = 0;
+    private double allRoughSaleWeight = 0;
+
+    private double allNotDoneRoughBuySum = 0;
+    private double allNotDoneRoughBuyWeight = 0;
+
+    private double allRoughBuyDoneSum = 0;
+    private double allRoughBuyDoneWeight = 0;
+    private double allRoughBuyDoneOrgWeight = 0;
+
+    private double allPolishBuySum = 0;
+    private double allPolishBuyWeight = 0;
+
+    private double allWageSum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,37 +120,165 @@ public class Balance extends AppCompatActivity {
         actionBar.setTitle("מאזנים");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        showProgress(true);
-
-        clientBuilder.setWhereClause(whereClause);
-        clientBuilder.setSortBy("name");
-        clientBuilder.setPageSize(pageSize);
-
+        // Get The Info//
+        // Setting all the buys in the array
+        DataQueryBuilder buyBuilder = DataQueryBuilder.create();
         buyBuilder.setWhereClause(whereClause);
-        buyBuilder.setSortBy("buyDate DESC");
         buyBuilder.setPageSize(pageSize);
 
-        exportBuilder.setWhereClause(whereClause);
-        exportBuilder.setSortBy("saleDate DESC");
-        exportBuilder.setPageSize(pageSize);
-
         showProgress(true);
-
-        Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
+        Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
             @Override
-            public void handleResponse(List<Client> response) {
-                InventoryApp.clients = response;
+            public void handleResponse(List<Buy> response) {
+                InventoryApp.buys = response;
+                if (InventoryApp.buys != null) {
+                    for (Buy buy : InventoryApp.buys) {
+                        if (!buy.isPolish()) {
 
-                Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
+                            // Buy Rough Not Done
+                            if (!buy.isDone()) {
+                                allNotDoneRoughBuySum += buy.getSum();
+                                allNotDoneRoughBuyWeight += buy.getWeight();
+
+                                // Buy Done Rough
+                            } else {
+                                allRoughBuyDoneSum += buy.getSum();
+                                allRoughBuyDoneOrgWeight += buy.getWeight();
+                                allRoughBuyDoneWeight += buy.getDoneWeight();
+                                allWageSum += (buy.getWage() * buy.getWeight());
+                            }
+
+                            // Buy Polish
+                        } else {
+                            allPolishBuySum += buy.getSum();
+                            allPolishBuyWeight += buy.getWeight();
+                        }
+                    }
+                }
+
+                // Getting the sale sum of exports
+                DataQueryBuilder exportSumBuilder = DataQueryBuilder.create();
+                exportSumBuilder.setWhereClause(whereClause);
+                exportSumBuilder.setProperties("Sum(saleSum)");
+                Backendless.Data.of("Export").find(exportSumBuilder, new AsyncCallback<List<Map>>() {
                     @Override
-                    public void handleResponse(List<Buy> response) {
-                        InventoryApp.buys = response;
+                    public void handleResponse(List<Map> response) {
+                        if (response.get(0).get("sum") != null) {
+                            allPolishExportSum = (double) response.get(0).get("sum");
+                        }
 
-                        Backendless.Data.of(Export.class).find(exportBuilder, new AsyncCallback<List<Export>>() {
+                        // Getting the weight sum of exports
+                        DataQueryBuilder exportWeightBuilder = DataQueryBuilder.create();
+                        exportWeightBuilder.setWhereClause(whereClause);
+                        exportWeightBuilder.setProperties("Sum(weight)");
+                        Backendless.Data.of("Export").find(exportWeightBuilder, new AsyncCallback<List<Map>>() {
                             @Override
-                            public void handleResponse(List<Export> response) {
-                                InventoryApp.exports = response;
-                                getSales("saleDate DESC");
+                            public void handleResponse(List<Map> response) {
+                                if (response.get(0).get("sum") != null) {
+                                    allPolishExportWeight = (double) response.get(0).get("sum");
+                                }
+
+                                // Getting the sale sum of sales
+                                DataQueryBuilder saleSumBuilder = DataQueryBuilder.create();
+                                saleSumBuilder.setWhereClause(whereClause);
+                                saleSumBuilder.setProperties("Sum(saleSum)", "polish");
+                                saleSumBuilder.setGroupBy("polish");
+                                Backendless.Data.of("Sale").find(saleSumBuilder, new AsyncCallback<List<Map>>() {
+                                    @Override
+                                    public void handleResponse(List<Map> response) {
+                                        allPolishSaleSum = (double) response.get(1).get("sum");
+                                        allRoughSaleSum = (double) response.get(0).get("sum");
+
+                                        // Getting the weight sum of sales
+                                        DataQueryBuilder saleWeightBuilder = DataQueryBuilder.create();
+                                        saleWeightBuilder.setWhereClause(whereClause);
+                                        saleWeightBuilder.setProperties("Sum(weight)", "polish");
+                                        saleWeightBuilder.setGroupBy("polish");
+                                        Backendless.Data.of("Sale").find(saleWeightBuilder, new AsyncCallback<List<Map>>() {
+                                            @Override
+                                            public void handleResponse(List<Map> response) {
+                                                allPolishSaleWeight = (double) response.get(1).get("sum");
+                                                allRoughSaleWeight = (double) response.get(0).get("sum");
+                                                showProgress(false);
+
+                                                //Calculate The Values//
+                                                exportSum = allPolishExportSum;
+                                                exportWeight = allPolishExportWeight;
+                                                exportPrice = (exportWeight > 0) ? (exportSum / exportWeight) : 0;
+
+                                                saleRoughSum = allRoughSaleSum;
+                                                saleRoughWeight = allRoughSaleWeight;
+                                                saleRoughPrice = (saleRoughWeight > 0) ? (saleRoughSum / saleRoughWeight) : 0;
+
+                                                salePolishSum = allPolishSaleSum;
+                                                salePolishWeight = allPolishSaleWeight;
+                                                salePolishPrice = (salePolishWeight > 0) ? (salePolishSum / salePolishWeight) : 0;
+
+                                                saleSum = salePolishSum + saleRoughSum + exportSum;
+                                                saleWeight = saleRoughWeight + salePolishWeight + exportWeight;
+                                                salePrice = (saleWeight > 0) ? (saleSum / saleWeight) : 0;
+
+                                                buyRoughSum = allNotDoneRoughBuySum + allRoughBuyDoneSum;
+                                                buyRoughWeight = allRoughBuyDoneOrgWeight + allNotDoneRoughBuyWeight;
+                                                buyRoughPrice = (buyRoughWeight > 0) ? (buyRoughSum / buyRoughWeight) : 0;
+
+                                                buyPolishSum = allPolishBuySum;
+                                                buyPolishWeight = allPolishBuyWeight;
+                                                buyPolishPrice = (buyPolishWeight > 0) ? (buyPolishSum / buyPolishWeight) : 0;
+
+                                                buySum = buyRoughSum + buyPolishSum;
+                                                buyWeight = buyRoughWeight + buyPolishWeight;
+                                                buyPrice = (buyWeight > 0) ? (buySum / buyWeight) : 0;
+
+                                                wageSum = allWageSum;
+                                                wageWeight = allRoughBuyDoneOrgWeight - allRoughBuyDoneWeight;
+                                                wagePer = (allRoughBuyDoneOrgWeight > 0) ? (1 - (allRoughBuyDoneWeight / allRoughBuyDoneOrgWeight)) : 0;
+                                                wagePrice = (allRoughBuyDoneOrgWeight > 0) ? (wageSum / allRoughBuyDoneOrgWeight) : 0;
+
+                                                balanceRoughSum = allNotDoneRoughBuySum - saleRoughSum;
+                                                balanceRoughWeight = allNotDoneRoughBuyWeight - saleRoughWeight;
+                                                balanceRoughPrice = (balanceRoughWeight > 0) ? (balanceRoughSum / balanceRoughWeight) : 0;
+
+                                                balancePolishSum = allRoughBuyDoneSum + buyPolishSum - salePolishSum - exportSum + wageSum;
+                                                balancePolishWeight = allRoughBuyDoneWeight + buyPolishWeight - salePolishWeight - exportWeight;
+                                                balancePolishPrice = (balancePolishWeight > 0) ? (balancePolishSum / balancePolishWeight) : 0;
+
+                                                balanceSum = balancePolishSum + balanceRoughSum;
+                                                balanceWeight = balanceRoughWeight + balancePolishWeight;
+                                                balancePrice = (balanceWeight > 0) ? (balanceSum / balanceWeight) : 0;
+
+                                                taxRoughPrice = (allNotDoneRoughBuyWeight > 0) ? (allNotDoneRoughBuySum / allNotDoneRoughBuyWeight) : 0;
+
+                                                taxRoughWeight = balanceRoughWeight;
+                                                taxRoughSum = taxRoughPrice * taxRoughWeight;
+                                                taxPolishPrice = ((allRoughBuyDoneWeight + buyPolishWeight) > 0) ? (allRoughBuyDoneSum + buyPolishSum) / (allRoughBuyDoneWeight + buyPolishWeight) : 0;
+                                                taxPolishWeight = balancePolishWeight;
+                                                taxPolishSum = taxPolishWeight * taxPolishPrice;
+
+                                                taxSum = taxRoughSum + taxPolishSum;
+                                                taxWeight = taxRoughWeight + taxPolishWeight;
+                                                taxPrice = (taxWeight > 0) ? (taxSum / taxWeight) : 0;
+
+                                                setTheText(0);
+                                                btnBalanceGoods.setSelected(true);
+
+                                            }
+
+                                            @Override
+                                            public void handleFault(BackendlessFault fault) {
+                                                showProgress(false);
+                                                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
                             }
 
                             @Override
@@ -149,6 +295,7 @@ public class Balance extends AppCompatActivity {
                         Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
             }
 
             @Override
@@ -158,10 +305,12 @@ public class Balance extends AppCompatActivity {
             }
         });
 
+
+
         btnBalanceGoods.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(0);
+                setTheText(0);
                 btnBalanceGoods.setSelected(true);
                 btnBalanceTax.setSelected(false);
                 btnBalanceSale.setSelected(false);
@@ -172,7 +321,7 @@ public class Balance extends AppCompatActivity {
         btnBalanceBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(1);
+                setTheText(1);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(false);
                 btnBalanceSale.setSelected(false);
@@ -183,7 +332,7 @@ public class Balance extends AppCompatActivity {
         btnBalanceSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(2);
+                setTheText(2);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(false);
                 btnBalanceSale.setSelected(true);
@@ -195,7 +344,7 @@ public class Balance extends AppCompatActivity {
         btnBalanceTax.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(3);
+                setTheText(3);
                 btnBalanceGoods.setSelected(false);
                 btnBalanceTax.setSelected(true);
                 btnBalanceSale.setSelected(false);
@@ -205,201 +354,7 @@ public class Balance extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void getInfo() {
-
-        double allPolishSaleSum = 0;
-        double allPolishSaleWeight = 0;
-
-        double allPolishExportSum = 0;
-        double allPolishExportWeight = 0;
-
-        double allRoughSaleSum = 0;
-        double allRoughSaleWeight = 0;
-
-        double allNotDoneRoughBuySum = 0;
-        double allNotDoneRoughBuyWeight = 0;
-
-        double allRoughBuyDoneSum = 0;
-        double allRoughBuyDoneWeight = 0;
-        double allRoughBuyDoneOrgWeight = 0;
-
-        double allPolishBuySum = 0;
-        double allPolishBuyWeight = 0;
-
-        double allWageSum = 0;
-
-        if (InventoryApp.exports != null) {
-            for (Export export : InventoryApp.exports) {
-                if (export.isPolish()) {
-                    allPolishExportSum += export.getSaleSum();
-                    allPolishExportWeight += export.getWeight();
-                }
-            }
-        }
-
-        if (InventoryApp.sales != null) {
-            for (Sale sale : InventoryApp.sales) {
-                if (sale.isPolish()) {
-                    allPolishSaleSum += sale.getSaleSum();
-                    allPolishSaleWeight += sale.getWeight();
-                } else {
-                    allRoughSaleSum += sale.getSaleSum();
-                    allRoughSaleWeight += sale.getWeight();
-                }
-            }
-        }
-
-        if (InventoryApp.buys != null) {
-            for (Buy buy : InventoryApp.buys) {
-                if (!buy.isPolish()) {
-
-                    // Buy Rough Not Done
-                    if (!buy.isDone()) {
-                        allNotDoneRoughBuySum += buy.getSum();
-                        allNotDoneRoughBuyWeight += buy.getWeight();
-
-                        // Buy Done Rough
-                    } else {
-                        allRoughBuyDoneSum += buy.getSum();
-                        allRoughBuyDoneOrgWeight += buy.getWeight();
-                        allRoughBuyDoneWeight += buy.getDoneWeight();
-                        allWageSum += (buy.getWage() * buy.getWeight());
-                    }
-
-                    // Buy Polish
-                } else {
-                    allPolishBuySum += buy.getSum();
-                    allPolishBuyWeight += buy.getWeight();
-                }
-            }
-        }
-
-        exportSum = allPolishExportSum;
-        exportWeight = allPolishExportWeight;
-        if (allPolishExportWeight == 0) {
-            exportPrice = 0;
-        } else {
-            exportPrice = exportSum / exportWeight;
-        }
-
-
-        saleRoughSum = allRoughSaleSum;
-        saleRoughWeight = allRoughSaleWeight;
-        if (saleRoughWeight == 0) {
-            saleRoughPrice = 0;
-        } else {
-            saleRoughPrice = saleRoughSum / saleRoughWeight;
-        }
-
-        salePolishSum = allPolishSaleSum;
-        salePolishWeight = allPolishSaleWeight;
-        if (salePolishWeight == 0) {
-            salePolishPrice = 0;
-        } else {
-            salePolishPrice = salePolishSum / salePolishWeight;
-        }
-
-        saleSum = salePolishSum + saleRoughSum + exportSum;
-        saleWeight = saleRoughWeight + salePolishWeight + exportWeight;
-        if (saleWeight == 0) {
-            salePrice = 0;
-        } else {
-            salePrice = saleSum / saleWeight;
-        }
-
-
-        buyRoughSum = allNotDoneRoughBuySum + allRoughBuyDoneSum;
-        buyRoughWeight = allRoughBuyDoneOrgWeight + allNotDoneRoughBuyWeight;
-        if (buyRoughWeight == 0) {
-            buyRoughPrice = 0;
-        } else {
-            buyRoughPrice = buyRoughSum / buyRoughWeight;
-        }
-
-        buyPolishSum = allPolishBuySum;
-        buyPolishWeight = allPolishBuyWeight;
-        if (buyPolishWeight == 0) {
-            buyPolishPrice = 0;
-        } else {
-            buyPolishPrice = buyPolishSum / buyPolishWeight;
-        }
-
-        buySum = buyRoughSum + buyPolishSum;
-        buyWeight = buyRoughWeight + buyPolishWeight;
-        if (buyWeight == 0) {
-            buyPrice = 0;
-        } else {
-            buyPrice = buySum / buyWeight;
-        }
-
-
-        wageSum = allWageSum;
-        wageWeight = allRoughBuyDoneOrgWeight - allRoughBuyDoneWeight;
-        if (allRoughBuyDoneOrgWeight == 0) {
-            wagePer = 0;
-        } else {
-            wagePer = 1 - (allRoughBuyDoneWeight / allRoughBuyDoneOrgWeight);
-        }
-        if (allRoughBuyDoneOrgWeight == 0) {
-            wagePrice = 0;
-        } else {
-            wagePrice = wageSum / allRoughBuyDoneOrgWeight;
-        }
-
-
-        balanceRoughSum = allNotDoneRoughBuySum - saleRoughSum;
-        balanceRoughWeight = allNotDoneRoughBuyWeight - saleRoughWeight;
-        if (balanceRoughWeight == 0) {
-            balanceRoughPrice = 0;
-        } else {
-            balanceRoughPrice = balanceRoughSum / balanceRoughWeight;
-        }
-
-        balancePolishSum = allRoughBuyDoneSum + buyPolishSum - salePolishSum - exportSum + wageSum;
-        balancePolishWeight = allRoughBuyDoneWeight + buyPolishWeight - salePolishWeight - exportWeight;
-        if (balancePolishWeight == 0) {
-            balancePolishPrice = 0;
-        } else {
-            balancePolishPrice = balancePolishSum / balancePolishWeight;
-        }
-
-        balanceSum = balancePolishSum + balanceRoughSum;
-        balanceWeight = balanceRoughWeight + balancePolishWeight;
-        if (balanceWeight == 0) {
-            balancePrice = 0;
-        } else {
-            balancePrice = balanceSum / balanceWeight;
-        }
-
-
-        if (allNotDoneRoughBuyWeight == 0) {
-            taxRoughPrice = 0;
-        } else {
-            taxRoughPrice = allNotDoneRoughBuySum / allNotDoneRoughBuyWeight;
-        }
-        taxRoughWeight = balanceRoughWeight;
-        taxRoughSum = taxRoughPrice * taxRoughWeight;
-        if ((allRoughBuyDoneWeight + buyPolishWeight) == 0) {
-            taxPolishPrice = 0;
-        } else {
-            taxPolishPrice = (allRoughBuyDoneSum + buyPolishSum) / (allRoughBuyDoneWeight + buyPolishWeight);
-        }
-        taxPolishWeight = balancePolishWeight;
-        taxPolishSum = taxPolishWeight * taxPolishPrice;
-
-        taxSum = taxRoughSum + taxPolishSum;
-        taxWeight = taxRoughWeight + taxPolishWeight;
-        if (taxWeight == 0) {
-            taxPrice = 0;
-        } else {
-            taxPrice = taxSum / taxWeight;
-        }
-
-        profit = taxSum - buySum + saleSum;
-    }
-
-    @SuppressLint("SetTextI18n")
-    public void display(int head) {
+    public void setTheText(int head) {
 
         DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
 
@@ -493,251 +448,6 @@ public class Balance extends AppCompatActivity {
                 tvBalanceWagePrice.setText("סכום:  " + nf.format(wageSum) + "$");
                 break;
         }
-    }
-
-    private void getSales(String order) {
-        saleBuilder.setOffset(0);
-        saleBuilder.setWhereClause(whereClause);
-        saleBuilder.setSortBy(order);
-        saleBuilder.setPageSize(pageSize);
-
-        showProgress(true);
-        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-            int offset = 0;
-
-            @Override
-            public void handleResponse(List<Sale> response) {
-                // Up to 100
-                InventoryApp.sales = response;
-
-                if (InventoryApp.sales.size() == pageSize) {
-                    offset += InventoryApp.sales.size();
-                    saleBuilder.setOffset(offset);
-
-                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                        @Override
-                        public void handleResponse(List<Sale> response) {
-                            // Up to 200
-                            InventoryApp.sales.addAll(response);
-
-                            if (InventoryApp.sales.size() == (pageSize * 2)) {
-                                offset += pageSize;
-                                saleBuilder.setOffset(offset);
-
-                                Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                    @Override
-                                    public void handleResponse(List<Sale> response) {
-                                        // Up to 300
-                                        InventoryApp.sales.addAll(response);
-
-                                        if (InventoryApp.sales.size() == pageSize * 3) {
-                                            offset += pageSize;
-                                            saleBuilder.setOffset(offset);
-
-                                            Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                @Override
-                                                public void handleResponse(List<Sale> response) {
-                                                    // Up to 400
-                                                    InventoryApp.sales.addAll(response);
-
-                                                    if (InventoryApp.sales.size() == pageSize * 4) {
-                                                        offset += pageSize;
-                                                        saleBuilder.setOffset(offset);
-
-                                                        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                            @Override
-                                                            public void handleResponse(List<Sale> response) {
-                                                                // Up to 500
-                                                                InventoryApp.sales.addAll(response);
-
-                                                                if (InventoryApp.sales.size() == pageSize * 5) {
-                                                                    offset += pageSize;
-                                                                    saleBuilder.setOffset(offset);
-
-                                                                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                                        @Override
-                                                                        public void handleResponse(List<Sale> response) {
-                                                                            // Up to 600
-                                                                            InventoryApp.sales.addAll(response);
-
-                                                                            if (InventoryApp.sales.size() == pageSize * 6) {
-                                                                                offset += pageSize;
-                                                                                saleBuilder.setOffset(offset);
-
-                                                                                Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                                                    @Override
-                                                                                    public void handleResponse(List<Sale> response) {
-                                                                                        // Up to 700
-                                                                                        InventoryApp.sales.addAll(response);
-
-                                                                                        if (InventoryApp.sales.size() == pageSize * 7) {
-                                                                                            offset += pageSize;
-                                                                                            saleBuilder.setOffset(offset);
-
-                                                                                            Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                                                                @Override
-                                                                                                public void handleResponse(List<Sale> response) {
-                                                                                                    // Up to 800
-                                                                                                    InventoryApp.sales.addAll(response);
-
-                                                                                                    if (InventoryApp.sales.size() == pageSize * 8) {
-                                                                                                        offset += pageSize;
-                                                                                                        saleBuilder.setOffset(offset);
-
-                                                                                                        Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                                                                            @Override
-                                                                                                            public void handleResponse(List<Sale> response) {
-                                                                                                                // Up to 900
-                                                                                                                InventoryApp.sales.addAll(response);
-
-                                                                                                                if (InventoryApp.sales.size() == pageSize * 9) {
-                                                                                                                    offset += pageSize;
-                                                                                                                    saleBuilder.setOffset(offset);
-
-                                                                                                                    Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-                                                                                                                        @Override
-                                                                                                                        public void handleResponse(List<Sale> response) {
-                                                                                                                            // Up to 1000
-                                                                                                                            InventoryApp.sales.addAll(response);
-                                                                                                                            getInfo();
-                                                                                                                            display(0);
-                                                                                                                            btnBalanceGoods.setSelected(true);
-                                                                                                                            showProgress(false);
-
-                                                                                                                        }
-
-                                                                                                                        @Override
-                                                                                                                        public void handleFault(BackendlessFault fault) {
-                                                                                                                            Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                                                            showProgress(false);
-                                                                                                                        }
-                                                                                                                    });
-                                                                                                                } else {
-                                                                                                                    getInfo();
-                                                                                                                    display(0);
-                                                                                                                    btnBalanceGoods.setSelected(true);
-                                                                                                                    showProgress(false);
-                                                                                                                }
-                                                                                                            }
-
-                                                                                                            @Override
-                                                                                                            public void handleFault(BackendlessFault fault) {
-                                                                                                                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                                                showProgress(false);
-                                                                                                            }
-                                                                                                        });
-                                                                                                    } else {
-                                                                                                        getInfo();
-                                                                                                        display(0);
-                                                                                                        btnBalanceGoods.setSelected(true);
-                                                                                                        showProgress(false);
-                                                                                                    }
-                                                                                                }
-
-                                                                                                @Override
-                                                                                                public void handleFault(BackendlessFault fault) {
-                                                                                                    Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                                    showProgress(false);
-                                                                                                }
-                                                                                            });
-                                                                                        } else {
-                                                                                            getInfo();
-                                                                                            display(0);
-                                                                                            btnBalanceGoods.setSelected(true);
-                                                                                            showProgress(false);
-                                                                                        }
-                                                                                    }
-
-                                                                                    @Override
-                                                                                    public void handleFault(BackendlessFault fault) {
-                                                                                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                        showProgress(false);
-                                                                                    }
-                                                                                });
-                                                                            } else {
-                                                                                getInfo();
-                                                                                display(0);
-                                                                                btnBalanceGoods.setSelected(true);
-                                                                                showProgress(false);
-                                                                            }
-                                                                        }
-
-                                                                        @Override
-                                                                        public void handleFault(BackendlessFault fault) {
-                                                                            Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                            showProgress(false);
-                                                                        }
-                                                                    });
-                                                                } else {
-                                                                    getInfo();
-                                                                    display(0);
-                                                                    btnBalanceGoods.setSelected(true);
-                                                                    showProgress(false);
-                                                                }
-                                                            }
-
-                                                            @Override
-                                                            public void handleFault(BackendlessFault fault) {
-                                                                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                showProgress(false);
-                                                            }
-                                                        });
-                                                    } else {
-                                                        getInfo();
-                                                        display(0);
-                                                        btnBalanceGoods.setSelected(true);
-                                                        showProgress(false);
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void handleFault(BackendlessFault fault) {
-                                                    Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    showProgress(false);
-                                                }
-                                            });
-                                        } else {
-                                            getInfo();
-                                            display(0);
-                                            btnBalanceGoods.setSelected(true);
-                                            showProgress(false);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault fault) {
-                                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                        showProgress(false);
-                                    }
-                                });
-                            } else {
-                                getInfo();
-                                display(0);
-                                btnBalanceGoods.setSelected(true);
-                                showProgress(false);
-                            }
-                        }
-
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            showProgress(false);
-                        }
-                    });
-                } else {
-                    getInfo();
-                    display(0);
-                    btnBalanceGoods.setSelected(true);
-                    showProgress(false);
-                }
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                showProgress(false);
-            }
-        });
     }
 
     private void showProgress(final boolean show) {

@@ -1,144 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    android:background="@drawable/table_row"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tvSaleClientName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:fontFamily="sans-serif-smallcaps"
-        android:gravity="center_horizontal"
-        android:text="שם"
-        android:textColor="@color/colorText"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    android:background="@drawable/table_row">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvSaleDate"
+            android:id="@+id/tvSaleClientName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="sans-serif-smallcaps"
             android:gravity="center_horizontal"
-            android:text="תאריך מכירה"
+            android:text="שם"
             android:textColor="@color/colorText"
-            android:textSize="16sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvSaleSum"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginTop="2dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center_horizontal"
-            android:text="סכום עסקה"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSaleDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="תאריך מכירה"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleSum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="סכום עסקה"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSaleDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSaleDetailsPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="מחיר"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="משקל"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="חשבונית"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsDays"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="ימים"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsPayDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="תאריך פקיעה"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="מספר מכירה במערכת"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/llSaleDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvSaleDetailsPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="מחיר"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSaleDetailsWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="משקל"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSaleDetailsID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="חשבונית"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSaleDetailsDays"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="ימים"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSaleDetailsPayDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="תאריך פקיעה"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSaleDetailsNum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="מספר מכירה במערכת"
-            android:textColor="@color/colorText"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/ivRough"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_weight="2"
+        app:srcCompat="@drawable/rough_icon" />
 
 </LinearLayout>

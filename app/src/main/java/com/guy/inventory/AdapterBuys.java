@@ -81,25 +81,12 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
                 nf.format(InventoryApp.buys.get(position).getWage() * InventoryApp.buys.get(position).getWeight()) + "$");
         tvBuyDetailsWorkDe.setText("אחוז ליטוש:  " + nf.format(InventoryApp.buys.get(position).getWorkDepreciation() * 100) + "%");
 
-        if (InventoryApp.buys.get(position).isDone()) {
-            ivDone.setImageResource(R.drawable.done1_icon);
-        }
+        ivDone.setImageResource((InventoryApp.buys.get(position).isDone()) ? R.drawable.done1_icon : R.drawable.not_done1_icon);
 
-        if (!InventoryApp.buys.get(position).isDone()){
-            ivDone.setImageResource(R.drawable.not_done1_icon);
-        }
+        ivPolish.setVisibility((InventoryApp.buys.get(position).isPolish()) ? View.VISIBLE: View.INVISIBLE);
 
-        if (InventoryApp.buys.get(position).isPolish()) {
-            ivPolish.setImageResource(R.drawable.diamond1_icon);
-        } else {
-            ivPolish.setVisibility(View.INVISIBLE);
-        }
+        llBuyDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
 
-        if (position == selectedPosition) {
-            llBuyDetails.setVisibility(View.VISIBLE);
-        } else {
-            llBuyDetails.setVisibility(View.GONE);
-        }
 
         return convertView;
     }

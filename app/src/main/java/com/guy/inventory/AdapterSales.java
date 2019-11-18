@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         TextView tvSaleDate = convertView.findViewById(R.id.tvSaleDate);
         TextView tvSaleSum = convertView.findViewById(R.id.tvSaleSum);
 
+        ImageView ivRough = convertView.findViewById(R.id.ivRough);
         TextView tvSaleDetailsPayDate = convertView.findViewById(R.id.tvSaleDetailsPayDate);
         TextView tvSaleDetailsID = convertView.findViewById(R.id.tvSaleDetailsID);
         TextView tvSaleDetailsPrice = convertView.findViewById(R.id.tvSaleDetailsPrice);
@@ -71,11 +73,8 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
         tvSaleDetailsNum.setText("מספר מכירה במערכת:  " + (position+1));
 
-        if (position == selectedPosition) {
-            llSaleDetails.setVisibility(View.VISIBLE);
-        } else {
-            llSaleDetails.setVisibility(View.GONE);
-        }
+        llSaleDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
+        ivRough.setVisibility((InventoryApp.sales.get(position).isPolish()) ? View.INVISIBLE : View.VISIBLE);
 
         return convertView;
     }
