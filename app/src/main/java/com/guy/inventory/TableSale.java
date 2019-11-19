@@ -24,7 +24,6 @@ import com.backendless.persistence.DataQueryBuilder;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 public class TableSale extends AppCompatActivity {
     private View mProgressView;
@@ -32,8 +31,7 @@ public class TableSale extends AppCompatActivity {
     private TextView tvLoad;
 
     TextView tvSaleDetailsClientName, tvSaleDetailsBuyDate, tvSaleDetailsPayDate, tvSaleDetailsID,
-            tvSaleDetailsPrice, tvSaleDetailsWeight, tvSaleDetailsDays, tvSaleDetailsSum,
-            tvSaleDetailsSaleSum, tvSaleDetailsWeightSum, tvSaleDetailsAvgPrice;
+            tvSaleDetailsPrice, tvSaleDetailsWeight, tvSaleDetailsDays, tvSaleDetailsSum;
 
     ListView lvSaleList;
     LinearLayout llSaleDetails;
@@ -42,10 +40,10 @@ public class TableSale extends AppCompatActivity {
     AdapterExports adapterExports;
 
     String order = "saleDate DESC";
-    int totalSalesCount;
-    int pageSize = 50;
     int selectedItem = -1;
     boolean exports;
+
+    final int PAGE_SIZE = 50;
 
     final DataQueryBuilder exportBuilder = DataQueryBuilder.create();
     final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
@@ -61,9 +59,6 @@ public class TableSale extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        tvSaleDetailsAvgPrice = findViewById(R.id.tvSaleDetailsAvgPrice);
-        tvSaleDetailsSaleSum = findViewById(R.id.tvSaleDetailsSaleSum);
-        tvSaleDetailsWeightSum = findViewById(R.id.tvSaleDetailsWeightSum);
         tvSaleDetailsClientName = findViewById(R.id.tvSaleDetailsClientName);
         tvSaleDetailsBuyDate = findViewById(R.id.tvSaleDetailsBuyDate);
         tvSaleDetailsPayDate = findViewById(R.id.tvSaleDetailsPayDate);
@@ -82,7 +77,7 @@ public class TableSale extends AppCompatActivity {
         // If the activity is an Export or not
         exports = getIntent().getBooleanExtra("exports", false);
 
-        // An Export Sale
+        // An Export Sale - Setting the action bar title
         if (exports) {
             ActionBar actionBar = getSupportActionBar();
             assert actionBar != null;
@@ -91,9 +86,8 @@ public class TableSale extends AppCompatActivity {
 
             getExports();
 
-            // Not an Export Sale
+        // Not an Export Sale - Setting the action bar title
         } else {
-
             ActionBar actionBar = getSupportActionBar();
             assert actionBar != null;
             actionBar.setTitle("מכירות");
@@ -101,21 +95,6 @@ public class TableSale extends AppCompatActivity {
 
             getSales();
         }
-
-        DataQueryBuilder saleCountBuilder = DataQueryBuilder.create();
-        saleCountBuilder.setWhereClause(whereClause);
-        saleCountBuilder.setProperties("Count(saleSum)");
-        Backendless.Data.of("Sale").find(saleCountBuilder, new AsyncCallback<List<Map>>() {
-            @Override
-            public void handleResponse(List<Map> response) {
-                totalSalesCount = (int) response.get(0).get("count");
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-
-            }
-        });
 
         lvSaleList.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -135,27 +114,13 @@ public class TableSale extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
                 selectedItem = position;
-
+                // Setting the values in land mode
                 if (findViewById(R.id.table_sales_layout_land) != null) {
                     llSaleDetails.setVisibility(View.VISIBLE);
 
                     DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
-                    double saleSum = 0;
-                    double weightSum = 0;
-                    for (Sale sale : InventoryApp.sales) {
-                        if (InventoryApp.sales.get(position).getClientName().equals(sale.getClientName())) {
-                            saleSum += sale.getSaleSum();
-                            weightSum += sale.getWeight();
-                        }
-                    }
 
-                    double avgPrice;
-                    if (weightSum == 0) {
-                        avgPrice = 0;
-                    } else {
-                        avgPrice = saleSum / weightSum;
-                    }
-
+                    // Setting the values for exports
                     if (exports) {
                         Calendar saleDate = Calendar.getInstance();
                         saleDate.setTime(InventoryApp.exports.get(position).getSaleDate());
@@ -175,10 +140,11 @@ public class TableSale extends AppCompatActivity {
                         tvSaleDetailsClientName.setText(InventoryApp.exports.get(position).getClientName());
                         tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.exports.get(position).getId());
                         tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.exports.get(position).getPrice()) + "$");
-                        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.exports.get(position).getWeight()));
+                        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.exports.get(position).getWeight()) + " קראט ");
                         tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.exports.get(position).getDays()));
                         tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.exports.get(position).getSaleSum()) + "$");
 
+                    // Setting the values for sales
                     } else {
 
                         Calendar saleDate = Calendar.getInstance();
@@ -202,14 +168,9 @@ public class TableSale extends AppCompatActivity {
                         tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()) + " קראט ");
                         tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
                         tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
-
-
-                        tvSaleDetailsSaleSum.setText("סה\"כ סכום שנמכר:  " + nf.format(saleSum) + "$");
-                        tvSaleDetailsWeightSum.setText("סה\"כ משקל שנמכר:  " + nf.format(weightSum) + " קראט ");
-                        tvSaleDetailsAvgPrice.setText("מחיר ממוצע שנמכר:  " + nf.format(avgPrice) + "$");
                     }
 
-                    // In Port
+                // Setting the values from the adapter in port mode
                 } else {
                     if (exports) {
                         adapterExports.setSelectedPosition(position);
@@ -280,6 +241,7 @@ public class TableSale extends AppCompatActivity {
                                         Toast.makeText(TableSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                                         adapterExports.notifyDataSetChanged();
                                         showProgress(false);
+                                        tvLoad.setText("טוען...");
                                     }
 
                                     @Override
@@ -361,10 +323,9 @@ public class TableSale extends AppCompatActivity {
     }
 
     private void getSales() {
-        saleBuilder.setOffset(0);
         saleBuilder.setWhereClause(whereClause);
         saleBuilder.setSortBy(order);
-        saleBuilder.setPageSize(pageSize);
+        saleBuilder.setPageSize(PAGE_SIZE);
 
         showProgress(true);
         Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
@@ -393,7 +354,7 @@ public class TableSale extends AppCompatActivity {
     private void getExports() {
         exportBuilder.setWhereClause(whereClause);
         exportBuilder.setSortBy(order);
-        exportBuilder.setPageSize(pageSize);
+        exportBuilder.setPageSize(PAGE_SIZE);
         showProgress(true);
 
         Backendless.Data.of(Export.class).find(exportBuilder, new AsyncCallback<List<Export>>() {
@@ -429,7 +390,7 @@ public class TableSale extends AppCompatActivity {
             exportBuilderLoad.setOffset(offset);
             exportBuilderLoad.setSortBy(order);
             exportBuilderLoad.setWhereClause(whereClause);
-            exportBuilderLoad.setPageSize(pageSize);
+            exportBuilderLoad.setPageSize(PAGE_SIZE);
 
             showProgress(true);
             Backendless.Data.of(Export.class).find(exportBuilderLoad, new AsyncCallback<List<Export>>() {
@@ -451,7 +412,7 @@ public class TableSale extends AppCompatActivity {
             saleBuilderLoad.setOffset(offset);
             saleBuilderLoad.setSortBy(order);
             saleBuilderLoad.setWhereClause(whereClause);
-            saleBuilderLoad.setPageSize(pageSize);
+            saleBuilderLoad.setPageSize(PAGE_SIZE);
 
             showProgress(true);
             Backendless.Data.of(Sale.class).find(saleBuilderLoad, new AsyncCallback<List<Sale>>() {

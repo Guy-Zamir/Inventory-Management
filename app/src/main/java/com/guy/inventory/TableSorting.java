@@ -26,11 +26,12 @@ public class TableSorting extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    ListView lvSortList;
-    AdapterSort sortAdapter;
+    private ListView lvSortList;
+    private AdapterSort sortAdapter;
 
-     int pageSize = 100;
-     int selectedItem = -1;
+    private int selectedItem = -1;
+
+    final int PAGE_SIZE = 100;
 
     private final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     private final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
@@ -50,7 +51,7 @@ public class TableSorting extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setTitle("מיונים");
         sortBuilder.setWhereClause(whereClause);
-        sortBuilder.setPageSize(pageSize);
+        sortBuilder.setPageSize(PAGE_SIZE);
 
         showProgress(true);
         Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {

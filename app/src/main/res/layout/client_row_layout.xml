@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:background="@drawable/table_row"
     android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvLoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/org_loading"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvClientName"
@@ -25,6 +52,42 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvClientSum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center_horizontal"
+            android:text='סה"כ סכום'
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvClientWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center_horizontal"
+            android:text='סה"כ משקל'
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvClientPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center_horizontal"
+            android:text="מחיר ממוצע"
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/tvClientDetailsWebSite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,9 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
             android:gravity="center_horizontal"
             android:text="טלפון"
             android:textColor="@color/colorText"
@@ -55,9 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
             android:gravity="center_horizontal"
             android:text="כתובת"
             android:textColor="@color/colorText"
@@ -68,9 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
             android:gravity="center_horizontal"
             android:text="פקס"
             android:textColor="@color/colorText"
@@ -81,9 +138,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
-            android:layout_marginRight="10dp"
             android:gravity="center_horizontal"
             android:text="טלפון פנימי"
             android:textColor="@color/colorText"
@@ -103,4 +158,5 @@
 
     </LinearLayout>
 
+</LinearLayout>
 </LinearLayout>

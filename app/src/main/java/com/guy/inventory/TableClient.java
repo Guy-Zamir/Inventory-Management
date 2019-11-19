@@ -129,6 +129,7 @@ public class TableClient extends AppCompatActivity {
                     tvClientDetailsDetails.setText("פרטים נוספים:  " + InventoryApp.clients.get(selectedItem).getDetails());
 
                 } else {
+                    adapter.setClient(client);
                     adapter.setSelectedPosition(position);
                     adapter.notifyDataSetChanged();
                 }

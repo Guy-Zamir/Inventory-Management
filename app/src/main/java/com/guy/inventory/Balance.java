@@ -37,7 +37,7 @@ public class Balance extends AppCompatActivity {
 
     int pageSize = 100;
 
-    // all the calculated values
+    // All the calculated values
     private double balanceSum, balanceWeight, balancePrice;
     private double balancePolishSum, balancePolishWeight, balancePolishPrice;
     private double balanceRoughSum, balanceRoughWeight, balanceRoughPrice;
@@ -58,7 +58,7 @@ public class Balance extends AppCompatActivity {
 
     private double wageSum, wageWeight, wagePer, wagePrice;
 
-    // all the original values
+    // All the original values
     private double allPolishSaleSum = 0;
     private double allPolishSaleWeight = 0;
 

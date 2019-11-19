@@ -32,6 +32,7 @@ public class AdapterSort extends ArrayAdapter<Sort> {
         assert inflater != null;
         convertView = inflater.inflate(R.layout.sort_row_layout, parent, false);
 
+        // Defining the views in the layouts
         TextView tvSortName = convertView.findViewById(R.id.tvSortName);
         TextView tvSortPrice = convertView.findViewById(R.id.tvSortPrice);
         TextView tvSortWeight = convertView.findViewById(R.id.tvSortWeight);
@@ -42,13 +43,14 @@ public class AdapterSort extends ArrayAdapter<Sort> {
 
         LinearLayout llSortDetails = convertView.findViewById(R.id.llSortDetails);
 
+        // Setting the values to the views
         tvSortName.setText(InventoryApp.sorts.get(position).getName());
-        tvSortPrice.setText("מחיר ממוצע:  " + sorts.get(position).getPrice() + "$");
-        tvSortWeight.setText("משקל:  " + sorts.get(position).getWeight() + " קראט ");
-        tvSortShape.setText("צורה:  " + sorts.get(position).getShape());
-        tvSortSize.setText("גודל:  " + sorts.get(position).getSize());
-        tvSortColor.setText("צבע:  " + sorts.get(position).getColor());
-        tvSortClarity.setText("נקיון:  " + sorts.get(position).getClarity());
+        tvSortPrice.setText("מחיר ממוצע: " + sorts.get(position).getPrice() + "$");
+        tvSortWeight.setText("משקל: " + sorts.get(position).getWeight() + " קראט ");
+        tvSortShape.setText("צורה: " + sorts.get(position).getShape());
+        tvSortSize.setText("גודל: " + sorts.get(position).getSize());
+        tvSortColor.setText("צבע: " + sorts.get(position).getColor());
+        tvSortClarity.setText("נקיון: " + sorts.get(position).getClarity());
 
         if (position == selectedPosition) {
             llSortDetails.setVisibility(View.VISIBLE);

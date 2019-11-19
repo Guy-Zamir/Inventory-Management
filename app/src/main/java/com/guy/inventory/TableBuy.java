@@ -39,9 +39,12 @@ public class TableBuy extends AppCompatActivity {
     AdapterBuys adapterBuys;
 
     int selectedItem = -1;
+    String order = "buyDate DESC";
+    final int PAGE_SIZE = 50;
 
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     final DataQueryBuilder buyBuilder = DataQueryBuilder.create();
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -77,7 +80,7 @@ public class TableBuy extends AppCompatActivity {
         actionBar.setTitle("קניות");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        getBuys("buyDate DESC");
+        getBuys();
 
         lvBuyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
@@ -91,11 +94,11 @@ public class TableBuy extends AppCompatActivity {
                     llBuyDetails.setVisibility(View.VISIBLE);
 
                     final DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
-                    Calendar saleDate = Calendar.getInstance();
-                    saleDate.setTime(InventoryApp.buys.get(selectedItem).getBuyDate());
-                    @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
-                    @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
-                    @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
+                    Calendar buyDate = Calendar.getInstance();
+                    buyDate.setTime(InventoryApp.buys.get(selectedItem).getBuyDate());
+                    @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", buyDate.get(Calendar.DAY_OF_MONTH));
+                    @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", buyDate.get(Calendar.MONTH) + 1);
+                    @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", buyDate.get(Calendar.YEAR));
 
                     Calendar payDate = Calendar.getInstance();
                     payDate.setTime(InventoryApp.buys.get(selectedItem).getPayDate());
@@ -124,6 +127,16 @@ public class TableBuy extends AppCompatActivity {
                 }
             }
         });
+
+        lvBuyList.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                loadNextDataFromApi(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
+            }
+        });
 }
 
     @Override
@@ -138,7 +151,6 @@ public class TableBuy extends AppCompatActivity {
             case R.id.newIcon:
                 Intent intent = new Intent(TableBuy.this, NewBuy.class);
                 startActivityForResult(intent, 1);
-
                 break;
 
             case R.id.editIcon:
@@ -149,7 +161,6 @@ public class TableBuy extends AppCompatActivity {
                     editBuy.putExtra("index", selectedItem);
                     startActivityForResult(editBuy, 1);
                 }
-
                 break;
 
             case R.id.deleteIcon:
@@ -172,6 +183,7 @@ public class TableBuy extends AppCompatActivity {
                                     Toast.makeText(TableBuy.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                                     adapterBuys.notifyDataSetChanged();
                                     showProgress(false);
+                                    tvLoad.setText("טוען...");
                                 }
 
                                 @Override
@@ -184,7 +196,6 @@ public class TableBuy extends AppCompatActivity {
                     });
                     alert.show();
                 }
-
                 break;
 
             case R.id.doneIcon:
@@ -225,19 +236,21 @@ public class TableBuy extends AppCompatActivity {
                         Toast.makeText(this, "יש לחבור חבילה לא גמורה", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 break;
 
             case R.id.dateOrderIcon:
-                getBuys("buyDate DESC");
+                order = "buyDate DESC";
+                getBuys();
                 break;
 
             case R.id.nameOrderIcon:
-                getBuys("supplierName");
+                order = "supplierName";
+                getBuys();
                 break;
 
             case R.id.priceOrderIcon:
-                getBuys("price DESC");
+                order = "price DESC";
+                getBuys();
                 break;
         }
                 return super.onOptionsItemSelected(item);
@@ -265,10 +278,10 @@ public class TableBuy extends AppCompatActivity {
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
-    private void getBuys(String order) {
+    private void getBuys() {
         buyBuilder.setWhereClause(whereClause);
         buyBuilder.setSortBy(order);
-        buyBuilder.setPageSize(100);
+        buyBuilder.setPageSize(PAGE_SIZE);
         showProgress(true);
 
         Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
@@ -290,5 +303,29 @@ public class TableBuy extends AppCompatActivity {
                 showProgress(false);
             }
         });
+    }
+
+    public void loadNextDataFromApi(int offset) {
+            DataQueryBuilder buyBuilderLoad = DataQueryBuilder.create();
+            buyBuilderLoad.setOffset(offset);
+            buyBuilderLoad.setSortBy(order);
+            buyBuilderLoad.setWhereClause(whereClause);
+            buyBuilderLoad.setPageSize(PAGE_SIZE);
+
+            showProgress(true);
+            Backendless.Data.of(Buy.class).find(buyBuilderLoad, new AsyncCallback<List<Buy>>() {
+                @Override
+                public void handleResponse(List<Buy> response) {
+                    InventoryApp.buys.addAll(response);
+                    adapterBuys.notifyDataSetChanged();
+                    showProgress(false);
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    showProgress(false);
+                    Toast.makeText(TableBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 }
