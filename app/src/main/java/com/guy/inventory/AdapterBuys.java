@@ -31,7 +31,7 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
+        DecimalFormat numberFormat = new DecimalFormat( "#,###,###,###.##" );
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         assert inflater != null;
@@ -71,17 +71,17 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
 
         tvBuySupplier.setText(buys.get(position).getSupplierName());
         tvBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth+ "/" + buyYear);
-        tvBuyPrice.setText("מחיר לקראט: " + nf.format(buys.get(position).getPrice()) + "$");
+        tvBuyPrice.setText("מחיר לקראט: " + numberFormat.format(buys.get(position).getPrice()) + "$");
         tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
         tvBuyDetailsID.setText("מספר אסמכתא: " + InventoryApp.buys.get(position).getId());
-        tvBuyDetailsWeight.setText("משקל חבילה: " + nf.format(InventoryApp.buys.get(position).getWeight()) + " קראט ");
+        tvBuyDetailsWeight.setText("משקל חבילה: " + numberFormat.format(InventoryApp.buys.get(position).getWeight()) + " קראט ");
         tvBuyDetailsDays.setText("מספר ימים: " + InventoryApp.buys.get(position).getDays());
-        tvBuyDetailsSum.setText("סכום עסקה: " + nf.format(InventoryApp.buys.get(position).getSum()) + "$");
-        tvBuyDetailsDoneWeight.setText("משקל גמור: " + nf.format(InventoryApp.buys.get(position).getDoneWeight()) + " קראט ");
-        tvBuyDetailsWage.setText("שכר עבודה: " + nf.format(InventoryApp.buys.get(position).getWage()) + "$" + " , " +
-                nf.format(InventoryApp.buys.get(position).getWage() / InventoryApp.buys.get(position).getPrice() * 100) + "%" + " , " +
-                nf.format(InventoryApp.buys.get(position).getWage() * InventoryApp.buys.get(position).getWeight()) + "$");
-        tvBuyDetailsWorkDe.setText("אחוז ליטוש: " + nf.format(InventoryApp.buys.get(position).getWorkDepreciation() * 100) + "%");
+        tvBuyDetailsSum.setText("סכום עסקה: " + numberFormat.format(InventoryApp.buys.get(position).getSum()) + "$");
+        tvBuyDetailsDoneWeight.setText("משקל גמור: " + numberFormat.format(InventoryApp.buys.get(position).getDoneWeight()) + " קראט ");
+        tvBuyDetailsWage.setText("שכר עבודה: " + numberFormat.format(InventoryApp.buys.get(position).getWage()) + "$" + " , " +
+                numberFormat.format(InventoryApp.buys.get(position).getWage() / InventoryApp.buys.get(position).getPrice() * 100) + "%" + " , " +
+                numberFormat.format(InventoryApp.buys.get(position).getWage() * InventoryApp.buys.get(position).getWeight()) + "$");
+        tvBuyDetailsWorkDe.setText("אחוז ליטוש: " + numberFormat.format(InventoryApp.buys.get(position).getWorkDepreciation() * 100) + "%");
 
         ivDone.setImageResource((InventoryApp.buys.get(position).isDone()) ? R.drawable.done1_icon : R.drawable.not_done1_icon);
 

@@ -31,7 +31,7 @@ public class AdapterSales extends ArrayAdapter<Sale> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
+        DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         assert inflater != null;
@@ -67,12 +67,12 @@ public class AdapterSales extends ArrayAdapter<Sale> {
 
         tvSaleClientName.setText(sales.get(position).getClientName());
         tvSaleDate.setText("תאריך מכירה: " + saleDays + "/" + saleMonth + "/" + saleYear);
-        tvSaleSum.setText("סכום עסקה: " + nf.format(sales.get(position).getSaleSum()) + "$");
+        tvSaleSum.setText("סכום עסקה: " + numberFormat.format(sales.get(position).getSaleSum()) + "$");
         tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
         tvSaleDetailsID.setText("מספר חשבונית: " + InventoryApp.sales.get(position).getId());
-        tvSaleDetailsPrice.setText("מחיר ממוצע: " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
-        tvSaleDetailsWeight.setText("משקל חבילה: " + nf.format(InventoryApp.sales.get(position).getWeight()));
-        tvSaleDetailsDays.setText("מספר ימים: " + nf.format(InventoryApp.sales.get(position).getDays()));
+        tvSaleDetailsPrice.setText("מחיר ממוצע: " + numberFormat.format(InventoryApp.sales.get(position).getPrice()) + "$");
+        tvSaleDetailsWeight.setText("משקל חבילה: " + numberFormat.format(InventoryApp.sales.get(position).getWeight()));
+        tvSaleDetailsDays.setText("מספר ימים: " + numberFormat.format(InventoryApp.sales.get(position).getDays()));
         tvSaleDetailsNum.setText("מספר מכירה במערכת: " + (position+1));
 
         llSaleDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);

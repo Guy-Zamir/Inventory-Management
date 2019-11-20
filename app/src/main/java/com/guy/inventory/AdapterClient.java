@@ -9,15 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
-
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +28,12 @@ public class AdapterClient extends ArrayAdapter<Client> {
     private Context context;
     private List<Client> clients;
     private int selectedPosition = -1;
+
     private boolean client = true;
-    private final DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
-    private double weightSum = 0.0;
-    private double saleSum = 0.0;
+    private final DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
+
+    private double weightSum = 0;
+    private double saleSum = 0;
 
     AdapterClient(Context context, List<Client> list) {
         super(context, R.layout.client_row_layout, list);
@@ -96,7 +95,9 @@ public class AdapterClient extends ArrayAdapter<Client> {
                         for (int i=0; i<response.size(); i++) {
                             if (response.get(i).get("clientName") != null) {
                                 if (Objects.equals(response.get(i).get("clientName"), InventoryApp.clients.get(selectedPosition).getName())) {
-                                    if (response.get(i).get("sum") != null) {
+                                     if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                         saleSum = (int) response.get(i).get("sum");
+                                     } else {
                                         saleSum = (double) response.get(i).get("sum");
                                         break;
                                     }
@@ -112,7 +113,9 @@ public class AdapterClient extends ArrayAdapter<Client> {
                                 for (int i=0; i<response.size(); i++) {
                                     if (response.get(i).get("clientName") != null) {
                                         if (Objects.equals(response.get(i).get("clientName"), InventoryApp.clients.get(selectedPosition).getName())) {
-                                            if (response.get(i).get("sum") != null) {
+                                            if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                                weightSum = (int) response.get(i).get("sum");
+                                            } else {
                                                 weightSum = (double) response.get(i).get("sum");
                                                 break;
                                             }
@@ -120,9 +123,9 @@ public class AdapterClient extends ArrayAdapter<Client> {
                                     }
                                 }
                                 double price = (weightSum > 0.0) ? (saleSum/weightSum) : 0;
-                                tvClientSum.setText("סה\"כ סכום שנמכר: " + nf.format(saleSum) + "$");
-                                tvClientWeight.setText("סה\"כ משקל שנמכר: " + nf.format(weightSum) + " קראט ");
-                                tvClientPrice.setText("מחיר ממוצע: " + nf.format((price))  + "$");
+                                tvClientSum.setText("סה\"כ סכום שנמכר: " + numberFormat.format(saleSum) + "$");
+                                tvClientWeight.setText("סה\"כ משקל שנמכר: " + numberFormat.format(weightSum) + " קראט ");
+                                tvClientPrice.setText("מחיר ממוצע: " + numberFormat.format((price))  + "$");
                             }
                             @Override
                             public void handleFault(BackendlessFault fault) {
@@ -151,7 +154,9 @@ public class AdapterClient extends ArrayAdapter<Client> {
                         for (int i = 0; i < response.size(); i++) {
                             if (response.get(i).get("supplierName") != null) {
                                 if (Objects.equals(response.get(i).get("supplierName"), InventoryApp.clients.get(selectedPosition).getName())) {
-                                    if (response.get(i).get("sum") != null) {
+                                    if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                        saleSum = (int) response.get(i).get("sum");
+                                    } else {
                                         saleSum = (double) response.get(i).get("sum");
                                         break;
                                     }
@@ -167,17 +172,19 @@ public class AdapterClient extends ArrayAdapter<Client> {
                                 for (int i = 0; i < response.size(); i++) {
                                     if (response.get(i).get("supplierName") != null) {
                                         if (Objects.equals(response.get(i).get("supplierName"), InventoryApp.clients.get(selectedPosition).getName())) {
-                                            if (response.get(i).get("sum") != null) {
+                                            if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                                weightSum = (int) response.get(i).get("sum");
+                                            } else {
                                                 weightSum = (double) response.get(i).get("sum");
                                                 break;
                                             }
                                         }
                                     }
                                 }
-                                double price = (weightSum > 0.0) ? (saleSum/weightSum) : 0;
-                                tvClientSum.setText("סה\"כ סכום שנקנה: " + nf.format(saleSum) + "$");
-                                tvClientWeight.setText("סה\"כ משקל שנקנה: " + nf.format(weightSum) + " קראט ");
-                                tvClientPrice.setText("מחיר ממוצע: " + nf.format((price))  + "$");
+                                double price = (weightSum > 0) ? (saleSum/weightSum) : 0;
+                                tvClientSum.setText("סה\"כ סכום שנקנה: " + numberFormat.format(saleSum) + "$");
+                                tvClientWeight.setText("סה\"כ משקל שנקנה: " + numberFormat.format(weightSum) + " קראט ");
+                                tvClientPrice.setText("מחיר ממוצע: " + numberFormat.format((price))  + "$");
                             }
 
                             @Override

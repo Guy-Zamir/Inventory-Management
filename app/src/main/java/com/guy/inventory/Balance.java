@@ -17,13 +17,15 @@ import com.backendless.persistence.DataQueryBuilder;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Balance extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
-    final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
+    final String WHERE_CLAUSE = "userEmail = '" + InventoryApp.user.getEmail() + "'";
 
     LinearLayout llBalanceWage;
 
@@ -35,7 +37,7 @@ public class Balance extends AppCompatActivity {
 
     Button btnBalanceBuy, btnBalanceSale, btnBalanceGoods, btnBalanceTax;
 
-    int pageSize = 100;
+    final int PAGE_SIZE = 100;
 
     // All the calculated values
     private double balanceSum, balanceWeight, balancePrice;
@@ -123,8 +125,8 @@ public class Balance extends AppCompatActivity {
         // Get The Info//
         // Setting all the buys in the array
         DataQueryBuilder buyBuilder = DataQueryBuilder.create();
-        buyBuilder.setWhereClause(whereClause);
-        buyBuilder.setPageSize(pageSize);
+        buyBuilder.setWhereClause(WHERE_CLAUSE);
+        buyBuilder.setPageSize(PAGE_SIZE);
 
         showProgress(true);
         Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
@@ -158,47 +160,73 @@ public class Balance extends AppCompatActivity {
 
                 // Getting the sale sum of exports
                 DataQueryBuilder exportSumBuilder = DataQueryBuilder.create();
-                exportSumBuilder.setWhereClause(whereClause);
+                exportSumBuilder.setWhereClause(WHERE_CLAUSE);
                 exportSumBuilder.setProperties("Sum(saleSum)");
                 Backendless.Data.of("Export").find(exportSumBuilder, new AsyncCallback<List<Map>>() {
                     @Override
                     public void handleResponse(List<Map> response) {
                         if (response.get(0).get("sum") != null) {
-                            allPolishExportSum = (double) response.get(0).get("sum");
+                            if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
+                                allPolishExportSum = (int) response.get(0).get("sum");
+                            } else {
+                                allPolishExportSum = (double) response.get(0).get("sum");
+                            }
                         }
 
                         // Getting the weight sum of exports
                         DataQueryBuilder exportWeightBuilder = DataQueryBuilder.create();
-                        exportWeightBuilder.setWhereClause(whereClause);
+                        exportWeightBuilder.setWhereClause(WHERE_CLAUSE);
                         exportWeightBuilder.setProperties("Sum(weight)");
                         Backendless.Data.of("Export").find(exportWeightBuilder, new AsyncCallback<List<Map>>() {
                             @Override
                             public void handleResponse(List<Map> response) {
                                 if (response.get(0).get("sum") != null) {
-                                    allPolishExportWeight = (double) response.get(0).get("sum");
+                                    if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
+                                        allPolishExportWeight = (int) response.get(0).get("sum");
+                                    } else {
+                                        allPolishExportWeight = (double) response.get(0).get("sum");
+                                    }
                                 }
 
                                 // Getting the sale sum of sales
                                 DataQueryBuilder saleSumBuilder = DataQueryBuilder.create();
-                                saleSumBuilder.setWhereClause(whereClause);
+                                saleSumBuilder.setWhereClause(WHERE_CLAUSE);
                                 saleSumBuilder.setProperties("Sum(saleSum)", "polish");
                                 saleSumBuilder.setGroupBy("polish");
                                 Backendless.Data.of("Sale").find(saleSumBuilder, new AsyncCallback<List<Map>>() {
                                     @Override
                                     public void handleResponse(List<Map> response) {
-                                        allPolishSaleSum = (double) response.get(1).get("sum");
-                                        allRoughSaleSum = (double) response.get(0).get("sum");
+                                        if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
+                                            allPolishSaleSum = (int) response.get(1).get("sum");
+                                        } else {
+                                            allPolishSaleSum = (double) response.get(1).get("sum");
+                                        }
+                                        if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
+                                            allRoughSaleSum = (int) response.get(0).get("sum");
+                                        } else {
+                                            allRoughSaleSum = (double) response.get(0).get("sum");
+                                        }
 
                                         // Getting the weight sum of sales
                                         DataQueryBuilder saleWeightBuilder = DataQueryBuilder.create();
-                                        saleWeightBuilder.setWhereClause(whereClause);
+                                        saleWeightBuilder.setWhereClause(WHERE_CLAUSE);
                                         saleWeightBuilder.setProperties("Sum(weight)", "polish");
                                         saleWeightBuilder.setGroupBy("polish");
                                         Backendless.Data.of("Sale").find(saleWeightBuilder, new AsyncCallback<List<Map>>() {
                                             @Override
                                             public void handleResponse(List<Map> response) {
-                                                allPolishSaleWeight = (double) response.get(1).get("sum");
-                                                allRoughSaleWeight = (double) response.get(0).get("sum");
+                                                if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
+                                                    allPolishSaleWeight = (int) response.get(1).get("sum");
+                                                } else {
+                                                    allPolishSaleWeight = (double) response.get(1).get("sum");
+                                                }
+
+                                                if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
+                                                    allRoughSaleWeight = (int) response.get(0).get("sum");
+                                                } else {
+                                                    allRoughSaleWeight = (double) response.get(0).get("sum");
+                                                }
+
                                                 showProgress(false);
 
                                                 //Calculate The Values//
@@ -356,8 +384,6 @@ public class Balance extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void setTheText(int head) {
 
-        DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
-
         switch (head) {
             case 0:
                 tvBalanceHeadline.setText("מאזן כולל");
@@ -365,21 +391,21 @@ public class Balance extends AppCompatActivity {
                 tvRoughHeadline.setText("מאזן גלם");
                 tvWageHeadline.setText("סיכום שכר עבודה");
 
-                tvBalanceSum.setText("סכום:  " + nf.format(balanceSum) + "$");
-                tvBalanceWeight.setText("משקל:  " + nf.format(balanceWeight) + " קראט ");
-                tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(balancePrice) + "$");
-                tvBalanceRoughSum.setText("סכום:  " + nf.format(balanceRoughSum) + "$");
-                tvBalanceRoughWeight.setText("משקל:  " + nf.format(balanceRoughWeight) + " קראט ");
-                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(balanceRoughPrice) + "$");
-                tvBalancePolishSum.setText("סכום:  " + nf.format(balancePolishSum) + "$");
-                tvBalancePolishWeight.setText("משקל:  " + nf.format(balancePolishWeight) + " קראט ");
-                tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(balancePolishPrice) + "$");
+                tvBalanceSum.setText("סכום:  " + numberFormat.format(balanceSum) + "$");
+                tvBalanceWeight.setText("משקל:  " + numberFormat.format(balanceWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + numberFormat.format(balancePrice) + "$");
+                tvBalanceRoughSum.setText("סכום:  " + numberFormat.format(balanceRoughSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + numberFormat.format(balanceRoughWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + numberFormat.format(balanceRoughPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + numberFormat.format(balancePolishSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + numberFormat.format(balancePolishWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + numberFormat.format(balancePolishPrice) + "$");
 
                 llBalanceWage.setVisibility(View.VISIBLE);
-                tvBalanceWageSum.setText("מחיר ממוצע:  " + nf.format(wagePrice) + "$");
-                tvBalanceWageWeight.setText("משקל:  " + nf.format(wageWeight) + " קראט ");
-                tvBalanceWagePre.setText("אחוז פחת ממוצע:  " + nf.format((wagePer) * 100) + "%");
-                tvBalanceWagePrice.setText("סכום:  " + nf.format(wageSum) + "$");
+                tvBalanceWageSum.setText("מחיר ממוצע:  " + numberFormat.format(wagePrice) + "$");
+                tvBalanceWageWeight.setText("משקל:  " + numberFormat.format(wageWeight) + " קראט ");
+                tvBalanceWagePre.setText("אחוז פחת ממוצע:  " + numberFormat.format((wagePer) * 100) + "%");
+                tvBalanceWagePrice.setText("סכום:  " + numberFormat.format(wageSum) + "$");
                 break;
 
             case 1:
@@ -387,15 +413,15 @@ public class Balance extends AppCompatActivity {
                 tvPolishHeadline.setText("קניית מלוטש");
                 tvRoughHeadline.setText("קניית גלם");
 
-                tvBalanceSum.setText("סכום:  " + nf.format(buySum) + "$");
-                tvBalanceWeight.setText("משקל:  " + nf.format(buyWeight) + " קראט ");
-                tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(buyPrice) + "$");
-                tvBalanceRoughSum.setText("סכום:  " + nf.format(buyRoughSum) + "$");
-                tvBalanceRoughWeight.setText("משקל:  " + nf.format(buyRoughWeight) + " קראט ");
-                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(buyRoughPrice) + "$");
-                tvBalancePolishSum.setText("סכום:  " + nf.format(buyPolishSum) + "$");
-                tvBalancePolishWeight.setText("משקל:  " + nf.format(buyPolishWeight) + " קראט ");
-                tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(buyPolishPrice) + "$");
+                tvBalanceSum.setText("סכום:  " + numberFormat.format(buySum) + "$");
+                tvBalanceWeight.setText("משקל:  " + numberFormat.format(buyWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + numberFormat.format(buyPrice) + "$");
+                tvBalanceRoughSum.setText("סכום:  " + numberFormat.format(buyRoughSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + numberFormat.format(buyRoughWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + numberFormat.format(buyRoughPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + numberFormat.format(buyPolishSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + numberFormat.format(buyPolishWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + numberFormat.format(buyPolishPrice) + "$");
 
                 llBalanceWage.setVisibility(View.GONE);
                 break;
@@ -406,23 +432,23 @@ public class Balance extends AppCompatActivity {
                 tvRoughHeadline.setText("מכירת מלוטש ביצוא");
                 tvWageHeadline.setText("מכירת גלם");
 
-                tvBalanceSum.setText("סכום:  " + nf.format(saleSum) + "$");
-                tvBalanceWeight.setText("משקל:  " + nf.format(saleWeight) + " קראט ");
-                tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(salePrice) + "$");
+                tvBalanceSum.setText("סכום:  " + numberFormat.format(saleSum) + "$");
+                tvBalanceWeight.setText("משקל:  " + numberFormat.format(saleWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + numberFormat.format(salePrice) + "$");
 
-                tvBalancePolishSum.setText("סכום:  " + nf.format(salePolishSum) + "$");
-                tvBalancePolishWeight.setText("משקל:  " + nf.format(salePolishWeight) + " קראט ");
-                tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(salePolishPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + numberFormat.format(salePolishSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + numberFormat.format(salePolishWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + numberFormat.format(salePolishPrice) + "$");
 
-                tvBalanceRoughSum.setText("סכום:  " + nf.format(exportSum) + "$");
-                tvBalanceRoughWeight.setText("משקל:  " + nf.format(exportWeight) + " קראט ");
-                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(exportPrice) + "$");
+                tvBalanceRoughSum.setText("סכום:  " + numberFormat.format(exportSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + numberFormat.format(exportWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + numberFormat.format(exportPrice) + "$");
 
                 llBalanceWage.setVisibility(View.VISIBLE);
-                tvBalanceWageSum.setText("סכום:  " + nf.format(saleRoughSum) + "$");
-                tvBalanceWageWeight.setText("משקל:  " + nf.format(saleRoughWeight) + " קראט ");
+                tvBalanceWageSum.setText("סכום:  " + numberFormat.format(saleRoughSum) + "$");
+                tvBalanceWageWeight.setText("משקל:  " + numberFormat.format(saleRoughWeight) + " קראט ");
                 tvBalanceWagePre.setVisibility(View.GONE);
-                tvBalanceWagePrice.setText("מחיר ממוצע:  " + nf.format(saleRoughPrice) + "$");
+                tvBalanceWagePrice.setText("מחיר ממוצע:  " + numberFormat.format(saleRoughPrice) + "$");
                 break;
 
             case 3:
@@ -431,21 +457,21 @@ public class Balance extends AppCompatActivity {
                 tvRoughHeadline.setText("מאזן גלם");
                 tvWageHeadline.setText("סיכום שכר עבודה");
 
-                tvBalanceSum.setText("סכום:  " + nf.format(taxSum) + "$");
-                tvBalanceWeight.setText("משקל:  " + nf.format(taxWeight) + " קראט ");
-                tvBalancePrice.setText("מחיר ממוצע:  " + nf.format(taxPrice) + "$");
-                tvBalanceRoughSum.setText("סכום:  " + nf.format(taxRoughSum) + "$");
-                tvBalanceRoughWeight.setText("משקל:  " + nf.format(taxRoughWeight) + " קראט ");
-                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + nf.format(taxRoughPrice) + "$");
-                tvBalancePolishSum.setText("סכום:  " + nf.format(taxPolishSum) + "$");
-                tvBalancePolishWeight.setText("משקל:  " + nf.format(taxPolishWeight) + " קראט ");
-                tvBalancePolishPrice.setText("מחיר ממוצע:  " + nf.format(taxPolishPrice) + "$");
+                tvBalanceSum.setText("סכום:  " + numberFormat.format(taxSum) + "$");
+                tvBalanceWeight.setText("משקל:  " + numberFormat.format(taxWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + numberFormat.format(taxPrice) + "$");
+                tvBalanceRoughSum.setText("סכום:  " + numberFormat.format(taxRoughSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + numberFormat.format(taxRoughWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + numberFormat.format(taxRoughPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + numberFormat.format(taxPolishSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + numberFormat.format(taxPolishWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + numberFormat.format(taxPolishPrice) + "$");
 
                 llBalanceWage.setVisibility(View.VISIBLE);
-                tvBalanceWageSum.setText("מחיר ממוצע:  " + nf.format(wagePrice) + "$");
-                tvBalanceWageWeight.setText("משקל:  " + nf.format(wageWeight) + " קראט ");
-                tvBalanceWagePre.setText("אחוז פחת ממוצע:  " + nf.format((wagePer) * 100) + "%");
-                tvBalanceWagePrice.setText("סכום:  " + nf.format(wageSum) + "$");
+                tvBalanceWageSum.setText("מחיר ממוצע:  " + numberFormat.format(wagePrice) + "$");
+                tvBalanceWageWeight.setText("משקל:  " + numberFormat.format(wageWeight) + " קראט ");
+                tvBalanceWagePre.setText("אחוז פחת ממוצע:  " + numberFormat.format((wagePer) * 100) + "%");
+                tvBalanceWagePrice.setText("סכום:  " + numberFormat.format(wageSum) + "$");
                 break;
         }
     }

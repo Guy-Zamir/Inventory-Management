@@ -30,7 +30,7 @@ public class AdapterExports extends ArrayAdapter<Export> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
+        DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
         convertView = inflater.inflate(R.layout.sale_row_layout, parent, false);
@@ -64,12 +64,12 @@ public class AdapterExports extends ArrayAdapter<Export> {
 
         tvSaleClientName.setText(exports.get(position).getClientName());
         tvSaleDate.setText("תאריך מכירה: " + saleDays + "/" + saleMonth + "/" + saleYear);
-        tvSaleSum.setText("סכום עסקה: " + nf.format(exports.get(position).getSaleSum()) + "$");
+        tvSaleSum.setText("סכום עסקה: " + numberFormat.format(exports.get(position).getSaleSum()) + "$");
         tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
         tvSaleDetailsID.setText("מספר חשבונית: " + InventoryApp.exports.get(position).getId());
-        tvSaleDetailsPrice.setText("מחיר ממוצע: " + nf.format(InventoryApp.exports.get(position).getPrice()) + "$");
-        tvSaleDetailsWeight.setText("משקל חבילה: " + nf.format(InventoryApp.exports.get(position).getWeight()));
-        tvSaleDetailsDays.setText("מספר ימים: " + nf.format(InventoryApp.exports.get(position).getDays()));
+        tvSaleDetailsPrice.setText("מחיר ממוצע: " + numberFormat.format(InventoryApp.exports.get(position).getPrice()) + "$");
+        tvSaleDetailsWeight.setText("משקל חבילה: " + numberFormat.format(InventoryApp.exports.get(position).getWeight()));
+        tvSaleDetailsDays.setText("מספר ימים: " + numberFormat.format(InventoryApp.exports.get(position).getDays()));
 
         if (position == selectedPosition) {
             llSaleDetails.setVisibility(View.VISIBLE);

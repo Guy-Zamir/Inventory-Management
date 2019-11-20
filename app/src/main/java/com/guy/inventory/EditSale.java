@@ -148,6 +148,7 @@ public class EditSale extends AppCompatActivity {
                                 });
 
                             } else {
+
                                 InventoryApp.sales.get(index).setSaleDate(getDateFromDatePicker(dpSaleEditDate));
                                 InventoryApp.sales.get(index).setId(id);
                                 InventoryApp.sales.get(index).setWeight(weight);
