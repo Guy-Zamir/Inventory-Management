@@ -83,10 +83,11 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
                 numberFormat.format(InventoryApp.buys.get(position).getWage() * InventoryApp.buys.get(position).getWeight()) + "$");
         tvBuyDetailsWorkDe.setText("אחוז ליטוש: " + numberFormat.format(InventoryApp.buys.get(position).getWorkDepreciation() * 100) + "%");
 
+        // When the goods are done
         ivDone.setImageResource((InventoryApp.buys.get(position).isDone()) ? R.drawable.done1_icon : R.drawable.not_done1_icon);
-
+        // When the the buy is a polish buy
         ivPolish.setVisibility((InventoryApp.buys.get(position).isPolish()) ? View.VISIBLE: View.INVISIBLE);
-
+        // When the buy is selected from the list
         llBuyDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
 
 

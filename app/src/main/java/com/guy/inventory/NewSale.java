@@ -66,7 +66,6 @@ public class NewSale extends AppCompatActivity {
         assert actionBar != null;
         if (isExport) {
             actionBar.setTitle("יצוא חדש");
-            swSalePolish.setVisibility(View.GONE);
         } else {
             actionBar.setTitle("מכירה חדשה");
         }
@@ -107,11 +106,7 @@ public class NewSale extends AppCompatActivity {
         swSalePolish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (swSalePolish.isChecked()) {
-                    swSalePolish.setText(" גלם  ");
-                } else {
-                    swSalePolish.setText("  מלוטש  ");
-                }
+                swSalePolish.setText(swSalePolish.isChecked() ? " גלם  " : "  מלוטש  ");
             }
         });
 
@@ -201,7 +196,7 @@ public class NewSale extends AppCompatActivity {
                             }
                         });
 
-                        // Not an Export sale
+                    // Not an Export sale
                     } else {
 
                         final Sale sale = new Sale();

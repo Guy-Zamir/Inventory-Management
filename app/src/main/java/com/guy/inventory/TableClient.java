@@ -31,9 +31,9 @@ public class TableClient extends AppCompatActivity {
             tvClientDetailsInsidePhone, tvClientDetailsFax,
             tvClientDetailsWebSite, tvClientDetailsDetails;
     ListView lvClientList;
-    AdapterClient adapter;
+    AdapterClient clientAdapter;
 
-    int pageSize = 100;
+    int PAGE_SIZE = 100;
     int selectedItem = -1;
 
     boolean client;
@@ -88,15 +88,15 @@ public class TableClient extends AppCompatActivity {
         } else {
             clientBuilder.setHavingClause(supplierClause);
         }
-        clientBuilder.setPageSize(pageSize);
+        clientBuilder.setPageSize(PAGE_SIZE);
 
         showProgress(true);
         Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
             @Override
             public void handleResponse(List<Client> response) {
                 InventoryApp.clients = response;
-                adapter = new AdapterClient(TableClient.this, InventoryApp.clients);
-                lvClientList.setAdapter(adapter);
+                clientAdapter = new AdapterClient(TableClient.this, InventoryApp.clients);
+                lvClientList.setAdapter(clientAdapter);
                 showProgress(false);
             }
 
@@ -129,9 +129,9 @@ public class TableClient extends AppCompatActivity {
                     tvClientDetailsDetails.setText("פרטים נוספים:  " + InventoryApp.clients.get(selectedItem).getDetails());
 
                 } else {
-                    adapter.setClient(client);
-                    adapter.setSelectedPosition(position);
-                    adapter.notifyDataSetChanged();
+                    clientAdapter.setClient(client);
+                    clientAdapter.setSelectedPosition(position);
+                    clientAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -177,8 +177,10 @@ public class TableClient extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            adapter.notifyDataSetChanged();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                clientAdapter.notifyDataSetChanged();
+            }
         }
     }
 

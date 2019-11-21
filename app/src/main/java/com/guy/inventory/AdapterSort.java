@@ -52,12 +52,8 @@ public class AdapterSort extends ArrayAdapter<Sort> {
         tvSortColor.setText("צבע: " + sorts.get(position).getColor());
         tvSortClarity.setText("נקיון: " + sorts.get(position).getClarity());
 
-        if (position == selectedPosition) {
-            llSortDetails.setVisibility(View.VISIBLE);
-        } else {
-            llSortDetails.setVisibility(View.GONE);
-        }
-
+        // When the sort is selected from the list
+        llSortDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
         return convertView;
     }
 

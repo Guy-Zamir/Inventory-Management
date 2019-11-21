@@ -47,11 +47,7 @@ public class NewClient extends AppCompatActivity {
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        if (client) {
-            actionBar.setTitle("לקוח חדש");
-        } else {
-            actionBar.setTitle("ספק חדש");
-        }
+        actionBar.setTitle((client) ? "לקוח חדש" : "ספק חדש");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         btnNewClientSubmit.setOnClickListener(new View.OnClickListener() {
@@ -69,11 +65,7 @@ public class NewClient extends AppCompatActivity {
                     website = etNewClientWebsite.getText().toString().trim();
                     details = etNewClientDetails.getText().toString().trim();
 
-                    if (client) {
-                        supplier = "client";
-                    } else {
-                        supplier = "supplier";
-                    }
+                    supplier = (client) ? "client" : "supplier";
 
                     final Client client = new Client();
                     client.setName(name);

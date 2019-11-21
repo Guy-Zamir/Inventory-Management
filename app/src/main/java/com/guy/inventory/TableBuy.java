@@ -131,8 +131,6 @@ public class TableBuy extends AppCompatActivity {
         lvBuyList.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
                 loadNextDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
@@ -268,6 +266,7 @@ public class TableBuy extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
                 adapterBuys.notifyDataSetChanged();
+                getBuys();
             }
         }
     }

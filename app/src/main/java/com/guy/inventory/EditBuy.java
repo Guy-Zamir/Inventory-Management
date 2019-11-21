@@ -80,9 +80,8 @@ public class EditBuy extends AppCompatActivity {
         tvBuyEditSupplier.setText(InventoryApp.buys.get(index).getSupplierName());
         final DecimalFormat nf = new DecimalFormat( "#,###,###,###.##" );
 
-        if (!InventoryApp.buys.get(index).isDone()) {
-            llBuyDone.setVisibility(View.GONE);
-        }
+        // Shows the options for the buy goods if it's done
+        llBuyDone.setVisibility((InventoryApp.buys.get(index).isDone()) ? View.VISIBLE : View.GONE);
 
         swBuyEditDoneWeight.setOnClickListener(new View.OnClickListener() {
             @Override

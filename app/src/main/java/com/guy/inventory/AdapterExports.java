@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -45,6 +46,8 @@ public class AdapterExports extends ArrayAdapter<Export> {
         TextView tvSaleDetailsPrice = convertView.findViewById(R.id.tvSaleDetailsPrice);
         TextView tvSaleDetailsWeight = convertView.findViewById(R.id.tvSaleDetailsWeight);
         TextView tvSaleDetailsDays = convertView.findViewById(R.id.tvSaleDetailsDays);
+        TextView tvSaleDetailsNum = convertView.findViewById(R.id.tvSaleDetailsNum);
+        ImageView ivRough = convertView.findViewById(R.id.ivRough);
 
         LinearLayout llSaleDetails = convertView.findViewById(R.id.llSaleDetails);
 
@@ -70,12 +73,12 @@ public class AdapterExports extends ArrayAdapter<Export> {
         tvSaleDetailsPrice.setText("מחיר ממוצע: " + numberFormat.format(InventoryApp.exports.get(position).getPrice()) + "$");
         tvSaleDetailsWeight.setText("משקל חבילה: " + numberFormat.format(InventoryApp.exports.get(position).getWeight()));
         tvSaleDetailsDays.setText("מספר ימים: " + numberFormat.format(InventoryApp.exports.get(position).getDays()));
+        tvSaleDetailsNum.setText("מספר מכירה במערכת: " + (position+1));
 
-        if (position == selectedPosition) {
-            llSaleDetails.setVisibility(View.VISIBLE);
-        } else {
-            llSaleDetails.setVisibility(View.GONE);
-        }
+        // // When the export is selected from the list
+        llSaleDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
+        // When the export is a rough export
+        ivRough.setVisibility((InventoryApp.exports.get(position).isPolish()) ? View.INVISIBLE : View.VISIBLE);
 
         return convertView;
     }

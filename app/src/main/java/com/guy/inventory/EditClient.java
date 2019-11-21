@@ -16,13 +16,16 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EditClient extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
-    EditText etClientEditAddress, etClientEditPhone, etClientEditInsidePhone, etClientEditFax, etClientEditWebSite, etClientEditDetails;
-    TextView tvClientEditName;
+    EditText etClientEditAddress, etClientEditPhone, etClientEditInsidePhone, etClientEditFax,
+            etClientEditWebSite, etClientEditDetails, etClientEditName;
     Button btnClientEditSubmit;
     int index;
     boolean client;
@@ -38,7 +41,7 @@ public class EditClient extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        tvClientEditName = findViewById(R.id.tvClientEditName);
+        etClientEditName = findViewById(R.id.etClientEditName);
         etClientEditAddress = findViewById(R.id.etClientEditAddress);
         etClientEditPhone = findViewById(R.id.etClientEditPhone);
         etClientEditInsidePhone = findViewById(R.id.etClientEditInsidePhone);
@@ -51,16 +54,13 @@ public class EditClient extends AppCompatActivity {
         client = getIntent().getBooleanExtra("client", true);
         index = getIntent().getIntExtra("index", 0);
 
+        // Setting up the action bar
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        if (client) {
-            actionBar.setTitle("נתוני לקוח");
-        } else {
-            actionBar.setTitle("נתוני ספק");
-        }
+        actionBar.setTitle((client) ? "עריכת לקוח" : "עריכת ספק");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        tvClientEditName.setText(InventoryApp.clients.get(index).getName());
+        etClientEditName.setText(InventoryApp.clients.get(index).getName());
         etClientEditAddress.setText(String.valueOf(InventoryApp.clients.get(index).getLocation()));
         etClientEditPhone.setText(String.valueOf(InventoryApp.clients.get(index).getPhoneNumber()));
         etClientEditInsidePhone.setText(String.valueOf(InventoryApp.clients.get(index).getInsidePhone()));
@@ -71,35 +71,74 @@ public class EditClient extends AppCompatActivity {
         btnClientEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    final String location = etClientEditAddress.getText().toString().trim();
-                    final String phone = etClientEditPhone.getText().toString().trim();
-                    final String insidePhone = etClientEditInsidePhone.getText().toString().trim();
-                    final String fax = etClientEditFax.getText().toString().trim();
-                    final String webSite = etClientEditWebSite.getText().toString().trim();
-                    final String details = etClientEditDetails.getText().toString().trim();
+                final String location = etClientEditAddress.getText().toString().trim();
+                final String phone = etClientEditPhone.getText().toString().trim();
+                final String insidePhone = etClientEditInsidePhone.getText().toString().trim();
+                final String fax = etClientEditFax.getText().toString().trim();
+                final String webSite = etClientEditWebSite.getText().toString().trim();
+                final String details = etClientEditDetails.getText().toString().trim();
+                final String newName = etClientEditName.getText().toString().trim();
+                final String oldName = InventoryApp.clients.get(index).getName();
 
-                    AlertDialog.Builder alert = new AlertDialog.Builder(EditClient.this);
-                    alert.setTitle("שינוי נתונים");
-                    alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
-                    alert.setNegativeButton(android.R.string.no, null);
-                    alert.setIcon(android.R.drawable.ic_dialog_alert);
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            InventoryApp.clients.get(index).setLocation(location);
-                            InventoryApp.clients.get(index).setPhoneNumber(phone);
-                            InventoryApp.clients.get(index).setInsidePhone(insidePhone);
-                            InventoryApp.clients.get(index).setFax(fax);
-                            InventoryApp.clients.get(index).setWebsite(webSite);
-                            InventoryApp.clients.get(index).setDetails(details);
+                AlertDialog.Builder alert = new AlertDialog.Builder(EditClient.this);
+                alert.setTitle("שינוי נתונים");
+                alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
+                alert.setNegativeButton(android.R.string.no, null);
+                alert.setIcon(android.R.drawable.ic_dialog_alert);
+                alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        InventoryApp.clients.get(index).setLocation(location);
+                        InventoryApp.clients.get(index).setPhoneNumber(phone);
+                        InventoryApp.clients.get(index).setInsidePhone(insidePhone);
+                        InventoryApp.clients.get(index).setFax(fax);
+                        InventoryApp.clients.get(index).setWebsite(webSite);
+                        InventoryApp.clients.get(index).setDetails(details);
 
-                            showProgress(true);
+                        showProgress(true);
+                        // If the user tried to change the client/supplier name
+                        if (!newName.equals(oldName)) {
+                            Map<String, Object> changes = new HashMap<>();
+                            changes.put("clientName", newName);
+                            String whereClause = "clientName = '" + oldName + "'";
+                            Backendless.Data.of("Sale").update(whereClause, changes, new AsyncCallback<Integer>() {
+                                @Override
+                                public void handleResponse(Integer response) {
+                                    InventoryApp.clients.get(index).setName(newName);
+                                    Backendless.Persistence.save(InventoryApp.clients.get(index), new AsyncCallback<Client>() {
+                                        @Override
+                                        public void handleResponse(Client response) {
+                                            showProgress(false);
+                                            setResult(RESULT_OK);
+                                            finishActivity(1);
+                                            EditClient.this.finish();
+                                            Toast.makeText(EditClient.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void handleFault(BackendlessFault fault) {
+                                            showProgress(false);
+                                            Toast.makeText(EditClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void handleFault(BackendlessFault fault) {
+                                    showProgress(false);
+                                    Toast.makeText(EditClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        // The user didn't try to change the client/supplier name
+                        } else {
                             Backendless.Persistence.save(InventoryApp.clients.get(index), new AsyncCallback<Client>() {
                                 @Override
                                 public void handleResponse(Client response) {
-                                    Toast.makeText(EditClient.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                    showProgress(false);
                                     setResult(RESULT_OK);
                                     finishActivity(1);
                                     EditClient.this.finish();
+                                    Toast.makeText(EditClient.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
@@ -109,8 +148,9 @@ public class EditClient extends AppCompatActivity {
                                 }
                             });
                         }
-                    });
-                    alert.show();
+                    }
+                });
+                alert.show();
             }
         });
     }

@@ -21,9 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public class AdapterClient extends ArrayAdapter<Client> {
-    private View mProgressView;
-    private View mLoginFormView;
-    private TextView tvLoad;
 
     private Context context;
     private List<Client> clients;
@@ -34,6 +31,7 @@ public class AdapterClient extends ArrayAdapter<Client> {
 
     private double weightSum = 0;
     private double saleSum = 0;
+    private double price = 0;
 
     AdapterClient(Context context, List<Client> list) {
         super(context, R.layout.client_row_layout, list);
@@ -49,11 +47,6 @@ public class AdapterClient extends ArrayAdapter<Client> {
 
         assert inflater != null;
         convertView = inflater.inflate(R.layout.client_row_layout, parent, false);
-
-        mLoginFormView = convertView.findViewById(R.id.login_form);
-        mProgressView = convertView.findViewById(R.id.login_progress);
-        tvLoad = convertView.findViewById(R.id.tvLoad);
-
 
         // Defining the views in the layouts
         TextView tvClientName = convertView.findViewById(R.id.tvClientName);
@@ -78,6 +71,7 @@ public class AdapterClient extends ArrayAdapter<Client> {
         tvClientDetailsWebSite.setText("כתובת אתר אינטרנט: " + InventoryApp.clients.get(position).getWebsite());
         tvClientDetails.setText("פרטים נוספים: " + clients.get(position).getDetails());
 
+        // When the client/supplier is selected from the list
         if (position == selectedPosition) {
             llClientDetails.setVisibility(View.VISIBLE);
 
@@ -181,7 +175,7 @@ public class AdapterClient extends ArrayAdapter<Client> {
                                         }
                                     }
                                 }
-                                double price = (weightSum > 0) ? (saleSum/weightSum) : 0;
+                                price = (weightSum > 0) ? (saleSum/weightSum) : 0;
                                 tvClientSum.setText("סה\"כ סכום שנקנה: " + numberFormat.format(saleSum) + "$");
                                 tvClientWeight.setText("סה\"כ משקל שנקנה: " + numberFormat.format(weightSum) + " קראט ");
                                 tvClientPrice.setText("מחיר ממוצע: " + numberFormat.format((price))  + "$");
@@ -201,9 +195,13 @@ public class AdapterClient extends ArrayAdapter<Client> {
                 });
 
             }
+
         // Not selected
         } else {
             llClientDetails.setVisibility(View.GONE);
+            saleSum = 0;
+            weightSum = 0;
+            price = 0;
         }
 
         return convertView;
@@ -215,11 +213,5 @@ public class AdapterClient extends ArrayAdapter<Client> {
 
     void setClient(boolean aClient) {
         client = aClient;
-    }
-
-    private void showProgress(final boolean show) {
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }

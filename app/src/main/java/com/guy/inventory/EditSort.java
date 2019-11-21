@@ -48,7 +48,6 @@ public class EditSort extends AppCompatActivity {
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("עריכת מיון");
-
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         tvSortEditName.setText(InventoryApp.sorts.get(index).getName());

@@ -75,7 +75,9 @@ public class AdapterSales extends ArrayAdapter<Sale> {
         tvSaleDetailsDays.setText("מספר ימים: " + numberFormat.format(InventoryApp.sales.get(position).getDays()));
         tvSaleDetailsNum.setText("מספר מכירה במערכת: " + (position+1));
 
+        // When the sale is selected from the list
         llSaleDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
+        // When the sale is a rough sale
         ivRough.setVisibility((InventoryApp.sales.get(position).isPolish()) ? View.INVISIBLE : View.VISIBLE);
 
         return convertView;

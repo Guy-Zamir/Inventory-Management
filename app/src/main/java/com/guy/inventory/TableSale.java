@@ -170,7 +170,7 @@ public class TableSale extends AppCompatActivity {
                         tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
                     }
 
-                // Setting the values from the adapter in port mode
+                // Setting the values from the clientAdapter in port mode
                 } else {
                     if (exports) {
                         adapterExports.setSelectedPosition(position);
@@ -316,8 +316,10 @@ public class TableSale extends AppCompatActivity {
         if (requestCode == 1) {
             if (exports) {
                 adapterExports.notifyDataSetChanged();
+                getSales();
             } else {
                 adapterSales.notifyDataSetChanged();
+                getSales();
             }
         }
     }

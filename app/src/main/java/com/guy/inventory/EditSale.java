@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.backendless.Backendless;
@@ -24,9 +25,10 @@ public class EditSale extends AppCompatActivity {
     private View mLoginFormView;
     private TextView tvLoad;
 
-    DatePicker dpSaleEditDate;
+    private DatePicker dpSaleEditDate;
     EditText etSaleEditID, etSaleEditWeight, etSaleEditSum, etSaleEditDays;
     TextView tvSaleEditClientName, tvSaleEditID, tvSaleEditWeight, tvSaleEditSum, tvSaleEditDays;
+    Switch swEditSalePolish;
     Button btnSaleEditSubmit;
 
     int index, days;
@@ -51,6 +53,7 @@ public class EditSale extends AppCompatActivity {
         etSaleEditSum = findViewById(R.id.etSaleEditSum);
         etSaleEditDays = findViewById(R.id.etSaleEditDays);
         btnSaleEditSubmit = findViewById(R.id.btnSaleEditSubmit);
+        swEditSalePolish = findViewById(R.id.swEditSalePolish);
 
         tvSaleEditClientName = findViewById(R.id.tvSaleEditClientName);
         tvSaleEditID = findViewById(R.id.tvSaleEditID);
@@ -89,6 +92,15 @@ public class EditSale extends AppCompatActivity {
             dpSaleEditDate.updateDate(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
         }
 
+        swEditSalePolish.setChecked((export) ? !InventoryApp.exports.get(index).isPolish() : !InventoryApp.sales.get(index).isPolish());
+        swEditSalePolish.setText(swEditSalePolish.isChecked() ? " גלם  " : "  מלוטש  ");
+        swEditSalePolish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swEditSalePolish.setText(swEditSalePolish.isChecked() ? " גלם  " : "  מלוטש  ");
+            }
+        });
+
         btnSaleEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +132,7 @@ public class EditSale extends AppCompatActivity {
                                 InventoryApp.exports.get(index).setWeight(weight);
                                 InventoryApp.exports.get(index).setSaleSum(saleSum);
                                 InventoryApp.exports.get(index).setDays(days);
+                                InventoryApp.exports.get(index).setPolish(!swEditSalePolish.isChecked());
 
                                 Calendar addedDays = Calendar.getInstance();
                                 addedDays.setTime(InventoryApp.exports.get(index).getSaleDate());
@@ -154,6 +167,7 @@ public class EditSale extends AppCompatActivity {
                                 InventoryApp.sales.get(index).setWeight(weight);
                                 InventoryApp.sales.get(index).setSaleSum(saleSum);
                                 InventoryApp.sales.get(index).setDays(days);
+                                InventoryApp.sales.get(index).setPolish(!swEditSalePolish.isChecked());
 
                                 Calendar addedDays = Calendar.getInstance();
                                 addedDays.setTime(InventoryApp.sales.get(index).getSaleDate());
