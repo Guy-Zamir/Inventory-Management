@@ -74,20 +74,12 @@ public class TableClient extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        if (client) {
-            actionBar.setTitle("לקוחות");
-        } else {
-            actionBar.setTitle("ספקים");
-        }
+        actionBar.setTitle((client) ? "לקוחות" : "ספקים");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         clientBuilder.setWhereClause(whereClause);
         clientBuilder.setSortBy("name");
-        if (client) {
-            clientBuilder.setHavingClause(clientClause);
-        } else {
-            clientBuilder.setHavingClause(supplierClause);
-        }
+        clientBuilder.setHavingClause((client) ? clientClause : supplierClause);
         clientBuilder.setPageSize(PAGE_SIZE);
 
         showProgress(true);

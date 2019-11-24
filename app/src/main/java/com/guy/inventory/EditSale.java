@@ -186,6 +186,7 @@ public class EditSale extends AppCompatActivity {
                                         showProgress(false);
                                         Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                         setResult(RESULT_OK);
+                                        getIntent().putExtra("export", export);
                                         finishActivity(1);
                                         EditSale.this.finish();
                                     }
