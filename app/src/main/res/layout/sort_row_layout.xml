@@ -40,6 +40,17 @@
         android:textColor="@color/colorText"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/tvSortSum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="2dp"
+        android:gravity="center_horizontal"
+        android:text="סכום"
+        android:textColor="@color/colorText"
+        android:textSize="16sp" />
+
     <LinearLayout
         android:id="@+id/llSortDetails"
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -14,8 +14,10 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.local.UserIdStorageFactory;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -47,7 +49,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (etEmail.getText().toString().isEmpty() || etPassword.getText().toString().isEmpty()) {
-                    Toast.makeText(Login.this, "יש להזין את כל הנתונים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "יש להזין את כל הנתונים", Toast.LENGTH_SHORT).show();
                 } else {
 
                     String name = etEmail.getText().toString().trim();
@@ -58,14 +60,14 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void handleResponse(BackendlessUser response) {
                             InventoryApp.user = response;
-                            startActivity(new Intent(Login.this, MainActivity.class));
-                            Login.this.finish();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            LoginActivity.this.finish();
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
                             showProgress(false);
-                            Toast.makeText(Login.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }, true);
                 }
@@ -75,7 +77,7 @@ public class Login extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Login.this, Register.class));
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
 
@@ -83,7 +85,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (etEmail.getText().toString().isEmpty()) {
-                    Toast.makeText(Login.this, "יש להזין את כתובת הדואר האלקטרוני", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "יש להזין את כתובת הדואר האלקטרוני", Toast.LENGTH_SHORT).show();
                 } else {
                     String name = etEmail.getText().toString().trim();
                     showProgress(false);
@@ -91,13 +93,13 @@ public class Login extends AppCompatActivity {
                     Backendless.UserService.restorePassword(name, new AsyncCallback<Void>() {
                         @Override
                         public void handleResponse(Void response) {
-                            Toast.makeText(Login.this, "איפוס סיסמה שנלח לכתובת הדואר האלקטרוני", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "איפוס סיסמה שנלח לכתובת הדואר האלקטרוני", Toast.LENGTH_SHORT).show();
                             showProgress(false);
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(Login.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                             showProgress(false);
                         }
                     });
@@ -114,13 +116,13 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void handleResponse(BackendlessUser response) {
                             InventoryApp.user = response;
-                            startActivity(new Intent(Login.this, MainActivity.class));
-                            Login.this.finish();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            LoginActivity.this.finish();
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(Login.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                             etEmail.setText(InventoryApp.user.getEmail());
                             showProgress(false);
                         }
@@ -133,7 +135,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(Login.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 showProgress(false);
             }
         });

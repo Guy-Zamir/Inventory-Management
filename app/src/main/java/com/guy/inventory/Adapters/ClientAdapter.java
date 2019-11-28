@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,12 +15,16 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Tables.Client;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class AdapterClient extends ArrayAdapter<Client> {
+public class ClientAdapter extends ArrayAdapter<Client> {
 
     private Context context;
     private List<Client> clients;
@@ -32,7 +36,7 @@ public class AdapterClient extends ArrayAdapter<Client> {
     private double saleSum = 0;
     private double price = 0;
 
-    AdapterClient(Context context, List<Client> list) {
+    public ClientAdapter(Context context, List<Client> list) {
         super(context, R.layout.client_row_layout, list);
         this.clients = list;
         this.context = context;
@@ -258,11 +262,11 @@ public class AdapterClient extends ArrayAdapter<Client> {
         return convertView;
     }
 
-    void setSelectedPosition(int pos) {
+    public void setSelectedPosition(int pos) {
         selectedPosition = pos;
     }
 
-    void setClient(boolean aClient) {
+    public void setClient(boolean aClient) {
         client = aClient;
     }
 }

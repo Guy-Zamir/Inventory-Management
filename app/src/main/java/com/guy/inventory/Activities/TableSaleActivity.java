@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +21,19 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Adapters.ExportsAdapter;
+import com.guy.inventory.Adapters.SalesAdapter;
+import com.guy.inventory.EndlessScrollListener;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Export;
+import com.guy.inventory.Tables.Sale;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class TableSale extends AppCompatActivity {
+public class TableSaleActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -36,8 +44,8 @@ public class TableSale extends AppCompatActivity {
     ListView lvSaleList;
     LinearLayout llSaleDetails;
 
-    AdapterSales adapterSales;
-    AdapterExports adapterExports;
+    SalesAdapter salesAdapter;
+    ExportsAdapter exportsAdapter;
 
     String order = "saleDate DESC";
     int selectedItem = -1;
@@ -173,11 +181,11 @@ public class TableSale extends AppCompatActivity {
                 // Setting the values from the clientAdapter in port mode
                 } else {
                     if (exports) {
-                        adapterExports.setSelectedPosition(position);
-                        adapterExports.notifyDataSetChanged();
+                        exportsAdapter.setSelectedPosition(position);
+                        exportsAdapter.notifyDataSetChanged();
                     } else {
-                        adapterSales.setSelectedPosition(position);
-                        adapterSales.notifyDataSetChanged();
+                        salesAdapter.setSelectedPosition(position);
+                        salesAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -194,7 +202,7 @@ public class TableSale extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newIcon:
-                Intent newSale = new Intent(TableSale.this, NewSale.class);
+                Intent newSale = new Intent(TableSaleActivity.this, NewSaleActivity.class);
                 if (exports) {
                     newSale.putExtra("export", true);
                 } else {
@@ -207,7 +215,7 @@ public class TableSale extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent editSale = new Intent(TableSale.this, EditSale.class);
+                    Intent editSale = new Intent(TableSaleActivity.this, EditSaleActivity.class);
                     editSale.putExtra("index", selectedItem);
                     if (exports) {
                         editSale.putExtra("export", true);
@@ -222,7 +230,7 @@ public class TableSale extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
                 } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(TableSale.this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(TableSaleActivity.this);
                     alert.setTitle("התראת מחיקה");
                     alert.setMessage("האם אתה בטוח שברצונך למחוק את המכירה המסומנת?");
                     alert.setNegativeButton(android.R.string.no, null);
@@ -238,8 +246,8 @@ public class TableSale extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(Long response) {
                                         InventoryApp.exports.remove(selectedItem);
-                                        Toast.makeText(TableSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                        adapterExports.notifyDataSetChanged();
+                                        Toast.makeText(TableSaleActivity.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                        exportsAdapter.notifyDataSetChanged();
                                         showProgress(false);
                                         tvLoad.setText("טוען...");
                                     }
@@ -247,7 +255,7 @@ public class TableSale extends AppCompatActivity {
                                     @Override
                                     public void handleFault(BackendlessFault fault) {
                                         showProgress(false);
-                                        Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -256,15 +264,15 @@ public class TableSale extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(Long response) {
                                         InventoryApp.sales.remove(selectedItem);
-                                        Toast.makeText(TableSale.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                        adapterSales.notifyDataSetChanged();
+                                        Toast.makeText(TableSaleActivity.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                        salesAdapter.notifyDataSetChanged();
                                         showProgress(false);
                                     }
 
                                     @Override
                                     public void handleFault(BackendlessFault fault) {
                                         showProgress(false);
-                                        Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -315,10 +323,10 @@ public class TableSale extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (exports) {
-                adapterExports.notifyDataSetChanged();
+                exportsAdapter.notifyDataSetChanged();
                 getSales();
             } else {
-                adapterSales.notifyDataSetChanged();
+                salesAdapter.notifyDataSetChanged();
                 getSales();
             }
         }
@@ -336,17 +344,17 @@ public class TableSale extends AppCompatActivity {
             public void handleResponse(List<Sale> response) {
                 // Up to 50
                 InventoryApp.sales = response;
-                adapterSales = new AdapterSales(TableSale.this, InventoryApp.sales);
-                lvSaleList.setAdapter(adapterSales);
+                salesAdapter = new SalesAdapter(TableSaleActivity.this, InventoryApp.sales);
+                lvSaleList.setAdapter(salesAdapter);
                 showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableSale.this, "טרם נשרמו מכירות", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableSaleActivity.this, "טרם נשרמו מכירות", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
             }
@@ -363,17 +371,17 @@ public class TableSale extends AppCompatActivity {
             @Override
             public void handleResponse(List<Export> response) {
                 InventoryApp.exports = response;
-                adapterExports = new AdapterExports(TableSale.this, InventoryApp.exports);
-                lvSaleList.setAdapter(adapterExports);
+                exportsAdapter = new ExportsAdapter(TableSaleActivity.this, InventoryApp.exports);
+                lvSaleList.setAdapter(exportsAdapter);
                 showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableSale.this, "טרם נשרמו יצואים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableSaleActivity.this, "טרם נשרמו יצואים", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
             }
@@ -399,14 +407,14 @@ public class TableSale extends AppCompatActivity {
                 @Override
                 public void handleResponse(List<Export> response) {
                     InventoryApp.exports.addAll(response);
-                    adapterExports.notifyDataSetChanged();
+                    exportsAdapter.notifyDataSetChanged();
                     showProgress(false);
                 }
 
                 @Override
                 public void handleFault(BackendlessFault fault) {
                     showProgress(false);
-                    Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -421,14 +429,14 @@ public class TableSale extends AppCompatActivity {
                 @Override
                 public void handleResponse(List<Sale> response) {
                     InventoryApp.sales.addAll(response);
-                    adapterSales.notifyDataSetChanged();
+                    salesAdapter.notifyDataSetChanged();
                     showProgress(false);
                 }
 
                 @Override
                 public void handleFault(BackendlessFault fault) {
                     showProgress(false);
-                    Toast.makeText(TableSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

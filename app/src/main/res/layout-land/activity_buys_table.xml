@@ -6,7 +6,7 @@
     android:background="@drawable/background"
     android:id="@+id/table_buys_layout_land"
     android:orientation="vertical"
-    tools:context=".TableBuy">
+    tools:context=".Activities.TableBuyActivity">
 
     <ProgressBar
         android:id="@+id/login_progress"

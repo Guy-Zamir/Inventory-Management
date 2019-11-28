@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -18,11 +18,15 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Buy;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class EditBuy extends AppCompatActivity {
+public class EditBuyActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -134,9 +138,9 @@ public class EditBuy extends AppCompatActivity {
                 }
 
                 if (toast) {
-                    Toast.makeText(EditBuy.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditBuyActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
                 } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(EditBuy.this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(EditBuyActivity.this);
                     alert.setTitle("שינוי נתונים");
                     alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
                     alert.setNegativeButton(android.R.string.no, null);
@@ -170,16 +174,16 @@ public class EditBuy extends AppCompatActivity {
                                 @Override
                                 public void handleResponse(Buy response) {
                                     showProgress(false);
-                                    Toast.makeText(EditBuy.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditBuyActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                     setResult(RESULT_OK);
                                     finishActivity(1);
-                                    EditBuy.this.finish();
+                                    EditBuyActivity.this.finish();
                                 }
 
                                 @Override
                                 public void handleFault(BackendlessFault fault) {
                                     showProgress(false);
-                                    Toast.makeText(EditBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }

@@ -6,7 +6,7 @@
     android:background="@drawable/background"
     android:orientation="vertical"
     android:id="@+id/client_table_land"
-    tools:context=".TableClient">
+    tools:context=".Activities.TableClientActivity">
 
     <ProgressBar
         android:id="@+id/login_progress"

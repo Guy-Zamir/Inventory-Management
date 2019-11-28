@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,12 +14,16 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Buy;
+
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Balance extends AppCompatActivity {
+public class BalanceActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -137,12 +141,12 @@ public class Balance extends AppCompatActivity {
                     for (Buy buy : InventoryApp.buys) {
                         if (!buy.isPolish()) {
 
-                            // Buy Rough Not Done
+                            // Buy Rough Not DoneActivity
                             if (!buy.isDone()) {
                                 allNotDoneRoughBuySum += buy.getSum();
                                 allNotDoneRoughBuyWeight += buy.getWeight();
 
-                                // Buy Done Rough
+                                // Buy DoneActivity Rough
                             } else {
                                 allRoughBuyDoneSum += buy.getSum();
                                 allRoughBuyDoneOrgWeight += buy.getWeight();
@@ -295,7 +299,7 @@ public class Balance extends AppCompatActivity {
                                             @Override
                                             public void handleFault(BackendlessFault fault) {
                                                 showProgress(false);
-                                                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -303,7 +307,7 @@ public class Balance extends AppCompatActivity {
                                     @Override
                                     public void handleFault(BackendlessFault fault) {
                                         showProgress(false);
-                                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -312,7 +316,7 @@ public class Balance extends AppCompatActivity {
                             @Override
                             public void handleFault(BackendlessFault fault) {
                                 showProgress(false);
-                                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -320,7 +324,7 @@ public class Balance extends AppCompatActivity {
                     @Override
                     public void handleFault(BackendlessFault fault) {
                         showProgress(false);
-                        Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -329,7 +333,7 @@ public class Balance extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 showProgress(false);
-                Toast.makeText(Balance.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

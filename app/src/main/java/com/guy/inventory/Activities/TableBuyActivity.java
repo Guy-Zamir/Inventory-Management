@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +21,16 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Adapters.BuysAdapter;
+import com.guy.inventory.EndlessScrollListener;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Buy;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class TableBuy extends AppCompatActivity {
+public class TableBuyActivity extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -36,7 +41,7 @@ public class TableBuy extends AppCompatActivity {
 
     ListView lvBuyList;
     LinearLayout llBuyDetails;
-    AdapterBuys adapterBuys;
+    BuysAdapter buysAdapter;
 
     int selectedItem = -1;
     String order = "buyDate DESC";
@@ -122,8 +127,8 @@ public class TableBuy extends AppCompatActivity {
                     tvBuyDetailsWorkDe.setText("אחוז ליטוש:  " + nf.format(InventoryApp.buys.get(selectedItem).getWorkDepreciation() * 100) + "%");
 
                 } else {
-                    adapterBuys.setSelectedPosition(position);
-                    adapterBuys.notifyDataSetChanged();
+                    buysAdapter.setSelectedPosition(position);
+                    buysAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -147,7 +152,7 @@ public class TableBuy extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newIcon:
-                Intent intent = new Intent(TableBuy.this, NewBuy.class);
+                Intent intent = new Intent(TableBuyActivity.this, NewBuyActivity.class);
                 startActivityForResult(intent, 1);
                 break;
 
@@ -155,7 +160,7 @@ public class TableBuy extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent editBuy = new Intent(TableBuy.this, EditBuy.class);
+                    Intent editBuy = new Intent(TableBuyActivity.this, EditBuyActivity.class);
                     editBuy.putExtra("index", selectedItem);
                     startActivityForResult(editBuy, 1);
                 }
@@ -165,12 +170,12 @@ public class TableBuy extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
                 } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(TableBuy.this);
-                    alert.setTitle("התראת מחיקה");
-                    alert.setMessage("האם אתה בטוח שברצונך למחוק את הקניה המסומנת?");
-                    alert.setNegativeButton(android.R.string.no, null);
-                    alert.setIcon(android.R.drawable.ic_dialog_alert);
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder deleteAlert = new AlertDialog.Builder(TableBuyActivity.this);
+                    deleteAlert.setTitle("התראת מחיקה");
+                    deleteAlert.setMessage("האם אתה בטוח שברצונך למחוק את הקניה המסומנת?");
+                    deleteAlert.setNegativeButton(android.R.string.no, null);
+                    deleteAlert.setIcon(android.R.drawable.ic_dialog_alert);
+                    deleteAlert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             showProgress(true);
                             tvLoad.setText("מוחק את הנתונים אנא המתן...");
@@ -178,8 +183,8 @@ public class TableBuy extends AppCompatActivity {
                                 @Override
                                 public void handleResponse(Long response) {
                                     InventoryApp.buys.remove(selectedItem);
-                                    Toast.makeText(TableBuy.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                    adapterBuys.notifyDataSetChanged();
+                                    Toast.makeText(TableBuyActivity.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                    buysAdapter.notifyDataSetChanged();
                                     showProgress(false);
                                     tvLoad.setText("טוען...");
                                 }
@@ -187,52 +192,22 @@ public class TableBuy extends AppCompatActivity {
                                 @Override
                                 public void handleFault(BackendlessFault fault) {
                                     showProgress(false);
-                                    Toast.makeText(TableBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
                     });
-                    alert.show();
+                    deleteAlert.show();
                 }
                 break;
 
             case R.id.doneIcon:
-                if (selectedItem == -1) {
-                    Toast.makeText(this, "יש לחבור חבילה שלא נכנסה לעבודה", Toast.LENGTH_SHORT).show();
+                if (selectedItem == -1 || InventoryApp.buys.get(selectedItem).isDone()) {
+                    Toast.makeText(this, "יש לחבור חבילה לא גמורה", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (!InventoryApp.buys.get(selectedItem).isDone()) {
-                        AlertDialog.Builder alert2 = new AlertDialog.Builder(TableBuy.this);
-                        alert2.setTitle("שינוי נתונים");
-                        alert2.setMessage("האם אתה בטוח שברצונך להכניס את החבילה לעבודה?");
-                        alert2.setNegativeButton(android.R.string.no, null);
-                        alert2.setIcon(android.R.drawable.ic_dialog_alert);
-
-                        alert2.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                InventoryApp.buys.get(selectedItem).setDone(true);
-                                showProgress(true);
-                                Backendless.Persistence.save(InventoryApp.buys.get(selectedItem), new AsyncCallback<Buy>() {
-                                    @Override
-                                    public void handleResponse(Buy response) {
-                                        showProgress(false);
-                                        Intent doneIntent = new Intent(TableBuy.this, Done.class);
-                                        doneIntent.putExtra("index", selectedItem);
-                                        startActivityForResult(doneIntent, 1);
-                                    }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault fault) {
-                                        showProgress(false);
-                                        Toast.makeText(TableBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        });
-
-                        alert2.show();
-                    } else {
-                        Toast.makeText(this, "יש לחבור חבילה לא גמורה", Toast.LENGTH_SHORT).show();
-                    }
+                    Intent doneIntent = new Intent(TableBuyActivity.this, DoneActivity.class);
+                    doneIntent.putExtra("index", selectedItem);
+                    startActivityForResult(doneIntent, 1);
                 }
                 break;
 
@@ -265,7 +240,7 @@ public class TableBuy extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
-                adapterBuys.notifyDataSetChanged();
+                buysAdapter.notifyDataSetChanged();
                 getBuys();
             }
         }
@@ -287,17 +262,17 @@ public class TableBuy extends AppCompatActivity {
             @Override
             public void handleResponse(List<Buy> response) {
                 InventoryApp.buys = response;
-                adapterBuys = new AdapterBuys(TableBuy.this, InventoryApp.buys);
-                lvBuyList.setAdapter(adapterBuys);
+                buysAdapter = new BuysAdapter(TableBuyActivity.this, InventoryApp.buys);
+                lvBuyList.setAdapter(buysAdapter);
                 showProgress(false);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableBuy.this, "טרם נשרמו קניות", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableBuyActivity.this, "טרם נשרמו קניות", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(TableBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
             }
@@ -316,14 +291,14 @@ public class TableBuy extends AppCompatActivity {
                 @Override
                 public void handleResponse(List<Buy> response) {
                     InventoryApp.buys.addAll(response);
-                    adapterBuys.notifyDataSetChanged();
+                    buysAdapter.notifyDataSetChanged();
                     showProgress(false);
                 }
 
                 @Override
                 public void handleFault(BackendlessFault fault) {
                     showProgress(false);
-                    Toast.makeText(TableBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
     }

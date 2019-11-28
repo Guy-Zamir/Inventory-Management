@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Tables;
 import java.util.Date;
 
 public class Export {

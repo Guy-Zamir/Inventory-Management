@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,8 +14,11 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Sort;
 
-public class NewSort extends AppCompatActivity {
+public class NewSortActivity extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -50,7 +53,7 @@ public class NewSort extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (etNewSortName.getText().toString().isEmpty()) {
-                    Toast.makeText(NewSort.this, "יש להזין את שם המיון", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewSortActivity.this, "יש להזין את שם המיון", Toast.LENGTH_SHORT).show();
                 } else {
 
                     name = etNewSortName.getText().toString().trim();
@@ -71,16 +74,16 @@ public class NewSort extends AppCompatActivity {
                         @Override
                         public void handleResponse(Sort response) {
                             InventoryApp.sorts.add(sort);
-                            Toast.makeText(NewSort.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewSortActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             finishActivity(1);
-                            NewSort.this.finish();
+                            NewSortActivity.this.finish();
                             showProgress(false);
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(NewSort.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewSortActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                             showProgress(false);
                         }
                     });

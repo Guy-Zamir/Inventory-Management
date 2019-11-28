@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +19,14 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Adapters.ClientAdapter;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Client;
+
 import java.util.List;
 
-public class TableClient extends AppCompatActivity {
+public class TableClientActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -31,7 +36,7 @@ public class TableClient extends AppCompatActivity {
             tvClientDetailsInsidePhone, tvClientDetailsFax,
             tvClientDetailsWebSite, tvClientDetailsDetails;
     ListView lvClientList;
-    AdapterClient clientAdapter;
+    ClientAdapter clientAdapter;
 
     int PAGE_SIZE = 100;
     int selectedItem = -1;
@@ -87,7 +92,7 @@ public class TableClient extends AppCompatActivity {
             @Override
             public void handleResponse(List<Client> response) {
                 InventoryApp.clients = response;
-                clientAdapter = new AdapterClient(TableClient.this, InventoryApp.clients);
+                clientAdapter = new ClientAdapter(TableClientActivity.this, InventoryApp.clients);
                 lvClientList.setAdapter(clientAdapter);
                 showProgress(false);
             }
@@ -95,9 +100,9 @@ public class TableClient extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableClient.this, "טרם נשרמו לקוחות", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableClientActivity.this, "טרם נשרמו לקוחות", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(TableClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
             }
@@ -140,7 +145,7 @@ public class TableClient extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newIcon:
-                Intent intent = new Intent(TableClient.this, NewClient.class);
+                Intent intent = new Intent(TableClientActivity.this, NewClientActivity.class);
                 startActivityForResult(intent, 1);
                 break;
 
@@ -148,7 +153,7 @@ public class TableClient extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent editClient = new Intent(TableClient.this, EditClient.class);
+                    Intent editClient = new Intent(TableClientActivity.this, EditClientActivity.class);
                     editClient.putExtra("index", selectedItem);
                     editClient.putExtra("client", client);
                     startActivityForResult(editClient, 1);

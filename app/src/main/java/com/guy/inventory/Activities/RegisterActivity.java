@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,8 +13,9 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.R;
 
-public class Register extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -43,7 +44,7 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 if (etName.getText().toString().isEmpty() || etEmail.getText().toString().isEmpty() ||
                 etPassword.getText().toString().isEmpty() || etRePassword.getText().toString().isEmpty()) {
-                    Toast.makeText(Register.this, "יש להזין את כל הנתונים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "יש להזין את כל הנתונים", Toast.LENGTH_SHORT).show();
                 } else {
                     if (etPassword.getText().toString().trim().equals(etRePassword.getText().toString().trim())) {
                         String name = etName.getText().toString().trim();
@@ -61,18 +62,18 @@ public class Register extends AppCompatActivity {
                             @Override
                             public void handleResponse(BackendlessUser response) {
                                 showProgress(false);
-                                Toast.makeText(Register.this, "משתמש נרשם בהצלחה", Toast.LENGTH_SHORT).show();
-                                Register.this.finish();
+                                Toast.makeText(RegisterActivity.this, "משתמש נרשם בהצלחה", Toast.LENGTH_SHORT).show();
+                                RegisterActivity.this.finish();
                             }
 
                             @Override
                             public void handleFault(BackendlessFault fault) {
                                 showProgress(false);
-                                Toast.makeText(Register.this, fault.getMessage() , Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, fault.getMessage() , Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
-                        Toast.makeText(Register.this, "וודא שאישור הסיסמה זהה לסיסמה", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "וודא שאישור הסיסמה זהה לסיסמה", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

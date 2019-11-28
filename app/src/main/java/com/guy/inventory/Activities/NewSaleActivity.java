@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,12 +18,18 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Client;
+import com.guy.inventory.Tables.Export;
+import com.guy.inventory.Tables.Sale;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class NewSale extends AppCompatActivity {
+public class NewSaleActivity extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -86,7 +92,7 @@ public class NewSale extends AppCompatActivity {
                     clientNames.add(client.getName());
                 }
                 InventoryApp.clients = response;
-                clientAdapter = new ArrayAdapter<>(NewSale.this, android.R.layout.select_dialog_singlechoice, clientNames);
+                clientAdapter = new ArrayAdapter<>(NewSaleActivity.this, android.R.layout.select_dialog_singlechoice, clientNames);
                 acClients.setThreshold(1);
                 acClients.setAdapter(clientAdapter);
                 showProgress(false);
@@ -95,9 +101,9 @@ public class NewSale extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 if (fault.getCode().equals("1009")) {
-                    Toast.makeText(NewSale.this, "טרם הוגדרו לקוחות, עליך להגדיר לקוח חדש לפני שמירת המכירה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewSaleActivity.this, "טרם הוגדרו לקוחות, עליך להגדיר לקוח חדש לפני שמירת המכירה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
             }
@@ -135,13 +141,13 @@ public class NewSale extends AppCompatActivity {
             public void onClick(View v) {
                 if (chosenClient == -1) {
 
-                    Toast.makeText(NewSale.this, "יש לבחור שם חברה קיים בלבד", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewSaleActivity.this, "יש לבחור שם חברה קיים בלבד", Toast.LENGTH_SHORT).show();
 
                 } else if (acClients.getText().toString().isEmpty() || etSaleID.getText().toString().isEmpty() ||
                         etSaleWeight.getText().toString().isEmpty() || etSaleSum.getText().toString().isEmpty() ||
                         etSaleDays.getText().toString().isEmpty()) {
 
-                    Toast.makeText(NewSale.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewSaleActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
 
                 } else {
                     final String clientName = InventoryApp.clients.get(chosenClient).getName();
@@ -182,17 +188,17 @@ public class NewSale extends AppCompatActivity {
                             @Override
                             public void handleResponse(Export response) {
                                 InventoryApp.exports.add(export);
-                                Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                                 setResult(RESULT_OK);
                                 finishActivity(1);
                                 showProgress(false);
-                                NewSale.this.finish();
+                                NewSaleActivity.this.finish();
                             }
 
                             @Override
                             public void handleFault(BackendlessFault fault) {
                                 showProgress(false);
-                                Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -227,17 +233,17 @@ public class NewSale extends AppCompatActivity {
                             @Override
                             public void handleResponse(Sale response) {
                                 InventoryApp.sales.add(sale);
-                                Toast.makeText(NewSale.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                                 setResult(RESULT_OK);
                                 finishActivity(1);
                                 showProgress(false);
-                                NewSale.this.finish();
+                                NewSaleActivity.this.finish();
                             }
 
                             @Override
                             public void handleFault(BackendlessFault fault) {
                                 showProgress(false);
-                                Toast.makeText(NewSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -15,8 +15,11 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Sort;
 
-public class EditSort extends AppCompatActivity {
+public class EditSortActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -64,7 +67,7 @@ public class EditSort extends AppCompatActivity {
                 final String color = etSortEditColor.getText().toString().trim();
                 final String clarity = etSortEditClarity.getText().toString().trim();
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(EditSort.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(EditSortActivity.this);
                 alert.setTitle("שינוי נתונים");
                 alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
                 alert.setNegativeButton(android.R.string.no, null);
@@ -80,16 +83,16 @@ public class EditSort extends AppCompatActivity {
                         Backendless.Persistence.save(InventoryApp.sorts.get(index), new AsyncCallback<Sort>() {
                             @Override
                             public void handleResponse(Sort response) {
-                                Toast.makeText(EditSort.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditSortActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                 setResult(RESULT_OK);
                                 finishActivity(1);
-                                EditSort.this.finish();
+                                EditSortActivity.this.finish();
                             }
 
                             @Override
                             public void handleFault(BackendlessFault fault) {
                                 showProgress(false);
-                                Toast.makeText(EditSort.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditSortActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

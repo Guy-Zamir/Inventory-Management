@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -17,10 +17,15 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Export;
+import com.guy.inventory.Tables.Sale;
+
 import java.util.Calendar;
 import java.util.Date;
 
-public class EditSale extends AppCompatActivity {
+public class EditSaleActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -107,7 +112,7 @@ public class EditSale extends AppCompatActivity {
                 if (etSaleEditID.getText().toString().isEmpty() ||
                         etSaleEditWeight.getText().toString().isEmpty()|| etSaleEditSum.getText().toString().isEmpty()||
                     etSaleEditDays.getText().toString().isEmpty()) {
-                    Toast.makeText(EditSale.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditSaleActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
 
                 } else {
 
@@ -116,7 +121,7 @@ public class EditSale extends AppCompatActivity {
                     saleSum = Double.parseDouble(etSaleEditSum.getText().toString().trim());
                     days = Integer.valueOf(etSaleEditDays.getText().toString().trim());
 
-                    AlertDialog.Builder alert = new AlertDialog.Builder(EditSale.this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(EditSaleActivity.this);
                     alert.setTitle("שינוי נתונים");
                     alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
                     alert.setNegativeButton(android.R.string.no, null);
@@ -147,16 +152,16 @@ public class EditSale extends AppCompatActivity {
                                 Backendless.Persistence.save(InventoryApp.exports.get(index), new AsyncCallback<Export>() {
                                     @Override
                                     public void handleResponse(Export response) {
-                                        Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditSaleActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                         setResult(RESULT_OK);
                                         finishActivity(1);
-                                        EditSale.this.finish();
+                                        EditSaleActivity.this.finish();
                                     }
 
                                     @Override
                                     public void handleFault(BackendlessFault fault) {
                                         showProgress(false);
-                                        Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -184,17 +189,17 @@ public class EditSale extends AppCompatActivity {
                                     @Override
                                     public void handleResponse(Sale response) {
                                         showProgress(false);
-                                        Toast.makeText(EditSale.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditSaleActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                         setResult(RESULT_OK);
                                         getIntent().putExtra("export", export);
                                         finishActivity(1);
-                                        EditSale.this.finish();
+                                        EditSaleActivity.this.finish();
                                     }
 
                                     @Override
                                     public void handleFault(BackendlessFault fault) {
                                         showProgress(false);
-                                        Toast.makeText(EditSale.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }

@@ -1,9 +1,9 @@
-package com.guy.inventory;
+package com.guy.inventory.Tables;
 
 import java.util.Date;
 
 public class Sort {
-    private double weight, price;
+    private double weight, price, sum;
     private String name, size, shape, clarity, color, details;
 
     private Date created, updated;
@@ -103,5 +103,13 @@ public class Sort {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public double getSum() {
+        return sum;
+    }
+
+    public void setSum(double sum) {
+        this.sum = sum;
     }
 }

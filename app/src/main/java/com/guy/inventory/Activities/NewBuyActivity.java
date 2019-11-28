@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,12 +18,17 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Buy;
+import com.guy.inventory.Tables.Client;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class NewBuy extends AppCompatActivity {
+public class NewBuyActivity extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -80,7 +85,7 @@ public class NewBuy extends AppCompatActivity {
                     supplierNames.add(supplier.getName());
                 }
                 InventoryApp.clients = response;
-                adapter = new ArrayAdapter<>(NewBuy.this,android.R.layout.select_dialog_singlechoice, supplierNames);
+                adapter = new ArrayAdapter<>(NewBuyActivity.this,android.R.layout.select_dialog_singlechoice, supplierNames);
                 acSuppliers.setThreshold(1);
                 acSuppliers.setAdapter(adapter);
                 showProgress(false);
@@ -89,9 +94,9 @@ public class NewBuy extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 if (fault.getCode().equals("1009")) {
-                    Toast.makeText(NewBuy.this, "טרם הוגדרו ספקים, עליך להגדיר ספק חדש לפני שמירת הקניה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewBuyActivity.this, "טרם הוגדרו ספקים, עליך להגדיר ספק חדש לפני שמירת הקניה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(NewBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
             }
@@ -132,13 +137,13 @@ public class NewBuy extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (chosenSupplier == -1) {
-                    Toast.makeText(NewBuy.this, "יש לבחור שם ספק קיים בלבד", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewBuyActivity.this, "יש לבחור שם ספק קיים בלבד", Toast.LENGTH_SHORT).show();
 
                 } else if (etBuyID.getText().toString().isEmpty() ||
                         etBuyPrice.getText().toString().isEmpty() || etBuyWeight.getText().toString().isEmpty() ||
                         etBuyDays.getText().toString().isEmpty()){
 
-                    Toast.makeText(NewBuy.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewBuyActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
                 } else {
 
                     String supplierName = InventoryApp.clients.get(chosenSupplier).getName();
@@ -175,16 +180,16 @@ public class NewBuy extends AppCompatActivity {
                         @Override
                         public void handleResponse(Buy response) {
                             InventoryApp.buys.add(buy);
-                            Toast.makeText(NewBuy.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewBuyActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             finishActivity(1);
-                            NewBuy.this.finish();
+                            NewBuyActivity.this.finish();
                             showProgress(false);
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(NewBuy.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

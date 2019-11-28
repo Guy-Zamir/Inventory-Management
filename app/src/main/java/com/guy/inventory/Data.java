@@ -5,6 +5,11 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Tables.Buy;
+import com.guy.inventory.Tables.Client;
+import com.guy.inventory.Tables.Export;
+import com.guy.inventory.Tables.Sale;
+import com.guy.inventory.Tables.Sort;
 
 import java.util.List;
 

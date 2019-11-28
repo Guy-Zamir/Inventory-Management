@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -15,11 +15,14 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Client;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class EditClient extends AppCompatActivity {
+public class EditClientActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -80,7 +83,7 @@ public class EditClient extends AppCompatActivity {
                 final String newName = etClientEditName.getText().toString().trim();
                 final String oldName = InventoryApp.clients.get(index).getName();
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(EditClient.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(EditClientActivity.this);
                 alert.setTitle("שינוי נתונים");
                 alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
                 alert.setNegativeButton(android.R.string.no, null);
@@ -110,14 +113,14 @@ public class EditClient extends AppCompatActivity {
                                             showProgress(false);
                                             setResult(RESULT_OK);
                                             finishActivity(1);
-                                            EditClient.this.finish();
-                                            Toast.makeText(EditClient.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                            EditClientActivity.this.finish();
+                                            Toast.makeText(EditClientActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                         }
 
                                         @Override
                                         public void handleFault(BackendlessFault fault) {
                                             showProgress(false);
-                                            Toast.makeText(EditClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(EditClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -125,7 +128,7 @@ public class EditClient extends AppCompatActivity {
                                 @Override
                                 public void handleFault(BackendlessFault fault) {
                                     showProgress(false);
-                                    Toast.makeText(EditClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -137,14 +140,14 @@ public class EditClient extends AppCompatActivity {
                                     showProgress(false);
                                     setResult(RESULT_OK);
                                     finishActivity(1);
-                                    EditClient.this.finish();
-                                    Toast.makeText(EditClient.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                    EditClientActivity.this.finish();
+                                    Toast.makeText(EditClientActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
                                 public void handleFault(BackendlessFault fault) {
                                     showProgress(false);
-                                    Toast.makeText(EditClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }

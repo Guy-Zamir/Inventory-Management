@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,15 +19,20 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Adapters.SortAdapter;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Sort;
+
 import java.util.List;
 
-public class TableSorting extends AppCompatActivity {
+public class TableSortingActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
     private ListView lvSortList;
-    private AdapterSort sortAdapter;
+    private SortAdapter sortAdapter;
 
     private int selectedItem = -1;
 
@@ -58,7 +63,7 @@ public class TableSorting extends AppCompatActivity {
             @Override
             public void handleResponse(List<Sort> response) {
                 InventoryApp.sorts = response;
-                sortAdapter = new AdapterSort(TableSorting.this, InventoryApp.sorts);
+                sortAdapter = new SortAdapter(TableSortingActivity.this, InventoryApp.sorts);
                 lvSortList.setAdapter(sortAdapter);
                 showProgress(false);
             }
@@ -66,9 +71,9 @@ public class TableSorting extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableSorting.this, "טרם נשרמו מיונים", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableSortingActivity.this, "טרם נשרמו מיונים", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(TableSorting.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TableSortingActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
             }
@@ -97,7 +102,7 @@ public class TableSorting extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newIcon:
-                Intent intent = new Intent(TableSorting.this, NewSort.class);
+                Intent intent = new Intent(TableSortingActivity.this, NewSortActivity.class);
                 startActivityForResult(intent, 1);
                 break;
 
@@ -105,7 +110,7 @@ public class TableSorting extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent editSort = new Intent(TableSorting.this, EditSort.class);
+                    Intent editSort = new Intent(TableSortingActivity.this, EditSortActivity.class);
                     editSort.putExtra("index", selectedItem);
                     startActivityForResult(editSort, 1);
                 }

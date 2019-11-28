@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +12,11 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Client;
 
-public class NewClient extends AppCompatActivity {
+public class NewClientActivity extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
@@ -54,7 +57,7 @@ public class NewClient extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (etNewClientName.getText().toString().isEmpty()) {
-                    Toast.makeText(NewClient.this, "יש להזין את שם החברה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewClientActivity.this, "יש להזין את שם החברה", Toast.LENGTH_SHORT).show();
                 } else {
 
                     name = etNewClientName.getText().toString().trim();
@@ -82,16 +85,16 @@ public class NewClient extends AppCompatActivity {
                         @Override
                         public void handleResponse(Client response) {
                             InventoryApp.clients.add(client);
-                            Toast.makeText(NewClient.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewClientActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             finishActivity(1);
-                            NewClient.this.finish();
+                            NewClientActivity.this.finish();
                             showProgress(false);
                         }
 
                         @Override
                         public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(NewClient.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                             showProgress(false);
                         }
                     });

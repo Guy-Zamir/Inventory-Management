@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,14 +10,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+import com.guy.inventory.Tables.Sort;
+
+import java.text.DecimalFormat;
 import java.util.List;
 
-public class AdapterSort extends ArrayAdapter<Sort> {
+public class SortAdapter extends ArrayAdapter<Sort> {
     private Context context;
     private List<Sort> sorts;
     private int selectedPosition = -1;
 
-    AdapterSort(Context context, List<Sort> list) {
+    public SortAdapter(Context context, List<Sort> list) {
         super(context, R.layout.sort_row_layout, list);
         this.sorts = list;
         this.context = context;
@@ -28,6 +34,7 @@ public class AdapterSort extends ArrayAdapter<Sort> {
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
 
         assert inflater != null;
         convertView = inflater.inflate(R.layout.sort_row_layout, parent, false);
@@ -36,6 +43,7 @@ public class AdapterSort extends ArrayAdapter<Sort> {
         TextView tvSortName = convertView.findViewById(R.id.tvSortName);
         TextView tvSortPrice = convertView.findViewById(R.id.tvSortPrice);
         TextView tvSortWeight = convertView.findViewById(R.id.tvSortWeight);
+        TextView tvSortSum = convertView.findViewById(R.id.tvSortSum);
         TextView tvSortShape = convertView.findViewById(R.id.tvSortShape);
         TextView tvSortSize = convertView.findViewById(R.id.tvSortSize);
         TextView tvSortColor = convertView.findViewById(R.id.tvSortColor);
@@ -45,8 +53,9 @@ public class AdapterSort extends ArrayAdapter<Sort> {
 
         // Setting the values to the views
         tvSortName.setText(InventoryApp.sorts.get(position).getName());
-        tvSortPrice.setText("מחיר ממוצע: " + sorts.get(position).getPrice() + "$");
-        tvSortWeight.setText("משקל: " + sorts.get(position).getWeight() + " קראט ");
+        tvSortPrice.setText("מחיר ממוצע: " + numberFormat.format(sorts.get(position).getPrice()) + "$");
+        tvSortWeight.setText("משקל: " + numberFormat.format(sorts.get(position).getWeight()) + " קראט ");
+        tvSortSum.setText("סכום: " + numberFormat.format(sorts.get(position).getSum()) + "$");
         tvSortShape.setText("צורה: " + sorts.get(position).getShape());
         tvSortSize.setText("גודל: " + sorts.get(position).getSize());
         tvSortColor.setText("צבע: " + sorts.get(position).getColor());
@@ -57,7 +66,7 @@ public class AdapterSort extends ArrayAdapter<Sort> {
         return convertView;
     }
 
-    void setSelectedPosition(int pos) {
+    public void setSelectedPosition(int pos) {
         selectedPosition = pos;
     }
 }

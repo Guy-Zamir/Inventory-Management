@@ -1,4 +1,4 @@
-package com.guy.inventory;
+package com.guy.inventory.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,16 +11,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.guy.inventory.Tables.Buy;
+import com.guy.inventory.InventoryApp;
+import com.guy.inventory.R;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class AdapterBuys extends ArrayAdapter<Buy> {
+public class BuysAdapter extends ArrayAdapter<Buy> {
     private Context context;
     private List<Buy> buys;
     private int selectedPosition = -1;
 
-    AdapterBuys(Context context, List<Buy> list) {
+    public BuysAdapter(Context context, List<Buy> list) {
         super(context, R.layout.buy_row_layout, list);
         this.buys = list;
         this.context = context;
@@ -50,8 +55,14 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         TextView tvBuyDetailsDays = convertView.findViewById(R.id.tvBuyDetailsDays);
         TextView tvBuyDetailsSum = convertView.findViewById(R.id.tvBuyDetailsSum);
         TextView tvBuyDetailsDoneWeight = convertView.findViewById(R.id.tvBuyDetailsDoneWeight);
-        TextView tvBuyDetailsWage = convertView.findViewById(R.id.tvBuyDetailsWage);
         TextView tvBuyDetailsWorkDe = convertView.findViewById(R.id.tvBuyDetailsWorkDe);
+        TextView tvBuyDetailsWage = convertView.findViewById(R.id.tvBuyDetailsWage);
+        TextView tvBuyDetailsSortDef = convertView.findViewById(R.id.tvBuyDetailsSortDef);
+        TextView tvBuyDetailsSort1 = convertView.findViewById(R.id.tvBuyDetailsSort1);
+        TextView tvBuyDetailsSort2 = convertView.findViewById(R.id.tvBuyDetailsSort2);
+        TextView tvBuyDetailsSort3 = convertView.findViewById(R.id.tvBuyDetailsSort3);
+        TextView tvBuyDetailsSort4 = convertView.findViewById(R.id.tvBuyDetailsSort4);
+        TextView tvBuyDetailsSort5 = convertView.findViewById(R.id.tvBuyDetailsSort5);
 
         LinearLayout llBuyDetails = convertView.findViewById(R.id.llBuyDetails);
 
@@ -82,6 +93,12 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
                 numberFormat.format(InventoryApp.buys.get(position).getWage() / InventoryApp.buys.get(position).getPrice() * 100) + "%" + " , " +
                 numberFormat.format(InventoryApp.buys.get(position).getWage() * InventoryApp.buys.get(position).getWeight()) + "$");
         tvBuyDetailsWorkDe.setText("אחוז ליטוש: " + numberFormat.format(InventoryApp.buys.get(position).getWorkDepreciation() * 100) + "%");
+        tvBuyDetailsSortDef.setText("משקל במיון הראשי: " + numberFormat.format(InventoryApp.buys.get(position).getSortWeightDef()));
+        tvBuyDetailsSort1.setText("משקל: " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight1()) + " מחיר: " + numberFormat.format(InventoryApp.buys.get(position).getSortPrice1()) + InventoryApp.buys.get(position).getSortName1());
+        tvBuyDetailsSort2.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName2()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight2()));
+        tvBuyDetailsSort3.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName3()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight3()));
+        tvBuyDetailsSort4.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName4()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight4()));
+        tvBuyDetailsSort5.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName5()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight5()));
 
         // When the goods are done
         ivDone.setImageResource((InventoryApp.buys.get(position).isDone()) ? R.drawable.done1_icon : R.drawable.not_done1_icon);
@@ -90,11 +107,17 @@ public class AdapterBuys extends ArrayAdapter<Buy> {
         // When the buy is selected from the list
         llBuyDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
 
+        tvBuyDetailsSortDef.setVisibility((InventoryApp.buys.get(position).isDone()) ? View.VISIBLE : View.GONE);
+        tvBuyDetailsSort1.setVisibility((InventoryApp.buys.get(position).getSortWeight1() !=0) ? View.VISIBLE : View.GONE);
+        tvBuyDetailsSort2.setVisibility((InventoryApp.buys.get(position).getSortWeight2() !=0) ? View.VISIBLE : View.GONE);
+        tvBuyDetailsSort3.setVisibility((InventoryApp.buys.get(position).getSortWeight3() !=0) ? View.VISIBLE : View.GONE);
+        tvBuyDetailsSort4.setVisibility((InventoryApp.buys.get(position).getSortWeight4() !=0) ? View.VISIBLE : View.GONE);
+        tvBuyDetailsSort5.setVisibility((InventoryApp.buys.get(position).getSortWeight5() !=0) ? View.VISIBLE : View.GONE);
 
         return convertView;
     }
 
-    void setSelectedPosition(int pos) {
+    public void setSelectedPosition(int pos) {
         selectedPosition = pos;
     }
 }

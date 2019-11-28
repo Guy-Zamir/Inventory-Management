@@ -6,7 +6,7 @@
     android:background="@drawable/background"
     android:orientation="vertical"
     android:id="@+id/client_table_port"
-    tools:context=".TableSorting">
+    tools:context=".Activities.TableSortingActivity">
 
     <ProgressBar
         android:id="@+id/login_progress"
