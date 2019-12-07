@@ -287,23 +287,23 @@ public class DoneActivity extends AppCompatActivity {
                     alert.setIcon(android.R.drawable.ic_dialog_alert);
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            InventoryApp.buys.get(index).setSortPrice1(sortPrice1);
-                            InventoryApp.buys.get(index).setSortPrice2(sortPrice2);
-                            InventoryApp.buys.get(index).setSortPrice3(sortPrice3);
-                            InventoryApp.buys.get(index).setSortPrice4(sortPrice4);
-                            InventoryApp.buys.get(index).setSortPrice5(sortPrice5);
-                            InventoryApp.buys.get(index).setSortWeight1(sortWeight1);
-                            InventoryApp.buys.get(index).setSortWeight2(sortWeight2);
-                            InventoryApp.buys.get(index).setSortWeight3(sortWeight3);
-                            InventoryApp.buys.get(index).setSortWeight4(sortWeight4);
-                            InventoryApp.buys.get(index).setSortWeight5(sortWeight5);
-                            InventoryApp.buys.get(index).setSortName1(sortName1);
-                            InventoryApp.buys.get(index).setSortName2(sortName2);
-                            InventoryApp.buys.get(index).setSortName3(sortName3);
-                            InventoryApp.buys.get(index).setSortName4(sortName4);
-                            InventoryApp.buys.get(index).setSortName5(sortName5);
-                            InventoryApp.buys.get(index).setSortPriceDef(sortPriceDef);
-                            InventoryApp.buys.get(index).setSortWeightDef(sortWeightDef);
+                            //InventoryApp.buys.get(index).setSortPrice1(sortPrice1);
+                            //InventoryApp.buys.get(index).setSortPrice2(sortPrice2);
+                            //InventoryApp.buys.get(index).setSortPrice3(sortPrice3);
+                            //InventoryApp.buys.get(index).setSortPrice4(sortPrice4);
+                            //InventoryApp.buys.get(index).setSortPrice5(sortPrice5);
+                            //InventoryApp.buys.get(index).setSortWeight1(sortWeight1);
+                            //InventoryApp.buys.get(index).setSortWeight2(sortWeight2);
+                            //InventoryApp.buys.get(index).setSortWeight3(sortWeight3);
+                            //InventoryApp.buys.get(index).setSortWeight4(sortWeight4);
+                            //InventoryApp.buys.get(index).setSortWeight5(sortWeight5);
+                            //InventoryApp.buys.get(index).setSortName1(sortName1);
+                            //InventoryApp.buys.get(index).setSortName2(sortName2);
+                            //InventoryApp.buys.get(index).setSortName3(sortName3);
+                            //InventoryApp.buys.get(index).setSortName4(sortName4);
+                            //InventoryApp.buys.get(index).setSortName5(sortName5);
+                            //InventoryApp.buys.get(index).setSortPriceDef(sortPriceDef);
+                            //InventoryApp.buys.get(index).setSortWeightDef(sortWeightDef);
 
                             InventoryApp.buys.get(index).setDone(true);
                             InventoryApp.buys.get(index).setDoneWeight(doneWeight);

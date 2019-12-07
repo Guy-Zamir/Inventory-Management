@@ -93,12 +93,12 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                 numberFormat.format(InventoryApp.buys.get(position).getWage() / InventoryApp.buys.get(position).getPrice() * 100) + "%" + " , " +
                 numberFormat.format(InventoryApp.buys.get(position).getWage() * InventoryApp.buys.get(position).getWeight()) + "$");
         tvBuyDetailsWorkDe.setText("אחוז ליטוש: " + numberFormat.format(InventoryApp.buys.get(position).getWorkDepreciation() * 100) + "%");
-        tvBuyDetailsSortDef.setText("משקל במיון הראשי: " + numberFormat.format(InventoryApp.buys.get(position).getSortWeightDef()));
-        tvBuyDetailsSort1.setText("משקל: " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight1()) + " מחיר: " + numberFormat.format(InventoryApp.buys.get(position).getSortPrice1()) + InventoryApp.buys.get(position).getSortName1());
-        tvBuyDetailsSort2.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName2()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight2()));
-        tvBuyDetailsSort3.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName3()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight3()));
-        tvBuyDetailsSort4.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName4()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight4()));
-        tvBuyDetailsSort5.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName5()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight5()));
+        //tvBuyDetailsSortDef.setText("משקל במיון הראשי: " + numberFormat.format(InventoryApp.buys.get(position).getSortWeightDef()));
+        //tvBuyDetailsSort1.setText("משקל: " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight1()) + " מחיר: " + numberFormat.format(InventoryApp.buys.get(position).getSortPrice1()) + InventoryApp.buys.get(position).getSortName1());
+        //tvBuyDetailsSort2.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName2()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight2()));
+        //tvBuyDetailsSort3.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName3()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight3()));
+        //tvBuyDetailsSort4.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName4()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight4()));
+        //tvBuyDetailsSort5.setText("משקל במיון "+InventoryApp.buys.get(position).getSortName5()+": " + numberFormat.format(InventoryApp.buys.get(position).getSortWeight5()));
 
         // When the goods are done
         ivDone.setImageResource((InventoryApp.buys.get(position).isDone()) ? R.drawable.done1_icon : R.drawable.not_done1_icon);
@@ -107,12 +107,12 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
         // When the buy is selected from the list
         llBuyDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
 
-        tvBuyDetailsSortDef.setVisibility((InventoryApp.buys.get(position).isDone()) ? View.VISIBLE : View.GONE);
-        tvBuyDetailsSort1.setVisibility((InventoryApp.buys.get(position).getSortWeight1() !=0) ? View.VISIBLE : View.GONE);
-        tvBuyDetailsSort2.setVisibility((InventoryApp.buys.get(position).getSortWeight2() !=0) ? View.VISIBLE : View.GONE);
-        tvBuyDetailsSort3.setVisibility((InventoryApp.buys.get(position).getSortWeight3() !=0) ? View.VISIBLE : View.GONE);
-        tvBuyDetailsSort4.setVisibility((InventoryApp.buys.get(position).getSortWeight4() !=0) ? View.VISIBLE : View.GONE);
-        tvBuyDetailsSort5.setVisibility((InventoryApp.buys.get(position).getSortWeight5() !=0) ? View.VISIBLE : View.GONE);
+        //tvBuyDetailsSortDef.setVisibility((InventoryApp.buys.get(position).isDone()) ? View.VISIBLE : View.GONE);
+        //tvBuyDetailsSort1.setVisibility((InventoryApp.buys.get(position).getSortWeight1() !=0) ? View.VISIBLE : View.GONE);
+        //tvBuyDetailsSort2.setVisibility((InventoryApp.buys.get(position).getSortWeight2() !=0) ? View.VISIBLE : View.GONE);
+        //tvBuyDetailsSort3.setVisibility((InventoryApp.buys.get(position).getSortWeight3() !=0) ? View.VISIBLE : View.GONE);
+        //tvBuyDetailsSort4.setVisibility((InventoryApp.buys.get(position).getSortWeight4() !=0) ? View.VISIBLE : View.GONE);
+        //tvBuyDetailsSort5.setVisibility((InventoryApp.buys.get(position).getSortWeight5() !=0) ? View.VISIBLE : View.GONE);
 
         return convertView;
     }

@@ -1,23 +1,27 @@
 package com.guy.inventory;
 import android.content.Context;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.guy.inventory.Activities.NewBuyActivity;
 import com.guy.inventory.Tables.Buy;
 import com.guy.inventory.Tables.Client;
 import com.guy.inventory.Tables.Export;
 import com.guy.inventory.Tables.Sale;
 import com.guy.inventory.Tables.Sort;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Data {
+public class DataBase {
     private Context context;
     private boolean valid;
 
-    public Data(Context context) {
+    public DataBase(Context context) {
         this.context = context;
     }
 
@@ -26,7 +30,6 @@ public class Data {
             @Override
             public void handleResponse(Export response) {
                 InventoryApp.exports.add(export);
-                Toast.makeText(context, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -43,7 +46,6 @@ public class Data {
         Backendless.Persistence.save(InventoryApp.exports.get(selectedItem), new AsyncCallback<Export>() {
             @Override
             public void handleResponse(Export response) {
-                Toast.makeText(context, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -66,7 +68,6 @@ public class Data {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(context, "נמחק בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = false;
             }
         });
@@ -80,7 +81,6 @@ public class Data {
             @Override
             public void handleResponse(Sale response) {
                 InventoryApp.sales.add(sale);
-                Toast.makeText(context, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -97,7 +97,6 @@ public class Data {
         Backendless.Persistence.save(InventoryApp.sales.get(selectedItem), new AsyncCallback<Sale>() {
             @Override
             public void handleResponse(Sale response) {
-                Toast.makeText(context, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -120,7 +119,6 @@ public class Data {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(context, "נמחק בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = false;
             }
         });
@@ -134,7 +132,6 @@ public class Data {
             @Override
             public void handleResponse(Buy response) {
                 InventoryApp.buys.add(buy);
-                Toast.makeText(context, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -151,7 +148,6 @@ public class Data {
         Backendless.Persistence.save(InventoryApp.buys.get(selectedItem), new AsyncCallback<Buy>() {
             @Override
             public void handleResponse(Buy response) {
-                Toast.makeText(context, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -174,7 +170,6 @@ public class Data {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(context, "נמחק בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = false;
             }
         });
@@ -188,7 +183,6 @@ public class Data {
             @Override
             public void handleResponse(Client response) {
                 InventoryApp.clients.add(client);
-                Toast.makeText(context, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -205,7 +199,6 @@ public class Data {
         Backendless.Persistence.save(InventoryApp.clients.get(selectedItem), new AsyncCallback<Client>() {
             @Override
             public void handleResponse(Client response) {
-                Toast.makeText(context, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -228,11 +221,32 @@ public class Data {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(context, "נמחק בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = false;
             }
         });
         return valid;
+    }
+
+    public void getClients(final DataQueryBuilder builder) {
+        Backendless.Data.of(Client.class).find(builder, new AsyncCallback<List<Client>>() {
+            @Override
+            public void handleResponse(List<Client> response) {
+                InventoryApp.clients = response;
+                valid = true;
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                if (fault.getCode().equals("1009")) {
+                    Toast.makeText(context, "טרם הוגדרו ספקים, עליך להגדיר ספק חדש לפני שמירת הקניה", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                valid = false;
+            }
+        });
+
+
     }
 
 
@@ -242,7 +256,6 @@ public class Data {
             @Override
             public void handleResponse(Sort response) {
                 InventoryApp.sorts.add(sort);
-                Toast.makeText(context, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -259,7 +272,6 @@ public class Data {
         Backendless.Persistence.save(InventoryApp.sorts.get(selectedItem), new AsyncCallback<Sort>() {
             @Override
             public void handleResponse(Sort response) {
-                Toast.makeText(context, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
                 valid = true;
             }
 
@@ -282,7 +294,7 @@ public class Data {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(context, "נמחק בהצלחה", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 valid = false;
             }
         });
@@ -364,6 +376,34 @@ public class Data {
                 valid = false;
             }
         });
+        return valid;
+    }
+
+
+
+    public boolean addRelation(final String parentObjectId, final String childrenObjectId, final String tableName, final String columnName) {
+        HashMap<String, Object> parentObject = new HashMap<>();
+        parentObject.put( "objectId", parentObjectId);
+
+        HashMap<String, Object> childObject = new HashMap<>();
+        childObject.put( "objectId", childrenObjectId);
+
+        ArrayList<Map> children = new ArrayList<>();
+        children.add(childObject);
+
+        Backendless.Data.of( tableName ).setRelation(parentObject, columnName, children,
+                new AsyncCallback<Integer>() {
+                    @Override
+                    public void handleResponse( Integer response ) {
+                        valid = true;
+                    }
+
+                    @Override
+                    public void handleFault( BackendlessFault fault ) {
+                        Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        valid = false;
+                    }
+                } );
         return valid;
     }
 }

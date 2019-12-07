@@ -27,7 +27,9 @@ import com.guy.inventory.Tables.Sale;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NewSaleActivity extends AppCompatActivity {
 
@@ -151,6 +153,7 @@ public class NewSaleActivity extends AppCompatActivity {
 
                 } else {
                     final String clientName = InventoryApp.clients.get(chosenClient).getName();
+                    final String clientObjectId = InventoryApp.clients.get(chosenClient).getObjectId();
                     final String id = etSaleID.getText().toString();
                     final double weight = Double.parseDouble(etSaleWeight.getText().toString());
                     final double saleSum = Double.parseDouble(etSaleSum.getText().toString());
@@ -188,11 +191,36 @@ public class NewSaleActivity extends AppCompatActivity {
                             @Override
                             public void handleResponse(Export response) {
                                 InventoryApp.exports.add(export);
-                                Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK);
-                                finishActivity(1);
-                                showProgress(false);
-                                NewSaleActivity.this.finish();
+
+                                // Setting the relation to the Client
+                                HashMap<String, Object> parentObject = new HashMap<>();
+                                parentObject.put( "objectId", InventoryApp.exports.get(InventoryApp.exports.size()-1).getObjectId());
+
+                                HashMap<String, Object> childObject = new HashMap<>();
+                                childObject.put( "objectId", clientObjectId );
+
+                                ArrayList<Map> children = new ArrayList<>();
+                                children.add(childObject);
+
+                                Backendless.Data.of( "Export" ).setRelation( parentObject, "Client", children,
+                                        new AsyncCallback<Integer>()
+                                        {
+                                            @Override
+                                            public void handleResponse( Integer response )
+                                            {
+                                                Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                                setResult(RESULT_OK);
+                                                finishActivity(1);
+                                                NewSaleActivity.this.finish();
+                                                showProgress(false);
+                                            }
+
+                                            @Override
+                                            public void handleFault( BackendlessFault fault )
+                                            {
+                                                Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        } );
                             }
 
                             @Override
@@ -233,11 +261,36 @@ public class NewSaleActivity extends AppCompatActivity {
                             @Override
                             public void handleResponse(Sale response) {
                                 InventoryApp.sales.add(sale);
-                                Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK);
-                                finishActivity(1);
-                                showProgress(false);
-                                NewSaleActivity.this.finish();
+
+                                // Setting the relation to the Client
+                                HashMap<String, Object> parentObject = new HashMap<>();
+                                parentObject.put( "objectId", InventoryApp.sales.get(InventoryApp.sales.size()-1).getObjectId());
+
+                                HashMap<String, Object> childObject = new HashMap<>();
+                                childObject.put( "objectId", clientObjectId );
+
+                                ArrayList<Map> children = new ArrayList<>();
+                                children.add(childObject);
+
+                                Backendless.Data.of( "Sale" ).setRelation( parentObject, "Client", children,
+                                        new AsyncCallback<Integer>()
+                                        {
+                                            @Override
+                                            public void handleResponse( Integer response )
+                                            {
+                                                Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                                setResult(RESULT_OK);
+                                                finishActivity(1);
+                                                NewSaleActivity.this.finish();
+                                                showProgress(false);
+                                            }
+
+                                            @Override
+                                            public void handleFault( BackendlessFault fault )
+                                            {
+                                                Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        } );
                             }
 
                             @Override

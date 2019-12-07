@@ -324,7 +324,7 @@ public class TableSaleActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (exports) {
                 exportsAdapter.notifyDataSetChanged();
-                getSales();
+                getExports();
             } else {
                 salesAdapter.notifyDataSetChanged();
                 getSales();

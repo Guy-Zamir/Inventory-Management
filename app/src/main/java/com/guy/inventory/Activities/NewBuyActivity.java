@@ -22,11 +22,12 @@ import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Buy;
 import com.guy.inventory.Tables.Client;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NewBuyActivity extends AppCompatActivity {
 
@@ -105,11 +106,7 @@ public class NewBuyActivity extends AppCompatActivity {
         swBuyPolish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (swBuyPolish.isChecked()) {
-                    swBuyPolish.setText(" מלוטש  ");
-                } else {
-                    swBuyPolish.setText("  גלם  ");
-                }
+                swBuyPolish.setText(swBuyPolish.isChecked() ? " מלוטש  " : "  גלם  ");
             }
         });
 
@@ -147,6 +144,7 @@ public class NewBuyActivity extends AppCompatActivity {
                 } else {
 
                     String supplierName = InventoryApp.clients.get(chosenSupplier).getName();
+                    final String supplierObjectId = InventoryApp.clients.get(chosenSupplier).getObjectId();
                     String id = etBuyID.getText().toString().trim();
                     double price = Double.parseDouble(etBuyPrice.getText().toString().trim());
                     double weight = Double.parseDouble(etBuyWeight.getText().toString().trim());
@@ -180,11 +178,36 @@ public class NewBuyActivity extends AppCompatActivity {
                         @Override
                         public void handleResponse(Buy response) {
                             InventoryApp.buys.add(buy);
-                            Toast.makeText(NewBuyActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
-                            finishActivity(1);
-                            NewBuyActivity.this.finish();
-                            showProgress(false);
+
+                            // Setting the relation to the Supplier
+                            HashMap<String, Object> parentObject = new HashMap<>();
+                            parentObject.put( "objectId", InventoryApp.buys.get(InventoryApp.buys.size()-1).getObjectId());
+
+                            HashMap<String, Object> childObject = new HashMap<>();
+                            childObject.put( "objectId", supplierObjectId );
+
+                            ArrayList<Map> children = new ArrayList<>();
+                            children.add(childObject);
+
+                            Backendless.Data.of( "Buy" ).setRelation( parentObject, "Supplier", children,
+                                    new AsyncCallback<Integer>()
+                                    {
+                                        @Override
+                                        public void handleResponse( Integer response )
+                                        {
+                                            Toast.makeText(NewBuyActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                            setResult(RESULT_OK);
+                                            finishActivity(1);
+                                            NewBuyActivity.this.finish();
+                                            showProgress(false);
+                                        }
+
+                                        @Override
+                                        public void handleFault( BackendlessFault fault )
+                                        {
+                                            Toast.makeText(NewBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    } );
                         }
 
                         @Override
