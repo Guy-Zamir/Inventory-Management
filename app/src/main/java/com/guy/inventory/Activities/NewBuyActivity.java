@@ -179,17 +179,17 @@ public class NewBuyActivity extends AppCompatActivity {
                         public void handleResponse(Buy response) {
                             InventoryApp.buys.add(buy);
 
-                            // Setting the relation to the Supplier
+                            // Setting the relation from the buy to the supplier
                             HashMap<String, Object> parentObject = new HashMap<>();
                             parentObject.put( "objectId", InventoryApp.buys.get(InventoryApp.buys.size()-1).getObjectId());
 
                             HashMap<String, Object> childObject = new HashMap<>();
-                            childObject.put( "objectId", supplierObjectId );
+                            childObject.put( "objectId", supplierObjectId);
 
                             ArrayList<Map> children = new ArrayList<>();
                             children.add(childObject);
 
-                            Backendless.Data.of( "Buy" ).setRelation( parentObject, "Supplier", children,
+                            Backendless.Data.of( "Buy" ).setRelation(parentObject, "Supplier", children,
                                     new AsyncCallback<Integer>()
                                     {
                                         @Override
