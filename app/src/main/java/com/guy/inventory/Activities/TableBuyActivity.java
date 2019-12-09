@@ -28,7 +28,10 @@ import com.guy.inventory.R;
 import com.guy.inventory.Tables.Buy;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TableBuyActivity extends AppCompatActivity {
 
@@ -256,8 +259,9 @@ public class TableBuyActivity extends AppCompatActivity {
         buyBuilder.setWhereClause(whereClause);
         buyBuilder.setSortBy(order);
         buyBuilder.setPageSize(PAGE_SIZE);
-        showProgress(true);
+        buyBuilder.addRelated("Supplier");
 
+        showProgress(true);
         Backendless.Data.of(Buy.class).find(buyBuilder, new AsyncCallback<List<Buy>>() {
             @Override
             public void handleResponse(List<Buy> response) {

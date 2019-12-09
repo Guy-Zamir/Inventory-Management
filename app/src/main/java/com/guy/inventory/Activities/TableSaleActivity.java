@@ -336,6 +336,8 @@ public class TableSaleActivity extends AppCompatActivity {
         saleBuilder.setWhereClause(whereClause);
         saleBuilder.setSortBy(order);
         saleBuilder.setPageSize(PAGE_SIZE);
+        saleBuilder.setRelated("Client");
+        saleBuilder.addRelated("Client");
 
         showProgress(true);
         Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {

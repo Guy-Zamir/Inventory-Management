@@ -2,6 +2,8 @@ package com.guy.inventory.Tables;
 import java.util.Date;
 
 public class Export {
+    private Client client;
+
     private double saleSum, weight, price;
     private String id, clientName;
     private int days;
@@ -121,5 +123,13 @@ public class Export {
 
     public void setPolish(boolean polish) {
         this.polish = polish;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
