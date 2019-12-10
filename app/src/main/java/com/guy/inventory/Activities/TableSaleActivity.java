@@ -21,17 +21,16 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
-import com.guy.inventory.Adapters.ExportsAdapter;
 import com.guy.inventory.Adapters.SalesAdapter;
 import com.guy.inventory.EndlessScrollListener;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
-import com.guy.inventory.Tables.Export;
 import com.guy.inventory.Tables.Sale;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TableSaleActivity extends AppCompatActivity {
     private View mProgressView;
@@ -45,7 +44,12 @@ public class TableSaleActivity extends AppCompatActivity {
     LinearLayout llSaleDetails;
 
     SalesAdapter salesAdapter;
-    ExportsAdapter exportsAdapter;
+
+    String aSale = "sale";
+    String anExport = "export";
+
+    final String saleClause = "kind = '" + aSale + "'";
+    final String exportClause = "kind = '" + anExport + "'";
 
     String order = "saleDate DESC";
     int selectedItem = -1;
@@ -53,7 +57,6 @@ public class TableSaleActivity extends AppCompatActivity {
 
     final int PAGE_SIZE = 50;
 
-    final DataQueryBuilder exportBuilder = DataQueryBuilder.create();
     final DataQueryBuilder saleBuilder = DataQueryBuilder.create();
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
 
@@ -82,27 +85,15 @@ public class TableSaleActivity extends AppCompatActivity {
             llSaleDetails.setVisibility(View.VISIBLE);
         }
 
-        // If the activity is an Export or not
+        // If the activity is an export or not
         exports = getIntent().getBooleanExtra("exports", false);
 
-        // An Export Sale - Setting the action bar title
-        if (exports) {
-            ActionBar actionBar = getSupportActionBar();
-            assert actionBar != null;
-            actionBar.setTitle("יצואים");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
-            getExports();
-
-        // Not an Export Sale - Setting the action bar title
-        } else {
-            ActionBar actionBar = getSupportActionBar();
-            assert actionBar != null;
-            actionBar.setTitle("מכירות");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
-            getSales();
-        }
+        // Setting the action bar title
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle((exports) ? "יצואים" : "מכירות");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        getSales();
 
         lvSaleList.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -128,65 +119,33 @@ public class TableSaleActivity extends AppCompatActivity {
 
                     DecimalFormat nf = new DecimalFormat("#,###,###,###.##");
 
-                    // Setting the values for exports
-                    if (exports) {
-                        Calendar saleDate = Calendar.getInstance();
-                        saleDate.setTime(InventoryApp.exports.get(position).getSaleDate());
-                        @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
-                        @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
-                        @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
-
-                        Calendar payDate = Calendar.getInstance();
-                        payDate.setTime(InventoryApp.exports.get(position).getPayDate());
-                        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
-                        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
-                        @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
-
-                        tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
-                        tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth + "/" + payYear);
-
-                        tvSaleDetailsClientName.setText(InventoryApp.exports.get(position).getClientName());
-                        tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.exports.get(position).getId());
-                        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.exports.get(position).getPrice()) + "$");
-                        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.exports.get(position).getWeight()) + " קראט ");
-                        tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.exports.get(position).getDays()));
-                        tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.exports.get(position).getSaleSum()) + "$");
-
                     // Setting the values for sales
-                    } else {
+                    Calendar saleDate = Calendar.getInstance();
+                    saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
+                    @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
+                    @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
+                    @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
 
-                        Calendar saleDate = Calendar.getInstance();
-                        saleDate.setTime(InventoryApp.sales.get(position).getSaleDate());
-                        @SuppressLint("DefaultLocale") String buyDays = String.format("%02d", saleDate.get(Calendar.DAY_OF_MONTH));
-                        @SuppressLint("DefaultLocale") String buyMonth = String.format("%02d", saleDate.get(Calendar.MONTH) + 1);
-                        @SuppressLint("DefaultLocale") String buyYear = String.format("%02d", saleDate.get(Calendar.YEAR));
+                    Calendar payDate = Calendar.getInstance();
+                    payDate.setTime(InventoryApp.sales.get(position).getPayDate());
+                    @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
+                    @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
+                    @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
-                        Calendar payDate = Calendar.getInstance();
-                        payDate.setTime(InventoryApp.sales.get(position).getPayDate());
-                        @SuppressLint("DefaultLocale") String payDays = String.format("%02d", payDate.get(Calendar.DAY_OF_MONTH));
-                        @SuppressLint("DefaultLocale") String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
-                        @SuppressLint("DefaultLocale") String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
+                    tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
+                    tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth + "/" + payYear);
 
-                        tvSaleDetailsBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth + "/" + buyYear);
-                        tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth + "/" + payYear);
-
-                        tvSaleDetailsClientName.setText(InventoryApp.sales.get(position).getClientName());
-                        tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
-                        tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
-                        tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()) + " קראט ");
-                        tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
-                        tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
-                    }
+                    tvSaleDetailsClientName.setText(InventoryApp.sales.get(position).getClientName());
+                    tvSaleDetailsID.setText("מספר חשבונית:  " + InventoryApp.sales.get(position).getId());
+                    tvSaleDetailsPrice.setText("מחיר ממוצע:  " + nf.format(InventoryApp.sales.get(position).getPrice()) + "$");
+                    tvSaleDetailsWeight.setText("משקל חבילה:  " + nf.format(InventoryApp.sales.get(position).getWeight()) + " קראט ");
+                    tvSaleDetailsDays.setText("מספר ימים:  " + nf.format(InventoryApp.sales.get(position).getDays()));
+                    tvSaleDetailsSum.setText("סכום עסקה:  " + nf.format(InventoryApp.sales.get(position).getSaleSum()) + "$");
 
                 // Setting the values from the clientAdapter in port mode
                 } else {
-                    if (exports) {
-                        exportsAdapter.setSelectedPosition(position);
-                        exportsAdapter.notifyDataSetChanged();
-                    } else {
-                        salesAdapter.setSelectedPosition(position);
-                        salesAdapter.notifyDataSetChanged();
-                    }
+                    salesAdapter.setSelectedPosition(position);
+                    salesAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -239,43 +198,21 @@ public class TableSaleActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             showProgress(true);
                             tvLoad.setText("מוחק את הנתונים אנא המתן...");
+                            Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(selectedItem), new AsyncCallback<Long>() {
+                                @Override
+                                public void handleResponse(Long response) {
+                                    InventoryApp.sales.remove(selectedItem);
+                                    Toast.makeText(TableSaleActivity.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                    salesAdapter.notifyDataSetChanged();
+                                    showProgress(false);
+                                }
 
-                            if (exports) {
-
-                                Backendless.Persistence.of(Export.class).remove(InventoryApp.exports.get(selectedItem), new AsyncCallback<Long>() {
-                                    @Override
-                                    public void handleResponse(Long response) {
-                                        InventoryApp.exports.remove(selectedItem);
-                                        Toast.makeText(TableSaleActivity.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                        exportsAdapter.notifyDataSetChanged();
-                                        showProgress(false);
-                                        tvLoad.setText("טוען...");
-                                    }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault fault) {
-                                        showProgress(false);
-                                        Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                            } else {
-                                Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(selectedItem), new AsyncCallback<Long>() {
-                                    @Override
-                                    public void handleResponse(Long response) {
-                                        InventoryApp.sales.remove(selectedItem);
-                                        Toast.makeText(TableSaleActivity.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
-                                        salesAdapter.notifyDataSetChanged();
-                                        showProgress(false);
-                                    }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault fault) {
-                                        showProgress(false);
-                                        Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+                                @Override
+                                public void handleFault(BackendlessFault fault) {
+                                    showProgress(false);
+                                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     });
                     alert.show();
@@ -284,29 +221,17 @@ public class TableSaleActivity extends AppCompatActivity {
 
             case R.id.dateOrderIcon:
                 order = "saleDate DESC";
-                if (exports) {
-                    getExports();
-                } else {
-                    getSales();
-                }
+                getSales();
                 break;
 
             case R.id.nameOrderIcon:
                 order = "clientName";
-                if (exports) {
-                    getExports();
-                } else {
-                    getSales();
-                }
+                getSales();
                 break;
 
             case R.id.sumOrderIcon:
                 order = "saleSum DESC";
-                if (exports) {
-                    getExports();
-                }else {
-                    getSales();
-                }
+                getSales();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -322,13 +247,8 @@ public class TableSaleActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if (exports) {
-                exportsAdapter.notifyDataSetChanged();
-                getExports();
-            } else {
-                salesAdapter.notifyDataSetChanged();
-                getSales();
-            }
+            salesAdapter.notifyDataSetChanged();
+            getSales();
         }
     }
 
@@ -336,19 +256,39 @@ public class TableSaleActivity extends AppCompatActivity {
         saleBuilder.setWhereClause(whereClause);
         saleBuilder.setSortBy(order);
         saleBuilder.setPageSize(PAGE_SIZE);
-        saleBuilder.setRelated("Client");
-        saleBuilder.addRelated("Client");
+        saleBuilder.setHavingClause((exports) ? exportClause : saleClause);
 
         showProgress(true);
         Backendless.Data.of(Sale.class).find(saleBuilder, new AsyncCallback<List<Sale>>() {
-
             @Override
             public void handleResponse(List<Sale> response) {
                 // Up to 50
                 InventoryApp.sales = response;
-                salesAdapter = new SalesAdapter(TableSaleActivity.this, InventoryApp.sales);
-                lvSaleList.setAdapter(salesAdapter);
-                showProgress(false);
+
+                final DataQueryBuilder saleNameBuilderLoad = DataQueryBuilder.create();
+                saleNameBuilderLoad.setSortBy(order);
+                saleNameBuilderLoad.setWhereClause(whereClause);
+                saleNameBuilderLoad.setPageSize(PAGE_SIZE);
+                saleNameBuilderLoad.setHavingClause((exports) ? exportClause : saleClause);
+                saleNameBuilderLoad.addRelated("Client");
+                Backendless.Data.of("Sale").find(saleNameBuilderLoad, new AsyncCallback<List<Map>>() {
+                    @Override
+                    public void handleResponse(List<Map> response) {
+                        for (int i = 0; i < response.size(); i++) {
+                            HashMap client = (HashMap) response.get(i).get("Client");
+                            InventoryApp.sales.get(i).setClientName((client == null) ? "1" : (String) client.get("name"));
+                        }
+
+                            salesAdapter = new SalesAdapter(TableSaleActivity.this, InventoryApp.sales);
+                            lvSaleList.setAdapter(salesAdapter);
+                            showProgress(false);
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
@@ -363,84 +303,58 @@ public class TableSaleActivity extends AppCompatActivity {
         });
     }
 
-    private void getExports() {
-        exportBuilder.setWhereClause(whereClause);
-        exportBuilder.setSortBy(order);
-        exportBuilder.setPageSize(PAGE_SIZE);
-        showProgress(true);
-
-        Backendless.Data.of(Export.class).find(exportBuilder, new AsyncCallback<List<Export>>() {
-            @Override
-            public void handleResponse(List<Export> response) {
-                InventoryApp.exports = response;
-                exportsAdapter = new ExportsAdapter(TableSaleActivity.this, InventoryApp.exports);
-                lvSaleList.setAdapter(exportsAdapter);
-                showProgress(false);
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                if (fault.getCode().equals("1009")) {
-                    Toast.makeText(TableSaleActivity.this, "טרם נשרמו יצואים", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                showProgress(false);
-            }
-        });
-    }
-
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
-    public void loadNextDataFromApi(int offset) {
-        if (exports) {
-            DataQueryBuilder exportBuilderLoad = DataQueryBuilder.create();
-            exportBuilderLoad.setOffset(offset);
-            exportBuilderLoad.setSortBy(order);
-            exportBuilderLoad.setWhereClause(whereClause);
-            exportBuilderLoad.setPageSize(PAGE_SIZE);
+    public void loadNextDataFromApi(final int offset) {
+        final DataQueryBuilder exportBuilderLoad = DataQueryBuilder.create();
+        exportBuilderLoad.setOffset(offset);
+        exportBuilderLoad.setSortBy(order);
+        exportBuilderLoad.setWhereClause(whereClause);
+        exportBuilderLoad.setPageSize(PAGE_SIZE);
+        exportBuilderLoad.setHavingClause((exports) ? exportClause : saleClause);
 
-            showProgress(true);
-            Backendless.Data.of(Export.class).find(exportBuilderLoad, new AsyncCallback<List<Export>>() {
-                @Override
-                public void handleResponse(List<Export> response) {
-                    InventoryApp.exports.addAll(response);
-                    exportsAdapter.notifyDataSetChanged();
-                    showProgress(false);
-                }
+        showProgress(true);
+        Backendless.Data.of(Sale.class).find(exportBuilderLoad, new AsyncCallback<List<Sale>>() {
+            @Override
+            public void handleResponse(List<Sale> response) {
+                InventoryApp.sales.addAll(response);
 
-                @Override
-                public void handleFault(BackendlessFault fault) {
-                    showProgress(false);
-                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            DataQueryBuilder saleBuilderLoad = DataQueryBuilder.create();
-            saleBuilderLoad.setOffset(offset);
-            saleBuilderLoad.setSortBy(order);
-            saleBuilderLoad.setWhereClause(whereClause);
-            saleBuilderLoad.setPageSize(PAGE_SIZE);
+                final DataQueryBuilder exportNameBuilderLoad = DataQueryBuilder.create();
+                exportNameBuilderLoad.setOffset(offset);
+                exportNameBuilderLoad.setSortBy(order);
+                exportNameBuilderLoad.setWhereClause(whereClause);
+                exportNameBuilderLoad.setPageSize(PAGE_SIZE);
+                exportNameBuilderLoad.setHavingClause((exports) ? exportClause : saleClause);
+                exportNameBuilderLoad.addRelated("Client");
+                Backendless.Data.of("Sale").find(exportNameBuilderLoad, new AsyncCallback<List<Map>>() {
+                    @Override
+                    public void handleResponse(List<Map> response) {
+                        for (int i = 0; i < response.size(); i++) {
+                            HashMap client = (HashMap) response.get(i).get("Client");
+                            InventoryApp.sales.get(i + offset).setClientName((client == null) ? "1" : (String) client.get("name"));
+                        }
+                        salesAdapter.notifyDataSetChanged();
+                        showProgress(false);
+                    }
 
-            showProgress(true);
-            Backendless.Data.of(Sale.class).find(saleBuilderLoad, new AsyncCallback<List<Sale>>() {
-                @Override
-                public void handleResponse(List<Sale> response) {
-                    InventoryApp.sales.addAll(response);
-                    salesAdapter.notifyDataSetChanged();
-                    showProgress(false);
-                }
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        showProgress(false);
+                    }
+                });
+            }
 
-                @Override
-                public void handleFault(BackendlessFault fault) {
-                    showProgress(false);
-                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                showProgress(false);
+                Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                showProgress(false);
+            }
+        });
     }
 }

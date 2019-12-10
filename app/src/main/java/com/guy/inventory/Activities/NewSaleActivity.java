@@ -21,9 +21,7 @@ import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Client;
-import com.guy.inventory.Tables.Export;
 import com.guy.inventory.Tables.Sale;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -72,18 +70,13 @@ public class NewSaleActivity extends AppCompatActivity {
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        if (isExport) {
-            actionBar.setTitle("יצוא חדש");
-        } else {
-            actionBar.setTitle("מכירה חדשה");
-        }
+        actionBar.setTitle((isExport) ? "יצוא חדש" : "מכירה חדשה");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         clientBuilder.setWhereClause(whereClause);
         clientBuilder.setHavingClause(clientClause);
         clientBuilder.setPageSize(100);
         clientBuilder.setSortBy("name");
-
         showProgress(true);
 
         Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
@@ -159,147 +152,72 @@ public class NewSaleActivity extends AppCompatActivity {
                     final double saleSum = Double.parseDouble(etSaleSum.getText().toString());
                     final int days = Integer.valueOf(etSaleDays.getText().toString().trim());
                     final boolean polish = !swSalePolish.isChecked();
+                    final String kind = (isExport) ? "export" : "sale";
 
-                    // An Export sale
-                    if (isExport) {
+                    final Sale sale = new Sale();
+                    sale.setClientName(clientName);
+                    sale.setSaleDate(getDateFromDatePicker(dpSaleDate));
+                    sale.setClientName(InventoryApp.clients.get(chosenClient).getName());
+                    sale.setId(id);
+                    sale.setSaleSum(saleSum);
+                    sale.setWeight(weight);
+                    sale.setDays(days);
+                    sale.setPolish(polish);
+                    sale.setKind(kind);
 
-                        final Export export = new Export();
-                        export.setClientName(clientName);
-                        export.setSaleDate(getDateFromDatePicker(dpSaleDate));
-                        export.setClientName(InventoryApp.clients.get(chosenClient).getName());
-                        export.setId(id);
-                        export.setSaleSum(saleSum);
-                        export.setWeight(weight);
-                        export.setDays(days);
-                        export.setPolish(polish);
-
-                        Calendar cAddedDays = Calendar.getInstance();
-                        cAddedDays.setTime(export.getSaleDate());
-                        cAddedDays.add(Calendar.DATE, days);
-                        Date addedDays = new Date();
-                        addedDays.setTime(cAddedDays.getTimeInMillis());
-                        Date now = new Date();
-                        if (now.after(addedDays)) {
-                            export.setPaid(true);
-                        }
-                        export.setPayDate(addedDays);
-                        export.setPrice((saleSum / weight));
-                        export.setUserEmail(InventoryApp.user.getEmail());
-
-                        showProgress(true);
-                        Backendless.Persistence.save(export, new AsyncCallback<Export>() {
-                            @Override
-                            public void handleResponse(Export response) {
-                                InventoryApp.exports.add(export);
-
-                                // Setting the relation to the Client
-                                HashMap<String, Object> parentObject = new HashMap<>();
-                                parentObject.put( "objectId", InventoryApp.exports.get(InventoryApp.exports.size()-1).getObjectId());
-
-                                HashMap<String, Object> childObject = new HashMap<>();
-                                childObject.put( "objectId", clientObjectId );
-
-                                ArrayList<Map> children = new ArrayList<>();
-                                children.add(childObject);
-
-                                Backendless.Data.of( "Export" ).setRelation( parentObject, "Client", children,
-                                        new AsyncCallback<Integer>()
-                                        {
-                                            @Override
-                                            public void handleResponse( Integer response )
-                                            {
-                                                Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                                                setResult(RESULT_OK);
-                                                finishActivity(1);
-                                                NewSaleActivity.this.finish();
-                                                showProgress(false);
-                                            }
-
-                                            @Override
-                                            public void handleFault( BackendlessFault fault )
-                                            {
-                                                Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        } );
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    // Not an Export sale
-                    } else {
-
-                        final Sale sale = new Sale();
-                        sale.setClientName(clientName);
-                        sale.setSaleDate(getDateFromDatePicker(dpSaleDate));
-                        sale.setClientName(InventoryApp.clients.get(chosenClient).getName());
-                        sale.setId(id);
-                        sale.setSaleSum(saleSum);
-                        sale.setWeight(weight);
-                        sale.setDays(days);
-                        sale.setPolish(polish);
-
-                        Calendar cAddedDays = Calendar.getInstance();
-                        cAddedDays.setTime(sale.getSaleDate());
-                        cAddedDays.add(Calendar.DATE, days);
-                        Date addedDays = new Date();
-                        addedDays.setTime(cAddedDays.getTimeInMillis());
-                        Date now = new Date();
-                        if (now.after(addedDays)) {
-                            sale.setPaid(true);
-                        }
-                        sale.setPayDate(addedDays);
-                        sale.setPrice((saleSum / weight));
-                        sale.setUserEmail(InventoryApp.user.getEmail());
-
-                        showProgress(true);
-                        Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
-                            @Override
-                            public void handleResponse(Sale response) {
-                                InventoryApp.sales.add(sale);
-
-                                // Setting the relation to the Client
-                                HashMap<String, Object> parentObject = new HashMap<>();
-                                parentObject.put( "objectId", InventoryApp.sales.get(InventoryApp.sales.size()-1).getObjectId());
-
-                                HashMap<String, Object> childObject = new HashMap<>();
-                                childObject.put( "objectId", clientObjectId );
-
-                                ArrayList<Map> children = new ArrayList<>();
-                                children.add(childObject);
-
-                                Backendless.Data.of( "Sale" ).setRelation( parentObject, "Client", children,
-                                        new AsyncCallback<Integer>()
-                                        {
-                                            @Override
-                                            public void handleResponse( Integer response )
-                                            {
-                                                Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                                                setResult(RESULT_OK);
-                                                finishActivity(1);
-                                                NewSaleActivity.this.finish();
-                                                showProgress(false);
-                                            }
-
-                                            @Override
-                                            public void handleFault( BackendlessFault fault )
-                                            {
-                                                Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        } );
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                showProgress(false);
-                                Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    Calendar cAddedDays = Calendar.getInstance();
+                    cAddedDays.setTime(sale.getSaleDate());
+                    cAddedDays.add(Calendar.DATE, days);
+                    Date addedDays = new Date();
+                    addedDays.setTime(cAddedDays.getTimeInMillis());
+                    Date now = new Date();
+                    if (now.after(addedDays)) {
+                        sale.setPaid(true);
                     }
+                    sale.setPayDate(addedDays);
+                    sale.setPrice((saleSum / weight));
+                    sale.setUserEmail(InventoryApp.user.getEmail());
+
+                    showProgress(true);
+                    Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
+                        @Override
+                        public void handleResponse(Sale response) {
+                            InventoryApp.sales.add(sale);
+
+                            // Setting the relation to the Client
+                            HashMap<String, Object> parentObject = new HashMap<>();
+                            parentObject.put("objectId", InventoryApp.sales.get(InventoryApp.sales.size() - 1).getObjectId());
+
+                            HashMap<String, Object> childObject = new HashMap<>();
+                            childObject.put("objectId", clientObjectId);
+
+                            ArrayList<Map> children = new ArrayList<>();
+                            children.add(childObject);
+
+                            Backendless.Data.of("Sale").setRelation(parentObject, "Client", children,
+                                    new AsyncCallback<Integer>() {
+                                        @Override
+                                        public void handleResponse(Integer response) {
+                                            Toast.makeText(NewSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                            setResult(RESULT_OK);
+                                            finishActivity(1);
+                                            NewSaleActivity.this.finish();
+                                            showProgress(false);
+                                        }
+
+                                        @Override
+                                        public void handleFault(BackendlessFault fault) {
+                                            Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            showProgress(false);
+                            Toast.makeText(NewSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });

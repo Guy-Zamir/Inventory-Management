@@ -31,6 +31,12 @@ public class BalanceActivity extends AppCompatActivity {
     final DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
     final String WHERE_CLAUSE = "userEmail = '" + InventoryApp.user.getEmail() + "'";
 
+    String aSale = "sale";
+    String anExport = "export";
+
+    final String saleClause = "kind = '" + aSale + "'";
+    final String exportClause = "kind = '" + anExport + "'";
+
     LinearLayout llBalanceWage;
 
     TextView tvBalanceSum, tvBalanceWeight, tvBalancePrice,
@@ -165,8 +171,9 @@ public class BalanceActivity extends AppCompatActivity {
                 // Getting the sale sum of exports
                 DataQueryBuilder exportSumBuilder = DataQueryBuilder.create();
                 exportSumBuilder.setWhereClause(WHERE_CLAUSE);
+                exportSumBuilder.setGroupBy("kind");
                 exportSumBuilder.setProperties("Sum(saleSum)");
-                Backendless.Data.of("Export").find(exportSumBuilder, new AsyncCallback<List<Map>>() {
+                Backendless.Data.of("Sale").find(exportSumBuilder, new AsyncCallback<List<Map>>() {
                     @Override
                     public void handleResponse(List<Map> response) {
                         if (response.get(0).get("sum") != null) {
@@ -180,8 +187,9 @@ public class BalanceActivity extends AppCompatActivity {
                         // Getting the weight sum of exports
                         DataQueryBuilder exportWeightBuilder = DataQueryBuilder.create();
                         exportWeightBuilder.setWhereClause(WHERE_CLAUSE);
+                        exportWeightBuilder.setGroupBy("kind");
                         exportWeightBuilder.setProperties("Sum(weight)");
-                        Backendless.Data.of("Export").find(exportWeightBuilder, new AsyncCallback<List<Map>>() {
+                        Backendless.Data.of("Sale").find(exportWeightBuilder, new AsyncCallback<List<Map>>() {
                             @Override
                             public void handleResponse(List<Map> response) {
                                 if (response.get(0).get("sum") != null) {
@@ -195,8 +203,9 @@ public class BalanceActivity extends AppCompatActivity {
                                 // Getting the sale sum of sales
                                 DataQueryBuilder saleSumBuilder = DataQueryBuilder.create();
                                 saleSumBuilder.setWhereClause(WHERE_CLAUSE);
-                                saleSumBuilder.setProperties("Sum(saleSum)", "polish");
+                                saleSumBuilder.setWhereClause(saleClause);
                                 saleSumBuilder.setGroupBy("polish");
+                                saleSumBuilder.setProperties("Sum(saleSum)");
                                 Backendless.Data.of("Sale").find(saleSumBuilder, new AsyncCallback<List<Map>>() {
                                     @Override
                                     public void handleResponse(List<Map> response) {
@@ -214,7 +223,8 @@ public class BalanceActivity extends AppCompatActivity {
                                         // Getting the weight sum of sales
                                         DataQueryBuilder saleWeightBuilder = DataQueryBuilder.create();
                                         saleWeightBuilder.setWhereClause(WHERE_CLAUSE);
-                                        saleWeightBuilder.setProperties("Sum(weight)", "polish");
+                                        saleWeightBuilder.setWhereClause(saleClause);
+                                        saleWeightBuilder.setProperties("Sum(weight)");
                                         saleWeightBuilder.setGroupBy("polish");
                                         Backendless.Data.of("Sale").find(saleWeightBuilder, new AsyncCallback<List<Map>>() {
                                             @Override

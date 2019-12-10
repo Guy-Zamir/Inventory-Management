@@ -278,6 +278,28 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvBalanceWageSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="סכום"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvBalanceWageWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="משקל פחת"
+                    android:textColor="@color/colorText"
+                    android:textSize="16sp" />
+
+                <TextView
                     android:id="@+id/tvBalanceWagePrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -296,28 +318,6 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:text="אחוז פחת ממוצע"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tvBalanceWageWeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="משקל פחת"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tvBalanceWageSum"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="סכום"
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
 

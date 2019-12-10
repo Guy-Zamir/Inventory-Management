@@ -1,15 +1,12 @@
 package com.guy.inventory;
 import android.content.Context;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
-import com.guy.inventory.Activities.NewBuyActivity;
 import com.guy.inventory.Tables.Buy;
 import com.guy.inventory.Tables.Client;
-import com.guy.inventory.Tables.Export;
 import com.guy.inventory.Tables.Sale;
 import com.guy.inventory.Tables.Sort;
 import java.util.ArrayList;
@@ -24,57 +21,6 @@ public class DataBase {
     public DataBase(Context context) {
         this.context = context;
     }
-
-    public boolean createNewExport(final Export export) {
-        Backendless.Persistence.save(export, new AsyncCallback<Export>() {
-            @Override
-            public void handleResponse(Export response) {
-                InventoryApp.exports.add(export);
-                valid = true;
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                valid = false;
-            }
-        });
-        return valid;
-    }
-
-    public boolean editExport(int selectedItem) {
-        Backendless.Persistence.save(InventoryApp.exports.get(selectedItem), new AsyncCallback<Export>() {
-            @Override
-            public void handleResponse(Export response) {
-                valid = true;
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                valid = false;
-            }
-        });
-        return valid;
-    }
-
-    public boolean deleteExport(final int selectedItem) {
-        Backendless.Persistence.of(Export.class).remove(InventoryApp.exports.get(selectedItem), new AsyncCallback<Long>() {
-            @Override
-            public void handleResponse(Long response) {
-                InventoryApp.exports.remove(selectedItem);
-                valid = true;
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                valid = false;
-            }
-        });
-        return valid;
-    }
-
-
 
     public boolean createNewSale(final Sale sale) {
         Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {

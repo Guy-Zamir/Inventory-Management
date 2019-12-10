@@ -160,7 +160,6 @@ public class TableClientActivity extends AppCompatActivity {
 
                 }
                 break;
-
         }
                 return super.onOptionsItemSelected(item);
         }

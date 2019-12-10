@@ -11,7 +11,7 @@ public class Sale {
     private Date saleDate, payDate;
 
     private Date created, updated;
-    private String objectId, userEmail;
+    private String objectId, userEmail, kind;
 
     public double getSaleSum() {
         return saleSum;
@@ -127,5 +127,17 @@ public class Sale {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 }

@@ -81,7 +81,7 @@ public class EditClientActivity extends AppCompatActivity {
                 final String webSite = etClientEditWebSite.getText().toString().trim();
                 final String details = etClientEditDetails.getText().toString().trim();
                 final String newName = etClientEditName.getText().toString().trim();
-                final String oldName = InventoryApp.clients.get(index).getName();
+                //final String oldName = InventoryApp.clients.get(index).getName();
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(EditClientActivity.this);
                 alert.setTitle("שינוי נתונים");
@@ -96,61 +96,25 @@ public class EditClientActivity extends AppCompatActivity {
                         InventoryApp.clients.get(index).setFax(fax);
                         InventoryApp.clients.get(index).setWebsite(webSite);
                         InventoryApp.clients.get(index).setDetails(details);
+                        InventoryApp.clients.get(index).setName(newName);
 
                         showProgress(true);
-                        // If the user tried to change the client/supplier name
-                        if (!newName.equals(oldName)) {
-                            Map<String, Object> changes = new HashMap<>();
-                            changes.put("clientName", newName);
-                            String whereClause = "clientName = '" + oldName + "'";
-                            Backendless.Data.of("Sale").update(whereClause, changes, new AsyncCallback<Integer>() {
-                                @Override
-                                public void handleResponse(Integer response) {
-                                    InventoryApp.clients.get(index).setName(newName);
-                                    Backendless.Persistence.save(InventoryApp.clients.get(index), new AsyncCallback<Client>() {
-                                        @Override
-                                        public void handleResponse(Client response) {
-                                            showProgress(false);
-                                            setResult(RESULT_OK);
-                                            finishActivity(1);
-                                            EditClientActivity.this.finish();
-                                            Toast.makeText(EditClientActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
-                                        }
+                        Backendless.Persistence.save(InventoryApp.clients.get(index), new AsyncCallback<Client>() {
+                            @Override
+                            public void handleResponse(Client response) {
+                                showProgress(false);
+                                setResult(RESULT_OK);
+                                finishActivity(1);
+                                EditClientActivity.this.finish();
+                                Toast.makeText(EditClientActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                            }
 
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                            showProgress(false);
-                                            Toast.makeText(EditClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    showProgress(false);
-                                    Toast.makeText(EditClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                        // The user didn't try to change the client/supplier name
-                        } else {
-                            Backendless.Persistence.save(InventoryApp.clients.get(index), new AsyncCallback<Client>() {
-                                @Override
-                                public void handleResponse(Client response) {
-                                    showProgress(false);
-                                    setResult(RESULT_OK);
-                                    finishActivity(1);
-                                    EditClientActivity.this.finish();
-                                    Toast.makeText(EditClientActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    showProgress(false);
-                                    Toast.makeText(EditClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                showProgress(false);
+                                Toast.makeText(EditClientActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
                 alert.show();

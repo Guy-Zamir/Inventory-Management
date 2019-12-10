@@ -15,13 +15,10 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
-import com.backendless.persistence.LoadRelationsQueryBuilder;
 import com.guy.inventory.Tables.Client;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
-
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +87,7 @@ public class ClientAdapter extends ArrayAdapter<Client> {
                 saleBuilder.setGroupBy("Client");
                 saleBuilder.addRelated("Client");
 
-                // Getting the sum of sales for the client
+                // Getting the sum of sales and exports for the client
                 Backendless.Data.of("Sale").find(saleBuilder, new AsyncCallback<List<Map>>() {
                     @Override
                     public void handleResponse(List<Map> response) {
@@ -110,7 +107,7 @@ public class ClientAdapter extends ArrayAdapter<Client> {
 
                         saleBuilder.setProperties("Sum(weight)");
 
-                        // Getting the sum of weights for the client
+                        // Getting the sum of weights (sales and exports) for the client
                         Backendless.Data.of("Sale").find(saleBuilder, new AsyncCallback<List<Map>>() {
                             @Override
                             public void handleResponse(List<Map> response) {
@@ -128,124 +125,9 @@ public class ClientAdapter extends ArrayAdapter<Client> {
                                     }
                                 }
 
-                                // Getting the weight of export for the client
-                                Backendless.Data.of("Export").find(saleBuilder, new AsyncCallback<List<Map>>() {
-                                    @Override
-                                    public void handleResponse(List<Map> response) {
-                                        for (int i = 0; i < response.size(); i++) {
-                                            HashMap supplier = (HashMap) response.get(i).get("Client");
-                                            if (supplier != null) {
-                                                if (Objects.equals(supplier.get("objectId"), InventoryApp.clients.get(selectedPosition).getObjectId())) {
-                                                    if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
-                                                        weightSum = (int) response.get(i).get("sum");
-                                                    } else {
-                                                        weightSum = (double) response.get(i).get("sum");
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        saleBuilder.setProperties("Sum(saleSum)");
-
-                                        // Getting the sum of export for the client
-                                        Backendless.Data.of("Export").find(saleBuilder, new AsyncCallback<List<Map>>() {
-                                            @Override
-                                            public void handleResponse(List<Map> response) {
-                                                for (int i = 0; i < response.size(); i++) {
-                                                    HashMap supplier = (HashMap) response.get(i).get("Client");
-                                                    if (supplier != null) {
-                                                        if (Objects.equals(supplier.get("objectId"), InventoryApp.clients.get(selectedPosition).getObjectId())) {
-                                                            if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
-                                                                saleSum = (int) response.get(i).get("sum");
-                                                            } else {
-                                                                saleSum = (double) response.get(i).get("sum");
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                double price = (weightSum > 0.0) ? (saleSum/weightSum) : 0;
-                                                tvClientSum.setText("סה\"כ סכום שנמכר: " + numberFormat.format(saleSum) + "$");
-                                                tvClientWeight.setText("סה\"כ משקל שנמכר: " + numberFormat.format(weightSum) + " קראט ");
-                                                tvClientPrice.setText("מחיר ממוצע: " + numberFormat.format((price))  + "$");
-                                            }
-
-                                            @Override
-                                            public void handleFault(BackendlessFault fault) {
-                                                Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault fault) {
-                                        Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault fault) {
-                        Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            // Supplier
-            } else {
-                final DataQueryBuilder buyBuilder = DataQueryBuilder.create();
-                buyBuilder.setPageSize(100);
-                buyBuilder.setWhereClause("userEmail = '" + InventoryApp.user.getEmail() + "'");
-                buyBuilder.addRelated("Supplier");
-                buyBuilder.setGroupBy("Supplier");
-                buyBuilder.setProperties("Sum(sum)");
-
-                Backendless.Data.of("Buy").find(buyBuilder, new AsyncCallback<List<Map>>() {
-                    @Override
-                    public void handleResponse(List<Map> response) {
-                        for (int i = 0; i < response.size(); i++) {
-                            HashMap supplier = (HashMap) response.get(i).get("Supplier");
-                            if (supplier != null) {
-                                if (Objects.equals(supplier.get("objectId"), InventoryApp.clients.get(selectedPosition).getObjectId())) {
-                                    if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
-                                        saleSum = (int) response.get(i).get("sum");
-                                    } else {
-                                        saleSum = (double) response.get(i).get("sum");
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        buyBuilder.setProperties("Sum(weight)", "Supplier");
-                        buyBuilder.setGroupBy("Supplier");
-                        Backendless.Data.of("Buy").find(buyBuilder, new AsyncCallback<List<Map>>() {
-                            @Override
-                            public void handleResponse(List<Map> response) {
-                                for (int i = 0; i < response.size(); i++) {
-                                    HashMap supplier = (HashMap) response.get(i).get("Supplier");
-                                    if (supplier != null) {
-                                        if (Objects.equals(supplier.get("objectId"), InventoryApp.clients.get(selectedPosition).getObjectId())) {
-                                            if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
-                                                weightSum = (int) response.get(i).get("sum");
-                                            } else {
-                                                weightSum = (double) response.get(i).get("sum");
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                price = (weightSum > 0) ? (saleSum / weightSum) : 0;
-                                tvClientSum.setText("סה\"כ סכום שנקנה: " + numberFormat.format(saleSum) + "$");
-                                tvClientWeight.setText("סה\"כ משקל שנקנה: " + numberFormat.format(weightSum) + " קראט ");
+                                double price = (weightSum > 0.0) ? (saleSum / weightSum) : 0;
+                                tvClientSum.setText("סה\"כ סכום שנמכר: " + numberFormat.format(saleSum) + "$");
+                                tvClientWeight.setText("סה\"כ משקל שנמכר: " + numberFormat.format(weightSum) + " קראט ");
                                 tvClientPrice.setText("מחיר ממוצע: " + numberFormat.format((price)) + "$");
                             }
 
@@ -261,7 +143,71 @@ public class ClientAdapter extends ArrayAdapter<Client> {
                         Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-            }
+
+            // Supplier
+            } else {
+            final DataQueryBuilder buyBuilder = DataQueryBuilder.create();
+            buyBuilder.setPageSize(100);
+            buyBuilder.setWhereClause("userEmail = '" + InventoryApp.user.getEmail() + "'");
+            buyBuilder.addRelated("Supplier");
+            buyBuilder.setGroupBy("Supplier");
+            buyBuilder.setProperties("Sum(sum)");
+
+            Backendless.Data.of("Buy").find(buyBuilder, new AsyncCallback<List<Map>>() {
+                @Override
+                public void handleResponse(List<Map> response) {
+                    for (int i = 0; i < response.size(); i++) {
+                        HashMap supplier = (HashMap) response.get(i).get("Supplier");
+                        if (supplier != null) {
+                            if (Objects.equals(supplier.get("objectId"), InventoryApp.clients.get(selectedPosition).getObjectId())) {
+                                if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                    saleSum = (int) response.get(i).get("sum");
+                                } else {
+                                    saleSum = (double) response.get(i).get("sum");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    buyBuilder.setProperties("Sum(weight)", "Supplier");
+                    buyBuilder.setGroupBy("Supplier");
+                    Backendless.Data.of("Buy").find(buyBuilder, new AsyncCallback<List<Map>>() {
+                        @Override
+                        public void handleResponse(List<Map> response) {
+                            for (int i = 0; i < response.size(); i++) {
+                                HashMap supplier = (HashMap) response.get(i).get("Supplier");
+                                if (supplier != null) {
+                                    if (Objects.equals(supplier.get("objectId"), InventoryApp.clients.get(selectedPosition).getObjectId())) {
+                                        if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                            weightSum = (int) response.get(i).get("sum");
+                                        } else {
+                                            weightSum = (double) response.get(i).get("sum");
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            price = (weightSum > 0) ? (saleSum / weightSum) : 0;
+                            tvClientSum.setText("סה\"כ סכום שנקנה: " + numberFormat.format(saleSum) + "$");
+                            tvClientWeight.setText("סה\"כ משקל שנקנה: " + numberFormat.format(weightSum) + " קראט ");
+                            tvClientPrice.setText("מחיר ממוצע: " + numberFormat.format((price)) + "$");
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    Toast.makeText(context, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         // Not selected
         } else {
