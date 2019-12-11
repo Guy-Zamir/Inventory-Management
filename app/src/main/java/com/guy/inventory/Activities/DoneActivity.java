@@ -24,7 +24,9 @@ import com.guy.inventory.R;
 import com.guy.inventory.Tables.Buy;
 import com.guy.inventory.Tables.Sort;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DoneActivity extends AppCompatActivity {
@@ -39,16 +41,14 @@ public class DoneActivity extends AppCompatActivity {
     EditText etWeightSort1, etPriceSort1, etWeightSort2, etPriceSort2, etWeightSort3, etPriceSort3, etWeightSort4, etPriceSort4, etWeightSort5, etPriceSort5;
     AutoCompleteTextView acSort1, acSort2, acSort3, acSort4, acSort5;
 
+    List<Map> sortInfos;
+
+    final String LEFT_OVER_ID = "0DAF3785-3207-041B-FF57-E78E656A2500";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     ArrayAdapter<String> sortAdapter;
 
     int chosenSort1 = -1, chosenSort2 = -1, chosenSort3 = -1, chosenSort4 = -1, chosenSort5 = -1;
-
-    double sortPrice1 = 0, sortPrice2 = 0, sortPrice3 = 0, sortPrice4 = 0, sortPrice5 = 0, sortPriceDef = 0,
-            sortWeight1 = 0, sortWeight2 = 0, sortWeight3 = 0, sortWeight4 = 0, sortWeight5 = 0, sortWeightDef = 0;
-
-    String sortName1, sortName2, sortName3, sortName4, sortName5;
 
     double doneWeight, wage;
     int index;
@@ -106,7 +106,9 @@ public class DoneActivity extends AppCompatActivity {
             public void handleResponse(List<Sort> response) {
                 ArrayList<String> sortNames = new ArrayList<>();
                 for (Sort sort : response) {
-                    sortNames.add(sort.getName());
+                    if (!sort.getObjectId().equals(LEFT_OVER_ID)) {
+                        sortNames.add(sort.getName());
+                    }
                 }
 
                 InventoryApp.sorts = response;
@@ -245,225 +247,131 @@ public class DoneActivity extends AppCompatActivity {
         btnDoneSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sortInfos = new ArrayList<>();
 
                 // Checking the sorts and assigning the values;
-                sortCheck(etPriceSort1, etWeightSort1, chosenSort1, 1);
-                sortCheck(etPriceSort2, etWeightSort2, chosenSort2, 2);
-                sortCheck(etPriceSort3, etWeightSort3, chosenSort3, 3);
-                sortCheck(etPriceSort4, etWeightSort4, chosenSort4, 4);
-                sortCheck(etPriceSort5, etWeightSort5, chosenSort5, 5);
+                sortCheck(etPriceSort1, etWeightSort1, chosenSort1);
+                sortCheck(etPriceSort2, etWeightSort2, chosenSort2);
+                sortCheck(etPriceSort3, etWeightSort3, chosenSort3);
+                sortCheck(etPriceSort4, etWeightSort4, chosenSort4);
+                sortCheck(etPriceSort5, etWeightSort5, chosenSort5);
 
-                double sortWeightSum = sortWeight1 + sortWeight2 + sortWeight3 + sortWeight4 + sortWeight5;
-                double sortValueSum = sortWeight1*sortPrice1 + sortWeight2*sortPrice2 + sortWeight3*sortPrice3 + sortWeight4*sortPrice4 + sortWeight5*sortPrice5;
+                double sortWeightSum = 0;
+                double sortValueSum = 0;
+
+                for (int i=0; i<sortInfos.size(); i++) {
+                    sortWeightSum += (double) sortInfos.get(i).get("weight");
+                    sortValueSum += (double) sortInfos.get(i).get("sum");
+                }
+
+                wage = (etDoneWage.getText().toString().isEmpty()) ? 0 : Double.parseDouble(etDoneWage.getText().toString().trim());
+
+                if (swDoneWeight.isChecked()) {
+                    doneWeight = (etDoneWeight.getText().toString().isEmpty()) ? -1 : ((Double.parseDouble(etDoneWeight.getText().toString().trim()) / 100) * InventoryApp.buys.get(index).getWeight());
+                } else {
+                    doneWeight = (etDoneWeight.getText().toString().isEmpty()) ? -1 : (Double.parseDouble(etDoneWeight.getText().toString().trim()));
+                }
 
                 // Checking whether the user entered done weight right
-                if (etDoneWage.getText().toString().isEmpty() || etDoneWeight.getText().toString().isEmpty() || doneWeight > InventoryApp.buys.get(index).getWeight()) {
-                    Toast.makeText(DoneActivity.this, "סכום המשקל הגמור ושכר העבודה אינם נכונים, יש להזין את הנתונים הנכונים", Toast.LENGTH_SHORT).show();
-                }
+                if (doneWeight > InventoryApp.buys.get(index).getWeight()) {
+                    Toast.makeText(DoneActivity.this, "סכום המשקל הגמור גבוהה ממשקל החבילה, יש להזין משקל שווה או נמוך למשקל החבילה", Toast.LENGTH_LONG).show();
 
-                wage = Double.parseDouble(etDoneWage.getText().toString().trim());
-                if (swDoneWeight.isChecked()) {
-                    doneWeight = (Double.parseDouble(etDoneWeight.getText().toString().trim())/100)*InventoryApp.buys.get(index).getWeight();
-                } else {
-                    doneWeight = Double.parseDouble(etDoneWeight.getText().toString().trim());
-                }
-
-                if (sortValueSum > InventoryApp.buys.get(index).getSum()) {
-                    Toast.makeText(DoneActivity.this, "סכום המיונים גבוהה מסכום הסחורה, יש להזין מחירים מתאימים", Toast.LENGTH_SHORT).show();
-
-                } else if (sortWeightSum > doneWeight) {
-                    Toast.makeText(DoneActivity.this, "סכום המשקל של המיונים גבוהה מהמשקל הגמור, יש להזין משקלים מתאמים", Toast.LENGTH_SHORT).show();
+                } else if (doneWeight < 0) {
+                    Toast.makeText(DoneActivity.this, "לא הוזן משקל גמור, יש להזין את המשקל הגמור של החבילה", Toast.LENGTH_LONG).show();
 
                 } else {
 
-                    // Assigning what's left from the done weight to the default sort
-                    sortWeightDef = doneWeight - sortWeightSum;
-                    sortPriceDef = (sortWeightDef != 0) ? (InventoryApp.buys.get(index).getSum() - sortValueSum) / sortWeightDef : 0;
+                    if (sortValueSum > InventoryApp.buys.get(index).getSum()) {
+                        Toast.makeText(DoneActivity.this, "סכום שווי המיונים גבוהה משווי הסחורה, יש להזין מחירים מתאימים", Toast.LENGTH_LONG).show();
 
-                    AlertDialog.Builder alert = new AlertDialog.Builder(DoneActivity.this);
-                    alert.setTitle("שינוי נתונים");
-                    alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
-                    alert.setNegativeButton(android.R.string.no, null);
-                    alert.setIcon(android.R.drawable.ic_dialog_alert);
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            //InventoryApp.buys.get(index).setSortPrice1(sortPrice1);
-                            //InventoryApp.buys.get(index).setSortPrice2(sortPrice2);
-                            //InventoryApp.buys.get(index).setSortPrice3(sortPrice3);
-                            //InventoryApp.buys.get(index).setSortPrice4(sortPrice4);
-                            //InventoryApp.buys.get(index).setSortPrice5(sortPrice5);
-                            //InventoryApp.buys.get(index).setSortWeight1(sortWeight1);
-                            //InventoryApp.buys.get(index).setSortWeight2(sortWeight2);
-                            //InventoryApp.buys.get(index).setSortWeight3(sortWeight3);
-                            //InventoryApp.buys.get(index).setSortWeight4(sortWeight4);
-                            //InventoryApp.buys.get(index).setSortWeight5(sortWeight5);
-                            //InventoryApp.buys.get(index).setSortName1(sortName1);
-                            //InventoryApp.buys.get(index).setSortName2(sortName2);
-                            //InventoryApp.buys.get(index).setSortName3(sortName3);
-                            //InventoryApp.buys.get(index).setSortName4(sortName4);
-                            //InventoryApp.buys.get(index).setSortName5(sortName5);
-                            //InventoryApp.buys.get(index).setSortPriceDef(sortPriceDef);
-                            //InventoryApp.buys.get(index).setSortWeightDef(sortWeightDef);
+                    } else if (sortWeightSum > doneWeight) {
+                        Toast.makeText(DoneActivity.this, "סכום המשקל של המיונים גבוהה מהמשקל הגמור, יש להזין משקלים מתאמים", Toast.LENGTH_LONG).show();
 
-                            InventoryApp.buys.get(index).setDone(true);
-                            InventoryApp.buys.get(index).setDoneWeight(doneWeight);
-                            InventoryApp.buys.get(index).setWage(wage);
-                            InventoryApp.buys.get(index).setWorkDepreciation(doneWeight / InventoryApp.buys.get(index).getWeight());
+                    } else {
 
-                            showProgress(true);
-                            Backendless.Persistence.save(InventoryApp.buys.get(index), new AsyncCallback<Buy>() {
-                                @Override
-                                public void handleResponse(Buy response) {
-                                    if (chosenSort1 != -1) {
-                                        InventoryApp.sorts.get(chosenSort1).setSum(InventoryApp.sorts.get(chosenSort1).getSum() + (sortWeight1*sortPrice1));
-                                        InventoryApp.sorts.get(chosenSort1).setWeight(InventoryApp.sorts.get(chosenSort1).getWeight() + sortWeight1);
-                                        InventoryApp.sorts.get(chosenSort1).setPrice(InventoryApp.sorts.get(chosenSort1).getSum() / InventoryApp.sorts.get(chosenSort1).getWeight());
-                                        Backendless.Persistence.save(InventoryApp.sorts.get(chosenSort1), new AsyncCallback<Sort>() {
+                        // Assigning what's left from the done weight to the left over sort
+                        double sortWeightLeftOver = doneWeight - sortWeightSum;
+                        double sortPriceLeftOver = (sortWeightLeftOver != 0) ? (InventoryApp.buys.get(index).getSum() - sortValueSum) / sortWeightLeftOver : 0;
+
+                        // Saving the left over and adding to the list
+                        Map<String, Object> sortInfoLeftOver = new HashMap<>();
+                        sortInfoLeftOver.put("fromId", InventoryApp.buys.get(index).getObjectId());
+                        sortInfoLeftOver.put("fromBuy", true);
+                        sortInfoLeftOver.put("fromSale", false);
+                        sortInfoLeftOver.put("leftOver", true);
+                        sortInfoLeftOver.put("toId", LEFT_OVER_ID);
+                        sortInfoLeftOver.put("price", sortPriceLeftOver);
+                        sortInfoLeftOver.put("weight", sortWeightLeftOver);
+                        sortInfoLeftOver.put("sum", (sortWeightLeftOver * sortPriceLeftOver));
+                        sortInfos.add(sortInfoLeftOver);
+
+                        AlertDialog.Builder alert = new AlertDialog.Builder(DoneActivity.this);
+                        alert.setTitle("שינוי נתונים");
+                        alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
+                        alert.setNegativeButton(android.R.string.no, null);
+                        alert.setIcon(android.R.drawable.ic_dialog_alert);
+                        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                InventoryApp.buys.get(index).setDone(true);
+                                InventoryApp.buys.get(index).setDoneWeight(doneWeight);
+                                InventoryApp.buys.get(index).setWage(wage);
+                                InventoryApp.buys.get(index).setWorkDepreciation(doneWeight / InventoryApp.buys.get(index).getWeight());
+
+                                showProgress(true);
+                                Backendless.Persistence.save(InventoryApp.buys.get(index), new AsyncCallback<Buy>() {
+                                    @Override
+                                    public void handleResponse(Buy response) {
+
+                                        Backendless.Data.of("SortInfo").create(sortInfos, new AsyncCallback<List<String>>() {
                                             @Override
-                                            public void handleResponse(Sort response) {
-
+                                            public void handleResponse(List<String> response) {
+                                                showProgress(false);
+                                                Toast.makeText(DoneActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
+                                                setResult(RESULT_OK);
+                                                finishActivity(1);
+                                                DoneActivity.this.finish();
                                             }
 
                                             @Override
                                             public void handleFault(BackendlessFault fault) {
-                                                Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                    if (chosenSort2 != -1) {
-                                        InventoryApp.sorts.get(chosenSort2).setSum(InventoryApp.sorts.get(chosenSort2).getSum() + (sortWeight2*sortPrice2));
-                                        InventoryApp.sorts.get(chosenSort2).setWeight(InventoryApp.sorts.get(chosenSort2).getWeight() + sortWeight2);
-                                        InventoryApp.sorts.get(chosenSort2).setPrice(InventoryApp.sorts.get(chosenSort2).getSum() / InventoryApp.sorts.get(chosenSort2).getWeight());
-                                        Backendless.Persistence.save(InventoryApp.sorts.get(chosenSort2), new AsyncCallback<Sort>() {
-                                            @Override
-                                            public void handleResponse(Sort response) {
-
-                                            }
-
-                                            @Override
-                                            public void handleFault(BackendlessFault fault) {
-                                                Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                    if (chosenSort3 != -1) {
-                                        InventoryApp.sorts.get(chosenSort3).setSum(InventoryApp.sorts.get(chosenSort3).getSum() + (sortWeight3*sortPrice3));
-                                        InventoryApp.sorts.get(chosenSort3).setWeight(InventoryApp.sorts.get(chosenSort3).getWeight() + sortWeight3);
-                                        InventoryApp.sorts.get(chosenSort3).setPrice(InventoryApp.sorts.get(chosenSort3).getSum() / InventoryApp.sorts.get(chosenSort3).getWeight());
-                                        Backendless.Persistence.save(InventoryApp.sorts.get(chosenSort3), new AsyncCallback<Sort>() {
-                                            @Override
-                                            public void handleResponse(Sort response) {
-
-                                            }
-
-                                            @Override
-                                            public void handleFault(BackendlessFault fault) {
-                                                Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                    if (chosenSort4 != -1) {
-                                        InventoryApp.sorts.get(chosenSort4).setSum(InventoryApp.sorts.get(chosenSort4).getSum() + (sortWeight4*sortPrice4));
-                                        InventoryApp.sorts.get(chosenSort4).setWeight(InventoryApp.sorts.get(chosenSort4).getWeight() + sortWeight4);
-                                        InventoryApp.sorts.get(chosenSort4).setPrice(InventoryApp.sorts.get(chosenSort4).getSum() / InventoryApp.sorts.get(chosenSort4).getWeight());
-                                        Backendless.Persistence.save(InventoryApp.sorts.get(chosenSort4), new AsyncCallback<Sort>() {
-                                            @Override
-                                            public void handleResponse(Sort response) {
-
-                                            }
-
-                                            @Override
-                                            public void handleFault(BackendlessFault fault) {
-                                                Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                    if (chosenSort5 != -1) {
-                                        InventoryApp.sorts.get(chosenSort5).setSum(InventoryApp.sorts.get(chosenSort5).getSum() + (sortWeight5*sortPrice5));
-                                        InventoryApp.sorts.get(chosenSort5).setWeight(InventoryApp.sorts.get(chosenSort5).getWeight() + sortWeight5);
-                                        InventoryApp.sorts.get(chosenSort5).setPrice(InventoryApp.sorts.get(chosenSort5).getSum() / InventoryApp.sorts.get(chosenSort5).getWeight());
-                                        Backendless.Persistence.save(InventoryApp.sorts.get(chosenSort5), new AsyncCallback<Sort>() {
-                                            @Override
-                                            public void handleResponse(Sort response) {
-
-                                            }
-
-                                            @Override
-                                            public void handleFault(BackendlessFault fault) {
+                                                showProgress(false);
                                                 Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
 
-                                    InventoryApp.sorts.get(InventoryApp.sorts.size()-1).setSum(InventoryApp.sorts.get(InventoryApp.sorts.size()-1).getSum() + (sortWeightDef*sortPriceDef));
-                                    InventoryApp.sorts.get(InventoryApp.sorts.size()-1).setWeight(InventoryApp.sorts.get(InventoryApp.sorts.size()-1).getWeight() + sortWeightDef);
-                                    InventoryApp.sorts.get(InventoryApp.sorts.size()-1).setPrice(InventoryApp.sorts.get(InventoryApp.sorts.size()-1).getSum() / InventoryApp.sorts.get(InventoryApp.sorts.size()-1).getWeight());
-                                    Backendless.Persistence.save(InventoryApp.sorts.get(InventoryApp.sorts.size()-1), new AsyncCallback<Sort>() {
-                                        @Override
-                                        public void handleResponse(Sort response) {
-
-                                        }
-
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                            Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                                    showProgress(false);
-                                    Toast.makeText(DoneActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
-                                    setResult(RESULT_OK);
-                                    finishActivity(1);
-                                    DoneActivity.this.finish();
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    showProgress(false);
-                                    Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                    alert.show();
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                        alert.show();
+                    }
                 }
             }
         });
     }
 
-    public void sortCheck(EditText sortPrice, EditText sortWeight, int chosenSort, int sortNumber) {
-        if (!(sortPrice.getText().toString().isEmpty() || sortWeight.getText().toString().isEmpty() || chosenSort == -1)) {
-            switch (sortNumber) {
-                case 1:
-                    sortPrice1 = Double.valueOf(sortPrice.getText().toString());
-                    sortWeight1 = Double.valueOf(sortWeight.getText().toString());
-                    sortName1 = InventoryApp.sorts.get(chosenSort).getName();
-                    break;
+    public void sortCheck(EditText sortPriceText, EditText sortWeightText, int chosenSort) {
+        if (!(sortPriceText.getText().toString().isEmpty() || sortWeightText.getText().toString().isEmpty() || chosenSort == -1)) {
 
-                case 2:
-                    sortPrice2 = Double.valueOf(sortPrice.getText().toString());
-                    sortWeight2 = Double.valueOf(sortWeight.getText().toString());
-                    sortName2 = InventoryApp.sorts.get(chosenSort).getName();
-                    break;
+            double sortPrice = Double.valueOf(sortPriceText.getText().toString());
+            double sortWeight = Double.valueOf(sortWeightText.getText().toString());
+            String sortId = InventoryApp.sorts.get(chosenSort).getObjectId();
 
-                case 3:
-                    sortPrice3 = Double.valueOf(sortPrice.getText().toString());
-                    sortWeight3 = Double.valueOf(sortWeight.getText().toString());
-                    sortName3 = InventoryApp.sorts.get(chosenSort).getName();
-                    break;
-
-                case 4:
-                    sortPrice4 = Double.valueOf(sortPrice.getText().toString());
-                    sortWeight4 = Double.valueOf(sortWeight.getText().toString());
-                    sortName4 = InventoryApp.sorts.get(chosenSort).getName();
-                    break;
-
-                case 5:
-                    sortPrice5 = Double.valueOf(sortPrice.getText().toString());
-                    sortWeight5 = Double.valueOf(sortWeight.getText().toString());
-                    sortName5 = InventoryApp.sorts.get(chosenSort).getName();
-                    break;
-            }
+            Map<String, Object> sortInfo = new HashMap<>();
+            sortInfo.put("fromId", InventoryApp.buys.get(index).getObjectId());
+            sortInfo.put("fromBuy", true);
+            sortInfo.put("fromSale", false);
+            sortInfo.put("leftOver", false);
+            sortInfo.put("toId", sortId);
+            sortInfo.put("price", sortPrice);
+            sortInfo.put("weight", sortWeight);
+            sortInfo.put("sum", (sortPrice * sortWeight));
+            sortInfos.add(sortInfo);
         }
     }
 
@@ -479,3 +387,4 @@ public class DoneActivity extends AppCompatActivity {
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }
+

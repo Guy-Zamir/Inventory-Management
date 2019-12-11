@@ -17,7 +17,6 @@ import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Buy;
-
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +31,8 @@ public class BalanceActivity extends AppCompatActivity {
     final String WHERE_CLAUSE = "userEmail = '" + InventoryApp.user.getEmail() + "'";
 
     String aSale = "sale";
-    String anExport = "export";
 
     final String saleClause = "kind = '" + aSale + "'";
-    final String exportClause = "kind = '" + anExport + "'";
 
     LinearLayout llBalanceWage;
 
