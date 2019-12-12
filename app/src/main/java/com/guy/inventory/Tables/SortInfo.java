@@ -10,6 +10,7 @@ public class SortInfo {
     private boolean fromSale;
     private boolean fromBuy;
     private boolean letOver;
+    private String userEmail;
 
     public double getWeight() {
         return weight;
@@ -73,5 +74,13 @@ public class SortInfo {
 
     public void setLetOver(boolean letOver) {
         this.letOver = letOver;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

@@ -25,6 +25,8 @@ import com.guy.inventory.R;
 import com.guy.inventory.Tables.Sort;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class TableSortingActivity extends AppCompatActivity {
     private View mProgressView;
@@ -39,7 +41,7 @@ public class TableSortingActivity extends AppCompatActivity {
     final int PAGE_SIZE = 100;
 
     private final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-    private final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    private final String EMAIL_CLAUSE = "userEmail = '" + InventoryApp.user.getEmail() + "'";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +53,12 @@ public class TableSortingActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
-
+        
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("מיונים");
-        sortBuilder.setWhereClause(whereClause);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        sortBuilder.setWhereClause(EMAIL_CLAUSE);
         sortBuilder.setPageSize(PAGE_SIZE);
 
         showProgress(true);
@@ -63,9 +66,49 @@ public class TableSortingActivity extends AppCompatActivity {
             @Override
             public void handleResponse(List<Sort> response) {
                 InventoryApp.sorts = response;
-                sortAdapter = new SortAdapter(TableSortingActivity.this, InventoryApp.sorts);
-                lvSortList.setAdapter(sortAdapter);
-                showProgress(false);
+
+                DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
+                sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
+                sortInfoBuilder.setPageSize(100);
+                sortInfoBuilder.setGroupBy("toId");
+                sortInfoBuilder.setProperties("Sum(sum) as sum");
+                sortInfoBuilder.addProperty("Sum(weight) as weight");
+                sortInfoBuilder.addProperty("toId");
+
+                Backendless.Data.of("SortInfo").find(sortInfoBuilder, new AsyncCallback<List<Map>>() {
+                    @Override
+                    public void handleResponse(List<Map> response) {
+                        for (int i=0; i < response.size(); i++) {
+                            String toId = (String) response.get(i).get("toId");
+                            for (int y=0; y < InventoryApp.sorts.size(); y++) {
+                                if (toId.equals(InventoryApp.sorts.get(y).getObjectId())) {
+                                    double sum;
+                                    double weight;
+                                    if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                        sum = (int) response.get(i).get("sum");
+                                        weight = (int) response.get(i).get("weight");
+                                    } else {
+                                        sum = (double) response.get(i).get("sum");
+                                        weight = (double) response.get(i).get("weight");
+                                    }
+                                    InventoryApp.sorts.get(y).setSum(sum);
+                                    InventoryApp.sorts.get(y).setWeight(weight);
+                                    InventoryApp.sorts.get(y).setPrice(sum/weight);
+                                }
+                            }
+                        }
+                        sortAdapter = new SortAdapter(TableSortingActivity.this, InventoryApp.sorts);
+                        lvSortList.setAdapter(sortAdapter);
+                        showProgress(false);
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(TableSortingActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
             }
 
             @Override

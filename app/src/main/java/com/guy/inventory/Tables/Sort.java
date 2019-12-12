@@ -1,14 +1,11 @@
 package com.guy.inventory.Tables;
 
 import java.util.Date;
-import java.util.List;
 
 public class Sort {
 
     private double weight, price, sum;
     private String name, size, shape, clarity, color, details;
-
-    private List<SortInfo> sortInfos;
 
     private Date created, updated;
     private String objectId, userEmail;
@@ -115,13 +112,5 @@ public class Sort {
 
     public void setSum(double sum) {
         this.sum = sum;
-    }
-
-    public List<SortInfo> getSortInfos() {
-        return sortInfos;
-    }
-
-    public void setSortInfos(List<SortInfo> sortInfos) {
-        this.sortInfos = sortInfos;
     }
 }

@@ -303,6 +303,7 @@ public class DoneActivity extends AppCompatActivity {
                         sortInfoLeftOver.put("price", sortPriceLeftOver);
                         sortInfoLeftOver.put("weight", sortWeightLeftOver);
                         sortInfoLeftOver.put("sum", (sortWeightLeftOver * sortPriceLeftOver));
+                        sortInfoLeftOver.put("userEmail", InventoryApp.user.getEmail());
                         sortInfos.add(sortInfoLeftOver);
 
                         AlertDialog.Builder alert = new AlertDialog.Builder(DoneActivity.this);
@@ -371,6 +372,7 @@ public class DoneActivity extends AppCompatActivity {
             sortInfo.put("price", sortPrice);
             sortInfo.put("weight", sortWeight);
             sortInfo.put("sum", (sortPrice * sortWeight));
+            sortInfo.put("userEmail", InventoryApp.user.getEmail());
             sortInfos.add(sortInfo);
         }
     }
