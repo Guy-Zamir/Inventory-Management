@@ -63,6 +63,13 @@ public class SortAdapter extends ArrayAdapter<Sort> {
 
         // When the sort is selected from the list
         llSortDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
+        // When the
+        tvSortShape.setVisibility(sorts.get(position).getShape().isEmpty() ? View.GONE : View.VISIBLE);
+        tvSortSize.setVisibility(sorts.get(position).getSize().isEmpty() ? View.GONE : View.VISIBLE);
+        tvSortColor.setVisibility(sorts.get(position).getColor().isEmpty() ? View.GONE : View.VISIBLE);
+        tvSortClarity.setVisibility(sorts.get(position).getClarity().isEmpty() ? View.GONE : View.VISIBLE);
+
+        convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
         return convertView;
     }
 

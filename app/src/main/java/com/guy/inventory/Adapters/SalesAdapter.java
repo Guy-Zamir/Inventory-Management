@@ -85,6 +85,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         // When the sale is a rough sale
         ivRough.setVisibility((InventoryApp.sales.get(position).isPolish()) ? View.INVISIBLE : View.VISIBLE);
 
+        convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
         return convertView;
     }
 

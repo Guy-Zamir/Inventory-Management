@@ -315,6 +315,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
             llBuyDetails.setVisibility(View.GONE);
         }
 
+        convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
         return convertView;
     }
 

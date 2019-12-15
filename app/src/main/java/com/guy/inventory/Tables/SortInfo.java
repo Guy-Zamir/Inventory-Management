@@ -1,5 +1,7 @@
 package com.guy.inventory.Tables;
 
+import java.util.Date;
+
 public class SortInfo {
 
     private double weight;
@@ -11,6 +13,7 @@ public class SortInfo {
     private boolean fromBuy;
     private boolean letOver;
     private String userEmail;
+    private Date created;
 
     public double getWeight() {
         return weight;
@@ -82,5 +85,13 @@ public class SortInfo {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

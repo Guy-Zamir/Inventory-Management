@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/editIcon"
+        android:icon="@drawable/edit1_icon"
+        android:title="@string/app_name"
+        android:orderInCategory="2"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/newIcon"
+        android:icon="@drawable/new_icon"
+        android:title="@string/app_name"
+        android:orderInCategory="3"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/detailsIcon"
+        android:icon="@drawable/details_icon"
+        android:title="@string/app_name"
+        android:orderInCategory="1"
+        app:showAsAction="always" />
+</menu>

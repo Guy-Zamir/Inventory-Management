@@ -214,6 +214,7 @@ public class ClientAdapter extends ArrayAdapter<Client> {
             llClientDetails.setVisibility(View.GONE);
         }
 
+        convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
         return convertView;
     }
 
