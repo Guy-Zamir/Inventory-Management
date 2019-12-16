@@ -233,6 +233,16 @@ public class TableSaleActivity extends AppCompatActivity {
                 order = "saleSum DESC";
                 getSales();
                 break;
+
+            case R.id.sortIcon:
+                if (selectedItem == -1) {
+                    Toast.makeText(this, "יש לחבור מכירה", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent newSaleSort = new Intent(TableSaleActivity.this, NewSaleSortActivity.class);
+                    newSaleSort.putExtra("index", selectedItem);
+                    startActivityForResult(newSaleSort, 1);
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

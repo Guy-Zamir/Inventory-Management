@@ -5,12 +5,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +34,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
     private ListView lvSortHistoryList;
     private SortHistoryAdapter sortHistoryAdapter;
 
-    private int index = -1;
+    private int index;
 
     final int PAGE_SIZE = 100;
 
@@ -54,12 +56,16 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("היסטוריה - " + InventoryApp.sorts.get(index).getName());
+        actionBar.setTitle("כניסות/יציאות - " + InventoryApp.sorts.get(index).getName());
         actionBar.setDisplayHomeAsUpEnabled(true);
         sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
         sortInfoBuilder.setSortBy("created DESC");
         sortInfoBuilder.setWhereClause("toId = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
+        String COUNT_CLAUSE = "sortCount = '" + (InventoryApp.sorts.get(index).getSortCount() - 1) + "'";
         sortInfoBuilder.setPageSize(PAGE_SIZE);
+        if (InventoryApp.sorts.get(index).getSortCount() != 0) {
+            sortInfoBuilder.setWhereClause(COUNT_CLAUSE);
+        }
 
         showProgress(true);
         Backendless.Data.of(SortInfo.class).find(sortInfoBuilder, new AsyncCallback<List<SortInfo>>() {
@@ -75,11 +81,21 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                 Toast.makeText(TableSortHistoryActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        lvSortHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                view.setSelected(true);
+                sortHistoryAdapter.setSelectedPosition(position);
+                sortHistoryAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
         @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.table_action_bar, menu);
+        getMenuInflater().inflate(R.menu.table_sort_action_bar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

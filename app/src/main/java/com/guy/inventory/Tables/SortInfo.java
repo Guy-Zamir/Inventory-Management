@@ -12,6 +12,7 @@ public class SortInfo {
     private boolean fromSale;
     private boolean fromBuy;
     private boolean letOver;
+    private int sortCount;
     private String userEmail;
     private Date created;
 
@@ -93,5 +94,13 @@ public class SortInfo {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public int getSortCount() {
+        return sortCount;
+    }
+
+    public void setSortCount(int sortCount) {
+        this.sortCount = sortCount;
     }
 }

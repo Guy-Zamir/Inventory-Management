@@ -87,9 +87,13 @@ public class TableSortingActivity extends AppCompatActivity {
                                     double buyWeight;
                                     if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
                                         buySum = (int) response.get(i).get("sum");
-                                        buyWeight = (int) response.get(i).get("weight");
                                     } else {
                                         buySum = (double) response.get(i).get("sum");
+                                    }
+
+                                    if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                        buyWeight = (int) response.get(i).get("weight");
+                                    } else {
                                         buyWeight = (double) response.get(i).get("weight");
                                     }
 
@@ -121,9 +125,12 @@ public class TableSortingActivity extends AppCompatActivity {
                                             double saleWeight;
                                             if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
                                                 saleSum = (int) response.get(i).get("sum");
-                                                saleWeight = (int) response.get(i).get("weight");
                                             } else {
                                                 saleSum = (double) response.get(i).get("sum");
+                                            }
+                                            if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                                saleWeight = (int) response.get(i).get("weight");
+                                            } else {
                                                 saleWeight = (double) response.get(i).get("weight");
                                             }
                                             InventoryApp.sorts.get(y).setSum(InventoryApp.sorts.get(y).getSum()-saleSum);
@@ -172,7 +179,6 @@ public class TableSortingActivity extends AppCompatActivity {
                 sortAdapter.notifyDataSetChanged();
             }
         });
-
     }
 
     @Override

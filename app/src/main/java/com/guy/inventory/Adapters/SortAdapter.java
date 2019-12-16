@@ -10,11 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Sort;
-
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -52,7 +50,7 @@ public class SortAdapter extends ArrayAdapter<Sort> {
         LinearLayout llSortDetails = convertView.findViewById(R.id.llSortDetails);
 
         // Setting the values to the views
-        tvSortName.setText(InventoryApp.sorts.get(position).getName());
+        tvSortName.setText(InventoryApp.sorts.get(position).getName() + " - " + sorts.get(position).getSortCount());
         tvSortPrice.setText("מחיר ממוצע: " + numberFormat.format(sorts.get(position).getPrice()) + "$");
         tvSortWeight.setText("משקל: " + numberFormat.format(sorts.get(position).getWeight()) + " קראט ");
         tvSortSum.setText("סכום: " + numberFormat.format(sorts.get(position).getSum()) + "$");
@@ -63,7 +61,6 @@ public class SortAdapter extends ArrayAdapter<Sort> {
 
         // When the sort is selected from the list
         llSortDetails.setVisibility((position == selectedPosition) ? View.VISIBLE : View.GONE);
-        // When the
         tvSortShape.setVisibility(sorts.get(position).getShape().isEmpty() ? View.GONE : View.VISIBLE);
         tvSortSize.setVisibility(sorts.get(position).getSize().isEmpty() ? View.GONE : View.VISIBLE);
         tvSortColor.setVisibility(sorts.get(position).getColor().isEmpty() ? View.GONE : View.VISIBLE);

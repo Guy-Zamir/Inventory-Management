@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Sort {
 
+    private int sortCount;
     private double weight, price, sum;
     private String name, size, shape, clarity, color, details;
 
@@ -112,5 +113,13 @@ public class Sort {
 
     public void setSum(double sum) {
         this.sum = sum;
+    }
+
+    public int getSortCount() {
+        return sortCount;
+    }
+
+    public void setSortCount(int sortCount) {
+        this.sortCount = sortCount;
     }
 }

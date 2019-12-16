@@ -43,7 +43,7 @@ public class DoneActivity extends AppCompatActivity {
 
     List<Map> sortInfos;
 
-    final String LEFT_OVER_ID = "0DAF3785-3207-041B-FF57-E78E656A2500";
+    final String LEFT_OVER_ID = "A19A4854-24E4-0305-FF7D-78282B68B900";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     ArrayAdapter<String> sortAdapter;
@@ -304,6 +304,12 @@ public class DoneActivity extends AppCompatActivity {
                         sortInfoLeftOver.put("weight", sortWeightLeftOver);
                         sortInfoLeftOver.put("sum", (sortWeightLeftOver * sortPriceLeftOver));
                         sortInfoLeftOver.put("userEmail", InventoryApp.user.getEmail());
+                        for (Sort sort : InventoryApp.sorts) {
+                            if (sort.getObjectId().equals(LEFT_OVER_ID)) {
+                                sortInfoLeftOver.put("sortCount", sort.getSortCount());
+                            }
+                        }
+
                         sortInfos.add(sortInfoLeftOver);
 
                         AlertDialog.Builder alert = new AlertDialog.Builder(DoneActivity.this);
@@ -372,6 +378,7 @@ public class DoneActivity extends AppCompatActivity {
             sortInfo.put("price", sortPrice);
             sortInfo.put("weight", sortWeight);
             sortInfo.put("sum", (sortPrice * sortWeight));
+            sortInfo.put("sortCount", InventoryApp.sorts.get(chosenSort).getSortCount());
             sortInfo.put("userEmail", InventoryApp.user.getEmail());
             sortInfos.add(sortInfo);
         }

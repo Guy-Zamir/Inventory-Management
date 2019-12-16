@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.TableSortHistoryActivity"></activity>
+        <activity android:name=".Activities.NewSaleSortActivity"></activity>
+        <activity android:name=".Activities.TableSortHistoryActivity" />
         <activity android:name=".Activities.EditSortActivity" />
         <activity android:name=".Activities.NewSortActivity" />
         <activity android:name=".Activities.TableSortingActivity" />
