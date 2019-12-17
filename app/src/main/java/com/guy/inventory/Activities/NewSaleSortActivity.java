@@ -41,6 +41,7 @@ public class NewSaleSortActivity extends AppCompatActivity {
     final String LEFT_OVER_ID = "A19A4854-24E4-0305-FF7D-78282B68B900";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String EMAIL_CLAUSE = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final boolean LEFT_OVER = true;
     ArrayAdapter<String> sortAdapter;
 
     int chosenSort1 = -1, chosenSort2 = -1, chosenSort3 = -1, chosenSort4 = -1, chosenSort5 = -1;
@@ -271,14 +272,10 @@ public class NewSaleSortActivity extends AppCompatActivity {
                     sortInfoLeftOver.put("weight", sortWeightLeftOver);
                     sortInfoLeftOver.put("sum", (sortWeightLeftOver * sortPriceLeftOver));
                     sortInfoLeftOver.put("userEmail", InventoryApp.user.getEmail());
-                    for (final Sort sort : InventoryApp.sorts) {
+
+                    for (Sort sort : InventoryApp.sorts) {
                         if (sort.getObjectId().equals(LEFT_OVER_ID)) {
                             sortInfoLeftOver.put("sortCount", sort.getSortCount() + 1);
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    Backendless.Persistence.of(Sort.class).save(sort);
-                                }
-                            }).start();
                         }
                     }
 
@@ -295,6 +292,12 @@ public class NewSaleSortActivity extends AppCompatActivity {
                             Backendless.Data.of("SortInfo").create(sortInfos, new AsyncCallback<List<String>>() {
                                 @Override
                                 public void handleResponse(List<String> response) {
+                                    sortCount(chosenSort1, false);
+                                    sortCount(chosenSort2, false);
+                                    sortCount(chosenSort3, false);
+                                    sortCount(chosenSort4, false);
+                                    sortCount(chosenSort5, false);
+                                    sortCount(-2, LEFT_OVER);
                                     showProgress(false);
                                     Toast.makeText(NewSaleSortActivity.this, "שונה בהצלחה", Toast.LENGTH_SHORT).show();
                                     setResult(RESULT_OK);
@@ -336,13 +339,41 @@ public class NewSaleSortActivity extends AppCompatActivity {
             sortInfo.put("sortCount", InventoryApp.sorts.get(chosenSort).getSortCount() + 1);
             sortInfo.put("userEmail", InventoryApp.user.getEmail());
             sortInfos.add(sortInfo);
+        }
+    }
 
+    public void sortCount(int chosenSort, boolean leftOver) {
+        if (chosenSort != -1 && !leftOver) {
             InventoryApp.sorts.get(chosenSort).setSortCount(InventoryApp.sorts.get(chosenSort).getSortCount()+1);
-            new Thread(new Runnable() {
-                public void run() {
-                    Backendless.Persistence.of(Sort.class).save(InventoryApp.sorts.get(chosenSort));
+            Backendless.Persistence.of(Sort.class).save(InventoryApp.sorts.get(chosenSort), new AsyncCallback<Sort>() {
+                @Override
+                public void handleResponse(Sort response) {
+
                 }
-            }).start();
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+
+                }
+            });
+        } else if (leftOver && chosenSort != -1) {
+            for (Sort sort : InventoryApp.sorts) {
+                if (sort.getObjectId().equals(LEFT_OVER_ID)) {
+                    sort.setSortCount(sort.getSortCount() + 1);
+                    Backendless.Persistence.of(Sort.class).save(sort, new AsyncCallback<Sort>() {
+                        @Override
+                        public void handleResponse(Sort response) {
+
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(NewSaleSortActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    break;
+                }
+            }
         }
     }
 

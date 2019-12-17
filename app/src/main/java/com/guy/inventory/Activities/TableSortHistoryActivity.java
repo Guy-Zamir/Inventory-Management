@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -24,6 +23,7 @@ import com.guy.inventory.Adapters.SortHistoryAdapter;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.SortInfo;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TableSortHistoryActivity extends AppCompatActivity {
@@ -33,9 +33,10 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
     private ListView lvSortHistoryList;
     private SortHistoryAdapter sortHistoryAdapter;
+    public List<SortInfo> fullSortHistory;
+    public List<SortInfo> filteredHistory;
 
     private int index;
-
     final int PAGE_SIZE = 100;
 
     private final DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
@@ -56,22 +57,22 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("כניסות/יציאות - " + InventoryApp.sorts.get(index).getName());
+        actionBar.setTitle("כניסות/יציאות: " + InventoryApp.sorts.get(index).getName() + " - " + InventoryApp.sorts.get(index).getSortCount());
         actionBar.setDisplayHomeAsUpEnabled(true);
         sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
         sortInfoBuilder.setSortBy("created DESC");
         sortInfoBuilder.setWhereClause("toId = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
-        String COUNT_CLAUSE = "sortCount = '" + (InventoryApp.sorts.get(index).getSortCount() - 1) + "'";
         sortInfoBuilder.setPageSize(PAGE_SIZE);
-        if (InventoryApp.sorts.get(index).getSortCount() != 0) {
-            sortInfoBuilder.setWhereClause(COUNT_CLAUSE);
-        }
 
         showProgress(true);
         Backendless.Data.of(SortInfo.class).find(sortInfoBuilder, new AsyncCallback<List<SortInfo>>() {
             @Override
             public void handleResponse(List<SortInfo> response) {
-                sortHistoryAdapter = new SortHistoryAdapter(TableSortHistoryActivity.this, response);
+                fullSortHistory = response;
+
+                filteredHistory = filterSortHistory(true);
+                sortHistoryAdapter = new SortHistoryAdapter(TableSortHistoryActivity.this, filteredHistory);
+                sortHistoryAdapter.setSelectedSort(index);
                 lvSortHistoryList.setAdapter(sortHistoryAdapter);
                 showProgress(false);
             }
@@ -95,16 +96,47 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
         @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.table_sort_action_bar, menu);
+        getMenuInflater().inflate(R.menu.table_sort_history_action_bar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.newIcon:
+            case R.id.outIcon:
+                if (InventoryApp.sorts.get(index).getSortCount() != InventoryApp.sorts.get(index).getSortCount() + sortHistoryAdapter.getI()) {
+                    sortHistoryAdapter.reduceI();
 
-            case R.id.editIcon:
+                    // Deleting all the sortInfo that doesn't matter
+                    List<SortInfo> toDelete = new ArrayList<>();
+                    for (SortInfo sortInfo : fullSortHistory) {
+                        if (sortInfo.isFromSale() && (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI() != sortInfo.getSortCount())) {
+                            toDelete.add(sortInfo);
+                        }
+                    }
+                    fullSortHistory.removeAll(toDelete);
+
+                    sortHistoryAdapter.notifyDataSetChanged();
+                    ActionBar actionBar = getSupportActionBar();
+                    assert actionBar != null;
+                    actionBar.setTitle("כניסות/יציאות:  " + InventoryApp.sorts.get(index).getName() + "-" + (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI()));
+                } else {
+                    Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.inIcon:
+                if (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI() != 0) {
+                    sortHistoryAdapter.addI();
+
+                    filterSortHistory(false);
+                    sortHistoryAdapter.notifyDataSetChanged();
+                    ActionBar actionBar = getSupportActionBar();
+                    assert actionBar != null;
+                    actionBar.setTitle("כניסות/יציאות:  " + InventoryApp.sorts.get(index).getName() + "-" + (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI()));
+                } else {
+                    Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -128,5 +160,22 @@ public class TableSortHistoryActivity extends AppCompatActivity {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    // Filtering all the sortInfo that doesn't matter
+    private List<SortInfo> filterSortHistory(boolean first) {
+        List<SortInfo> filteredHistory = new ArrayList<>(fullSortHistory);
+        List<SortInfo> toDelete = new ArrayList<>();
+        for (SortInfo sortInfo : fullSortHistory) {
+            if (first) {
+                if (sortInfo.isFromSale() && (InventoryApp.sorts.get(index).getSortCount() != sortInfo.getSortCount())) {
+                    toDelete.add(sortInfo);
+                }
+            } else if (sortInfo.isFromSale() && (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI() != sortInfo.getSortCount())) {
+                toDelete.add(sortInfo);
+            }
+        }
+        filteredHistory.removeAll(toDelete);
+        return filteredHistory;
     }
 }
