@@ -1,5 +1,11 @@
 package com.guy.inventory.Tables;
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.persistence.*;
+import com.backendless.geo.GeoPoint;
 import java.util.Date;
+import java.util.List;
 
 public class Sale {
     private Client client;
@@ -139,5 +145,65 @@ public class Sale {
 
     public void setKind(String kind) {
         this.kind = kind;
+    }
+
+    public Sale save()
+    {
+        return Backendless.Data.of( Sale.class ).save( this );
+    }
+
+    public void saveAsync( AsyncCallback<Sale> callback )
+    {
+        Backendless.Data.of( Sale.class ).save( this, callback );
+    }
+
+    public Long remove()
+    {
+        return Backendless.Data.of( Sale.class ).remove( this );
+    }
+
+    public void removeAsync( AsyncCallback<Long> callback )
+    {
+        Backendless.Data.of( Sale.class ).remove( this, callback );
+    }
+
+    public static Sale findById( String id )
+    {
+        return Backendless.Data.of( Sale.class ).findById( id );
+    }
+
+    public static void findByIdAsync( String id, AsyncCallback<Sale> callback )
+    {
+        Backendless.Data.of( Sale.class ).findById( id, callback );
+    }
+
+    public static Sale findFirst()
+    {
+        return Backendless.Data.of( Sale.class ).findFirst();
+    }
+
+    public static void findFirstAsync( AsyncCallback<Sale> callback )
+    {
+        Backendless.Data.of( Sale.class ).findFirst( callback );
+    }
+
+    public static Sale findLast()
+    {
+        return Backendless.Data.of( Sale.class ).findLast();
+    }
+
+    public static void findLastAsync( AsyncCallback<Sale> callback )
+    {
+        Backendless.Data.of( Sale.class ).findLast( callback );
+    }
+
+    public static List<Sale> find(DataQueryBuilder queryBuilder )
+    {
+        return Backendless.Data.of( Sale.class ).find( queryBuilder );
+    }
+
+    public static void findAsync( DataQueryBuilder queryBuilder, AsyncCallback<List<Sale>> callback )
+    {
+        Backendless.Data.of( Sale.class ).find( queryBuilder, callback );
     }
 }

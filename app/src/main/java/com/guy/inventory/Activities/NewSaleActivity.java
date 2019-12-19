@@ -42,6 +42,7 @@ public class NewSaleActivity extends AppCompatActivity {
     private int chosenClient = -1;
     private boolean isExport;
 
+
     private String aClient = "client";
     final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
@@ -64,6 +65,7 @@ public class NewSaleActivity extends AppCompatActivity {
         etSaleWeight = findViewById(R.id.etSaleWeight);
         etSaleDays = findViewById(R.id.etSaleDays);
         acClients = findViewById(R.id.acClients);
+
         Button btnSaleSubmit = findViewById(R.id.btnSaleSubmit);
 
         isExport = getIntent().getBooleanExtra("export", false);
@@ -179,6 +181,11 @@ public class NewSaleActivity extends AppCompatActivity {
                     sale.setUserEmail(InventoryApp.user.getEmail());
 
                     showProgress(true);
+
+
+                    showProgress(true);
+
+
                     Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
                         @Override
                         public void handleResponse(Sale response) {
@@ -227,6 +234,7 @@ public class NewSaleActivity extends AppCompatActivity {
         finish();
         return true;
     }
+
 
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
