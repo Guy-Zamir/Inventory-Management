@@ -59,103 +59,16 @@ public class TableSortingActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         sortBuilder.setWhereClause(EMAIL_CLAUSE);
         sortBuilder.setPageSize(PAGE_SIZE);
+        sortBuilder.setWhereClause("last = true");
 
         showProgress(true);
         Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
             @Override
             public void handleResponse(List<Sort> response) {
                 InventoryApp.sorts = response;
-
-                DataQueryBuilder sortInfoBuyBuilder = DataQueryBuilder.create();
-                sortInfoBuyBuilder.setWhereClause(EMAIL_CLAUSE);
-                sortInfoBuyBuilder.setWhereClause("fromBuy = true");
-                sortInfoBuyBuilder.setPageSize(100);
-                sortInfoBuyBuilder.setGroupBy("toId");
-                sortInfoBuyBuilder.setProperties("Sum(sum) as sum");
-                sortInfoBuyBuilder.addProperty("Sum(weight) as weight");
-                sortInfoBuyBuilder.addProperty("toId");
-
-                Backendless.Data.of("SortInfo").find(sortInfoBuyBuilder, new AsyncCallback<List<Map>>() {
-                    @Override
-                    public void handleResponse(List<Map> response) {
-                        for (int i = 0; i < response.size(); i++) {
-                            String toId = (String) response.get(i).get("toId");
-                            for (int y = 0; y < InventoryApp.sorts.size(); y++) {
-                                assert toId != null;
-                                if (toId.equals(InventoryApp.sorts.get(y).getObjectId())) {
-                                    double buySum;
-                                    double buyWeight;
-                                    if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
-                                        buySum = (int) response.get(i).get("sum");
-                                    } else {
-                                        buySum = (double) response.get(i).get("sum");
-                                    }
-
-                                    if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
-                                        buyWeight = (int) response.get(i).get("weight");
-                                    } else {
-                                        buyWeight = (double) response.get(i).get("weight");
-                                    }
-
-                                    InventoryApp.sorts.get(y).setSum(buySum);
-                                    InventoryApp.sorts.get(y).setWeight(buyWeight);
-                                    InventoryApp.sorts.get(y).setPrice(buySum / buyWeight);
-                                }
-                            }
-                        }
-
-                        DataQueryBuilder sortInfoSaleBuilder = DataQueryBuilder.create();
-                        sortInfoSaleBuilder.setWhereClause(EMAIL_CLAUSE);
-                        sortInfoSaleBuilder.setPageSize(100);
-                        sortInfoSaleBuilder.setGroupBy("toId");
-                        sortInfoSaleBuilder.setProperties("Sum(sum) as sum");
-                        sortInfoSaleBuilder.addProperty("Sum(weight) as weight");
-                        sortInfoSaleBuilder.addProperty("toId");
-                        sortInfoSaleBuilder.setWhereClause("fromSale = true");
-
-                        Backendless.Data.of("SortInfo").find(sortInfoSaleBuilder, new AsyncCallback<List<Map>>() {
-                            @Override
-                            public void handleResponse(List<Map> response) {
-                                for (int i = 0; i < response.size(); i++) {
-                                    String toId = (String) response.get(i).get("toId");
-                                    for (int y = 0; y < InventoryApp.sorts.size(); y++) {
-                                        assert toId != null;
-                                        if (toId.equals(InventoryApp.sorts.get(y).getObjectId())) {
-                                            double saleSum;
-                                            double saleWeight;
-                                            if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
-                                                saleSum = (int) response.get(i).get("sum");
-                                            } else {
-                                                saleSum = (double) response.get(i).get("sum");
-                                            }
-                                            if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
-                                                saleWeight = (int) response.get(i).get("weight");
-                                            } else {
-                                                saleWeight = (double) response.get(i).get("weight");
-                                            }
-                                            InventoryApp.sorts.get(y).setSum(InventoryApp.sorts.get(y).getSum()-saleSum);
-                                            InventoryApp.sorts.get(y).setWeight(InventoryApp.sorts.get(y).getWeight()-saleWeight);
-                                            InventoryApp.sorts.get(y).setPrice(InventoryApp.sorts.get(y).getSum() / InventoryApp.sorts.get(y).getWeight());
-                                        }
-                                    }
-                                }
-                                sortAdapter = new SortAdapter(TableSortingActivity.this, InventoryApp.sorts);
-                                lvSortList.setAdapter(sortAdapter);
-                                showProgress(false);
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault fault) {
-                                Toast.makeText(TableSortingActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault fault) {
-                        Toast.makeText(TableSortingActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                sortAdapter = new SortAdapter(TableSortingActivity.this, InventoryApp.sorts);
+                lvSortList.setAdapter(sortAdapter);
+                showProgress(false);
             }
 
             @Override

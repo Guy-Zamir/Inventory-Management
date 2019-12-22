@@ -23,7 +23,6 @@ import com.guy.inventory.Adapters.SortHistoryAdapter;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.SortInfo;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TableSortHistoryActivity extends AppCompatActivity {
@@ -33,14 +32,13 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
     private ListView lvSortHistoryList;
     private SortHistoryAdapter sortHistoryAdapter;
-    public List<SortInfo> fullSortHistory;
-    public List<SortInfo> filteredHistory;
+    public List<SortInfo> sortHistory;
 
     private int index;
     final int PAGE_SIZE = 100;
+    private int selectedItem = -1;
 
     private final DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
-    private final String EMAIL_CLAUSE = "userEmail = '" + InventoryApp.user.getEmail() + "'";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +57,6 @@ public class TableSortHistoryActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setTitle("כניסות/יציאות: " + InventoryApp.sorts.get(index).getName() + " - " + InventoryApp.sorts.get(index).getSortCount());
         actionBar.setDisplayHomeAsUpEnabled(true);
-        sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
         sortInfoBuilder.setSortBy("created DESC");
         sortInfoBuilder.setWhereClause("toId = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
         sortInfoBuilder.setPageSize(PAGE_SIZE);
@@ -68,11 +65,9 @@ public class TableSortHistoryActivity extends AppCompatActivity {
         Backendless.Data.of(SortInfo.class).find(sortInfoBuilder, new AsyncCallback<List<SortInfo>>() {
             @Override
             public void handleResponse(List<SortInfo> response) {
-                fullSortHistory = response;
+                sortHistory = response;
 
-                filteredHistory = filterSortHistory(true);
-                sortHistoryAdapter = new SortHistoryAdapter(TableSortHistoryActivity.this, filteredHistory);
-                sortHistoryAdapter.setSelectedSort(index);
+                sortHistoryAdapter = new SortHistoryAdapter(TableSortHistoryActivity.this, sortHistory);
                 lvSortHistoryList.setAdapter(sortHistoryAdapter);
                 showProgress(false);
             }
@@ -90,6 +85,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                 view.setSelected(true);
                 sortHistoryAdapter.setSelectedPosition(position);
                 sortHistoryAdapter.notifyDataSetChanged();
+                selectedItem = position;
             }
         });
     }
@@ -104,39 +100,36 @@ public class TableSortHistoryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.outIcon:
-                if (InventoryApp.sorts.get(index).getSortCount() != InventoryApp.sorts.get(index).getSortCount() + sortHistoryAdapter.getI()) {
-                    sortHistoryAdapter.reduceI();
+                if (selectedItem == -1) {
+                    Toast.makeText(this, "יש לבחור פריט", Toast.LENGTH_SHORT).show();
 
-                    // Deleting all the sortInfo that doesn't matter
-                    List<SortInfo> toDelete = new ArrayList<>();
-                    for (SortInfo sortInfo : fullSortHistory) {
-                        if (sortInfo.isFromSale() && (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI() != sortInfo.getSortCount())) {
-                            toDelete.add(sortInfo);
-                        }
-                    }
-                    fullSortHistory.removeAll(toDelete);
+                } else if (sortHistory.get(selectedItem).isFromSale() || sortHistory.get(selectedItem).isFromBuy()) {
+                    Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
 
-                    sortHistoryAdapter.notifyDataSetChanged();
+                } else {
                     ActionBar actionBar = getSupportActionBar();
                     assert actionBar != null;
-                    actionBar.setTitle("כניסות/יציאות:  " + InventoryApp.sorts.get(index).getName() + "-" + (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI()));
-                } else {
-                    Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
+                    actionBar.setTitle("כניסות/יציאות:  " + sortHistory.get(selectedItem).getName() + "-" + (sortHistory.get(selectedItem).getSortCount()));
+                    DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
+                    sortInfoBuilder.setWhereClause("toId = '" + sortHistory.get(selectedItem).getFromId() + "'");
+
+                    Backendless.Data.of(SortInfo.class).find(sortInfoBuilder, new AsyncCallback<List<SortInfo>>() {
+                        @Override
+                        public void handleResponse(List<SortInfo> response) {
+                            sortHistory = response;
+                            sortHistoryAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Toast.makeText(TableSortHistoryActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
                 break;
 
             case R.id.inIcon:
-                if (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI() != 0) {
-                    sortHistoryAdapter.addI();
-
-                    filterSortHistory(false);
-                    sortHistoryAdapter.notifyDataSetChanged();
-                    ActionBar actionBar = getSupportActionBar();
-                    assert actionBar != null;
-                    actionBar.setTitle("כניסות/יציאות:  " + InventoryApp.sorts.get(index).getName() + "-" + (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI()));
-                } else {
-                    Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
-                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -160,22 +153,5 @@ public class TableSortHistoryActivity extends AppCompatActivity {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-    }
-
-    // Filtering all the sortInfo that doesn't matter
-    private List<SortInfo> filterSortHistory(boolean first) {
-        List<SortInfo> filteredHistory = new ArrayList<>(fullSortHistory);
-        List<SortInfo> toDelete = new ArrayList<>();
-        for (SortInfo sortInfo : fullSortHistory) {
-            if (first) {
-                if (sortInfo.isFromSale() && (InventoryApp.sorts.get(index).getSortCount() != sortInfo.getSortCount())) {
-                    toDelete.add(sortInfo);
-                }
-            } else if (sortInfo.isFromSale() && (InventoryApp.sorts.get(index).getSortCount() - sortHistoryAdapter.getI() != sortInfo.getSortCount())) {
-                toDelete.add(sortInfo);
-            }
-        }
-        filteredHistory.removeAll(toDelete);
-        return filteredHistory;
     }
 }

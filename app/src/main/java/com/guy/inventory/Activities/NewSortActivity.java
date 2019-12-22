@@ -68,6 +68,9 @@ public class NewSortActivity extends AppCompatActivity {
                     sort.setSize(size);
                     sort.setColor(color);
                     sort.setClarity(clarity);
+                    sort.setSum(0.0);
+                    sort.setPrice(0.0);
+                    sort.setWeight(0.0);
                     sort.setSortCount(0);
                     sort.setUserEmail(InventoryApp.user.getEmail());
                     showProgress(true);

@@ -181,7 +181,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                                     Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                                         @Override
                                         public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortLeftN.setText(String.valueOf(response.get(0).get("name")));
+                                            tvBuyDetailsSortLeftN.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
 
                                             // Setting the visibility
                                             tvBuyDetailsSortLeftP.setVisibility(View.VISIBLE);
@@ -202,7 +202,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                                 Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                                     @Override
                                     public void handleResponse(List<Map> response) {
-                                        tvBuyDetailsSortN1.setText(String.valueOf(response.get(0).get("name")));
+                                        tvBuyDetailsSortN1.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
 
                                         // Setting the visibility
                                         tvBuyDetailsSortP1.setVisibility(View.VISIBLE);
@@ -223,7 +223,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                                     Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                                         @Override
                                         public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortN2.setText(String.valueOf(response.get(0).get("name")));
+                                            tvBuyDetailsSortN2.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
 
                                             // Setting the visibility
                                             tvBuyDetailsSortP2.setVisibility(View.VISIBLE);
@@ -244,7 +244,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                                     Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                                         @Override
                                         public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortN3.setText(String.valueOf(response.get(0).get("name")));
+                                            tvBuyDetailsSortN3.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
 
                                             // Setting the visibility
                                             tvBuyDetailsSortP3.setVisibility(View.VISIBLE);
@@ -265,7 +265,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                                     Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                                         @Override
                                         public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortN4.setText(String.valueOf(response.get(0).get("name")));
+                                            tvBuyDetailsSortN4.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
 
                                             // Setting the visibility
                                             tvBuyDetailsSortP4.setVisibility(View.VISIBLE);
@@ -286,7 +286,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                                     Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                                         @Override
                                         public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortN5.setText(String.valueOf(response.get(0).get("name")));
+                                            tvBuyDetailsSortN5.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
 
                                             // Setting the visibility
                                             tvBuyDetailsSortP5.setVisibility(View.VISIBLE);

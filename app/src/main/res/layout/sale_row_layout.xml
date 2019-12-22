@@ -146,4 +146,12 @@
         android:layout_weight="2"
         app:srcCompat="@drawable/rough_icon" />
 
+    <ImageView
+        android:id="@+id/ivSorted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="2.5"
+        app:srcCompat="@drawable/done1_icon" />
+
 </LinearLayout>

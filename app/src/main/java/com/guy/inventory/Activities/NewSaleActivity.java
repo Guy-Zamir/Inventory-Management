@@ -2,6 +2,8 @@ package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +30,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class NewSaleActivity extends AppCompatActivity {
 
@@ -41,6 +45,7 @@ public class NewSaleActivity extends AppCompatActivity {
     private AutoCompleteTextView acClients;
     private int chosenClient = -1;
     private boolean isExport;
+
 
 
     private String aClient = "client";
@@ -141,8 +146,7 @@ public class NewSaleActivity extends AppCompatActivity {
                     Toast.makeText(NewSaleActivity.this, "יש לבחור שם חברה קיים בלבד", Toast.LENGTH_SHORT).show();
 
                 } else if (acClients.getText().toString().isEmpty() || etSaleID.getText().toString().isEmpty() ||
-                        etSaleWeight.getText().toString().isEmpty() || etSaleSum.getText().toString().isEmpty() ||
-                        etSaleDays.getText().toString().isEmpty()) {
+                        etSaleWeight.getText().toString().isEmpty() || etSaleSum.getText().toString().isEmpty()) {
 
                     Toast.makeText(NewSaleActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
 
@@ -152,7 +156,7 @@ public class NewSaleActivity extends AppCompatActivity {
                     final String id = etSaleID.getText().toString();
                     final double weight = Double.parseDouble(etSaleWeight.getText().toString());
                     final double saleSum = Double.parseDouble(etSaleSum.getText().toString());
-                    final int days = Integer.valueOf(etSaleDays.getText().toString().trim());
+                    final int days = (etSaleDays.getText().toString().isEmpty()) ? 0 : Integer.valueOf(etSaleDays.getText().toString().trim());
                     final boolean polish = !swSalePolish.isChecked();
                     final String kind = (isExport) ? "export" : "sale";
 
@@ -181,11 +185,6 @@ public class NewSaleActivity extends AppCompatActivity {
                     sale.setUserEmail(InventoryApp.user.getEmail());
 
                     showProgress(true);
-
-
-                    showProgress(true);
-
-
                     Backendless.Persistence.save(sale, new AsyncCallback<Sale>() {
                         @Override
                         public void handleResponse(Sale response) {
@@ -229,12 +228,12 @@ public class NewSaleActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onSupportNavigateUp(){
         finish();
         return true;
     }
-
 
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);

@@ -48,6 +48,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         TextView tvSaleSum = convertView.findViewById(R.id.tvSaleSum);
 
         ImageView ivRough = convertView.findViewById(R.id.ivRough);
+        ImageView ivSorted = convertView.findViewById(R.id.ivSorted);
         TextView tvSaleDetailsPayDate = convertView.findViewById(R.id.tvSaleDetailsPayDate);
         TextView tvSaleDetailsID = convertView.findViewById(R.id.tvSaleDetailsID);
         TextView tvSaleDetailsPrice = convertView.findViewById(R.id.tvSaleDetailsPrice);
@@ -56,6 +57,9 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         TextView tvSaleDetailsNum = convertView.findViewById(R.id.tvSaleDetailsNum);
 
         LinearLayout llSaleDetails = convertView.findViewById(R.id.llSaleDetails);
+
+        // When the goods are done
+        ivSorted.setImageResource((InventoryApp.sales.get(position).isSorted()) ? R.drawable.done1_icon : R.drawable.not_done1_icon);
 
         // Setting the values to the views
         Calendar saleDate = Calendar.getInstance();

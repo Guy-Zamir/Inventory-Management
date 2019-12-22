@@ -13,7 +13,7 @@ public class Sale {
     private double saleSum, weight, price;
     private String id, clientName;
     private int days;
-    private boolean paid, polish;
+    private boolean paid, polish, sorted;
     private Date saleDate, payDate;
 
     private Date created, updated;
@@ -205,5 +205,13 @@ public class Sale {
     public static void findAsync( DataQueryBuilder queryBuilder, AsyncCallback<List<Sale>> callback )
     {
         Backendless.Data.of( Sale.class ).find( queryBuilder, callback );
+    }
+
+    public boolean isSorted() {
+        return sorted;
+    }
+
+    public void setSorted(boolean sorted) {
+        this.sorted = sorted;
     }
 }
