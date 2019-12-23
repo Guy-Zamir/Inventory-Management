@@ -23,7 +23,11 @@ import com.guy.inventory.Adapters.SortHistoryAdapter;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.SortInfo;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TableSortHistoryActivity extends AppCompatActivity {
     private View mProgressView;
@@ -32,13 +36,13 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
     private ListView lvSortHistoryList;
     private SortHistoryAdapter sortHistoryAdapter;
-    public List<SortInfo> sortHistory;
+    public List<SortInfo> filterSorts = new ArrayList<>();
 
     private int index;
     final int PAGE_SIZE = 100;
     private int selectedItem = -1;
 
-    private final DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
+    final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,26 +61,67 @@ public class TableSortHistoryActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setTitle("כניסות/יציאות: " + InventoryApp.sorts.get(index).getName() + " - " + InventoryApp.sorts.get(index).getSortCount());
         actionBar.setDisplayHomeAsUpEnabled(true);
-        sortInfoBuilder.setSortBy("created DESC");
-        sortInfoBuilder.setWhereClause("toId = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
-        sortInfoBuilder.setPageSize(PAGE_SIZE);
+
+        sortBuilder.setPageSize(PAGE_SIZE);
+        sortBuilder.setWhereClause("userEmail = '" + InventoryApp.user.getEmail() + "'");
+        sortBuilder.setWhereClause("objectId = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
+        sortBuilder.addRelated("Sorts");
 
         showProgress(true);
-        Backendless.Data.of(SortInfo.class).find(sortInfoBuilder, new AsyncCallback<List<SortInfo>>() {
-            @Override
-            public void handleResponse(List<SortInfo> response) {
-                sortHistory = response;
+        Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
+                    @Override
+                    public void handleResponse(List<Map> response) {
+                        HashMap[] sorts = (HashMap[]) response.get(0).get("Sorts");
+                        for (HashMap sort : sorts) {
+                            SortInfo sortInfo = new SortInfo();
+                            sortInfo.setFromName(sort.get("name") + " - " + sort.get("sortCount"));
+                            sortInfo.setSortCount((Integer) sort.get("sortCount"));
+                            sortInfo.setCreated((Date) sort.get("created"));
+                            sortInfo.setSale((boolean) sort.get("sale"));
+                            sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                            sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                            sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                            filterSorts.add(sortInfo);
+                        }
 
-                sortHistoryAdapter = new SortHistoryAdapter(TableSortHistoryActivity.this, sortHistory);
-                lvSortHistoryList.setAdapter(sortHistoryAdapter);
-                showProgress(false);
-            }
+                        DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
+                        sortInfoBuilder.setWhereClause("userEmail = '" + InventoryApp.user.getEmail() + "'");
+                        sortInfoBuilder.setWhereClause("toId = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
+                        sortInfoBuilder.setPageSize(PAGE_SIZE);
+                        Backendless.Data.of("SortInfo").find(sortInfoBuilder, new AsyncCallback<List<Map>>() {
+                            @Override
+                            public void handleResponse(List<Map> response) {
+                                for (int i = 0; i < response.size(); i++) {
+                                    HashMap sort = (HashMap) response.get(i);
+                                    SortInfo sortInfo = new SortInfo();
+                                    sortInfo.setFromName((String) sort.get("fromName"));
+                                    sortInfo.setSortCount((int) sort.get("sortCount"));
+                                    sortInfo.setCreated((Date) sort.get("created"));
+                                    sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                                    sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                                    sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                                    filterSorts.add(sortInfo);
+                                }
 
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(TableSortHistoryActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                                sortHistoryAdapter = new SortHistoryAdapter(TableSortHistoryActivity.this, filterSorts);
+                                lvSortHistoryList.setAdapter(sortHistoryAdapter);
+                                showProgress(false);
+
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                Toast.makeText(TableSortHistoryActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(TableSortHistoryActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         lvSortHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
@@ -103,20 +148,20 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לבחור פריט", Toast.LENGTH_SHORT).show();
 
-                } else if (sortHistory.get(selectedItem).isFromSale() || sortHistory.get(selectedItem).isFromBuy()) {
+                //} else if (sortHistory.get(selectedItem).isFromSale() || sortHistory.get(selectedItem).isFromBuy()) {
                     Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
 
                 } else {
                     ActionBar actionBar = getSupportActionBar();
                     assert actionBar != null;
-                    actionBar.setTitle("כניסות/יציאות:  " + sortHistory.get(selectedItem).getName() + "-" + (sortHistory.get(selectedItem).getSortCount()));
+                    actionBar.setTitle("כניסות/יציאות:  " + filterSorts.get(selectedItem).getFromName() + "-" + (filterSorts.get(selectedItem).getSortCount()));
                     DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
-                    sortInfoBuilder.setWhereClause("toId = '" + sortHistory.get(selectedItem).getFromId() + "'");
+                 //   sortInfoBuilder.setWhereClause("toId = '" + sortHistory.get(selectedItem).getFromId() + "'");
 
                     Backendless.Data.of(SortInfo.class).find(sortInfoBuilder, new AsyncCallback<List<SortInfo>>() {
                         @Override
                         public void handleResponse(List<SortInfo> response) {
-                            sortHistory = response;
+                            filterSorts = response;
                             sortHistoryAdapter.notifyDataSetChanged();
                         }
 

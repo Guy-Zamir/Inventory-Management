@@ -57,10 +57,10 @@ public class NewSortActivity extends AppCompatActivity {
                 } else {
 
                     name = etNewSortName.getText().toString().trim();
-                    shape = etNewSortShape.getText().toString().trim();
-                    size = etNewSortSize.getText().toString().trim();
-                    color = etNewSortColor.getText().toString().trim();
-                    clarity = etNewSortClarity.getText().toString().trim();
+                    shape = etNewSortShape.getText().toString().isEmpty() ? "null" : etNewSortShape.getText().toString().trim();
+                    size = etNewSortSize.getText().toString().isEmpty() ? "null" : etNewSortSize.getText().toString().trim();
+                    color = etNewSortColor.getText().toString().isEmpty() ? "null" : etNewSortColor.getText().toString().trim();
+                    clarity = etNewSortClarity.getText().toString().isEmpty() ? "null" : etNewSortClarity.getText().toString().trim();
 
                     final Sort sort = new Sort();
                     sort.setName(name);

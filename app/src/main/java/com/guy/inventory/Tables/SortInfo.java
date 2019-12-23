@@ -10,18 +10,19 @@ import java.util.Date;
 public class SortInfo
 {
     private Date updated;
-    private boolean fromBuy;
-    private boolean fromSale;
     private Integer sortCount;
     private Double price;
-    private String name;
+    private String fromName;
+    private String toName;
+    private String fromId;
     private Double weight;
     private Double sum;
     private String objectId;
-    private String fromId;
     private String toId;
     private String ownerId;
     private Date created;
+    private String userEmail;
+    private boolean sale;
 
     public Date getUpdated()
     {
@@ -48,14 +49,14 @@ public class SortInfo
         this.price = price;
     }
 
-    public String getName()
+    public String getFromName()
     {
-        return name;
+        return fromName;
     }
 
-    public void setName( String name )
+    public void setFromName(String fromName )
     {
-        this.name = name;
+        this.fromName = fromName;
     }
 
     public Double getWeight()
@@ -154,24 +155,24 @@ public class SortInfo
         Backendless.Data.of( SortInfo.class ).find( queryBuilder, callback );
     }
 
-    public boolean isFromBuy() {
-        return fromBuy;
-    }
-
-    public void setFromBuy(boolean fromBuy) {
-        this.fromBuy = fromBuy;
-    }
-
-    public boolean isFromSale() {
-        return fromSale;
-    }
-
-    public void setFromSale(boolean fromSale) {
-        this.fromSale = fromSale;
-    }
-
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public String getToId() {
+        return toId;
+    }
+
+    public void setToId(String toId) {
+        this.toId = toId;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getFromId() {
@@ -182,11 +183,23 @@ public class SortInfo
         this.fromId = fromId;
     }
 
-    public String getToId() {
-        return toId;
+    public String getToName() {
+        return toName;
     }
 
-    public void setToId(String toId) {
-        this.toId = toId;
+    public void setToName(String toName) {
+        this.toName = toName;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public boolean isSale() {
+        return sale;
+    }
+
+    public void setSale(boolean sale) {
+        this.sale = sale;
     }
 }

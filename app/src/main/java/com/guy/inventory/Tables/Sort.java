@@ -1,11 +1,8 @@
 package com.guy.inventory.Tables;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.persistence.*;
-import com.backendless.geo.GeoPoint;
-
 import java.util.List;
 import java.util.Date;
 
@@ -27,6 +24,7 @@ public class Sort
     private Double soldPrice;
     private Double price;
     private Boolean sale;
+    private String saleId;
     private Date created;
 
     public String getColor()
@@ -238,5 +236,13 @@ public class Sort
     public static void findAsync( DataQueryBuilder queryBuilder, AsyncCallback<List<Sort>> callback )
     {
         Backendless.Data.of( Sort.class ).find( queryBuilder, callback );
+    }
+
+    public String getSaleId() {
+        return saleId;
+    }
+
+    public void setSaleId(String saleId) {
+        this.saleId = saleId;
     }
 }

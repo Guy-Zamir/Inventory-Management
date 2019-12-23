@@ -40,16 +40,14 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
         // Defining the views in the layouts
         final TextView tvSortHistoryNameOrg = convertView.findViewById(R.id.tvSortHistoryNameOrg);
         TextView tvSortHistoryDate = convertView.findViewById(R.id.tvSortHistoryDate);
-        TextView tvSortHistoryWeightOrg = convertView.findViewById(R.id.tvSortHistoryWeightOrg);
-        TextView tvSortHistoryPriceOrg = convertView.findViewById(R.id.tvSortHistoryPriceOrg);
-        TextView tvSortHistorySumOrg = convertView.findViewById(R.id.tvSortHistorySumOrg);
+        TextView tvSortHistorySaleName = convertView.findViewById(R.id.tvSortHistorySaleName);
         TextView tvSortHistoryWeight = convertView.findViewById(R.id.tvSortHistoryWeight);
         TextView tvSortHistoryPrice = convertView.findViewById(R.id.tvSortHistoryPrice);
         TextView tvSortHistorySum = convertView.findViewById(R.id.tvSortHistorySum);
         TextView tvSortHistoryPL = convertView.findViewById(R.id.tvSortHistoryPL);
         ImageView ivOutIn = convertView.findViewById(R.id.ivOutIn);
 
-        final String inOut = (sortHistory.get(position).isFromBuy() ? "נכנס: " : "יוצא: ");
+        final String inOut = (sortHistory.get(position).isSale() ? "יוצא: " : "נכנס: ");
 
         Calendar sortDate = Calendar.getInstance();
         sortDate.setTime(sortHistory.get(position).getCreated());
@@ -57,21 +55,16 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
         @SuppressLint("DefaultLocale") String sortMonth = String.format("%02d", sortDate.get(Calendar.MONTH) + 1);
         @SuppressLint("DefaultLocale") String sortYear = String.format("%02d", sortDate.get(Calendar.YEAR));
 
-        String name = (sortHistory.get(position).isFromBuy() ? sortHistory.get(position).getName() : sortHistory.get(position).getName() + " - " + sortHistory.get(position).getSortCount());
-        tvSortHistoryNameOrg.setText(name);
+        tvSortHistoryNameOrg.setText(sortHistory.get(position).getFromName());
         tvSortHistoryDate.setText("תאריך כניסה: " + sortDays + "/" + sortMonth + "/" + sortYear);
         tvSortHistoryWeight.setText("משקל " + inOut + numberFormat.format(sortHistory.get(position).getWeight()) + " קראט ");
-        tvSortHistoryPrice.setText("מחיר " + inOut + numberFormat.format(sortHistory.get(position).getPrice()) + " $ ");
-        tvSortHistorySum.setText("סכום " + inOut + numberFormat.format(sortHistory.get(position).getSum()) + " $ ");
+        tvSortHistoryPrice.setText("מחיר " + inOut  + numberFormat.format(sortHistory.get(position).getPrice()) + " $ ");
+        tvSortHistorySum.setText("סכום " + inOut  + numberFormat.format(sortHistory.get(position).getSum()) + " $ ");
 
-        //////////////////////
-        tvSortHistoryWeightOrg.setVisibility(View.GONE);
-        tvSortHistoryPriceOrg.setVisibility(View.GONE);
-        tvSortHistorySumOrg.setVisibility(View.GONE);
-        ////////////////////////
 
-        tvSortHistoryPL.setVisibility(sortHistory.get(position).isFromSale() ? View.VISIBLE : View.GONE);
-        ivOutIn.setImageResource((sortHistory.get(position).isFromSale()) ? R.drawable.out_icon : R.drawable.in_icon);
+        tvSortHistorySaleName.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
+        tvSortHistoryPL.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
+        ivOutIn.setImageResource((sortHistory.get(position).isSale()) ? R.drawable.out_icon : R.drawable.in_icon);
         convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
         return convertView;
     }

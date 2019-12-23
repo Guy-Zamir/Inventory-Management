@@ -31,6 +31,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvSortHistorySaleName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם קונה"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
                 android:id="@+id/tvSortHistoryDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,42 +91,6 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvSortHistoryWeightOrg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="2dp"
-                android:fontFamily="sans-serif-smallcaps"
-                android:gravity="center_horizontal"
-                android:text="משקל לפני הפעולה"
-                android:textColor="@color/colorText"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvSortHistoryPriceOrg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="2dp"
-                android:fontFamily="sans-serif-smallcaps"
-                android:gravity="center_horizontal"
-                android:text="מחיר לפני הפעולה"
-                android:textColor="@color/colorText"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvSortHistorySumOrg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="2dp"
-                android:fontFamily="sans-serif-smallcaps"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="סכום לפני הפעולה"
-                android:textColor="@color/colorText"
-                android:textSize="16sp" />
-
-            <TextView
                 android:id="@+id/tvSortHistoryPL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_weight="0.1"
+        android:layout_weight="0.5"
         app:srcCompat="@drawable/in_icon" />
 
 </LinearLayout>

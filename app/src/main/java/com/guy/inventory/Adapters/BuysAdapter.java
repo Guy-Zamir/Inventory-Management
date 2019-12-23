@@ -177,127 +177,67 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                                 case 0:
                                     tvBuyDetailsSortLeftP.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
                                     tvBuyDetailsSortLeftW.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
+                                    tvBuyDetailsSortLeftN.setText(response.get(i).get("toName") + " - " + response.get(i).get("sortCount"));
 
-                                    Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                        @Override
-                                        public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortLeftN.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
-
-                                            // Setting the visibility
-                                            tvBuyDetailsSortLeftP.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortLeftW.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortLeftN.setVisibility(View.VISIBLE);
-                                        }
-
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                        }
-                                    });
+                                    // Setting the visibility
+                                    tvBuyDetailsSortLeftP.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortLeftW.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortLeftN.setVisibility(View.VISIBLE);
                                     break;
 
                                 case 1:
-                                tvBuyDetailsSortP1.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
-                                tvBuyDetailsSortW1.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
+                                    tvBuyDetailsSortP1.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
+                                    tvBuyDetailsSortW1.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
+                                    tvBuyDetailsSortN1.setText(response.get(i).get("toName") + " - " + response.get(i).get("sortCount"));
 
-                                Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                    @Override
-                                    public void handleResponse(List<Map> response) {
-                                        tvBuyDetailsSortN1.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
-
-                                        // Setting the visibility
-                                        tvBuyDetailsSortP1.setVisibility(View.VISIBLE);
-                                        tvBuyDetailsSortW1.setVisibility(View.VISIBLE);
-                                        tvBuyDetailsSortN1.setVisibility(View.VISIBLE);
-                                    }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault fault) {
-                                    }
-                                });
+                                    // Setting the visibility
+                                    tvBuyDetailsSortP1.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortW1.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortN1.setVisibility(View.VISIBLE);
                                     break;
 
                                 case 2:
                                     tvBuyDetailsSortP2.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
                                     tvBuyDetailsSortW2.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
+                                    tvBuyDetailsSortN2.setText(response.get(i).get("toName") + " - " + response.get(i).get("sortCount"));
 
-                                    Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                        @Override
-                                        public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortN2.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
-
-                                            // Setting the visibility
-                                            tvBuyDetailsSortP2.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortW2.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortN2.setVisibility(View.VISIBLE);
-                                        }
-
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                        }
-                                    });
+                                    // Setting the visibility
+                                    tvBuyDetailsSortP2.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortW2.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortN2.setVisibility(View.VISIBLE);
                                     break;
 
                                 case 3:
                                     tvBuyDetailsSortP3.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
                                     tvBuyDetailsSortW3.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
+                                    tvBuyDetailsSortN3.setText(response.get(i).get("toName") + " - " + response.get(i).get("sortCount"));
 
-                                    Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                        @Override
-                                        public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortN3.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
-
-                                            // Setting the visibility
-                                            tvBuyDetailsSortP3.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortW3.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortN3.setVisibility(View.VISIBLE);
-                                        }
-
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                        }
-                                    });
+                                    // Setting the visibility
+                                    tvBuyDetailsSortP3.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortW3.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortN3.setVisibility(View.VISIBLE);
                                     break;
 
                                 case 4:
                                     tvBuyDetailsSortP4.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
                                     tvBuyDetailsSortW4.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
+                                    tvBuyDetailsSortN4.setText(response.get(i).get("toName") + " - " + response.get(i).get("sortCount"));
 
-                                    Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                        @Override
-                                        public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortN4.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
-
-                                            // Setting the visibility
-                                            tvBuyDetailsSortP4.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortW4.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortN4.setVisibility(View.VISIBLE);
-                                        }
-
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                        }
-                                    });
+                                    // Setting the visibility
+                                    tvBuyDetailsSortP4.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortW4.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortN4.setVisibility(View.VISIBLE);
                                     break;
 
                                 case 5:
                                     tvBuyDetailsSortP5.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
                                     tvBuyDetailsSortW5.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
+                                    tvBuyDetailsSortN5.setText(response.get(i).get("toName") + " - " + response.get(i).get("sortCount"));
 
-                                    Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                        @Override
-                                        public void handleResponse(List<Map> response) {
-                                            tvBuyDetailsSortN5.setText(response.get(0).get("name") + " - " + response.get(0).get("sortCount"));
-
-                                            // Setting the visibility
-                                            tvBuyDetailsSortP5.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortW5.setVisibility(View.VISIBLE);
-                                            tvBuyDetailsSortN5.setVisibility(View.VISIBLE);
-                                        }
-
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                        }
-                                    });
+                                    // Setting the visibility
+                                    tvBuyDetailsSortP5.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortW5.setVisibility(View.VISIBLE);
+                                    tvBuyDetailsSortN5.setVisibility(View.VISIBLE);
                                     break;
                             }
                         }
