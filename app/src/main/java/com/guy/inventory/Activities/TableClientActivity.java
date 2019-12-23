@@ -146,6 +146,7 @@ public class TableClientActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.newIcon:
                 Intent intent = new Intent(TableClientActivity.this, NewClientActivity.class);
+                intent.putExtra("client", client);
                 startActivityForResult(intent, 1);
                 break;
 

@@ -306,17 +306,36 @@ public class NewSaleSortActivity extends AppCompatActivity {
 
                                         Sort newSaleSort = newSaleSortSave(etPriceSortS1, etWeightSortS1, chosenSort1);
                                         newSaleSort.save();
-                                        String newSaleSortObjectId = newSaleSort.getObjectId();
 
-              //                          SortInfo saleInfo = saleInfoSave(etPriceSortS1, etWeightSortS1, chosenSort1, newSaleSortObjectId);
-               //                         saleInfo.save();
 
-               //                         SortInfo sortInfo = sortInfoSave(etPriceSortS1, etWeightSortS1, chosenSort1, newSortObjectId);
-               //                         sortInfo.save();
+                                        // Setting the relation to the Sort
+                                        HashMap<String, Object> parentObject = new HashMap<>();
+                                        parentObject.put("objectId", oldSort1.getObjectId());
+
+                                        HashMap<String, Object> newSaleSortObject = new HashMap<>();
+                                        HashMap<String, Object> newSortObject = new HashMap<>();
+                                        newSaleSortObject.put("objectId", newSaleSort.getObjectId());
+                                        newSortObject.put("objectId", newSort.getObjectId());
+
+                                        ArrayList<Map> children = new ArrayList<>();
+                                        children.add(newSaleSortObject);
+                                        children.add(newSortObject);
 
                                         HashMap<String, Object> sortInfo1ObjectId = new HashMap<>();
                                         sortInfo1ObjectId.put("objectId", newSortObjectId);
                                         sortInfoObjects.add(sortInfo1ObjectId);
+
+                                        Backendless.Data.of("Sort").addRelation(parentObject, "Sorts", children, new AsyncCallback<Integer>() {
+                                            @Override
+                                            public void handleResponse(Integer response) {
+                                                int x = response;
+                                            }
+
+                                            @Override
+                                            public void handleFault(BackendlessFault fault) {
+
+                                            }
+                                        });
                                     }
 
                                     if (oldSort2 != null) {
