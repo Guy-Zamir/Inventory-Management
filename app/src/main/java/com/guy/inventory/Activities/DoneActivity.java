@@ -25,9 +25,7 @@ import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -48,9 +46,10 @@ public class DoneActivity extends AppCompatActivity {
 
     List<SortInfo> sortCheck;
 
-    final String LEFT_OVER_ID = "555D00E6-F4DC-4642-FF97-764A70C8AB00";
+    final String LEFT_OVER_NAME = "X";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-    final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final String whereClauseEmail = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final String whereClauseLast = "last = true";
     ArrayAdapter<String> sortAdapter;
 
     int chosenSort1 = -1, chosenSort2 = -1, chosenSort3 = -1, chosenSort4 = -1, chosenSort5 = -1;
@@ -108,7 +107,8 @@ public class DoneActivity extends AppCompatActivity {
 
         index = getIntent().getIntExtra("index", 0);
 
-        sortBuilder.setWhereClause(whereClause);
+        sortBuilder.setWhereClause(whereClauseEmail);
+        sortBuilder.setWhereClause(whereClauseLast);
         sortBuilder.setPageSize(100);
         sortBuilder.setSortBy("name");
 
@@ -119,8 +119,8 @@ public class DoneActivity extends AppCompatActivity {
             public void handleResponse(List<Sort> response) {
                 ArrayList<String> sortNames = new ArrayList<>();
                 for (Sort sort : response) {
-                    if (!sort.getObjectId().equals(LEFT_OVER_ID)) {
-                        sortNames.add(sort.getName());
+                    if (!sort.getName().equals(LEFT_OVER_NAME)) {
+                        sortNames.add(sort.getName() + " - " + sort.getSortCount());
                     }
                 }
 
@@ -155,7 +155,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    if (InventoryApp.sorts.get(i).getName().equals(selection)) {
+                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    if (name.equals(selection)) {
                         chosenSort1 = i;
                         break;
                     }
@@ -175,7 +176,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    if (InventoryApp.sorts.get(i).getName().equals(selection)) {
+                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    if (name.equals(selection)) {
                         chosenSort2 = i;
                         break;
                     }
@@ -195,7 +197,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    if (InventoryApp.sorts.get(i).getName().equals(selection)) {
+                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    if (name.equals(selection)) {
                         chosenSort3 = i;
                         break;
                     }
@@ -215,7 +218,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    if (InventoryApp.sorts.get(i).getName().equals(selection)) {
+                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    if (name.equals(selection)) {
                         chosenSort4 = i;
                         break;
                     }
@@ -235,7 +239,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    if (InventoryApp.sorts.get(i).getName().equals(selection)) {
+                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    if (name.equals(selection)) {
                         chosenSort5 = i;
                         break;
                     }
@@ -458,7 +463,7 @@ public class DoneActivity extends AppCompatActivity {
 
     public Sort findLeftOver() {
         for (Sort sort : InventoryApp.sorts) {
-            if (sort.getObjectId().equals(LEFT_OVER_ID)) {
+            if (sort.getName().equals(LEFT_OVER_NAME)) {
                 return sort;
             }
         }

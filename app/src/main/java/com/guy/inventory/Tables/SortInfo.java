@@ -23,6 +23,8 @@ public class SortInfo
     private Date created;
     private String userEmail;
     private boolean sale;
+    private boolean buy;
+    private double soldPrice;
 
     public Date getUpdated()
     {
@@ -201,5 +203,21 @@ public class SortInfo
 
     public void setSale(boolean sale) {
         this.sale = sale;
+    }
+
+    public boolean isBuy() {
+        return buy;
+    }
+
+    public void setBuy(boolean buy) {
+        this.buy = buy;
+    }
+
+    public double getSoldPrice() {
+        return soldPrice;
+    }
+
+    public void setSoldPrice(double soldPrice) {
+        this.soldPrice = soldPrice;
     }
 }

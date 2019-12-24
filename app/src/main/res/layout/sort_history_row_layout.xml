@@ -38,7 +38,7 @@
                 android:layout_marginTop="2dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center_horizontal"
-                android:text="שם קונה"
+                android:text="שם הקונה"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
@@ -87,6 +87,30 @@
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="סכום כניסה/יציאה"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSortHistoryPriceSold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="מחיר מכירה"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSortHistorySumSold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="סכום מכירה"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 

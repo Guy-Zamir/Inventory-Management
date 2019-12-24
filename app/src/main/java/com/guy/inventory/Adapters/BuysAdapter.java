@@ -165,13 +165,6 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
                     @Override
                     public void handleResponse(List<Map> response) {
                         for (int i=0; i < response.size(); i++) {
-
-                            DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-                            String whereClause1 = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-                            String whereClause2 = "objectId = '" + response.get(i).get("toId") + "'";
-                            sortBuilder.setWhereClause(whereClause1);
-                            sortBuilder.setWhereClause(whereClause2);
-
                             switch (i) {
 
                                 case 0:

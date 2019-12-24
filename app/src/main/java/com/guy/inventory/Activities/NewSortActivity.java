@@ -72,6 +72,7 @@ public class NewSortActivity extends AppCompatActivity {
                     sort.setPrice(0.0);
                     sort.setWeight(0.0);
                     sort.setSortCount(0);
+                    sort.setLast(true);
                     sort.setUserEmail(InventoryApp.user.getEmail());
                     showProgress(true);
                     Backendless.Persistence.save(sort, new AsyncCallback<Sort>() {

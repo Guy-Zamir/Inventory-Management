@@ -26,6 +26,7 @@ public class Sort
     private Boolean sale;
     private String saleId;
     private Date created;
+    private String saleName;
 
     public String getColor()
     {
@@ -244,5 +245,13 @@ public class Sort
 
     public void setSaleId(String saleId) {
         this.saleId = saleId;
+    }
+
+    public String getSaleName() {
+        return saleName;
+    }
+
+    public void setSaleName(String saleName) {
+        this.saleName = saleName;
     }
 }
