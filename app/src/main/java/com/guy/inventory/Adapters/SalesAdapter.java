@@ -83,6 +83,11 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         final TextView tvSaleDetailsSortP4 = convertView.findViewById(R.id.tvSaleDetailsSortP4);
         final TextView tvSaleDetailsSortP5 = convertView.findViewById(R.id.tvSaleDetailsSortP5);
 
+        ///////// No need for now //////////
+        tvSaleDetailsDays.setVisibility(View.GONE);
+        tvSaleDetailsPayDate.setVisibility(View.GONE);
+        ///////////////////////////////////
+
         // When the goods are done
         ivSorted.setImageResource((InventoryApp.sales.get(position).isSorted()) ? R.drawable.done1_icon : R.drawable.not_done1_icon);
 
@@ -105,10 +110,10 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
         tvSaleDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth + "/" + payYear);
         tvSaleDetailsID.setText("מספר חשבונית: " + InventoryApp.sales.get(position).getId());
         tvSaleDetailsPrice.setText("מחיר ממוצע: " + numberFormat.format(InventoryApp.sales.get(position).getPrice()) + "$");
-        tvSaleDetailsWeight.setText("משקל חבילה: " + numberFormat.format(InventoryApp.sales.get(position).getWeight()));
+        tvSaleDetailsWeight.setText("משקל חבילה: " + numberFormat.format(InventoryApp.sales.get(position).getWeight()) + " קראט ");
         tvSaleDetailsDays.setText("מספר ימים: " + numberFormat.format(InventoryApp.sales.get(position).getDays()));
 
-        //////////No need for now////////
+        ////////// No need for now ////////
         tvSaleDetailsDays.setVisibility(View.GONE);
         tvSaleDetailsPayDate.setVisibility(View.GONE);
         ///////////////////////////

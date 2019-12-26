@@ -24,8 +24,6 @@ import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Sort;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class TableSortingActivity extends AppCompatActivity {
     private View mProgressView;
@@ -109,19 +107,19 @@ public class TableSortingActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
                 break;
 
-            case R.id.editIcon:
+            case R.id.splitIcon:
                 if (selectedItem == -1) {
-                    Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "יש לחבור מיון לפיצול", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent editSort = new Intent(TableSortingActivity.this, EditSortActivity.class);
-                    editSort.putExtra("index", selectedItem);
-                    startActivityForResult(editSort, 1);
+                    Intent splitSort = new Intent(TableSortingActivity.this, SplitSortActivity.class);
+                    splitSort.putExtra("index", selectedItem);
+                    startActivityForResult(splitSort, 1);
                 }
                 break;
 
             case R.id.detailsIcon:
                 if (selectedItem == -1) {
-                    Toast.makeText(this, "יש לחבור פריט", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "יש לחבור מיון להיסטוריה", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent sortHistory = new Intent(TableSortingActivity.this, TableSortHistoryActivity.class);
                     sortHistory.putExtra("index", selectedItem);

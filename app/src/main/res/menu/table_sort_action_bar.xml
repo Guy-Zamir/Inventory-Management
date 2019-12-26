@@ -2,8 +2,8 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/editIcon"
-        android:icon="@drawable/edit1_icon"
+        android:id="@+id/splitIcon"
+        android:icon="@drawable/split_icon"
         android:title="@string/app_name"
         android:orderInCategory="3"
         app:showAsAction="always" />

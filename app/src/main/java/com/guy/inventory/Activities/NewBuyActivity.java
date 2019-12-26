@@ -76,8 +76,11 @@ public class NewBuyActivity extends AppCompatActivity {
         supplierBuilder.setPageSize(100);
         supplierBuilder.setSortBy("name");
 
-        showProgress(true);
+        //////// No need for now /////////
+        etBuyDays.setVisibility(View.GONE);
+        //////////////////////////////////
 
+        showProgress(true);
         Backendless.Data.of(Client.class).find(supplierBuilder, new AsyncCallback<List<Client>>() {
             @Override
             public void handleResponse(List<Client> response) {
@@ -137,8 +140,7 @@ public class NewBuyActivity extends AppCompatActivity {
                     Toast.makeText(NewBuyActivity.this, "יש לבחור שם ספק קיים בלבד", Toast.LENGTH_SHORT).show();
 
                 } else if (etBuyID.getText().toString().isEmpty() ||
-                        etBuyPrice.getText().toString().isEmpty() || etBuyWeight.getText().toString().isEmpty() ||
-                        etBuyDays.getText().toString().isEmpty()){
+                        etBuyPrice.getText().toString().isEmpty() || etBuyWeight.getText().toString().isEmpty()){
 
                     Toast.makeText(NewBuyActivity.this, "יש למלא את כל הפרטים", Toast.LENGTH_SHORT).show();
                 } else {
@@ -148,7 +150,7 @@ public class NewBuyActivity extends AppCompatActivity {
                     String id = etBuyID.getText().toString().trim();
                     double price = Double.parseDouble(etBuyPrice.getText().toString().trim());
                     double weight = Double.parseDouble(etBuyWeight.getText().toString().trim());
-                    int days = Integer.valueOf(etBuyDays.getText().toString().trim());
+                    int days = etBuyDays.getText().toString().isEmpty() ? 90 : Integer.valueOf(etBuyDays.getText().toString().trim());
                     boolean polish = swBuyPolish.isChecked();
 
                     final Buy buy = new Buy();

@@ -545,7 +545,7 @@ public class NewSaleSortActivity extends AppCompatActivity {
         final double sortPriceLeftOver = (sortWeightLeftOver != 0) ? (InventoryApp.sales.get(index).getSaleSum() - sortValueSum) / sortWeightLeftOver : 0;
 
         if (sortWeightSum > InventoryApp.sales.get(index).getWeight()) {
-            massage = "סכום המשקל של המיונים גבוהה ממשקל המכירה, יש להזין משקלים מתאמים";
+            massage = "סכום משקל המיונים גבוהה ממשקל המכירה, יש להזין משקלים מתאמים";
             return massage;
 
         } else if (sortWeightLeftOver > findLeftOver().getWeight()) {
@@ -650,6 +650,10 @@ public class NewSaleSortActivity extends AppCompatActivity {
 
             if (sortProfit < 0) {
                 return "לא ניתן למכור בהפסד";
+            }
+
+            if (sortProfit > sortPrice) {
+                return "לא ניתן לקבוע רווח גבוהה ממחיר המכירה";
             }
 
             if (sortWeight > InventoryApp.sorts.get(chosenSort).getWeight()) {

@@ -24,6 +24,7 @@ public class SortInfo
     private String userEmail;
     private boolean sale;
     private boolean buy;
+    private boolean split;
     private double soldPrice;
 
     public Date getUpdated()
@@ -219,5 +220,13 @@ public class SortInfo
 
     public void setSoldPrice(double soldPrice) {
         this.soldPrice = soldPrice;
+    }
+
+    public boolean isSplit() {
+        return split;
+    }
+
+    public void setSplit(boolean split) {
+        this.split = split;
     }
 }

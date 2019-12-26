@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context=".Activities.SplitSortActivity">
+
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="200dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvLoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal"
+        android:text="@string/org_loading"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="20">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/vlSort1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_row"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/acSort1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:hint="בחר מיון 1"
+                        android:inputType="text"
+                        android:textSize="16sp">
+
+                    </AutoCompleteTextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal|center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/etWeightSort1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="משקל"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/etPriceSort1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="מחיר"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/vlSort2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_row"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/acSort2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:hint="בחר מיון 2"
+                        android:inputType="text"
+                        android:textSize="16sp">
+
+                    </AutoCompleteTextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal|center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/etWeightSort2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="משקל"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/etPriceSort2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="מחיר"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/vlSort3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_row"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/acSort3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:hint="בחר מיון 3"
+                        android:inputType="text"
+                        android:textSize="16sp">
+
+                    </AutoCompleteTextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal|center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/etWeightSort3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="משקל"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/etPriceSort3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="מחיר"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lvSort4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_row"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/acSort4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:hint="בחר מיון 4"
+                        android:inputType="text"
+                        android:textSize="16sp">
+
+                    </AutoCompleteTextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal|center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/etWeightSort4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="משקל"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/etPriceSort4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="מחיר"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lvSort5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/table_row"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/acSort5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:hint="בחר מיון 5"
+                        android:inputType="text"
+                        android:textSize="16sp">
+
+                    </AutoCompleteTextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal|center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/etWeightSort5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="משקל"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/etPriceSort5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:gravity="bottom|center_horizontal"
+                            android:hint="מחיר"
+                            android:inputType="numberDecimal"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btnSplitSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/buttons"
+            android:text="@string/Submit"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

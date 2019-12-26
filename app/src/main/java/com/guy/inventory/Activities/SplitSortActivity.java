@@ -3,6 +3,7 @@ package com.guy.inventory.Activities;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -12,9 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -29,38 +30,33 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+public class SplitSortActivity extends AppCompatActivity {
 
-public class DoneActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
-    Button btnDoneSubmit;
-    EditText etDoneWage, etDoneWeight;
-    Switch swDoneWeight;
-
+    Button btnSplitSubmit;
     private ThreadPoolExecutor mPool;
 
     EditText etWeightSort1, etPriceSort1, etWeightSort2, etPriceSort2, etWeightSort3, etPriceSort3, etWeightSort4, etPriceSort4, etWeightSort5, etPriceSort5;
     AutoCompleteTextView acSort1, acSort2, acSort3, acSort4, acSort5;
 
-    List<SortInfo> sortCheck;
-
     final String LEFT_OVER_NAME = "עודפים";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String whereClauseEmail = "userEmail = '" + InventoryApp.user.getEmail() + "'";
-    final String whereClauseLast = "last = true";
     ArrayAdapter<String> sortAdapter;
+
+    List<SortInfo> sortCheck;
 
     int chosenSort1 = -1, chosenSort2 = -1, chosenSort3 = -1, chosenSort4 = -1, chosenSort5 = -1;
 
-    double doneWeight, wage;
     int index;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_done);
+        setContentView(R.layout.activity_split_sort);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(100);
@@ -69,10 +65,7 @@ public class DoneActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
 
-        etDoneWage = findViewById(R.id.etDoneWage);
-        etDoneWeight = findViewById(R.id.etDoneWeight);
-        swDoneWeight = findViewById(R.id.swDoneWeight);
-        btnDoneSubmit = findViewById(R.id.btnDoneSubmit);
+        btnSplitSubmit = findViewById(R.id.btnSplitSubmit);
 
         etWeightSort1 = findViewById(R.id.etWeightSort1);
         etPriceSort1 = findViewById(R.id.etPriceSort1);
@@ -94,38 +87,30 @@ public class DoneActivity extends AppCompatActivity {
         etPriceSort5 = findViewById(R.id.etPriceSort5);
         acSort5 = findViewById(R.id.acSort5);
 
-        // No need for now
-        TextView tvDoneWage = findViewById(R.id.tvDoneWage);
-        tvDoneWage.setVisibility(View.GONE);
-        etDoneWage.setVisibility(View.GONE);
-        //////////////////
+        index = getIntent().getIntExtra("index", 0);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("סרייה גמורה");
+        actionBar.setTitle("פיצול מיון");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        index = getIntent().getIntExtra("index", 0);
-
         sortBuilder.setWhereClause(whereClauseEmail);
-        sortBuilder.setWhereClause(whereClauseLast);
-        sortBuilder.setPageSize(100);
-        sortBuilder.setSortBy("name");
+        sortBuilder.setHavingClause("last = true");
+        sortBuilder.setSortBy("created DESC");
 
         showProgress(true);
-
         Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
             @Override
             public void handleResponse(List<Sort> response) {
                 ArrayList<String> sortNames = new ArrayList<>();
                 for (Sort sort : response) {
-                    if (!sort.getName().equals(LEFT_OVER_NAME)) {
+                    if (!(sort.getName().equals(LEFT_OVER_NAME) || sort.getName().equals(InventoryApp.sorts.get(index).getName()))) {
                         sortNames.add(sort.getName() + " - " + sort.getSortCount());
                     }
                 }
 
                 InventoryApp.sorts = response;
-                sortAdapter = new ArrayAdapter<>(DoneActivity.this, android.R.layout.select_dialog_singlechoice, sortNames);
+                sortAdapter = new ArrayAdapter<>(SplitSortActivity.this, android.R.layout.select_dialog_singlechoice, sortNames);
                 acSort1.setThreshold(1);
                 acSort1.setAdapter(sortAdapter);
                 acSort2.setThreshold(1);
@@ -142,9 +127,9 @@ public class DoneActivity extends AppCompatActivity {
             @Override
             public void handleFault(BackendlessFault fault) {
                 if (fault.getCode().equals("1009")) {
-                    Toast.makeText(DoneActivity.this, "טרם הוגדרו מיונים, עליך להגדיר מיון חדש לפני שמירת הקניה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SplitSortActivity.this, "טרם הוגדרו מיונים, עליך להגדיר מיון חדש לפני שמירת הקניה", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(DoneActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SplitSortActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 showProgress(false);
             }
@@ -255,17 +240,12 @@ public class DoneActivity extends AppCompatActivity {
             }
         });
 
-        swDoneWeight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                swDoneWeight.setText(swDoneWeight.isChecked() ? " אחוז ליטוש  " : "  משקל גמור  ");
-            }
-        });
-
-        btnDoneSubmit.setOnClickListener(new View.OnClickListener() {
+        btnSplitSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sortCheck = new ArrayList<>();
+
+                final Sort splitSort = InventoryApp.sorts.get(index);
 
                 // Checking the sorts and assigning the values;
                 sortCheck(etPriceSort1, etWeightSort1, chosenSort1);
@@ -282,152 +262,101 @@ public class DoneActivity extends AppCompatActivity {
                     sortValueSum += sortCheck.get(i).getSum();
                 }
 
-                wage = (etDoneWage.getText().toString().isEmpty()) ? 0 : Double.parseDouble(etDoneWage.getText().toString().trim());
+                if (sortValueSum > splitSort.getSum()) {
+                    Toast.makeText(SplitSortActivity.this, "סכום שווי המיונים גבוהה משווי המיון ממנו מבוצע הפיצול, יש להזין מחירים מתאימים", Toast.LENGTH_LONG).show();
 
-                if (swDoneWeight.isChecked()) {
-                    doneWeight = (etDoneWeight.getText().toString().isEmpty()) ? -1 : ((Double.parseDouble(etDoneWeight.getText().toString().trim()) / 100) * InventoryApp.buys.get(index).getWeight());
-                } else {
-                    doneWeight = (etDoneWeight.getText().toString().isEmpty()) ? -1 : (Double.parseDouble(etDoneWeight.getText().toString().trim()));
-                }
+                } else if (sortWeightSum > splitSort.getWeight()) {
+                    Toast.makeText(SplitSortActivity.this, "סכום משקל המיונים גבוהה ממשקל המיון ממנו מבוצע הפיצול, יש לזין משקלים מתאימים", Toast.LENGTH_SHORT).show();
 
-                // Checking whether the user entered done weight right
-                if (doneWeight > InventoryApp.buys.get(index).getWeight()) {
-                    Toast.makeText(DoneActivity.this, "סכום המשקל הגמור גבוהה ממשקל החבילה, יש להזין משקל שווה או נמוך למשקל החבילה", Toast.LENGTH_LONG).show();
-
-                } else if (doneWeight < 0) {
-                    Toast.makeText(DoneActivity.this, "לא הוזן משקל גמור, יש להזין את המשקל הגמור של החבילה", Toast.LENGTH_LONG).show();
+                } else if ((sortWeightSum == splitSort.getWeight() && sortValueSum != splitSort.getSum())) {
+                    Toast.makeText(SplitSortActivity.this, "סכום שווי המיונים לא שווה לשווי המיון ממנו מבוצע הפיצול, יש להזין מחירים מתאימים", Toast.LENGTH_SHORT).show();
 
                 } else {
 
-                    if (sortValueSum > InventoryApp.buys.get(index).getSum()) {
-                        Toast.makeText(DoneActivity.this, "סכום שווי המיונים גבוהה משווי הסחורה, יש להזין מחירים מתאימים", Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(SplitSortActivity.this);
+                    alert.setTitle("שינוי נתונים");
+                    alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
+                    alert.setNegativeButton(android.R.string.no, null);
+                    alert.setIcon(android.R.drawable.ic_dialog_alert);
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    } else if (sortWeightSum > doneWeight) {
-                        Toast.makeText(DoneActivity.this, "סכום המשקל של המיונים גבוהה מהמשקל הגמור, יש להזין משקלים מתאמים", Toast.LENGTH_LONG).show();
+                            double weightSum = 0;
+                            double valueSum = 0;
 
-                    } else if (sortWeightSum == InventoryApp.buys.get(index).getWeight() && sortValueSum != InventoryApp.buys.get(index).getSum()) {
-                        Toast.makeText(DoneActivity.this, "סכום שווי המיונים לא שווה לשווי הסחורה, יש להזין מחירים מתאימים", Toast.LENGTH_LONG).show();
+                            for (int i=0; i < sortCheck.size(); i++) {
+                                weightSum += sortCheck.get(i).getWeight();
+                                valueSum += sortCheck.get(i).getSum();
+                            }
+                            // Saving the changes to the sort
 
-                    } else {
+                            splitSort.setWeight(splitSort.getWeight()- weightSum);
+                            splitSort.setSum(splitSort.getSum()-valueSum);
+                            splitSort.setPrice(splitSort.getWeight() == 0 ? 0 : splitSort.getSum()/splitSort.getWeight());
 
-                        // Assigning what's left from the done weight to the left over sort
-                        final double sortWeightLeftOver = doneWeight - sortWeightSum;
-                        final double sortPriceLeftOver = (sortWeightLeftOver != 0) ? (InventoryApp.buys.get(index).getSum() - sortValueSum) / sortWeightLeftOver : 0;
+                            showProgress(true);
+                            submitRunnableTask(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Backendless.Persistence.save(InventoryApp.sorts.get(index));
 
-                        AlertDialog.Builder alert = new AlertDialog.Builder(DoneActivity.this);
-                        alert.setTitle("שינוי נתונים");
-                        alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
-                        alert.setNegativeButton(android.R.string.no, null);
-                        alert.setIcon(android.R.drawable.ic_dialog_alert);
-                        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                                    // Checking the sorts and assigning the values if the sort was chosen
+                                    Sort sort1 = sortSave(etPriceSort1, etWeightSort1, chosenSort1);
+                                    Sort sort2 = sortSave(etPriceSort2, etWeightSort2, chosenSort2);
+                                    Sort sort3 = sortSave(etPriceSort3, etWeightSort3, chosenSort3);
+                                    Sort sort4 = sortSave(etPriceSort4, etWeightSort4, chosenSort4);
+                                    Sort sort5 = sortSave(etPriceSort5, etWeightSort5, chosenSort5);
 
-                                // Saving the changes to the buy
-                                InventoryApp.buys.get(index).setDone(true);
-                                InventoryApp.buys.get(index).setDoneWeight(doneWeight);
-                                InventoryApp.buys.get(index).setWage(wage);
-                                InventoryApp.buys.get(index).setWorkDepreciation(doneWeight / InventoryApp.buys.get(index).getWeight());
+                                    if (sort1 != null) {
+                                        sort1.save();
 
-                                showProgress(true);
-                                submitRunnableTask(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Backendless.Persistence.save(InventoryApp.buys.get(index));
-
-                                        // Checking the sorts and assigning the values if the sort was chosen
-                                        Sort sort1 = sortSave(etPriceSort1, etWeightSort1, chosenSort1);
-                                        Sort sort2 = sortSave(etPriceSort2, etWeightSort2, chosenSort2);
-                                        Sort sort3 = sortSave(etPriceSort3, etWeightSort3, chosenSort3);
-                                        Sort sort4 = sortSave(etPriceSort4, etWeightSort4, chosenSort4);
-                                        Sort sort5 = sortSave(etPriceSort5, etWeightSort5, chosenSort5);
-
-                                        if (sort1 != null) {
-                                            sort1.save();
-
-                                            SortInfo sortInfo1 = sortInfoSave(etPriceSort1, etWeightSort1, chosenSort1);
-                                            sortInfo1.save();
-                                        }
-
-                                        if (sort2 != null) {
-                                            sort2.save();
-
-                                            SortInfo sortInfo2 = sortInfoSave(etPriceSort2, etWeightSort2, chosenSort2);
-                                            sortInfo2.save();
-                                        }
-
-                                        if (sort3 != null) {
-                                            sort3.save();
-
-                                            SortInfo sortInfo3 = sortInfoSave(etPriceSort3, etWeightSort3, chosenSort3);
-                                            sortInfo3.save();
-                                        }
-
-                                        if (sort4 != null) {
-                                            sort4.save();
-
-                                            SortInfo sortInfo4 = sortInfoSave(etPriceSort4, etWeightSort4, chosenSort4);
-                                            sortInfo4.save();
-                                        }
-
-                                        if (sort5 != null) {
-                                            sort5.save();
-
-                                            SortInfo sortInfo5 = sortInfoSave(etPriceSort5, etWeightSort5, chosenSort5);
-                                            sortInfo5.save();
-                                        }
-
-                                        if (sortWeightLeftOver != 0) {
-                                            // Saving the left over
-                                            Sort leftOverSort = findLeftOver();
-                                            leftOverSort.setSum(leftOverSort.getSum() + (sortWeightLeftOver * sortPriceLeftOver));
-                                            leftOverSort.setWeight(leftOverSort.getWeight() + sortWeightLeftOver);
-                                            leftOverSort.setPrice(leftOverSort.getSum() / leftOverSort.getWeight());
-                                            leftOverSort.save();
-
-                                            SortInfo sortInfoLeftOver = new SortInfo();
-                                            sortInfoLeftOver.setFromName(InventoryApp.buys.get(index).getSupplierName());
-                                            sortInfoLeftOver.setToName(leftOverSort.getName());
-                                            sortInfoLeftOver.setBuy(true);
-                                            sortInfoLeftOver.setSale(false);
-                                            sortInfoLeftOver.setToId(leftOverSort.getObjectId());
-                                            sortInfoLeftOver.setSortCount(leftOverSort.getSortCount());
-                                            sortInfoLeftOver.setFromId(InventoryApp.buys.get(index).getObjectId());
-                                            sortInfoLeftOver.setPrice(sortPriceLeftOver);
-                                            sortInfoLeftOver.setWeight(sortWeightLeftOver);
-                                            sortInfoLeftOver.setSum(sortPriceLeftOver * sortWeightLeftOver);
-                                            sortInfoLeftOver.setUserEmail(InventoryApp.user.getEmail());
-                                            sortInfoLeftOver.save();
-                                        }
+                                        SortInfo sortInfo1 = sortInfoSave(etPriceSort1, etWeightSort1, chosenSort1);
+                                        sortInfo1.save();
                                     }
 
-                                });
-                                showProgress(false);
-                                Toast.makeText(DoneActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK);
-                                finishActivity(1);
-                                DoneActivity.this.finish();
-                            }
-                        });
-                        alert.show();
-                    }
+                                    if (sort2 != null) {
+                                        sort2.save();
+
+                                        SortInfo sortInfo2 = sortInfoSave(etPriceSort2, etWeightSort2, chosenSort2);
+                                        sortInfo2.save();
+                                    }
+
+                                    if (sort3 != null) {
+                                        sort3.save();
+
+                                        SortInfo sortInfo3 = sortInfoSave(etPriceSort3, etWeightSort3, chosenSort3);
+                                        sortInfo3.save();
+                                    }
+
+                                    if (sort4 != null) {
+                                        sort4.save();
+
+                                        SortInfo sortInfo4 = sortInfoSave(etPriceSort4, etWeightSort4, chosenSort4);
+                                        sortInfo4.save();
+                                    }
+
+                                    if (sort5 != null) {
+                                        sort5.save();
+
+                                        SortInfo sortInfo5 = sortInfoSave(etPriceSort5, etWeightSort5, chosenSort5);
+                                        sortInfo5.save();
+                                    }
+                                }
+
+                            });
+                            showProgress(false);
+                            Toast.makeText(SplitSortActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finishActivity(1);
+                            SplitSortActivity.this.finish();
+                        }
+                    });
+                    alert.show();
                 }
             }
         });
     }
 
-    public void sortCheck(EditText sortPriceText, EditText sortWeightText, int chosenSort) {
-        if (!(sortPriceText.getText().toString().isEmpty() || sortWeightText.getText().toString().isEmpty() || chosenSort == -1)) {
-
-            double sortPrice = Double.valueOf(sortPriceText.getText().toString());
-            double sortWeight = Double.valueOf(sortWeightText.getText().toString());
-
-            SortInfo sortInfo = new SortInfo();
-            sortInfo.setPrice(sortPrice);
-            sortInfo.setWeight(sortWeight);
-            sortInfo.setSum(sortPrice*sortWeight);
-            sortCheck.add(sortInfo);
-        }
-    }
     public SortInfo sortInfoSave(EditText sortPriceText, EditText sortWeightText, int chosenSort) {
         if (!(sortPriceText.getText().toString().isEmpty() || sortWeightText.getText().toString().isEmpty() || chosenSort == -1)) {
 
@@ -435,16 +364,17 @@ public class DoneActivity extends AppCompatActivity {
             double sortWeight = Double.valueOf(sortWeightText.getText().toString());
 
             SortInfo sortInfo = new SortInfo();
-            sortInfo.setFromName(InventoryApp.buys.get(index).getSupplierName());
+            sortInfo.setFromName(InventoryApp.sorts.get(index).getName());
             sortInfo.setToName(InventoryApp.sorts.get(chosenSort).getName());
             sortInfo.setToId(InventoryApp.sorts.get(chosenSort).getObjectId());
             sortInfo.setSortCount(InventoryApp.sorts.get(chosenSort).getSortCount());
-            sortInfo.setFromId(InventoryApp.buys.get(index).getObjectId());
+            sortInfo.setFromId(InventoryApp.sorts.get(index).getObjectId());
             sortInfo.setPrice(sortPrice);
             sortInfo.setWeight(sortWeight);
             sortInfo.setSum(sortPrice*sortWeight);
-            sortInfo.setBuy(true);
+            sortInfo.setBuy(false);
             sortInfo.setSale(false);
+            sortInfo.setSplit(true);
             sortInfo.setUserEmail(InventoryApp.user.getEmail());
 
             return sortInfo;
@@ -474,13 +404,18 @@ public class DoneActivity extends AppCompatActivity {
         }
     }
 
-    public Sort findLeftOver() {
-        for (Sort sort : InventoryApp.sorts) {
-            if (sort.getName().equals(LEFT_OVER_NAME)) {
-                return sort;
-            }
+    public void sortCheck(EditText sortPriceText, EditText sortWeightText, int chosenSort) {
+        if (!(sortPriceText.getText().toString().isEmpty() || sortWeightText.getText().toString().isEmpty() || chosenSort == -1)) {
+
+            double sortPrice = Double.valueOf(sortPriceText.getText().toString());
+            double sortWeight = Double.valueOf(sortWeightText.getText().toString());
+
+            SortInfo sortInfo = new SortInfo();
+            sortInfo.setPrice(sortPrice);
+            sortInfo.setWeight(sortWeight);
+            sortInfo.setSum(sortPrice*sortWeight);
+            sortCheck.add(sortInfo);
         }
-        return null;
     }
 
     public void submitRunnableTask(Runnable task){
@@ -503,4 +438,3 @@ public class DoneActivity extends AppCompatActivity {
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }
-

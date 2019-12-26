@@ -70,7 +70,16 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
         tvSortHistorySumSold.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
         tvSortHistorySaleName.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
         tvSortHistoryPL.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
-        ivOutIn.setImageResource((sortHistory.get(position).isSale()) ? R.drawable.dollar_icon : R.drawable.in_icon);
+
+        if (sortHistory.get(position).isSplit()) {
+            ivOutIn.setImageResource(R.drawable.out_icon);
+        } else if (sortHistory.get(position).isSale()) {
+            ivOutIn.setImageResource(R.drawable.dollar_icon);
+        } else if (sortHistory.get(position).isBuy()) {
+            ivOutIn.setImageResource(R.drawable.in_icon);
+        } else {
+            ivOutIn.setImageResource(R.drawable.in_icon);
+        }
         convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
         return convertView;
     }
