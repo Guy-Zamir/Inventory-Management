@@ -154,7 +154,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
                         switch (i) {
 
                             case 0:
-                                tvSaleDetailsSortLeftP.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
+                                tvSaleDetailsSortLeftP.setText("מחיר: " + (numberFormat.format(response.get(i).get("soldPrice"))) + " $ ");
                                 tvSaleDetailsSortLeftW.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
                                 tvSaleDetailsSortLeftN.setText(response.get(i).get("name") + " - " + response.get(i).get("sortCount"));
 
@@ -165,7 +165,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
                                 break;
 
                             case 1:
-                                tvSaleDetailsSortP1.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
+                                tvSaleDetailsSortP1.setText("מחיר: " + (numberFormat.format(response.get(i).get("soldPrice"))) + " $ ");
                                 tvSaleDetailsSortW1.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
                                 tvSaleDetailsSortN1.setText(response.get(i).get("name") + " - " + response.get(i).get("sortCount"));
 
@@ -176,7 +176,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
                                 break;
 
                             case 2:
-                                tvSaleDetailsSortP2.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
+                                tvSaleDetailsSortP2.setText("מחיר: " + (numberFormat.format(response.get(i).get("soldPrice"))) + " $ ");
                                 tvSaleDetailsSortW2.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
                                 tvSaleDetailsSortN2.setText(response.get(i).get("name") + " - " + response.get(i).get("sortCount"));
 
@@ -187,7 +187,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
                                 break;
 
                             case 3:
-                                tvSaleDetailsSortP3.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
+                                tvSaleDetailsSortP3.setText("מחיר: " + (numberFormat.format(response.get(i).get("soldPrice"))) + " $ ");
                                 tvSaleDetailsSortW3.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
                                 tvSaleDetailsSortN3.setText(response.get(i).get("name") + " - " + response.get(i).get("sortCount"));
 
@@ -198,7 +198,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
                                 break;
 
                             case 4:
-                                tvSaleDetailsSortP4.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
+                                tvSaleDetailsSortP4.setText("מחיר: " + (numberFormat.format(response.get(i).get("soldPrice"))) + " $ ");
                                 tvSaleDetailsSortW4.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
                                 tvSaleDetailsSortN4.setText(response.get(i).get("name") + " - " + response.get(i).get("sortCount"));
 
@@ -209,7 +209,7 @@ public class SalesAdapter extends ArrayAdapter<Sale> {
                                 break;
 
                             case 5:
-                                tvSaleDetailsSortP5.setText("מחיר: " + (numberFormat.format(response.get(i).get("price"))) + " $ ");
+                                tvSaleDetailsSortP5.setText("מחיר: " + (numberFormat.format(response.get(i).get("soldPrice"))) + " $ ");
                                 tvSaleDetailsSortW5.setText("משקל: " + (numberFormat.format(response.get(i).get("weight")) + " קראט "));
                                 tvSaleDetailsSortN5.setText(response.get(i).get("name") + " - " + response.get(i).get("sortCount"));
 

@@ -59,7 +59,8 @@ public class TableSortingActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         sortBuilder.setWhereClause(EMAIL_CLAUSE);
         sortBuilder.setPageSize(PAGE_SIZE);
-        sortBuilder.setWhereClause("last = true");
+        sortBuilder.setSortBy("created DESC");
+        sortBuilder.setHavingClause("last = true");
 
         showProgress(true);
         Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
@@ -126,6 +127,13 @@ public class TableSortingActivity extends AppCompatActivity {
                     sortHistory.putExtra("index", selectedItem);
                     startActivityForResult(sortHistory, 1);
                 }
+                break;
+
+            case R.id.saleIcon:
+                Intent sortHistory = new Intent(TableSortingActivity.this, TableSortHistoryActivity.class);
+                sortHistory.putExtra("sales", true);
+                startActivityForResult(sortHistory, 1);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -51,9 +51,9 @@ public class SortAdapter extends ArrayAdapter<Sort> {
 
         // Setting the values to the views
         tvSortName.setText(InventoryApp.sorts.get(position).getName() + " - " + sorts.get(position).getSortCount());
-        tvSortPrice.setText("מחיר ממוצע: " + numberFormat.format(sorts.get(position).getPrice()) + "$");
-        tvSortWeight.setText("משקל: " + numberFormat.format(sorts.get(position).getWeight()) + " קראט ");
-        tvSortSum.setText("סכום: " + numberFormat.format(sorts.get(position).getSum()) + "$");
+        tvSortPrice.setText("מחיר מיון: " + numberFormat.format(sorts.get(position).getPrice()) + "$");
+        tvSortWeight.setText("משקל מיון: " + numberFormat.format(sorts.get(position).getWeight()) + " קראט ");
+        tvSortSum.setText("סכום מיון: " + numberFormat.format(sorts.get(position).getSum()) + "$");
         tvSortShape.setText("צורה: " + sorts.get(position).getShape());
         tvSortSize.setText("גודל: " + sorts.get(position).getSize());
         tvSortColor.setText("צבע: " + sorts.get(position).getColor());

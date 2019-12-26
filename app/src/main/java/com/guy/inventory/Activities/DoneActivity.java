@@ -46,7 +46,7 @@ public class DoneActivity extends AppCompatActivity {
 
     List<SortInfo> sortCheck;
 
-    final String LEFT_OVER_NAME = "X";
+    final String LEFT_OVER_NAME = "עודפים";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String whereClauseEmail = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     final String whereClauseLast = "last = true";
@@ -373,24 +373,26 @@ public class DoneActivity extends AppCompatActivity {
                                             sortInfo5.save();
                                         }
 
-                                        // Saving the left over
-                                        Sort leftOverSort = findLeftOver();
-                                        leftOverSort.setSum(leftOverSort.getSum() + (sortWeightLeftOver*sortPriceLeftOver));
-                                        leftOverSort.setWeight(leftOverSort.getWeight() + sortWeightLeftOver);
-                                        leftOverSort.setPrice(leftOverSort.getSum()/leftOverSort.getWeight());
-                                        leftOverSort.save();
+                                        if (sortWeightLeftOver != 0) {
+                                            // Saving the left over
+                                            Sort leftOverSort = findLeftOver();
+                                            leftOverSort.setSum(leftOverSort.getSum() + (sortWeightLeftOver * sortPriceLeftOver));
+                                            leftOverSort.setWeight(leftOverSort.getWeight() + sortWeightLeftOver);
+                                            leftOverSort.setPrice(leftOverSort.getSum() / leftOverSort.getWeight());
+                                            leftOverSort.save();
 
-                                        SortInfo sortInfoLeftOver = new SortInfo();
-                                        sortInfoLeftOver.setFromName(InventoryApp.buys.get(index).getSupplierName());
-                                        sortInfoLeftOver.setToName(leftOverSort.getName());
-                                        sortInfoLeftOver.setToId(leftOverSort.getObjectId());
-                                        sortInfoLeftOver.setSortCount(leftOverSort.getSortCount());
-                                        sortInfoLeftOver.setFromId(InventoryApp.buys.get(index).getObjectId());
-                                        sortInfoLeftOver.setPrice(sortPriceLeftOver);
-                                        sortInfoLeftOver.setWeight(sortWeightLeftOver);
-                                        sortInfoLeftOver.setSum(sortPriceLeftOver*sortWeightLeftOver);
-                                        sortInfoLeftOver.setUserEmail(InventoryApp.user.getEmail());
-                                        sortInfoLeftOver.save();
+                                            SortInfo sortInfoLeftOver = new SortInfo();
+                                            sortInfoLeftOver.setFromName(InventoryApp.buys.get(index).getSupplierName());
+                                            sortInfoLeftOver.setToName(leftOverSort.getName());
+                                            sortInfoLeftOver.setToId(leftOverSort.getObjectId());
+                                            sortInfoLeftOver.setSortCount(leftOverSort.getSortCount());
+                                            sortInfoLeftOver.setFromId(InventoryApp.buys.get(index).getObjectId());
+                                            sortInfoLeftOver.setPrice(sortPriceLeftOver);
+                                            sortInfoLeftOver.setWeight(sortWeightLeftOver);
+                                            sortInfoLeftOver.setSum(sortPriceLeftOver * sortWeightLeftOver);
+                                            sortInfoLeftOver.setUserEmail(InventoryApp.user.getEmail());
+                                            sortInfoLeftOver.save();
+                                        }
                                     }
 
                                 });
@@ -436,6 +438,7 @@ public class DoneActivity extends AppCompatActivity {
             sortInfo.setPrice(sortPrice);
             sortInfo.setWeight(sortWeight);
             sortInfo.setSum(sortPrice*sortWeight);
+            sortInfo.setBuy(true);
             sortInfo.setUserEmail(InventoryApp.user.getEmail());
 
             return sortInfo;
@@ -449,6 +452,10 @@ public class DoneActivity extends AppCompatActivity {
 
             double sortPrice = Double.valueOf(sortPriceText.getText().toString());
             double sortWeight = Double.valueOf(sortWeightText.getText().toString());
+
+            if (sortWeight <= 0) {
+                return null;
+            }
 
             Sort sort = InventoryApp.sorts.get(chosenSort);
             sort.setSum(sort.getSum() + (sortPrice*sortWeight));

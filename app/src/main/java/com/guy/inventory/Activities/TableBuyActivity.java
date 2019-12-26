@@ -161,6 +161,10 @@ public class TableBuyActivity extends AppCompatActivity {
             case R.id.editIcon:
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_SHORT).show();
+
+                } else if (InventoryApp.buys.get(selectedItem).isDone()) {
+                    Toast.makeText(this, "לא ניתן לערוך חבילה גמורה", Toast.LENGTH_LONG).show();
+
                 } else {
                     Intent editBuy = new Intent(TableBuyActivity.this, EditBuyActivity.class);
                     editBuy.putExtra("index", selectedItem);
@@ -171,6 +175,10 @@ public class TableBuyActivity extends AppCompatActivity {
             case R.id.deleteIcon:
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
+
+                } else if (InventoryApp.buys.get(selectedItem).isDone()) {
+                    Toast.makeText(this, "לא ניתן למחוק חבילה גמורה", Toast.LENGTH_LONG).show();
+
                 } else {
                     AlertDialog.Builder deleteAlert = new AlertDialog.Builder(TableBuyActivity.this);
                     deleteAlert.setTitle("התראת מחיקה");

@@ -5,13 +5,19 @@
         android:id="@+id/editIcon"
         android:icon="@drawable/edit1_icon"
         android:title="@string/app_name"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         app:showAsAction="always" />
     <item
         android:id="@+id/newIcon"
         android:icon="@drawable/new_icon"
         android:title="@string/app_name"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/saleIcon"
+        android:icon="@drawable/dollar_icon"
+        android:title="@string/app_name"
+        android:orderInCategory="2"
         app:showAsAction="always" />
     <item
         android:id="@+id/detailsIcon"

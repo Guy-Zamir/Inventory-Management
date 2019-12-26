@@ -89,6 +89,11 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
 
         LinearLayout llBuyDetails = convertView.findViewById(R.id.llBuyDetails);
 
+        /////////// No Need for now ////////////
+        tvBuyDetailsDays.setVisibility(View.GONE);
+        tvBuyDetailsPayDate.setVisibility(View.GONE);
+        ////////////////////////////////////////
+
         // Setting the values to the views
         final Calendar saleDate = Calendar.getInstance();
         saleDate.setTime(buys.get(position).getBuyDate());

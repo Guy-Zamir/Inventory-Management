@@ -10,14 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.backendless.Backendless;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.DataQueryBuilder;
-import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
-import com.guy.inventory.Tables.Sale;
 import com.guy.inventory.Tables.SortInfo;
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -77,7 +70,7 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
         tvSortHistorySumSold.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
         tvSortHistorySaleName.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
         tvSortHistoryPL.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
-        ivOutIn.setImageResource((sortHistory.get(position).isSale()) ? R.drawable.out_icon : R.drawable.in_icon);
+        ivOutIn.setImageResource((sortHistory.get(position).isSale()) ? R.drawable.dollar_icon : R.drawable.in_icon);
         convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
         return convertView;
     }

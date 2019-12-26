@@ -71,6 +71,10 @@ public class NewSaleActivity extends AppCompatActivity {
         etSaleDays = findViewById(R.id.etSaleDays);
         acClients = findViewById(R.id.acClients);
 
+        ///////////////// No Need for now ///////////////////
+        etSaleDays.setVisibility(View.GONE);
+        ////////////////////////////////////////////////////
+
         Button btnSaleSubmit = findViewById(R.id.btnSaleSubmit);
 
         isExport = getIntent().getBooleanExtra("export", false);
@@ -156,7 +160,7 @@ public class NewSaleActivity extends AppCompatActivity {
                     final String id = etSaleID.getText().toString();
                     final double weight = Double.parseDouble(etSaleWeight.getText().toString());
                     final double saleSum = Double.parseDouble(etSaleSum.getText().toString());
-                    final int days = (etSaleDays.getText().toString().isEmpty()) ? 0 : Integer.valueOf(etSaleDays.getText().toString().trim());
+                    final int days = (etSaleDays.getText().toString().isEmpty()) ? 90 : Integer.valueOf(etSaleDays.getText().toString().trim());
                     final boolean polish = !swSalePolish.isChecked();
                     final String kind = (isExport) ? "export" : "sale";
 

@@ -47,7 +47,7 @@ public class NewSaleSortActivity extends AppCompatActivity {
 
     List<SortInfo> sortCheck;
 
-    final String LEFT_OVER_NAME = "X";
+    final String LEFT_OVER_NAME = "עודפים";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String EMAIL_CLAUSE = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     final String whereClauseLast = "last = true";
@@ -254,47 +254,12 @@ public class NewSaleSortActivity extends AppCompatActivity {
         btnNewSaleSortSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sortCheck = new ArrayList<>();
+                String massage = checking();
 
-                boolean allGood = true;
-
-                // Checking the sorts and assigning the values
-                if (!sortCheck(etProfitSortS1, etWeightSortS1, chosenSort1, etProfitSortS1)) {
-                    allGood = false;
-                }
-                if (!sortCheck(etProfitSortS2, etWeightSortS2, chosenSort2, etProfitSortS2)) {
-                    allGood = false;
-                }
-                if (!sortCheck(etProfitSortS3, etWeightSortS3, chosenSort3, etProfitSortS3)) {
-                    allGood = false;
-                }
-                if (!sortCheck(etProfitSortS4, etWeightSortS4, chosenSort4, etProfitSortS4)) {
-                    allGood = false;
-                }
-                if (!sortCheck(etProfitSortS5, etWeightSortS5, chosenSort5, etProfitSortS5)) {
-                    allGood = false;
-                }
-
-                double sortWeightSum = 0;
-                double sortValueSum = 0;
-
-                for (int i = 0; i < sortCheck.size(); i++) {
-                    sortWeightSum += sortCheck.get(i).getWeight();
-                    sortValueSum += sortCheck.get(i).getSum();
-                }
-
-                if (!allGood) {
-                    Toast.makeText(NewSaleSortActivity.this, "משקל אחד המיונים גדול ממשקל המיון במלאי", Toast.LENGTH_LONG).show();
-
-                } else if (sortWeightSum > InventoryApp.sales.get(index).getWeight()) {
-                    Toast.makeText(NewSaleSortActivity.this, "סכום המשקל של המיונים גבוהה ממשקל המכירה, יש להזין משקלים מתאמים", Toast.LENGTH_LONG).show();
+                if (!massage.equals("OK")) {
+                    Toast.makeText(NewSaleSortActivity.this, massage, Toast.LENGTH_LONG).show();
 
                 } else {
-
-                    // Assigning what's left from the weight to the left over sort
-                    final double sortWeightLeftOver = InventoryApp.sales.get(index).getWeight() - sortWeightSum;
-                    final double sortPriceLeftOver = (sortWeightLeftOver != 0) ? (InventoryApp.sales.get(index).getSaleSum() - sortValueSum) / sortWeightLeftOver : 0;
-
                     AlertDialog.Builder alert = new AlertDialog.Builder(NewSaleSortActivity.this);
                     alert.setTitle("שינוי נתונים");
                     alert.setMessage("האם אתה בטוח שברצונך לשנות את הנתונים?");
@@ -302,6 +267,18 @@ public class NewSaleSortActivity extends AppCompatActivity {
                     alert.setIcon(android.R.drawable.ic_dialog_alert);
                     alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+
+                            double sortWeightSum = 0;
+                            double sortValueSum = 0;
+
+                            for (int i = 0; i < sortCheck.size(); i++) {
+                                sortWeightSum += sortCheck.get(i).getWeight();
+                                sortValueSum += sortCheck.get(i).getSum();
+                            }
+
+                            // Assigning what's left from the weight to the left over sort
+                            final double sortWeightLeftOver = InventoryApp.sales.get(index).getWeight() - sortWeightSum;
+                            final double sortPriceLeftOver = (sortWeightLeftOver != 0) ? (InventoryApp.sales.get(index).getSaleSum() - sortValueSum) / sortWeightLeftOver : 0;
 
                             // Saving the changes to the sale
                             InventoryApp.sales.get(index).setSorted(true);
@@ -322,7 +299,7 @@ public class NewSaleSortActivity extends AppCompatActivity {
                                     if (oldSort1 != null) {
                                         oldSort1.save();
 
-                                        Sort newSort = newSortSave(etPriceSortS1, etWeightSortS1, chosenSort1);
+                                        Sort newSort = newSortSave(etPriceSortS1, etWeightSortS1, chosenSort1, etProfitSortS1);
                                         newSort.save();
                                         String newSortObjectId = newSort.getObjectId();
 
@@ -347,78 +324,169 @@ public class NewSaleSortActivity extends AppCompatActivity {
 
                                     if (oldSort2 != null) {
                                         oldSort2.save();
+
+                                        Sort newSort = newSortSave(etPriceSortS2, etWeightSortS2, chosenSort2, etProfitSortS2);
+                                        newSort.save();
+                                        String newSortObjectId = newSort.getObjectId();
+
+                                        Sort newSaleSort = newSaleSortSave(etPriceSortS2, etWeightSortS2, chosenSort2, etProfitSortS2);
+                                        newSaleSort.save();
+
+                                        // Setting the relation to the Sort
+                                        HashMap<String, Object> parentObject = new HashMap<>();
+                                        parentObject.put("objectId", newSortObjectId);
+
+                                        HashMap<String, Object> newSaleSortObject = new HashMap<>();
+                                        HashMap<String, Object> oldSortObject = new HashMap<>();
+                                        newSaleSortObject.put("objectId", newSaleSort.getObjectId());
+                                        oldSortObject.put("objectId", oldSort2.getObjectId());
+
+                                        ArrayList<Map> children = new ArrayList<>();
+                                        children.add(newSaleSortObject);
+                                        children.add(oldSortObject);
+
+                                        Backendless.Data.of("Sort").addRelation(parentObject, "Sorts", children);
                                     }
 
                                     if (oldSort3 != null) {
                                         oldSort3.save();
+
+                                        Sort newSort = newSortSave(etPriceSortS3, etWeightSortS3, chosenSort3, etProfitSortS3);
+                                        newSort.save();
+                                        String newSortObjectId = newSort.getObjectId();
+
+                                        Sort newSaleSort = newSaleSortSave(etPriceSortS3, etWeightSortS3, chosenSort3, etProfitSortS3);
+                                        newSaleSort.save();
+
+                                        // Setting the relation to the Sort
+                                        HashMap<String, Object> parentObject = new HashMap<>();
+                                        parentObject.put("objectId", newSortObjectId);
+
+                                        HashMap<String, Object> newSaleSortObject = new HashMap<>();
+                                        HashMap<String, Object> oldSortObject = new HashMap<>();
+                                        newSaleSortObject.put("objectId", newSaleSort.getObjectId());
+                                        oldSortObject.put("objectId", oldSort3.getObjectId());
+
+                                        ArrayList<Map> children = new ArrayList<>();
+                                        children.add(newSaleSortObject);
+                                        children.add(oldSortObject);
+
+                                        Backendless.Data.of("Sort").addRelation(parentObject, "Sorts", children);
                                     }
 
                                     if (oldSort4 != null) {
                                         oldSort4.save();
+
+                                        Sort newSort = newSortSave(etPriceSortS4, etWeightSortS4, chosenSort4, etProfitSortS4);
+                                        newSort.save();
+                                        String newSortObjectId = newSort.getObjectId();
+
+                                        Sort newSaleSort = newSaleSortSave(etPriceSortS4, etWeightSortS4, chosenSort4, etProfitSortS4);
+                                        newSaleSort.save();
+
+                                        // Setting the relation to the Sort
+                                        HashMap<String, Object> parentObject = new HashMap<>();
+                                        parentObject.put("objectId", newSortObjectId);
+
+                                        HashMap<String, Object> newSaleSortObject = new HashMap<>();
+                                        HashMap<String, Object> oldSortObject = new HashMap<>();
+                                        newSaleSortObject.put("objectId", newSaleSort.getObjectId());
+                                        oldSortObject.put("objectId", oldSort4.getObjectId());
+
+                                        ArrayList<Map> children = new ArrayList<>();
+                                        children.add(newSaleSortObject);
+                                        children.add(oldSortObject);
+
+                                        Backendless.Data.of("Sort").addRelation(parentObject, "Sorts", children);
                                     }
 
                                     if (oldSort5 != null) {
                                         oldSort5.save();
+
+                                        Sort newSort = newSortSave(etPriceSortS5, etWeightSortS5, chosenSort5, etProfitSortS5);
+                                        newSort.save();
+                                        String newSortObjectId = newSort.getObjectId();
+
+                                        Sort newSaleSort = newSaleSortSave(etPriceSortS5, etWeightSortS5, chosenSort5, etProfitSortS5);
+                                        newSaleSort.save();
+
+                                        // Setting the relation to the Sort
+                                        HashMap<String, Object> parentObject = new HashMap<>();
+                                        parentObject.put("objectId", newSortObjectId);
+
+                                        HashMap<String, Object> newSaleSortObject = new HashMap<>();
+                                        HashMap<String, Object> oldSortObject = new HashMap<>();
+                                        newSaleSortObject.put("objectId", newSaleSort.getObjectId());
+                                        oldSortObject.put("objectId", oldSort5.getObjectId());
+
+                                        ArrayList<Map> children = new ArrayList<>();
+                                        children.add(newSaleSortObject);
+                                        children.add(oldSortObject);
+
+                                        Backendless.Data.of("Sort").addRelation(parentObject, "Sorts", children);
                                     }
 
-                                    // Saving left over old sort
-                                    Sort oldLeftOverSort = findLeftOver();
-                                    oldLeftOverSort.setLast(false);
-                                    oldLeftOverSort.save();
+                                    if (sortWeightLeftOver != 0) {
+                                        // Saving left over old sort
+                                        Sort oldLeftOverSort = findLeftOver();
+                                        oldLeftOverSort.setLast(false);
+                                        oldLeftOverSort.save();
 
-                                    // Saving new left over new sort
-                                    Sort newLeftOverSort = new Sort();
-                                    newLeftOverSort.setName(oldLeftOverSort.getName());
-                                    newLeftOverSort.setSortCount(oldLeftOverSort.getSortCount()+1);
+                                        // Saving new left over new sort
+                                        Sort newLeftOverSort = new Sort();
+                                        newLeftOverSort.setName(oldLeftOverSort.getName());
+                                        newLeftOverSort.setSortCount(oldLeftOverSort.getSortCount() + 1);
 
-                                    newLeftOverSort.setClarity(oldLeftOverSort.getClarity());
-                                    newLeftOverSort.setColor(oldLeftOverSort.getColor());
-                                    newLeftOverSort.setShape(oldLeftOverSort.getShape());
-                                    newLeftOverSort.setSize(oldLeftOverSort.getSize());
+                                        newLeftOverSort.setClarity(oldLeftOverSort.getClarity());
+                                        newLeftOverSort.setColor(oldLeftOverSort.getColor());
+                                        newLeftOverSort.setShape(oldLeftOverSort.getShape());
+                                        newLeftOverSort.setSize(oldLeftOverSort.getSize());
 
-                                    newLeftOverSort.setSum(oldLeftOverSort.getSum() - (sortPriceLeftOver*sortWeightLeftOver));
-                                    newLeftOverSort.setWeight(oldLeftOverSort.getWeight() - sortWeightLeftOver);
-                                    newLeftOverSort.setPrice(newLeftOverSort.getSum()/newLeftOverSort.getWeight());
-                                    newLeftOverSort.setUserEmail(InventoryApp.user.getEmail());
-                                    newLeftOverSort.setLast(true);
-                                    newLeftOverSort.save();
-                                    String newLeftOverSortObjectId = newLeftOverSort.getObjectId();
+                                        newLeftOverSort.setSum(oldLeftOverSort.getSum() - (sortPriceLeftOver * sortWeightLeftOver));
+                                        newLeftOverSort.setWeight(oldLeftOverSort.getWeight() - sortWeightLeftOver);
+                                        newLeftOverSort.setPrice((newLeftOverSort.getWeight() == 0) ? 0 : newLeftOverSort.getSum() / newLeftOverSort.getWeight());
+                                        newLeftOverSort.setUserEmail(InventoryApp.user.getEmail());
+                                        newLeftOverSort.setLast(true);
+                                        newLeftOverSort.save();
+                                        String newLeftOverSortObjectId = newLeftOverSort.getObjectId();
 
-                                    // Saving left over sale sort
-                                    Sort leftOverSaleSort = new Sort();
-                                    leftOverSaleSort.setName(oldLeftOverSort.getName() + "S");
-                                    leftOverSaleSort.setSortCount(oldLeftOverSort.getSortCount()+1);
-                                    leftOverSaleSort.setSaleId(InventoryApp.sales.get(index).getObjectId());
-                                    leftOverSaleSort.setSaleName(InventoryApp.sales.get(index).getClientName());
+                                        // Saving left over sale sort
+                                        Sort leftOverSaleSort = new Sort();
+                                        leftOverSaleSort.setName(oldLeftOverSort.getName() + "S");
+                                        leftOverSaleSort.setSortCount(oldLeftOverSort.getSortCount() + 1);
+                                        leftOverSaleSort.setSaleId(InventoryApp.sales.get(index).getObjectId());
+                                        leftOverSaleSort.setSaleName(InventoryApp.sales.get(index).getClientName());
 
-                                    leftOverSaleSort.setClarity(oldLeftOverSort.getClarity());
-                                    leftOverSaleSort.setColor(oldLeftOverSort.getColor());
-                                    leftOverSaleSort.setShape(oldLeftOverSort.getShape());
-                                    leftOverSaleSort.setSize(oldLeftOverSort.getSize());
+                                        leftOverSaleSort.setClarity(oldLeftOverSort.getClarity());
+                                        leftOverSaleSort.setColor(oldLeftOverSort.getColor());
+                                        leftOverSaleSort.setShape(oldLeftOverSort.getShape());
+                                        leftOverSaleSort.setSize(oldLeftOverSort.getSize());
 
-                                    leftOverSaleSort.setSum(sortPriceLeftOver*sortWeightLeftOver);
-                                    leftOverSaleSort.setWeight(sortWeightLeftOver);
-                                    leftOverSaleSort.setPrice(leftOverSaleSort.getSum()/leftOverSaleSort.getWeight());
-                                    leftOverSaleSort.setSoldPrice(sortPriceLeftOver);
-                                    leftOverSaleSort.setLast(false);
-                                    leftOverSaleSort.setSale(true);
-                                    leftOverSaleSort.setUserEmail(InventoryApp.user.getEmail());
-                                    leftOverSaleSort.save();
+                                        leftOverSaleSort.setSum(sortPriceLeftOver * sortWeightLeftOver);
+                                        leftOverSaleSort.setWeight(sortWeightLeftOver);
+                                        leftOverSaleSort.setPrice((leftOverSaleSort.getWeight() == 0) ? 0 : leftOverSaleSort.getSum() / leftOverSaleSort.getWeight());
+                                        leftOverSaleSort.setSoldPrice(sortPriceLeftOver);
+                                        leftOverSaleSort.setLast(false);
+                                        leftOverSaleSort.setSale(true);
+                                        leftOverSaleSort.setUserEmail(InventoryApp.user.getEmail());
+                                        leftOverSaleSort.save();
 
-                                    // Setting the relation to the Sort
-                                    HashMap<String, Object> parentObject = new HashMap<>();
-                                    parentObject.put("objectId", newLeftOverSortObjectId);
+                                        // Setting the relation to the Sort
+                                        HashMap<String, Object> parentObject = new HashMap<>();
+                                        parentObject.put("objectId", newLeftOverSortObjectId);
 
-                                    HashMap<String, Object> newSaleSortObject = new HashMap<>();
-                                    HashMap<String, Object> oldLeftOverObject = new HashMap<>();
-                                    newSaleSortObject.put("objectId", leftOverSaleSort.getObjectId());
-                                    oldLeftOverObject.put("objectId", oldLeftOverSort.getObjectId());
+                                        HashMap<String, Object> newSaleSortObject = new HashMap<>();
+                                        HashMap<String, Object> oldLeftOverObject = new HashMap<>();
+                                        newSaleSortObject.put("objectId", leftOverSaleSort.getObjectId());
+                                        oldLeftOverObject.put("objectId", oldLeftOverSort.getObjectId());
 
-                                    ArrayList<Map> children = new ArrayList<>();
-                                    children.add(newSaleSortObject);
-                                    children.add(oldLeftOverObject);
+                                        ArrayList<Map> children = new ArrayList<>();
+                                        children.add(newSaleSortObject);
+                                        children.add(oldLeftOverObject);
 
-                                    Backendless.Data.of("Sort").addRelation(parentObject, "Sorts", children);
+
+                                        Backendless.Data.of("Sort").addRelation(parentObject, "Sorts", children);
+                                    }
                               }
                           });
                             showProgress(false);
@@ -434,6 +502,63 @@ public class NewSaleSortActivity extends AppCompatActivity {
         });
     }
 
+    public String checking() {
+
+        sortCheck = new ArrayList<>();
+        String massage;
+
+        massage = sortCheck(etPriceSortS1, etWeightSortS1, chosenSort1, etProfitSortS1);
+        if (!massage.equals("OK")) {
+            return massage;
+        }
+
+        massage = sortCheck(etPriceSortS2, etWeightSortS2, chosenSort2, etProfitSortS2);
+        if (!massage.equals("OK")) {
+            return massage;
+        }
+
+        massage = sortCheck(etPriceSortS3, etWeightSortS3, chosenSort3, etProfitSortS3);
+        if (!massage.equals("OK")) {
+            return massage;
+        }
+
+        massage = sortCheck(etPriceSortS4, etWeightSortS4, chosenSort4, etProfitSortS4);
+        if (!massage.equals("OK")) {
+            return massage;
+        }
+
+        massage = sortCheck(etPriceSortS5, etWeightSortS5, chosenSort5, etProfitSortS5);
+        if (!massage.equals("OK")) {
+            return massage;
+        }
+
+        double sortWeightSum = 0;
+        double sortValueSum = 0;
+
+        for (int i = 0; i < sortCheck.size(); i++) {
+            sortWeightSum += sortCheck.get(i).getWeight();
+            sortValueSum += sortCheck.get(i).getSum();
+        }
+
+        // Assigning what's left from the weight to the left over sort
+        final double sortWeightLeftOver = InventoryApp.sales.get(index).getWeight() - sortWeightSum;
+        final double sortPriceLeftOver = (sortWeightLeftOver != 0) ? (InventoryApp.sales.get(index).getSaleSum() - sortValueSum) / sortWeightLeftOver : 0;
+
+        if (sortWeightSum > InventoryApp.sales.get(index).getWeight()) {
+            massage = "סכום המשקל של המיונים גבוהה ממשקל המכירה, יש להזין משקלים מתאמים";
+            return massage;
+
+        } else if (sortWeightLeftOver > findLeftOver().getWeight()) {
+            massage = "משקל המיון העודף גבוה ממשקל המיון במלאי";
+            return massage;
+
+        } else if ((sortPriceLeftOver*sortWeightLeftOver) > findLeftOver().getSum()) {
+            massage = "סכום המכירה של המיון העודף גבוהה מהסכום שקיים במלאי";
+            return massage;
+        }
+        return "OK";
+    }
+
     public Sort oldSortSave(EditText sortPriceText, EditText sortWeightText, int chosenSort, EditText etProfitSort) {
         if (!(sortPriceText.getText().toString().isEmpty() || sortWeightText.getText().toString().isEmpty() || chosenSort == -1
         || etProfitSort.getText().toString().isEmpty())) {
@@ -447,13 +572,15 @@ public class NewSaleSortActivity extends AppCompatActivity {
         }
     }
 
-    public Sort newSortSave(EditText sortPriceText, EditText sortWeightText, int chosenSort) {
+    public Sort newSortSave(EditText sortPriceText, EditText sortWeightText, int chosenSort, EditText etProfitSort) {
         if (!(sortPriceText.getText().toString().isEmpty() || sortWeightText.getText().toString().isEmpty() || chosenSort == -1)) {
 
             double sortPrice = Double.valueOf(sortPriceText.getText().toString());
             double sortWeight = Double.valueOf(sortWeightText.getText().toString());
+            double profit =  Double.valueOf(etProfitSort.getText().toString());
 
             Sort oldSort = InventoryApp.sorts.get(chosenSort);
+
             Sort newSort = new Sort();
             newSort.setName(oldSort.getName());
             newSort.setSortCount(oldSort.getSortCount()+1);
@@ -463,9 +590,9 @@ public class NewSaleSortActivity extends AppCompatActivity {
             newSort.setShape(oldSort.getShape());
             newSort.setSize(oldSort.getSize());
 
-            newSort.setSum(oldSort.getSum() - (sortPrice*sortWeight));
+            newSort.setSum(oldSort.getSum() - ((sortPrice-profit)*sortWeight));
             newSort.setWeight(oldSort.getWeight() - sortWeight);
-            newSort.setPrice(newSort.getSum()/newSort.getWeight());
+            newSort.setPrice(newSort.getWeight() == 0 ? 0 : newSort.getSum()/newSort.getWeight());
             newSort.setUserEmail(InventoryApp.user.getEmail());
             newSort.setLast(true);
 
@@ -479,8 +606,8 @@ public class NewSaleSortActivity extends AppCompatActivity {
         if (!(sortProfitText.getText().toString().isEmpty() || sortWeightText.getText().toString().isEmpty() || chosenSort == -1)) {
 
             double sortPrice = Double.valueOf(sortProfitText.getText().toString());
-            double soldWeight = Double.valueOf(sortWeightText.getText().toString());
-            double soldPrice =  Double.valueOf(etProfitSort.getText().toString());
+            double sortWeight = Double.valueOf(sortWeightText.getText().toString());
+            double profit =  Double.valueOf(etProfitSort.getText().toString());
 
             Sort oldSort = InventoryApp.sorts.get(chosenSort);
             Sort newSaleSort = new Sort();
@@ -494,10 +621,10 @@ public class NewSaleSortActivity extends AppCompatActivity {
             newSaleSort.setShape(oldSort.getShape());
             newSaleSort.setSize(oldSort.getSize());
 
-            newSaleSort.setSum(sortPrice*soldWeight);
-            newSaleSort.setWeight(soldWeight);
-            newSaleSort.setPrice(sortPrice);
-            newSaleSort.setSoldPrice(soldPrice);
+            newSaleSort.setPrice(sortPrice - profit);
+            newSaleSort.setSoldPrice(sortPrice);
+            newSaleSort.setSum(sortPrice*sortWeight);
+            newSaleSort.setWeight(sortWeight);
             newSaleSort.setLast(false);
             newSaleSort.setSale(true);
             newSaleSort.setUserEmail(InventoryApp.user.getEmail());
@@ -508,28 +635,33 @@ public class NewSaleSortActivity extends AppCompatActivity {
         }
     }
 
-    public boolean sortCheck(EditText sortPriceText, EditText sortWeightText, final int chosenSort,  EditText sortProfitText) {
+    public String sortCheck(EditText sortPriceText, EditText sortWeightText, final int chosenSort,  EditText sortProfitText) {
         if (!(sortPriceText.getText().toString().isEmpty() || sortWeightText.getText().toString().isEmpty() || chosenSort == -1 || sortProfitText.getText().toString().isEmpty())) {
 
             double sortPrice = Double.valueOf(sortPriceText.getText().toString());
             double sortWeight = Double.valueOf(sortWeightText.getText().toString());
             double sortProfit = Double.valueOf(sortProfitText.getText().toString());
 
-            if (sortProfit < 0) {
-                return false;
+            Sort sort = InventoryApp.sorts.get(chosenSort);
 
-            } else if (sortWeight > InventoryApp.sorts.get(chosenSort).getWeight()) {
-                return false;
-
-            } else {
-                SortInfo sortInfo = new SortInfo();
-                sortInfo.setWeight(sortWeight);
-                sortInfo.setSum(sortPrice*sortWeight);
-                sortCheck.add(sortInfo);
-                return true;
+            if (sortWeight == sort.getWeight() && sortPrice < sort.getPrice()) {
+                return "לא ניתן למכור את כל המיון במחיר נמוך ממחיר העלות";
             }
+
+            if (sortProfit < 0) {
+                return "לא ניתן למכור בהפסד";
+            }
+
+            if (sortWeight > InventoryApp.sorts.get(chosenSort).getWeight()) {
+                return "המשקל שהוכנס גבוה מהמשקל שקיים במיון";
+            }
+            SortInfo sortInfo = new SortInfo();
+            sortInfo.setWeight(sortWeight);
+            sortInfo.setSum(sortPrice*sortWeight);
+            sortCheck.add(sortInfo);
+            return "OK";
         }
-        return true;
+        return "OK";
     }
 
     public Sort findLeftOver() {
@@ -561,4 +693,3 @@ public class NewSaleSortActivity extends AppCompatActivity {
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }
-

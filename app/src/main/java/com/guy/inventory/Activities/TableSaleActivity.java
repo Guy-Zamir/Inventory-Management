@@ -172,7 +172,11 @@ public class TableSaleActivity extends AppCompatActivity {
 
             case R.id.editIcon:
                 if (selectedItem == -1) {
-                    Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "יש לחבור פריט לעריכה", Toast.LENGTH_LONG).show();
+
+                } else if (InventoryApp.sales.get(selectedItem).isSorted()) {
+                    Toast.makeText(this, "אין ניתן לערוך מכירה ממוינת", Toast.LENGTH_LONG).show();
+
                 } else {
                     Intent editSale = new Intent(TableSaleActivity.this, EditSaleActivity.class);
                     editSale.putExtra("index", selectedItem);
@@ -187,7 +191,10 @@ public class TableSaleActivity extends AppCompatActivity {
 
             case R.id.deleteIcon:
                 if (selectedItem == -1) {
-                    Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_LONG).show();
+
+                } else if (InventoryApp.sales.get(selectedItem).isSorted()) {
+                    Toast.makeText(this, "לא ניתן למחוק מכירה ממוינת", Toast.LENGTH_LONG).show();
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(TableSaleActivity.this);
                     alert.setTitle("התראת מחיקה");
@@ -202,7 +209,7 @@ public class TableSaleActivity extends AppCompatActivity {
                                 @Override
                                 public void handleResponse(Long response) {
                                     InventoryApp.sales.remove(selectedItem);
-                                    Toast.makeText(TableSaleActivity.this, "עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TableSaleActivity.this, "עודכן בהצלחה", Toast.LENGTH_LONG).show();
                                     salesAdapter.notifyDataSetChanged();
                                     showProgress(false);
                                 }
@@ -210,7 +217,7 @@ public class TableSaleActivity extends AppCompatActivity {
                                 @Override
                                 public void handleFault(BackendlessFault fault) {
                                     showProgress(false);
-                                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
                         }
