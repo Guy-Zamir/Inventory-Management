@@ -24,8 +24,13 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tvLoad;
 
     EditText etEmail, etPassword;
-    Button btnLogin, btnRegister;
+    Button btnLogin, btnRegister, btn2019, btn2020 ,btnDemo;
     TextView tvReset;
+
+    final String EMAIL_2019 = "ENTER YOUR EMAIL HERE";
+    final String EMAIL_2020 = "ENTER YOUR EMAIL HERE";
+    final String EMAIL_TEST = "ENTER YOUR EMAIL HERE";
+    final String PASSWORD = "ENTER YOUR PASSWORD HERE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +41,28 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
-        tvReset = findViewById(R.id.tvReset);
 
+        tvReset = findViewById(R.id.tvReset);
         etEmail = findViewById(R.id.etLoginEmail);
         etPassword = findViewById(R.id.etLoginPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnLoginRegister);
+        btn2019 = findViewById(R.id.btn2019);
+        btn2020 = findViewById(R.id.btn2020);
+        btnDemo = findViewById(R.id.btnDemo);
 
-        showProgress(true);
+        Backendless.UserService.logout(new AsyncCallback<Void>() {
+            @Override
+            public void handleResponse(Void response) {
+
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+
+            }
+        });
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,36 +126,103 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
+        //showProgress(true);
+        //Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
+        //    @Override
+        //    public void handleResponse(final Boolean response) {
+        //        if (response) {
+        //            String objectUserId = UserIdStorageFactory.instance().getStorage().get();
+        //            Backendless.Data.of(BackendlessUser.class).findById(objectUserId, new AsyncCallback<BackendlessUser>() {
+        //                @Override
+        //                public void handleResponse(BackendlessUser response) {
+        //                    InventoryApp.user = response;
+        //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        //                    LoginActivity.this.finish();
+        //                }
+//
+        //                @Override
+        //                public void handleFault(BackendlessFault fault) {
+        //                    Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+        //                    etEmail.setText(InventoryApp.user.getEmail());
+        //                    showProgress(false);
+        //                }
+        //            });
+//
+        //        } else {
+        //            showProgress(false);
+        //        }
+        //    }
+//
+        //    @Override
+        //    public void handleFault(BackendlessFault fault) {
+        //        Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+        //        showProgress(false);
+        //    }
+        //});
+
+        btn2019.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void handleResponse(final Boolean response) {
-                if (response) {
-                    String objectUserId = UserIdStorageFactory.instance().getStorage().get();
-                    Backendless.Data.of(BackendlessUser.class).findById(objectUserId, new AsyncCallback<BackendlessUser>() {
-                        @Override
-                        public void handleResponse(BackendlessUser response) {
-                            InventoryApp.user = response;
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            LoginActivity.this.finish();
-                        }
+            public void onClick(View v) {
+                showProgress(true);
+                Backendless.UserService.login(EMAIL_2019, PASSWORD, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser response) {
+                        showProgress(false);
+                        InventoryApp.user = response;
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        LoginActivity.this.finish();
+                    }
 
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            etEmail.setText(InventoryApp.user.getEmail());
-                            showProgress(false);
-                        }
-                    });
-
-                } else {
-                    showProgress(false);
-                }
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, true);
             }
+        });
 
+        btn2020.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void handleFault(BackendlessFault fault) {
-                Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                showProgress(false);
+            public void onClick(View v) {
+                showProgress(true);
+                Backendless.UserService.login(EMAIL_2020, PASSWORD, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser response) {
+                        showProgress(false);
+                        InventoryApp.user = response;
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        LoginActivity.this.finish();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, true);
+            }
+        });
+
+        btnDemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProgress(true);
+                Backendless.UserService.login(EMAIL_TEST, PASSWORD, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser response) {
+                        showProgress(false);
+                        InventoryApp.user = response;
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        LoginActivity.this.finish();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, true);
             }
         });
     }

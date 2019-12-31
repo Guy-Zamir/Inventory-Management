@@ -26,6 +26,7 @@ public class SortInfo
     private boolean buy;
     private boolean split;
     private double soldPrice;
+    private boolean open;
 
     public Date getUpdated()
     {
@@ -228,5 +229,13 @@ public class SortInfo
 
     public void setSplit(boolean split) {
         this.split = split;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 }

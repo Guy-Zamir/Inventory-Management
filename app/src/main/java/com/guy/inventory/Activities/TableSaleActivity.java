@@ -244,8 +244,10 @@ public class TableSaleActivity extends AppCompatActivity {
             case R.id.sortIcon:
                 if (selectedItem == -1) {
                     Toast.makeText(this, "יש לחבור מכירה", Toast.LENGTH_SHORT).show();
+
                 } else if (InventoryApp.sales.get(selectedItem).isSorted()) {
-                    // Send the sorted information
+                    Toast.makeText(this, "יש לחבור מכירה לא ממוינת", Toast.LENGTH_SHORT).show();
+
                 } else {
                     Intent newSaleSort = new Intent(TableSaleActivity.this, NewSaleSortActivity.class);
                     newSaleSort.putExtra("index", selectedItem);

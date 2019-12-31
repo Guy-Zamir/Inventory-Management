@@ -77,6 +77,8 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
             ivOutIn.setImageResource(R.drawable.dollar_icon);
         } else if (sortHistory.get(position).isBuy()) {
             ivOutIn.setImageResource(R.drawable.in_icon);
+        }else if (sortHistory.get(position).isOpen()) {
+            ivOutIn.setImageResource(R.drawable.in_icon);
         } else {
             ivOutIn.setImageResource(R.drawable.in_icon);
         }

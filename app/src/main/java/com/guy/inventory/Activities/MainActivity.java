@@ -7,12 +7,28 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
+import android.widget.TextView;
+import android.widget.Toast;
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 
+
 public class MainActivity extends AppCompatActivity {
+    private View mProgressView;
+    private View mLoginFormView;
+    private TextView tvLoad;
+
     Button btnResult, btnBuyTable, btnSaleTable, btnSupplierTable, btnClientTable, btnExportTable,
-    btnSortingTable;
+    btnSortingTable, btn2019, btn2020 ,btnDemo;
+
+    final String EMAIL_2019 = "ENTER YOUR EMAIL HERE";
+    final String EMAIL_2020 = "ENTER YOUR EMAIL HERE";
+    final String EMAIL_TEST = "ENTER YOUR EMAIL HERE";
+    final String PASSWORD = "ENTER YOUR PASSWORD HERE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +43,22 @@ public class MainActivity extends AppCompatActivity {
         btnClientTable = findViewById(R.id.btnClientTable);
         btnExportTable = findViewById(R.id.btnExportTable);
         btnSortingTable = findViewById(R.id.btnSortingTable);
+        btn2019 = findViewById(R.id.btn2019);
+        btn2020 = findViewById(R.id.btn2020);
+        btnDemo = findViewById(R.id.btnDemo);
+
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+        tvLoad = findViewById(R.id.tvLoad);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("ניהול מלאי");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        btn2019.setBackgroundResource(InventoryApp.user.getEmail().equals(EMAIL_2019) ? R.drawable.table_row_selected : R.drawable.table_row);
+        btn2020.setBackgroundResource(InventoryApp.user.getEmail().equals(EMAIL_2020) ? R.drawable.table_row_selected : R.drawable.table_row);
+        btnDemo.setBackgroundResource(InventoryApp.user.getEmail().equals(EMAIL_TEST) ? R.drawable.table_row_selected : R.drawable.table_row);
 
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +119,75 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btn2019.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProgress(true);
+                Backendless.UserService.login(EMAIL_2019, PASSWORD, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser response) {
+                        showProgress(false);
+                        InventoryApp.user = response;
+                        btn2019.setBackgroundResource(R.drawable.table_row_selected);
+                        btn2020.setBackgroundResource(R.drawable.table_row);
+                        btnDemo.setBackgroundResource(R.drawable.table_row);
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(MainActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, true);
+            }
+        });
+
+        btn2020.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProgress(true);
+                Backendless.UserService.login(EMAIL_2020, PASSWORD, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser response) {
+                        showProgress(false);
+                        InventoryApp.user = response;
+                        btn2019.setBackgroundResource(R.drawable.table_row);
+                        btn2020.setBackgroundResource(R.drawable.table_row_selected);
+                        btnDemo.setBackgroundResource(R.drawable.table_row);
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(MainActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, true);
+            }
+        });
+
+        btnDemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProgress(true);
+                Backendless.UserService.login(EMAIL_TEST, PASSWORD, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser response) {
+                        showProgress(false);
+                        InventoryApp.user = response;
+                        btn2019.setBackgroundResource(R.drawable.table_row);
+                        btn2020.setBackgroundResource(R.drawable.table_row);
+                        btnDemo.setBackgroundResource(R.drawable.table_row_selected);
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(MainActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, true);
+            }
+        });
     }
 
     @Override
@@ -100,4 +196,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        tvLoad.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
 }

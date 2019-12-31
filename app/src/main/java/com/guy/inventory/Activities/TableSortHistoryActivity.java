@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ import com.guy.inventory.Adapters.SortHistoryAdapter;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.SortInfo;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,6 +48,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
     final DataQueryBuilder sortHistoryBuilder = DataQueryBuilder.create();
     final DataQueryBuilder sortSalesBuilder = DataQueryBuilder.create();
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +67,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        actionBar.setTitle(sales ? "מיונים שנמכרו" : "כניסות/יציאות: " + InventoryApp.sorts.get(index).getName() + " - " + InventoryApp.sorts.get(index).getSortCount());
-
         sortHistoryBuilder.setWhereClause("objectId = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
-        sortHistoryBuilder.setPageSize(PAGE_SIZE);
         sortHistoryBuilder.setSortBy("created DESC");
         sortHistoryBuilder.addRelated("Sorts");
 
@@ -76,7 +77,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
         showProgress(true);
         if (sales) {
-            // Getting all the sales in the sorts as SORTS ( sale = true )
+            // Getting all the sales in the sorts as SORTS (sale = true)
             Backendless.Data.of("Sort").find(sortSalesBuilder, new AsyncCallback<List<Map>>() {
                 @Override
                 public void handleResponse(List<Map> response) {
@@ -152,8 +153,15 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                     sortInfo.setSale((boolean) sort.get("sale"));
                                     sortInfo.setBuy((boolean) sort.get("buy"));
                                     sortInfo.setSplit((boolean) sort.get("split"));
+                                    sortInfo.setOpen((boolean) sort.get("open"));
                                     sortInfo.setSortCount((int) sort.get("sortCount"));
-                                    sortInfo.setFromName(sortInfo.isBuy() ? (String) sort.get("fromName") : sort.get("fromName") + " - " + sort.get("sortCount"));
+
+                                    if (sortInfo.isBuy() || sortInfo.isOpen()) {
+                                        sortInfo.setFromName((String) sort.get("fromName"));
+                                    } else {
+                                        sortInfo.setFromName(sort.get("fromName") + " - " + sort.get("sortCount"));
+                                    }
+
                                     sortInfo.setToName((String) sort.get("toName"));
                                     sortInfo.setObjectId((String) sort.get("fromId"));
                                     sortInfo.setCreated((Date) sort.get("created"));
@@ -245,16 +253,13 @@ public class TableSortHistoryActivity extends AppCompatActivity {
             if (selectedItem == -1) {
                 Toast.makeText(this, "יש לבחור פריט", Toast.LENGTH_SHORT).show();
 
-            } else if (filterSorts.get(selectedItem).isBuy()) {
-                Toast.makeText(this, "אין פירוט לקניה", Toast.LENGTH_SHORT).show();
-
-            } else if (filterSorts.get(selectedItem).isSale()) {
-                Toast.makeText(this, "אין פירוט למכירה", Toast.LENGTH_SHORT).show();
+            } else if (filterSorts.get(selectedItem).isBuy() || filterSorts.get(selectedItem).isSale() || filterSorts.get(selectedItem).isOpen()) {
+                Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
 
             } else {
                 ActionBar actionBar = getSupportActionBar();
                 assert actionBar != null;
-                actionBar.setTitle("כניסות/יציאות:  " + filterSorts.get(selectedItem).getFromName());
+                actionBar.setTitle("תנועות:  " + filterSorts.get(selectedItem).getFromName());
                 actionBar.setDisplayHomeAsUpEnabled(true);
 
                 final DataQueryBuilder sortBuilder = DataQueryBuilder.create();

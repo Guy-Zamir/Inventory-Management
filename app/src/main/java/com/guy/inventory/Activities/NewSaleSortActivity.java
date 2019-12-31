@@ -22,6 +22,7 @@ import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,10 +48,13 @@ public class NewSaleSortActivity extends AppCompatActivity {
 
     List<SortInfo> sortCheck;
 
+    final double VALUE_MARGIN = 10.0;
+    final double CARAT_MARGIN = 0.01;
     final String LEFT_OVER_NAME = "עודפים";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String EMAIL_CLAUSE = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     final String whereClauseLast = "last = true";
+    final DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
     ArrayAdapter<String> sortAdapter;
 
     int chosenSort1 = -1, chosenSort2 = -1, chosenSort3 = -1, chosenSort4 = -1, chosenSort5 = -1;
@@ -115,7 +119,7 @@ public class NewSaleSortActivity extends AppCompatActivity {
                 ArrayList<String> sortNames = new ArrayList<>();
                 for (Sort sort : response) {
                     if (!sort.getName().equals(LEFT_OVER_NAME)) {
-                        sortNames.add(sort.getName() + " - " + sort.getSortCount());
+                        sortNames.add(sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C");
                     }
                 }
 
@@ -150,7 +154,8 @@ public class NewSaleSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort1 = i;
                         break;
@@ -171,7 +176,8 @@ public class NewSaleSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort2 = i;
                         break;
@@ -192,7 +198,8 @@ public class NewSaleSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort3 = i;
                         break;
@@ -213,7 +220,8 @@ public class NewSaleSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort4 = i;
                         break;
@@ -234,7 +242,8 @@ public class NewSaleSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort5 = i;
                         break;
@@ -426,7 +435,7 @@ public class NewSaleSortActivity extends AppCompatActivity {
                                         Backendless.Data.of("Sort").addRelation(parentObject, "Sorts", children);
                                     }
 
-                                    if (sortWeightLeftOver != 0) {
+                                    if (sortWeightLeftOver > CARAT_MARGIN) {
                                         // Saving left over old sort
                                         Sort oldLeftOverSort = findLeftOver();
                                         oldLeftOverSort.setLast(false);
@@ -544,16 +553,12 @@ public class NewSaleSortActivity extends AppCompatActivity {
         final double sortWeightLeftOver = InventoryApp.sales.get(index).getWeight() - sortWeightSum;
         final double sortPriceLeftOver = (sortWeightLeftOver != 0) ? (InventoryApp.sales.get(index).getSaleSum() - sortValueSum) / sortWeightLeftOver : 0;
 
-        if (sortWeightSum > InventoryApp.sales.get(index).getWeight()) {
-            massage = "סכום משקל המיונים גבוהה ממשקל המכירה, יש להזין משקלים מתאמים";
+        if (sortWeightSum < InventoryApp.sales.get(index).getWeight() - CARAT_MARGIN || sortWeightSum > InventoryApp.sales.get(index).getWeight() + CARAT_MARGIN) {
+            massage = "סכום משקל המיונים לא שווה למשקל המכירה, יש להזין משקלים מתאמים";
             return massage;
 
-        } else if (sortWeightLeftOver > findLeftOver().getWeight()) {
-            massage = "משקל המיון העודף גבוה ממשקל המיון במלאי";
-            return massage;
-
-        } else if ((sortPriceLeftOver*sortWeightLeftOver) > findLeftOver().getSum()) {
-            massage = "סכום המכירה של המיון העודף גבוהה מהסכום שקיים במלאי";
+        } else if (sortValueSum < InventoryApp.sales.get(index).getSaleSum() - VALUE_MARGIN || sortValueSum > InventoryApp.sales.get(index).getSaleSum() + VALUE_MARGIN) {
+            massage = "סכום המכירה של המיונים לא שווה לסכום שקיים המכירה";
             return massage;
         }
         return "OK";
@@ -623,7 +628,8 @@ public class NewSaleSortActivity extends AppCompatActivity {
 
             newSaleSort.setPrice(sortPrice - profit);
             newSaleSort.setSoldPrice(sortPrice);
-            newSaleSort.setSum(sortPrice*sortWeight);
+            newSaleSort.setSaleSum(sortPrice*sortWeight);
+            newSaleSort.setSum(newSaleSort.getPrice()*sortWeight);
             newSaleSort.setWeight(sortWeight);
             newSaleSort.setLast(false);
             newSaleSort.setSale(true);

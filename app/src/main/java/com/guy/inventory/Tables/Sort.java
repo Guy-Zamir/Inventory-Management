@@ -27,6 +27,7 @@ public class Sort
     private String saleId;
     private Date created;
     private String saleName;
+    private Double saleSum;
 
     public String getColor()
     {
@@ -253,5 +254,13 @@ public class Sort
 
     public void setSaleName(String saleName) {
         this.saleName = saleName;
+    }
+
+    public Double getSaleSum() {
+        return saleSum;
+    }
+
+    public void setSaleSum(Double saleSum) {
+        this.saleSum = saleSum;
     }
 }

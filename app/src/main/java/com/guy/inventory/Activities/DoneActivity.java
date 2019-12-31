@@ -23,7 +23,7 @@ import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
-
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -31,6 +31,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 
 public class DoneActivity extends AppCompatActivity {
+
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
@@ -41,8 +42,13 @@ public class DoneActivity extends AppCompatActivity {
 
     private ThreadPoolExecutor mPool;
 
-    EditText etWeightSort1, etPriceSort1, etWeightSort2, etPriceSort2, etWeightSort3, etPriceSort3, etWeightSort4, etPriceSort4, etWeightSort5, etPriceSort5;
+    EditText etWeightSort1, etPriceSort1, etWeightSort2, etPriceSort2, etWeightSort3, etPriceSort3,
+            etWeightSort4, etPriceSort4, etWeightSort5, etPriceSort5;
+
     AutoCompleteTextView acSort1, acSort2, acSort3, acSort4, acSort5;
+
+    final double VALUE_MARGIN = 10.0;
+    final double CARAT_MARGIN = 0.01;
 
     List<SortInfo> sortCheck;
 
@@ -50,6 +56,7 @@ public class DoneActivity extends AppCompatActivity {
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String whereClauseEmail = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     final String whereClauseLast = "last = true";
+    final DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
     ArrayAdapter<String> sortAdapter;
 
     int chosenSort1 = -1, chosenSort2 = -1, chosenSort3 = -1, chosenSort4 = -1, chosenSort5 = -1;
@@ -108,7 +115,7 @@ public class DoneActivity extends AppCompatActivity {
         index = getIntent().getIntExtra("index", 0);
 
         sortBuilder.setWhereClause(whereClauseEmail);
-        sortBuilder.setWhereClause(whereClauseLast);
+        sortBuilder.setHavingClause(whereClauseLast);
         sortBuilder.setPageSize(100);
         sortBuilder.setSortBy("name");
 
@@ -120,7 +127,7 @@ public class DoneActivity extends AppCompatActivity {
                 ArrayList<String> sortNames = new ArrayList<>();
                 for (Sort sort : response) {
                     if (!sort.getName().equals(LEFT_OVER_NAME)) {
-                        sortNames.add(sort.getName() + " - " + sort.getSortCount());
+                        sortNames.add(sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C");
                     }
                 }
 
@@ -155,7 +162,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort1 = i;
                         break;
@@ -176,7 +184,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort2 = i;
                         break;
@@ -197,7 +206,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort3 = i;
                         break;
@@ -218,7 +228,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort4 = i;
                         break;
@@ -239,7 +250,8 @@ public class DoneActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort5 = i;
                         break;
@@ -291,22 +303,18 @@ public class DoneActivity extends AppCompatActivity {
                 }
 
                 // Checking whether the user entered done weight right
-                if (doneWeight > InventoryApp.buys.get(index).getWeight()) {
+                if (doneWeight > (InventoryApp.buys.get(index).getWeight() + CARAT_MARGIN)) {
                     Toast.makeText(DoneActivity.this, "סכום המשקל הגמור גבוהה ממשקל החבילה, יש להזין משקל שווה או נמוך למשקל החבילה", Toast.LENGTH_LONG).show();
 
                 } else if (doneWeight < 0) {
                     Toast.makeText(DoneActivity.this, "לא הוזן משקל גמור, יש להזין את המשקל הגמור של החבילה", Toast.LENGTH_LONG).show();
 
                 } else {
-
-                    if (sortValueSum > InventoryApp.buys.get(index).getSum()) {
-                        Toast.makeText(DoneActivity.this, "סכום שווי המיונים גבוהה משווי הסחורה, יש להזין מחירים מתאימים", Toast.LENGTH_LONG).show();
-
-                    } else if (sortWeightSum > doneWeight) {
-                        Toast.makeText(DoneActivity.this, "סכום המשקל של המיונים גבוהה מהמשקל הגמור, יש להזין משקלים מתאמים", Toast.LENGTH_LONG).show();
-
-                    } else if (sortWeightSum == InventoryApp.buys.get(index).getWeight() && sortValueSum != InventoryApp.buys.get(index).getSum()) {
+                    if (sortValueSum  < InventoryApp.buys.get(index).getSum() - VALUE_MARGIN || sortValueSum > InventoryApp.buys.get(index).getSum() + VALUE_MARGIN) {
                         Toast.makeText(DoneActivity.this, "סכום שווי המיונים לא שווה לשווי הסחורה, יש להזין מחירים מתאימים", Toast.LENGTH_LONG).show();
+
+                    } else if (sortWeightSum < doneWeight - CARAT_MARGIN || sortWeightSum > doneWeight + CARAT_MARGIN) {
+                        Toast.makeText(DoneActivity.this, "סכום המשקל של המיונים לא שווה למשקל הגמור, יש להזין משקלים מתאמים", Toast.LENGTH_LONG).show();
 
                     } else {
 
@@ -376,7 +384,7 @@ public class DoneActivity extends AppCompatActivity {
                                             sortInfo5.save();
                                         }
 
-                                        if (sortWeightLeftOver != 0) {
+                                        if (sortWeightLeftOver > CARAT_MARGIN) {
                                             // Saving the left over
                                             Sort leftOverSort = findLeftOver();
                                             leftOverSort.setSum(leftOverSort.getSum() + (sortWeightLeftOver * sortPriceLeftOver));
@@ -445,6 +453,7 @@ public class DoneActivity extends AppCompatActivity {
             sortInfo.setSum(sortPrice*sortWeight);
             sortInfo.setBuy(true);
             sortInfo.setSale(false);
+            sortInfo.setOpen(false);
             sortInfo.setUserEmail(InventoryApp.user.getEmail());
 
             return sortInfo;

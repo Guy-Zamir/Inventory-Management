@@ -25,6 +25,7 @@ import com.guy.inventory.R;
 import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -45,6 +46,7 @@ public class SplitSortActivity extends AppCompatActivity {
     final String LEFT_OVER_NAME = "עודפים";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String whereClauseEmail = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    final DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
     ArrayAdapter<String> sortAdapter;
 
     List<SortInfo> sortCheck;
@@ -105,7 +107,7 @@ public class SplitSortActivity extends AppCompatActivity {
                 ArrayList<String> sortNames = new ArrayList<>();
                 for (Sort sort : response) {
                     if (!(sort.getName().equals(LEFT_OVER_NAME) || sort.getName().equals(InventoryApp.sorts.get(index).getName()))) {
-                        sortNames.add(sort.getName() + " - " + sort.getSortCount());
+                        sortNames.add(sort.getName() + "-" + sort.getSortCount() + " : " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C");
                     }
                 }
 
@@ -140,7 +142,8 @@ public class SplitSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " : " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort1 = i;
                         break;
@@ -161,7 +164,8 @@ public class SplitSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " : " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort2 = i;
                         break;
@@ -182,7 +186,8 @@ public class SplitSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " : " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort3 = i;
                         break;
@@ -203,7 +208,8 @@ public class SplitSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " : " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort4 = i;
                         break;
@@ -224,7 +230,8 @@ public class SplitSortActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 for (int i = 0; i < InventoryApp.sorts.size(); i++) {
-                    String name = (InventoryApp.sorts.get(i).getName() + " - " + InventoryApp.sorts.get(i).getSortCount());
+                    Sort sort = InventoryApp.sorts.get(i);
+                    String name = sort.getName() + "-" + sort.getSortCount() + " : " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C";
                     if (name.equals(selection)) {
                         chosenSort5 = i;
                         break;

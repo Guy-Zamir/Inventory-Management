@@ -1,7 +1,6 @@
 package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
