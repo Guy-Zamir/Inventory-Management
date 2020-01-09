@@ -57,7 +57,7 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
         @SuppressLint("DefaultLocale") String sortYear = String.format("%02d", sortDate.get(Calendar.YEAR));
 
         tvSortHistoryNameOrg.setText(sortHistory.get(position).getFromName());
-        tvSortHistorySaleName.setText(sortHistory.get(position).getToName());
+        tvSortHistorySaleName.setText("נמכר ל: " + sortHistory.get(position).getToName());
         tvSortHistoryDate.setText("תאריך: " + sortDays + "/" + sortMonth + "/" + sortYear);
         tvSortHistoryWeight.setText("משקל: " + numberFormat.format(sortHistory.get(position).getWeight()) + " קראט ");
         tvSortHistoryPrice.setText("מחיר: " + numberFormat.format(sortHistory.get(position).getPrice()) + " $ ");
@@ -66,22 +66,24 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
         tvSortHistoryPriceSold.setText("מחיר מכירה: " + numberFormat.format(sortHistory.get(position).getSoldPrice()) + "$");
         tvSortHistorySumSold.setText("סכום מכירה: " + numberFormat.format(sortHistory.get(position).getSoldPrice() * sortHistory.get(position).getWeight()));
 
-        tvSortHistoryPriceSold.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
-        tvSortHistorySumSold.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
-        tvSortHistorySaleName.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
-        tvSortHistoryPL.setVisibility(sortHistory.get(position).isSale() ? View.VISIBLE : View.GONE);
+        tvSortHistoryPriceSold.setVisibility((sortHistory.get(position).getKind().equals("sale")) ? View.VISIBLE : View.GONE);
+        tvSortHistorySumSold.setVisibility(sortHistory.get(position).getKind().equals("sale") ? View.VISIBLE : View.GONE);
+        tvSortHistorySaleName.setVisibility(sortHistory.get(position).getKind().equals("sale") ? View.VISIBLE : View.GONE);
+        tvSortHistoryPL.setVisibility(sortHistory.get(position).getKind().equals("sale") ? View.VISIBLE : View.GONE);
 
-        if (sortHistory.get(position).isSplit()) {
+        if (sortHistory.get(position).getKind().equals("sale")) {
+            ivOutIn.setImageResource(R.drawable.empty_dollar);
+
+        } else if (sortHistory.get(position).getKind().equals("broker")){
+            ivOutIn.setImageResource(R.drawable.broker_icon);
+
+        } else if (sortHistory.get(position).isOut()) {
             ivOutIn.setImageResource(R.drawable.out_icon);
-        } else if (sortHistory.get(position).isSale()) {
-            ivOutIn.setImageResource(R.drawable.dollar_icon);
-        } else if (sortHistory.get(position).isBuy()) {
-            ivOutIn.setImageResource(R.drawable.in_icon);
-        }else if (sortHistory.get(position).isOpen()) {
-            ivOutIn.setImageResource(R.drawable.in_icon);
+
         } else {
             ivOutIn.setImageResource(R.drawable.in_icon);
         }
+
         convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
         return convertView;
     }

@@ -9,10 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -20,7 +18,6 @@ import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Tables.Buy;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;

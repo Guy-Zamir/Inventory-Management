@@ -146,7 +146,31 @@ public class TableSortingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            sortAdapter.notifyDataSetChanged();
+            sortBuilder.setWhereClause(EMAIL_CLAUSE);
+            sortBuilder.setPageSize(PAGE_SIZE);
+            sortBuilder.setSortBy("created DESC");
+            sortBuilder.setHavingClause("last = true");
+
+            showProgress(true);
+            Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
+                @Override
+                public void handleResponse(List<Sort> response) {
+                    InventoryApp.sorts = response;
+                    sortAdapter = new SortAdapter(TableSortingActivity.this, InventoryApp.sorts);
+                    lvSortList.setAdapter(sortAdapter);
+                    showProgress(false);
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    if (fault.getCode().equals("1009")) {
+                        Toast.makeText(TableSortingActivity.this, "טרם נשרמו מיונים", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(TableSortingActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    showProgress(false);
+                }
+            });
         }
     }
 

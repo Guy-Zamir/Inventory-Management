@@ -117,9 +117,7 @@ public class NewSortActivity extends AppCompatActivity {
                                 sortInfo.setPrice(response.getPrice());
                                 sortInfo.setWeight(response.getWeight());
                                 sortInfo.setSum(response.getSum());
-                                sortInfo.setBuy(false);
-                                sortInfo.setSale(false);
-                                sortInfo.setOpen(true);
+                                sortInfo.setKind("open");
                                 sortInfo.setUserEmail(InventoryApp.user.getEmail());
                                 Backendless.Persistence.save(sortInfo, new AsyncCallback<SortInfo>() {
                                     @Override

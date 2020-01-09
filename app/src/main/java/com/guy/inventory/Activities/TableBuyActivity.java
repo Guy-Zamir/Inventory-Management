@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,10 @@ import com.guy.inventory.EndlessScrollListener;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Buy;
+import com.guy.inventory.Tables.Sale;
+import com.guy.inventory.Tables.Sort;
+import com.guy.inventory.Tables.SortInfo;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -57,6 +62,7 @@ public class TableBuyActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buys_table);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         lvBuyList = findViewById(R.id.lvBuyList);
         mLoginFormView = findViewById(R.id.login_form);
@@ -177,7 +183,118 @@ public class TableBuyActivity extends AppCompatActivity {
                     Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_SHORT).show();
 
                 } else if (InventoryApp.buys.get(selectedItem).isDone()) {
-                    Toast.makeText(this, "לא ניתן למחוק חבילה גמורה", Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder deleteAlert = new AlertDialog.Builder(TableBuyActivity.this);
+                    deleteAlert.setTitle("התראת מחיקה");
+                    deleteAlert.setMessage("האם אתה בטוח שברצונך למחוק את המכירה המסומנת?");
+                    deleteAlert.setNegativeButton(android.R.string.no, null);
+                    deleteAlert.setIcon(android.R.drawable.ic_dialog_alert);
+                    deleteAlert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            showProgress(true);
+                            tvLoad.setText("מוחק את הנתונים אנא המתן...");
+
+                            final DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
+                            sortInfoBuilder.setWhereClause("fromId = '" + InventoryApp.buys.get(selectedItem).getObjectId() + "'");
+
+                            Backendless.Data.of(SortInfo.class).find(sortInfoBuilder, new AsyncCallback<List<SortInfo>>() {
+                                @Override
+                                public void handleResponse(List<SortInfo> response) {
+                                    // Finding all the sortInfo and deleting them after collecting the data of the weight and sum
+                                    double sum = 0;
+                                    double weight = 0;
+                                    String sortName = "";
+
+                                    for (SortInfo sortInfo : response) {
+                                        sum += sortInfo.getSum();
+                                        weight += sortInfo.getWeight();
+                                        sortName = sortInfo.getToName();
+                                    }
+
+                                    final double allSum = sum;
+                                    final double allWeight = weight;
+                                    final String name = sortName;
+
+                                    DataQueryBuilder sortBuilder = DataQueryBuilder.create();
+                                    sortBuilder.setWhereClause("name = '" + name + "'");
+                                    sortBuilder.setHavingClause("last = true");
+                                    Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
+                                        @Override
+                                        public void handleResponse(List<Sort> response) {
+                                            final Sort sort = response.get(0);
+
+                                            // Adding to the original sort the weight and sum
+                                            sort.setSum(sort.getSum() - allSum);
+                                            sort.setWeight(sort.getWeight() - allWeight);
+                                            sort.setPrice(sort.getWeight() == 0 ? 0 : sort.getSum() / sort.getWeight());
+
+                                            // Checking if the user has enough goods to delete
+                                            if (!(sort.getWeight() < 0 || sort.getSum() < 0)) {
+
+                                                Backendless.Data.of(Sort.class).save(sort, new AsyncCallback<Sort>() {
+                                                    @Override
+                                                    public void handleResponse(Sort response) {
+
+                                                        Backendless.Data.of("SortInfo").remove("fromId = '" + InventoryApp.buys.get(selectedItem).getObjectId() + "'", new AsyncCallback<Integer>() {
+                                                            @Override
+                                                            public void handleResponse(Integer response) {
+
+                                                                Backendless.Persistence.of(Buy.class).remove(InventoryApp.buys.get(selectedItem), new AsyncCallback<Long>() {
+                                                                    @Override
+                                                                    public void handleResponse(Long response) {
+                                                                        showProgress(false);
+                                                                        Toast.makeText(TableBuyActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                                                        setResult(RESULT_OK);
+                                                                        finishActivity(1);
+                                                                        TableBuyActivity.this.finish();
+                                                                    }
+
+                                                                    @Override
+                                                                    public void handleFault(BackendlessFault fault) {
+                                                                        Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        showProgress(false);
+                                                                    }
+                                                                });
+                                                            }
+
+                                                            @Override
+                                                            public void handleFault(BackendlessFault fault) {
+                                                                Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                showProgress(false);
+                                                            }
+                                                        });
+                                                    }
+
+                                                    @Override
+                                                    public void handleFault(BackendlessFault fault) {
+                                                        Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        showProgress(false);
+                                                    }
+                                                });
+
+                                            // Not enough goods in the stock
+                                            } else {
+                                                showProgress(false);
+                                                Toast.makeText(TableBuyActivity.this, "אין אפשרות לבצע את המחיקה, לא קיים מספיק מלאי", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void handleFault(BackendlessFault fault) {
+                                            Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                            showProgress(false);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void handleFault(BackendlessFault fault) {
+                                    Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                    showProgress(false);
+                                }
+                            });
+                        }
+                    });
+                    deleteAlert.show();
 
                 } else {
                     AlertDialog.Builder deleteAlert = new AlertDialog.Builder(TableBuyActivity.this);

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/newIcon"
+        android:icon="@drawable/new_icon"
+        android:title="@string/app_name"
+        android:orderInCategory="5"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/memoIcon"
+        android:icon="@drawable/m_icon"
+        android:title="@string/app_name"
+        android:orderInCategory="1"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/deleteIcon"
+        android:icon="@drawable/delete_icon1"
+        android:title="@string/app_name"
+        android:orderInCategory="2"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/addIcon"
+        android:icon="@drawable/add_icon"
+        android:title="@string/app_name"
+        android:orderInCategory="4"
+        app:showAsAction="always" />
+</menu>

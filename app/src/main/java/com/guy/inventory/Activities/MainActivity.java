@@ -16,19 +16,18 @@ import com.backendless.exceptions.BackendlessFault;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 
-
 public class MainActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
     Button btnResult, btnBuyTable, btnSaleTable, btnSupplierTable, btnClientTable, btnExportTable,
-    btnSortingTable, btn2019, btn2020 ,btnDemo;
+    btnSortingTable, btnMemo, btnBroker, btn2019, btn2020 ,btnDemo;
 
-    final String EMAIL_2019 = "ENTER YOUR EMAIL HERE";
-    final String EMAIL_2020 = "ENTER YOUR EMAIL HERE";
-    final String EMAIL_TEST = "ENTER YOUR EMAIL HERE";
-    final String PASSWORD = "ENTER YOUR PASSWORD HERE";
+    final String EMAIL_2019 = "zamirbit@012.net.il";
+    final String EMAIL_2020 = "zamirbit20@012.net.il";
+    final String EMAIL_TEST = "test@test.com";
+    final String PASSWORD = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         btnClientTable = findViewById(R.id.btnClientTable);
         btnExportTable = findViewById(R.id.btnExportTable);
         btnSortingTable = findViewById(R.id.btnSortingTable);
+        btnBroker = findViewById(R.id.btnBroker);
+        btnMemo = findViewById(R.id.btnMemo);
         btn2019 = findViewById(R.id.btn2019);
         btn2020 = findViewById(R.id.btn2020);
         btnDemo = findViewById(R.id.btnDemo);
@@ -59,6 +60,22 @@ public class MainActivity extends AppCompatActivity {
         btn2019.setBackgroundResource(InventoryApp.user.getEmail().equals(EMAIL_2019) ? R.drawable.table_row_selected : R.drawable.table_row);
         btn2020.setBackgroundResource(InventoryApp.user.getEmail().equals(EMAIL_2020) ? R.drawable.table_row_selected : R.drawable.table_row);
         btnDemo.setBackgroundResource(InventoryApp.user.getEmail().equals(EMAIL_TEST) ? R.drawable.table_row_selected : R.drawable.table_row);
+
+        btnMemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnBroker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BrokerMainSortActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override

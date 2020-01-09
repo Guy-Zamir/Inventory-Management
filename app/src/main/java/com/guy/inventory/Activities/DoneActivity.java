@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-
 public class DoneActivity extends AppCompatActivity {
 
     private View mProgressView;
@@ -395,8 +394,9 @@ public class DoneActivity extends AppCompatActivity {
                                             SortInfo sortInfoLeftOver = new SortInfo();
                                             sortInfoLeftOver.setFromName(InventoryApp.buys.get(index).getSupplierName());
                                             sortInfoLeftOver.setToName(leftOverSort.getName());
-                                            sortInfoLeftOver.setBuy(true);
-                                            sortInfoLeftOver.setSale(false);
+                                            sortInfoLeftOver.setKind("buy");
+                                            //sortInfoLeftOver.setBuy(true);
+                                            //sortInfoLeftOver.setSale(false);
                                             sortInfoLeftOver.setToId(leftOverSort.getObjectId());
                                             sortInfoLeftOver.setSortCount(leftOverSort.getSortCount());
                                             sortInfoLeftOver.setFromId(InventoryApp.buys.get(index).getObjectId());
@@ -451,9 +451,10 @@ public class DoneActivity extends AppCompatActivity {
             sortInfo.setPrice(sortPrice);
             sortInfo.setWeight(sortWeight);
             sortInfo.setSum(sortPrice*sortWeight);
-            sortInfo.setBuy(true);
-            sortInfo.setSale(false);
-            sortInfo.setOpen(false);
+            //sortInfo.setBuy(true);
+            //sortInfo.setSale(false);
+            //sortInfo.setOpen(false);
+            sortInfo.setKind("buy");
             sortInfo.setUserEmail(InventoryApp.user.getEmail());
 
             return sortInfo;

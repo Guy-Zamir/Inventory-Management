@@ -4,7 +4,7 @@
     package="com.guy.inventory">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".InventoryApp"
@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.NewSaleSortActivity"></activity>
+        <activity android:name=".Activities.NewBrokerSortActivity"></activity>
+        <activity android:name=".Activities.TableBrokerActivity" />
+        <activity android:name=".Activities.BrokerMainSortActivity" />
+        <activity android:name=".Activities.NewSaleSortActivity" />
         <activity android:name=".Activities.TableSortHistoryActivity" />
         <activity android:name=".Activities.SplitSortActivity" />
         <activity android:name=".Activities.NewSortActivity" />

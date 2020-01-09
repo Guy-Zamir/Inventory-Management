@@ -16,6 +16,11 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
+import com.guy.inventory.Tables.BrokerSort;
+import com.guy.inventory.Tables.Buy;
+import com.guy.inventory.Tables.Sale;
+import com.guy.inventory.Tables.Sort;
+
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +45,7 @@ public class BalanceActivity extends AppCompatActivity {
             tvBalanceSortProfit, tvBalanceSortProfitPrice, tvBalanceSortProfitPre, tvBalanceSortNum,
             tvSortHeadline, tvBalanceHeadline, tvPolishHeadline, tvRoughHeadline;
 
-    Button btnBalanceBuy, btnBalanceSale, btnBalanceGoods, btnBalanceOpen;
+    Button btnBalanceBuy, btnBalanceSale, btnBalanceGoods, btnBalanceOpen, btnBalanceBroker;
 
     // All the calculated values
     private double weight;
@@ -89,11 +94,18 @@ public class BalanceActivity extends AppCompatActivity {
 
     private double sortSaleSum = 0;
     private double sortSum = 0;
+    private double allSortSum = 0;
+    private double allSortWeight = 0;
+    private double allSortPrice = 0;
 
     private double openStockPolishSum = 0;
     private double openStockPolishWeight = 0;
     private double openStockRoughSum = 0;
     private double openStockRoughWeight = 0;
+
+    private double brokerSum = 0;
+    private double brokerWeightSum = 0;
+    private double brokerPrice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +121,7 @@ public class BalanceActivity extends AppCompatActivity {
         btnBalanceSale = findViewById(R.id.btnBalanceSale);
         btnBalanceGoods = findViewById(R.id.btnBalanceGoods);
         btnBalanceOpen = findViewById(R.id.btnBalanceOpen);
+        btnBalanceBroker = findViewById(R.id.btnBalanceBroker);
 
         llBalanceSort = findViewById(R.id.llBalanceSort);
 
@@ -353,98 +366,137 @@ public class BalanceActivity extends AppCompatActivity {
 
                                                                                         DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
                                                                                         sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                                        sortInfoBuilder.setGroupBy("open");
-                                                                                        sortInfoBuilder.setProperties("Sum(sum), open");
+                                                                                        sortInfoBuilder.setGroupBy("kind");
+                                                                                        sortInfoBuilder.setProperties("Sum(sum), kind");
 
                                                                                         Backendless.Data.of("sortInfo").find(sortInfoBuilder, new AsyncCallback<List<Map>>() {
                                                                                             @Override
                                                                                             public void handleResponse(List<Map> response) {
-                                                                                                if (response.size() >= 2) {
-                                                                                                    if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
-                                                                                                        openStockPolishSum += (int) response.get(1).get("sum");
-                                                                                                    } else {
-                                                                                                        openStockPolishSum += (double) response.get(1).get("sum");
+                                                                                                for (int i=0; i<response.size(); i++) {
+                                                                                                    if (Objects.equals(response.get(i).get("kind"), "open")) {
+                                                                                                        if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                                                                                            openStockPolishSum += (int) response.get(i).get("sum");
+                                                                                                        } else {
+                                                                                                            openStockPolishSum += (double) response.get(i).get("sum");
+                                                                                                        }
                                                                                                     }
-                                                                                                } else {
-                                                                                                    openStockPolishSum = 0;
                                                                                                 }
 
                                                                                                 DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
                                                                                                 sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                                                sortInfoBuilder.setGroupBy("open");
-                                                                                                sortInfoBuilder.setProperties("Sum(weight), open");
+                                                                                                sortInfoBuilder.setGroupBy("kind");
+                                                                                                sortInfoBuilder.setProperties("Sum(weight), kind");
 
                                                                                                 Backendless.Data.of("sortInfo").find(sortInfoBuilder, new AsyncCallback<List<Map>>() {
                                                                                                     @Override
                                                                                                     public void handleResponse(List<Map> response) {
-                                                                                                        if (response.size() >= 2) {
-                                                                                                            if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
-                                                                                                                openStockPolishWeight += (int) response.get(1).get("sum");
-                                                                                                            } else {
-                                                                                                                openStockPolishWeight += (double) response.get(1).get("sum");
+                                                                                                        for (int i = 0; i < response.size(); i++) {
+                                                                                                            if (Objects.equals(response.get(i).get("kind"), "open")) {
+                                                                                                                if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                                                                                                    openStockPolishWeight += (int) response.get(i).get("sum");
+                                                                                                                } else {
+                                                                                                                    openStockPolishWeight += (double) response.get(i).get("sum");
+                                                                                                                }
                                                                                                             }
-                                                                                                        } else {
-                                                                                                            openStockPolishWeight = 0;
                                                                                                         }
 
+                                                                                                        DataQueryBuilder brokerSortBuilder = DataQueryBuilder.create();
+                                                                                                        brokerSortBuilder.setWhereClause(EMAIL_CLAUSE);
+                                                                                                        Backendless.Data.of(BrokerSort.class).find(brokerSortBuilder, new AsyncCallback<List<BrokerSort>>() {
+                                                                                                            @Override
+                                                                                                            public void handleResponse(List<BrokerSort> response) {
+                                                                                                                for (BrokerSort brokerSort : response) {
+                                                                                                                    brokerSum += brokerSort.getSum();
+                                                                                                                    brokerWeightSum += brokerSort.getWeight();
+                                                                                                                }
 
-                                                                                                        showProgress(false);
+                                                                                                                DataQueryBuilder sortBuilder = DataQueryBuilder.create();
+                                                                                                                sortBuilder.setWhereClause(EMAIL_CLAUSE);
+                                                                                                                sortBuilder.setHavingClause("last = true");
+                                                                                                                Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
+                                                                                                                    @Override
+                                                                                                                    public void handleResponse(List<Sort> response) {
+                                                                                                                        for (Sort sort : response) {
+                                                                                                                            allSortSum += sort.getSum();
+                                                                                                                            allSortWeight += sort.getWeight();
+                                                                                                                        }
 
-                                                                                                        //Calculate The Values//
-                                                                                                        exportSum = allPolishExportSum;
-                                                                                                        exportWeight = allPolishExportWeight;
-                                                                                                        exportPrice = (exportWeight > 0) ? (exportSum / exportWeight) : 0;
+                                                                                                                        showProgress(false);
 
-                                                                                                        saleRoughSum = allRoughSaleSum;
-                                                                                                        saleRoughWeight = allRoughSaleWeight;
-                                                                                                        saleRoughPrice = (saleRoughWeight > 0) ? (saleRoughSum / saleRoughWeight) : 0;
+                                                                                                                        //Calculate The Values//
+                                                                                                                        exportSum = allPolishExportSum;
+                                                                                                                        exportWeight = allPolishExportWeight;
+                                                                                                                        exportPrice = (exportWeight > 0) ? (exportSum / exportWeight) : 0;
 
-                                                                                                        salePolishSum = allPolishSaleSum;
-                                                                                                        salePolishWeight = allPolishSaleWeight;
-                                                                                                        salePolishPrice = (salePolishWeight > 0) ? (salePolishSum / salePolishWeight) : 0;
+                                                                                                                        saleRoughSum = allRoughSaleSum;
+                                                                                                                        saleRoughWeight = allRoughSaleWeight;
+                                                                                                                        saleRoughPrice = (saleRoughWeight > 0) ? (saleRoughSum / saleRoughWeight) : 0;
 
-                                                                                                        saleSum = salePolishSum + saleRoughSum + exportSum;
-                                                                                                        saleWeight = saleRoughWeight + salePolishWeight + exportWeight;
-                                                                                                        salePrice = (saleWeight > 0) ? (saleSum / saleWeight) : 0;
+                                                                                                                        salePolishSum = allPolishSaleSum;
+                                                                                                                        salePolishWeight = allPolishSaleWeight;
+                                                                                                                        salePolishPrice = (salePolishWeight > 0) ? (salePolishSum / salePolishWeight) : 0;
 
-                                                                                                        buyRoughSum = allNotDoneRoughBuySum + allRoughBuyDoneSum;
-                                                                                                        buyRoughWeight = allRoughBuyDoneOrgWeight + allNotDoneRoughBuyWeight;
-                                                                                                        buyRoughPrice = (buyRoughWeight > 0) ? (buyRoughSum / buyRoughWeight) : 0;
+                                                                                                                        saleSum = salePolishSum + saleRoughSum + exportSum;
+                                                                                                                        saleWeight = saleRoughWeight + salePolishWeight + exportWeight;
+                                                                                                                        salePrice = (saleWeight > 0) ? (saleSum / saleWeight) : 0;
 
-                                                                                                        buyPolishSum = allPolishBuySum;
-                                                                                                        buyPolishWeight = allPolishBuyWeight;
-                                                                                                        buyPolishPrice = (buyPolishWeight > 0) ? (buyPolishSum / buyPolishWeight) : 0;
+                                                                                                                        buyRoughSum = allNotDoneRoughBuySum + allRoughBuyDoneSum;
+                                                                                                                        buyRoughWeight = allRoughBuyDoneOrgWeight + allNotDoneRoughBuyWeight;
+                                                                                                                        buyRoughPrice = (buyRoughWeight > 0) ? (buyRoughSum / buyRoughWeight) : 0;
 
-                                                                                                        buySum = buyRoughSum + buyPolishSum;
-                                                                                                        buyWeight = buyRoughWeight + buyPolishWeight;
-                                                                                                        buyPrice = (buyWeight > 0) ? (buySum / buyWeight) : 0;
+                                                                                                                        buyPolishSum = allPolishBuySum;
+                                                                                                                        buyPolishWeight = allPolishBuyWeight;
+                                                                                                                        buyPolishPrice = (buyPolishWeight > 0) ? (buyPolishSum / buyPolishWeight) : 0;
 
-                                                                                                        RoughWeight = openStockRoughWeight + allNotDoneRoughBuyWeight - saleRoughWeight;
-                                                                                                        PolishWeight = openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight - salePolishWeight - exportWeight;
-                                                                                                        weight = RoughWeight + PolishWeight;
+                                                                                                                        buySum = buyRoughSum + buyPolishSum;
+                                                                                                                        buyWeight = buyRoughWeight + buyPolishWeight;
+                                                                                                                        buyPrice = (buyWeight > 0) ? (buySum / buyWeight) : 0;
 
-                                                                                                        roughCostPrice = (openStockRoughWeight + allNotDoneRoughBuyWeight > 0) ? ((openStockRoughSum + allNotDoneRoughBuySum) / (openStockRoughWeight + allNotDoneRoughBuyWeight)) : 0;
-                                                                                                        roughSum = roughCostPrice * RoughWeight;
+                                                                                                                        RoughWeight = openStockRoughWeight + allNotDoneRoughBuyWeight - saleRoughWeight;
+                                                                                                                        PolishWeight = openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight - salePolishWeight - exportWeight;
+                                                                                                                        weight = RoughWeight + PolishWeight;
 
-                                                                                                        polishCostPrice = ((openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight) > 0) ? (openStockPolishSum + allRoughBuyDoneSum + buyPolishSum) / (openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight) : 0;
-                                                                                                        polishSum = PolishWeight * polishCostPrice;
+                                                                                                                        roughCostPrice = (openStockRoughWeight + allNotDoneRoughBuyWeight > 0) ? ((openStockRoughSum + allNotDoneRoughBuySum) / (openStockRoughWeight + allNotDoneRoughBuyWeight)) : 0;
+                                                                                                                        roughSum = roughCostPrice * RoughWeight;
 
-                                                                                                        costSum = roughSum + polishSum;
-                                                                                                        costPrice = (weight > 0) ? (costSum / weight) : 0;
+                                                                                                                        polishCostPrice = ((openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight) > 0) ? (openStockPolishSum + allRoughBuyDoneSum + buyPolishSum) / (openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight) : 0;
+                                                                                                                        polishSum = PolishWeight * polishCostPrice;
 
-                                                                                                        openStockRoughPrice = openStockRoughWeight == 0 ? 0 : openStockRoughSum / openStockRoughWeight;
-                                                                                                        openStockPolishPrice = openStockPolishWeight == 0 ? 0 : openStockPolishSum / openStockPolishWeight;
+                                                                                                                        costSum = roughSum + polishSum;
+                                                                                                                        costPrice = (weight > 0) ? (costSum / weight) : 0;
 
-                                                                                                        openStockSum = openStockPolishSum + openStockRoughSum;
-                                                                                                        openStockWeight = openStockPolishWeight + openStockRoughWeight;
-                                                                                                        openStockPrice = openStockWeight == 0 ? 0 : (openStockSum / openStockWeight);
+                                                                                                                        openStockRoughPrice = openStockRoughWeight == 0 ? 0 : openStockRoughSum / openStockRoughWeight;
+                                                                                                                        openStockPolishPrice = openStockPolishWeight == 0 ? 0 : openStockPolishSum / openStockPolishWeight;
 
-                                                                                                        sortProfit = sortSaleSum - sortSum;
-                                                                                                        sortProfitPre = saleWeight != 0 ? (sortProfit / saleSum) : 0;
-                                                                                                        sortProfitPrice = saleWeight != 0 ? (sortProfit / saleWeight) : 0;
+                                                                                                                        openStockSum = openStockPolishSum + openStockRoughSum;
+                                                                                                                        openStockWeight = openStockPolishWeight + openStockRoughWeight;
+                                                                                                                        openStockPrice = openStockWeight == 0 ? 0 : (openStockSum / openStockWeight);
 
-                                                                                                        setTheText(0);
-                                                                                                        btnBalanceGoods.setSelected(true);
+                                                                                                                        sortProfit = sortSaleSum - sortSum;
+                                                                                                                        sortProfitPre = saleWeight != 0 ? (sortProfit / saleSum) : 0;
+                                                                                                                        sortProfitPrice = saleWeight != 0 ? (sortProfit / saleWeight) : 0;
+
+                                                                                                                        brokerPrice = brokerWeightSum == 0 ? 0 : brokerSum/brokerWeightSum;
+
+                                                                                                                        allSortPrice = allSortWeight == 0 ? 0 : allSortSum/allSortWeight;
+
+                                                                                                                        setTheText(0);
+                                                                                                                        btnBalanceGoods.setSelected(true);
+                                                                                                                    }
+
+                                                                                                                    @Override
+                                                                                                                    public void handleFault(BackendlessFault fault) {
+
+                                                                                                                    }
+                                                                                                                });
+                                                                                                            }
+
+                                                                                                            @Override
+                                                                                                            public void handleFault(BackendlessFault fault) {
+
+                                                                                                            }
+                                                                                                        });
+
                                                                                                     }
 
                                                                                                     @Override
@@ -544,7 +596,6 @@ public class BalanceActivity extends AppCompatActivity {
             }
         });
 
-
         btnBalanceGoods.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -553,6 +604,7 @@ public class BalanceActivity extends AppCompatActivity {
                 btnBalanceOpen.setSelected(false);
                 btnBalanceSale.setSelected(false);
                 btnBalanceBuy.setSelected(false);
+                btnBalanceBroker.setSelected(false);
             }
         });
 
@@ -564,6 +616,7 @@ public class BalanceActivity extends AppCompatActivity {
                 btnBalanceOpen.setSelected(false);
                 btnBalanceSale.setSelected(false);
                 btnBalanceBuy.setSelected(true);
+                btnBalanceBroker.setSelected(false);
             }
         });
 
@@ -575,6 +628,7 @@ public class BalanceActivity extends AppCompatActivity {
                 btnBalanceOpen.setSelected(false);
                 btnBalanceSale.setSelected(true);
                 btnBalanceBuy.setSelected(false);
+                btnBalanceBroker.setSelected(false);
             }
         });
 
@@ -586,6 +640,19 @@ public class BalanceActivity extends AppCompatActivity {
                 btnBalanceOpen.setSelected(true);
                 btnBalanceSale.setSelected(false);
                 btnBalanceBuy.setSelected(false);
+                btnBalanceBroker.setSelected(false);
+            }
+        });
+
+        btnBalanceBroker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTheText(4);
+                btnBalanceGoods.setSelected(false);
+                btnBalanceOpen.setSelected(false);
+                btnBalanceSale.setSelected(false);
+                btnBalanceBuy.setSelected(false);
+                btnBalanceBroker.setSelected(true);
             }
         });
     }
@@ -670,6 +737,24 @@ public class BalanceActivity extends AppCompatActivity {
                 tvBalancePolishSum.setText("סכום:  " + numberFormat.format(openStockPolishSum) + "$");
                 tvBalancePolishWeight.setText("משקל:  " + numberFormat.format(openStockPolishWeight) + " קראט ");
                 tvBalancePolishPrice.setText("מחיר ממוצע:  " + numberFormat.format(openStockPolishPrice) + "$");
+
+                llBalanceSort.setVisibility(View.GONE);
+                break;
+
+            case 4:
+                tvBalanceHeadline.setText("מיונים אצל ניב");
+                tvPolishHeadline.setText("מיונים במשרד");
+                tvRoughHeadline.setText("-----");
+
+                tvBalanceSum.setText("סכום:  " + numberFormat.format(brokerSum) + "$");
+                tvBalanceWeight.setText("משקל:  " + numberFormat.format(brokerWeightSum) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + numberFormat.format(brokerPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + numberFormat.format(allSortSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + numberFormat.format(allSortWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + numberFormat.format(allSortPrice) + "$");
+                tvBalanceRoughSum.setText("------");
+                tvBalanceRoughWeight.setText("------");
+                tvBalanceRoughPrice.setText("------");
 
                 llBalanceSort.setVisibility(View.GONE);
                 break;

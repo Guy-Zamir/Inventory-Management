@@ -34,6 +34,7 @@ public class NewSaleActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
+
     private DatePicker dpSaleDate;
     private Switch swSalePolish;
     private EditText etSaleID, etSaleSum, etSaleWeight, etSaleDays;
@@ -41,8 +42,6 @@ public class NewSaleActivity extends AppCompatActivity {
     private AutoCompleteTextView acClients;
     private int chosenClient = -1;
     private boolean isExport;
-
-
 
     private String aClient = "client";
     final DataQueryBuilder clientBuilder = DataQueryBuilder.create();

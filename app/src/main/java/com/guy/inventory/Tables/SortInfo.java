@@ -22,11 +22,9 @@ public class SortInfo
     private String ownerId;
     private Date created;
     private String userEmail;
-    private boolean sale;
-    private boolean buy;
-    private boolean split;
     private double soldPrice;
-    private boolean open;
+    private String kind;
+    private boolean out;
 
     public Date getUpdated()
     {
@@ -199,22 +197,6 @@ public class SortInfo
         this.created = created;
     }
 
-    public boolean isSale() {
-        return sale;
-    }
-
-    public void setSale(boolean sale) {
-        this.sale = sale;
-    }
-
-    public boolean isBuy() {
-        return buy;
-    }
-
-    public void setBuy(boolean buy) {
-        this.buy = buy;
-    }
-
     public double getSoldPrice() {
         return soldPrice;
     }
@@ -223,19 +205,19 @@ public class SortInfo
         this.soldPrice = soldPrice;
     }
 
-    public boolean isSplit() {
-        return split;
+    public String getKind() {
+        return kind;
     }
 
-    public void setSplit(boolean split) {
-        this.split = split;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
-    public boolean isOpen() {
-        return open;
+    public boolean isOut() {
+        return out;
     }
 
-    public void setOpen(boolean open) {
-        this.open = open;
+    public void setOut(boolean out) {
+        this.out = out;
     }
 }

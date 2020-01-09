@@ -379,9 +379,7 @@ public class SplitSortActivity extends AppCompatActivity {
             sortInfo.setPrice(sortPrice);
             sortInfo.setWeight(sortWeight);
             sortInfo.setSum(sortPrice*sortWeight);
-            sortInfo.setBuy(false);
-            sortInfo.setSale(false);
-            sortInfo.setSplit(true);
+            sortInfo.setKind("split");
             sortInfo.setUserEmail(InventoryApp.user.getEmail());
 
             return sortInfo;

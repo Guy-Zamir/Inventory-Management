@@ -27,10 +27,10 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin, btnRegister, btn2019, btn2020 ,btnDemo;
     TextView tvReset;
 
-    final String EMAIL_2019 = "ENTER YOUR EMAIL HERE";
-    final String EMAIL_2020 = "ENTER YOUR EMAIL HERE";
-    final String EMAIL_TEST = "ENTER YOUR EMAIL HERE";
-    final String PASSWORD = "ENTER YOUR PASSWORD HERE";
+    final String EMAIL_2019 = "zamirbit@012.net.il";
+    final String EMAIL_2020 = "zamirbit20@012.net.il";
+    final String EMAIL_TEST = "test@test.com";
+    final String PASSWORD = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
