@@ -451,9 +451,6 @@ public class DoneActivity extends AppCompatActivity {
             sortInfo.setPrice(sortPrice);
             sortInfo.setWeight(sortWeight);
             sortInfo.setSum(sortPrice*sortWeight);
-            //sortInfo.setBuy(true);
-            //sortInfo.setSale(false);
-            //sortInfo.setOpen(false);
             sortInfo.setKind("buy");
             sortInfo.setUserEmail(InventoryApp.user.getEmail());
 

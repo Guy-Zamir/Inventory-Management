@@ -38,11 +38,11 @@ public class NewSaleActivity extends AppCompatActivity {
     private DatePicker dpSaleDate;
     private Switch swSalePolish;
     private EditText etSaleID, etSaleSum, etSaleWeight, etSaleDays;
-    private ArrayAdapter<String> clientAdapter;
     private AutoCompleteTextView acClients;
-    private int chosenClient = -1;
-    private boolean isExport;
+    private boolean export;
 
+    private int chosenClient = -1;
+    private ArrayAdapter<String> clientAdapter;
     private String aClient = "client";
     final DataQueryBuilder clientBuilder = DataQueryBuilder.create();
     final String whereClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
@@ -72,11 +72,11 @@ public class NewSaleActivity extends AppCompatActivity {
 
         Button btnSaleSubmit = findViewById(R.id.btnSaleSubmit);
 
-        isExport = getIntent().getBooleanExtra("export", false);
+        export = getIntent().getBooleanExtra("export", false);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle((isExport) ? "יצוא חדש" : "מכירה חדשה");
+        actionBar.setTitle((export) ? "יצוא חדש" : "מכירה חדשה");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         clientBuilder.setWhereClause(whereClause);
@@ -157,7 +157,7 @@ public class NewSaleActivity extends AppCompatActivity {
                     final double saleSum = Double.parseDouble(etSaleSum.getText().toString());
                     final int days = (etSaleDays.getText().toString().isEmpty()) ? 90 : Integer.valueOf(etSaleDays.getText().toString().trim());
                     final boolean polish = !swSalePolish.isChecked();
-                    final String kind = (isExport) ? "export" : "sale";
+                    final String kind = (export) ? "export" : "sale";
 
                     final Sale sale = new Sale();
                     sale.setClientName(clientName);

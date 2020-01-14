@@ -60,6 +60,20 @@
 
         </AutoCompleteTextView>
 
+        <AutoCompleteTextView
+            android:id="@+id/acClient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="bottom|center_horizontal"
+            android:hint="בחר לקוח"
+            android:inputType="text">
+
+        </AutoCompleteTextView>
+
         <EditText
             android:id="@+id/etBrokerName"
             android:layout_width="match_parent"
@@ -70,7 +84,8 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="bottom|center_horizontal"
-            android:hint="שם החבילה של המתווך" />
+            android:hint="שם חבילה היוצאת"
+            android:inputType="textLongMessage" />
 
         <EditText
             android:id="@+id/etBrokerWeight"
@@ -95,7 +110,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="bottom|center_horizontal"
-            android:hint="מחיר חבילת המתווך"
+            android:hint="מחיר יציאה לחבילה"
             android:inputType="numberDecimal" />
 
         <EditText

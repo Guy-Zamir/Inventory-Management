@@ -19,24 +19,22 @@ import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.BrokerSort;
+import com.guy.inventory.Tables.Client;
+import com.guy.inventory.Tables.Memo;
 import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class NewBrokerSortActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
 
-    private ThreadPoolExecutor mPool;
-
     private EditText etBrokerWeight, etBrokerPrice, etBrokerPriceINV, etBrokerName;
     private ArrayAdapter<String> sortAdapter;
-    private AutoCompleteTextView acSorts;
+    private AutoCompleteTextView acSorts, acClient;
 
     private int chosenSort = -1;
     final int PAGE_SIZE = 100;
@@ -44,11 +42,16 @@ public class NewBrokerSortActivity extends AppCompatActivity {
     private String kind;
     private boolean add;
     private int index;
+    private boolean memo;
 
+    private int chosenClient = -1;
+    private ArrayAdapter<String> clientAdapter;
+    private String aClient = "client";
     final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
     final String LEFT_OVER_NAME = "עודפים";
     final String whereClauseEmail = "userEmail = '" + InventoryApp.user.getEmail() + "'";
     final String whereClauseLast = "last = true";
+    final String clientClause = "supplier = '" + aClient + "'";
     final DecimalFormat numberFormat = new DecimalFormat("#,###,###,###.##");
 
     private String sortName;
@@ -69,20 +72,29 @@ public class NewBrokerSortActivity extends AppCompatActivity {
         etBrokerPriceINV = findViewById(R.id.etBrokerPriceINV);
         etBrokerName = findViewById(R.id.etBrokerName);
         acSorts = findViewById(R.id.acSorts);
+        acClient = findViewById(R.id.acClient);
         Button btnBrokerSubmit = findViewById(R.id.btnBrokerSubmit);
-
-        mPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(100);
 
         kind = getIntent().getStringExtra("kind");
         add = getIntent().getBooleanExtra("add", false);
         index = getIntent().getIntExtra("index", -1);
+        memo = getIntent().getBooleanExtra("memo", false);
 
         etBrokerName.setVisibility(add ? View.GONE : View.VISIBLE);
+
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle(add ? "הוספה לחבילת מתווך - " + kind : "חבילת מתווך חדש - " + kind);
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
+        if (memo) {
+            actionBar.setTitle(add ? "הוספה ל: " + InventoryApp.memos.get(index).getName() + " - " + kind : "חבילת ממו חדשה - " + kind);
+
+        } else {
+            actionBar.setTitle(add ? "הוספה ל: " + InventoryApp.brokerSorts.get(index).getName() + " - " + kind : "חבילת מתווך חדשה - " + kind);
+            chosenClient = 1;
+            acClient.setVisibility(View.GONE);
+        }
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
         sortBuilder.setWhereClause(whereClauseEmail);
         sortBuilder.setHavingClause(whereClauseLast);
         sortBuilder.setPageSize(PAGE_SIZE);
@@ -139,64 +151,147 @@ public class NewBrokerSortActivity extends AppCompatActivity {
             }
         });
 
+        DataQueryBuilder clientBuilder = DataQueryBuilder.create();
+        clientBuilder.setWhereClause(whereClauseEmail);
+        clientBuilder.setHavingClause(clientClause);
+        clientBuilder.setPageSize(100);
+        clientBuilder.setSortBy("name");
+        showProgress(true);
+
+        Backendless.Data.of(Client.class).find(clientBuilder, new AsyncCallback<List<Client>>() {
+            @Override
+            public void handleResponse(List<Client> response) {
+                ArrayList<String> clientNames = new ArrayList<>();
+                for (Client client : response) {
+                    clientNames.add(client.getName());
+                }
+                InventoryApp.clients = response;
+                clientAdapter = new ArrayAdapter<>(NewBrokerSortActivity.this, android.R.layout.select_dialog_singlechoice, clientNames);
+                acClient.setThreshold(1);
+                acClient.setAdapter(clientAdapter);
+                showProgress(false);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(NewBrokerSortActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                showProgress(false);
+            }
+        });
+
+        acClient.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selection = (String) parent.getItemAtPosition(position);
+                for (int i = 0; i < InventoryApp.clients.size(); i++) {
+                    if (InventoryApp.clients.get(i).getName().equals(selection)) {
+                        chosenClient = i;
+                        break;
+                    }
+                }
+            }
+        });
+
+        acClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acClient.showDropDown();
+            }
+        });
+
         btnBrokerSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (check().equals("OK")) {
-                    showProgress(true);
-                    BrokerSort brokerSort = brokerSortSave();
-                    Backendless.Data.of(BrokerSort.class).save(brokerSort, new AsyncCallback<BrokerSort>() {
-                        @Override
-                        public void handleResponse(BrokerSort response) {
-                            String brokerSortId = response.getObjectId();
-                            Backendless.Data.of(SortInfo.class).save(sortInfoSave(brokerSortId), new AsyncCallback<SortInfo>() {
-                                @Override
-                                public void handleResponse(SortInfo response) {
-                                    Backendless.Data.of(Sort.class).save(sortSave(), new AsyncCallback<Sort>() {
-                                        @Override
-                                        public void handleResponse(Sort response) {
-                                            showProgress(false);
-                                            Toast.makeText(NewBrokerSortActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                                            setResult(RESULT_OK);
-                                            finishActivity(1);
-                                            NewBrokerSortActivity.this.finish();
-                                        }
 
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                            showProgress(false);
-                                            Toast.makeText(NewBrokerSortActivity.this, check(), Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                }
+                    if (memo) {
+                        showProgress(true);
+                        Memo memo = memoSave();
+                        Backendless.Data.of(Memo.class).save(memo, new AsyncCallback<Memo>() {
+                            @Override
+                            public void handleResponse(Memo response) {
+                                String memoSortId = response.getObjectId();
+                                Backendless.Data.of(SortInfo.class).save(sortInfoSave(memoSortId), new AsyncCallback<SortInfo>() {
+                                    @Override
+                                    public void handleResponse(SortInfo response) {
+                                        Backendless.Data.of(Sort.class).save(sortSave(), new AsyncCallback<Sort>() {
+                                            @Override
+                                            public void handleResponse(Sort response) {
+                                                showProgress(false);
+                                                Toast.makeText(NewBrokerSortActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                                setResult(RESULT_OK);
+                                                finishActivity(1);
+                                                NewBrokerSortActivity.this.finish();
+                                            }
 
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    showProgress(false);
-                                    Toast.makeText(NewBrokerSortActivity.this, check(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
+                                            @Override
+                                            public void handleFault(BackendlessFault fault) {
+                                                showProgress(false);
+                                                Toast.makeText(NewBrokerSortActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
 
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            showProgress(false);
-                            Toast.makeText(NewBrokerSortActivity.this, check(), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(NewBrokerSortActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
 
-                    // Saving all at once (No need for now)
-                    //submitRunnableTask(new Runnable() {
-                    //    @Override
-                    //    public void run() {
-                    //        BrokerSort brokerSort = brokerSortSave();
-                    //        brokerSort.save();
-                    //        String brokerSortId = brokerSort.getObjectId();
-                    //        sortInfoSave(brokerSortId).save();
-                    //        sortSave().save();
-                    //    }
-                    //});
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                showProgress(false);
+                                Toast.makeText(NewBrokerSortActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
 
+                    } else {
+                        showProgress(true);
+                        BrokerSort brokerSort = brokerSortSave();
+                        Backendless.Data.of(BrokerSort.class).save(brokerSort, new AsyncCallback<BrokerSort>() {
+                            @Override
+                            public void handleResponse(BrokerSort response) {
+                                String brokerSortId = response.getObjectId();
+                                Backendless.Data.of(SortInfo.class).save(sortInfoSave(brokerSortId), new AsyncCallback<SortInfo>() {
+                                    @Override
+                                    public void handleResponse(SortInfo response) {
+                                        Backendless.Data.of(Sort.class).save(sortSave(), new AsyncCallback<Sort>() {
+                                            @Override
+                                            public void handleResponse(Sort response) {
+                                                showProgress(false);
+                                                Toast.makeText(NewBrokerSortActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                                setResult(RESULT_OK);
+                                                finishActivity(1);
+                                                NewBrokerSortActivity.this.finish();
+                                            }
+
+                                            @Override
+                                            public void handleFault(BackendlessFault fault) {
+                                                showProgress(false);
+                                                Toast.makeText(NewBrokerSortActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        showProgress(false);
+                                        Toast.makeText(NewBrokerSortActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                showProgress(false);
+                                Toast.makeText(NewBrokerSortActivity.this, fault.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                // Checking wasn't right, prints a toast
                 } else {
                     showProgress(false);
                     Toast.makeText(NewBrokerSortActivity.this, check(), Toast.LENGTH_LONG).show();
@@ -208,7 +303,7 @@ public class NewBrokerSortActivity extends AppCompatActivity {
     private String check() {
         if ((etBrokerName.getText().toString().isEmpty() && !add) || etBrokerPrice.getText().toString().isEmpty()
                 || etBrokerPriceINV.getText().toString().isEmpty() || etBrokerWeight.getText().toString().isEmpty() ||
-        chosenSort == -1) {
+        chosenSort == -1 || chosenClient == -1) {
             return "יש להזין את כל הנתונים";
 
         } else if (Double.valueOf(etBrokerPrice.getText().toString()) < Double.valueOf(etBrokerPriceINV.getText().toString())) {
@@ -239,7 +334,7 @@ public class NewBrokerSortActivity extends AppCompatActivity {
         sortInfo.setPrice(priceINV);
         sortInfo.setWeight(weight);
         sortInfo.setSum(priceINV * weight);
-        sortInfo.setKind("broker");
+        sortInfo.setKind(memo ? "memo" : "broker");
         sortInfo.setOut(true);
         sortInfo.setUserEmail(InventoryApp.user.getEmail());
         return sortInfo;
@@ -271,20 +366,38 @@ public class NewBrokerSortActivity extends AppCompatActivity {
         }
     }
 
+    public Memo memoSave() {
+        if (add) {
+            Memo memo = InventoryApp.memos.get(index);
+            memo.setSum(memo.getSum() + (weight*price));
+            memo.setWeight(memo.getWeight() + weight);
+            memo.setPrice(memo.getSum() / memo.getPrice());
+            memo.setSumINV(memo.getSumINV() + (weight*priceINV));
+            memo.setPriceINV(memo.getSumINV() / memo.getWeight());
+            return memo;
+
+        } else {
+            Memo memo = new Memo();
+            memo.setFromSortId(InventoryApp.sorts.get(chosenSort).getObjectId());
+            memo.setKind(kind);
+            memo.setName(sortName);
+            memo.setClientName(InventoryApp.clients.get(chosenClient).getName());
+            memo.setPrice(price);
+            memo.setPriceINV(priceINV);
+            memo.setWeight(weight);
+            memo.setSum(weight * price);
+            memo.setSumINV(weight * priceINV);
+            memo.setUserEmail(InventoryApp.user.getEmail());
+            return memo;
+        }
+    }
+
     public Sort sortSave() {
         Sort sort = InventoryApp.sorts.get(chosenSort);
         sort.setSum(sort.getSum() - (priceINV * weight));
         sort.setWeight(sort.getWeight() - weight);
         sort.setPrice(sort.getSum() / sort.getWeight());
         return sort;
-    }
-
-    public void submitRunnableTask(Runnable task){
-        if(!mPool.isShutdown() && mPool.getActiveCount() != mPool.getMaximumPoolSize()){
-            mPool.submit(task);
-        } else {
-            new Thread(task).start(); // Actually this should never happen, just in case...
-        }
     }
 
     @Override

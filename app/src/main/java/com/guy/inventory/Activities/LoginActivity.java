@@ -13,7 +13,6 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.local.UserIdStorageFactory;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 
@@ -51,17 +50,36 @@ public class LoginActivity extends AppCompatActivity {
         btn2020 = findViewById(R.id.btn2020);
         btnDemo = findViewById(R.id.btnDemo);
 
+        showProgress(true);
         Backendless.UserService.logout(new AsyncCallback<Void>() {
             @Override
             public void handleResponse(Void response) {
+
+                // Always logging into 2020
+                Backendless.UserService.login(EMAIL_2020, PASSWORD, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser response) {
+                        InventoryApp.user = response;
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        LoginActivity.this.finish();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, true);
 
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-
+                showProgress(false);
+                Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {

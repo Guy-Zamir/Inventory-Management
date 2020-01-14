@@ -8,10 +8,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+
 import com.guy.inventory.R;
 
 public class BrokerMainSortActivity extends AppCompatActivity {
-    Button btnPR, btnAS, btnRA, btnEM, btnCU, btnBA, btnAll;
+    LinearLayout llPR, llAS, llRA, llEM, llCU, llBA, llALL;
+    boolean memo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,78 +22,87 @@ public class BrokerMainSortActivity extends AppCompatActivity {
         setContentView(R.layout.activity_broker_main_sort);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        btnPR = findViewById(R.id.btnPR);
-        btnAS = findViewById(R.id.btnAS);
-        btnRA = findViewById(R.id.btnRA);
-        btnEM = findViewById(R.id.btnEM);
-        btnCU = findViewById(R.id.btnCU);
-        btnBA = findViewById(R.id.btnBA);
-        btnAll = findViewById(R.id.btnAll);
+        llPR = findViewById(R.id.llPR);
+        llAS = findViewById(R.id.llAS);
+        llRA = findViewById(R.id.llRA);
+        llEM = findViewById(R.id.llEM);
+        llCU = findViewById(R.id.llCU);
+        llBA = findViewById(R.id.llBA);
+        llALL = findViewById(R.id.llALL);
+
+        memo = getIntent().getBooleanExtra("memo", false);
 
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle("מיונים - ניב");
+        actionBar.setTitle(memo ? "מיונים - ממו" : "מיונים - ניב");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        btnAll.setOnClickListener(new View.OnClickListener() {
+        llALL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BrokerMainSortActivity.this, TableBrokerActivity.class);
-                intent.putExtra("kind", "ALL");
+                intent.putExtra("kind", "כל המיונים");
+                intent.putExtra("memo", memo);
                 startActivity(intent);
             }
         });
 
-        btnAS.setOnClickListener(new View.OnClickListener() {
+        llAS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BrokerMainSortActivity.this, TableBrokerActivity.class);
-                intent.putExtra("kind", "AS");
+                intent.putExtra("kind", "אשרים");
+                intent.putExtra("memo", memo);
                 startActivity(intent);
             }
         });
 
-        btnEM.setOnClickListener(new View.OnClickListener() {
+        llEM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BrokerMainSortActivity.this, TableBrokerActivity.class);
-                intent.putExtra("kind", "EM");
+                intent.putExtra("kind", "אמרלדים");
+                intent.putExtra("memo", memo);
                 startActivity(intent);
             }
         });
 
-        btnPR.setOnClickListener(new View.OnClickListener() {
+        llPR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BrokerMainSortActivity.this, TableBrokerActivity.class);
-                intent.putExtra("kind", "PR");
+                intent.putExtra("kind", "פרינססים");
+                intent.putExtra("memo", memo);
                 startActivity(intent);
             }
         });
 
-        btnRA.setOnClickListener(new View.OnClickListener() {
+        llRA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BrokerMainSortActivity.this, TableBrokerActivity.class);
-                intent.putExtra("kind", "RA");
+                intent.putExtra("kind", "רדיאנים");
+                intent.putExtra("memo", memo);
                 startActivity(intent);
             }
         });
 
-        btnCU.setOnClickListener(new View.OnClickListener() {
+        llCU.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BrokerMainSortActivity.this, TableBrokerActivity.class);
-                intent.putExtra("kind", "CU");
+                intent.putExtra("kind", "קושונים");
+                intent.putExtra("memo", memo);
                 startActivity(intent);
             }
         });
 
-        btnBA.setOnClickListener(new View.OnClickListener() {
+        llBA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BrokerMainSortActivity.this, TableBrokerActivity.class);
-                intent.putExtra("kind", "BA");
+                intent.putExtra("kind", "בגטים");
+                intent.putExtra("memo", memo);
                 startActivity(intent);
             }
         });

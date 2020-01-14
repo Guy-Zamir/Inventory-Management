@@ -17,8 +17,7 @@ import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.BrokerSort;
-import com.guy.inventory.Tables.Buy;
-import com.guy.inventory.Tables.Sale;
+import com.guy.inventory.Tables.Memo;
 import com.guy.inventory.Tables.Sort;
 
 import java.text.DecimalFormat;
@@ -45,7 +44,7 @@ public class BalanceActivity extends AppCompatActivity {
             tvBalanceSortProfit, tvBalanceSortProfitPrice, tvBalanceSortProfitPre, tvBalanceSortNum,
             tvSortHeadline, tvBalanceHeadline, tvPolishHeadline, tvRoughHeadline;
 
-    Button btnBalanceBuy, btnBalanceSale, btnBalanceGoods, btnBalanceOpen, btnBalanceBroker;
+    Button btnBalanceBuy, btnBalanceSale, btnBalanceGoods, btnBalanceOpen, btnBalanceSorts, btnBalanceMemo;
 
     // All the calculated values
     private double weight;
@@ -68,6 +67,11 @@ public class BalanceActivity extends AppCompatActivity {
 
     private double openStockRoughPrice, openStockPolishPrice;
     private double openStockSum, openStockWeight, openStockPrice;
+
+    private double brokerMemoPrice;
+    private double memoPrice;
+
+    private double allMemoSum, allMemoWeight, allMemoPrice;
 
     private double sortProfit, sortProfitPre, sortProfitPrice;
     private int sortNum;
@@ -106,6 +110,11 @@ public class BalanceActivity extends AppCompatActivity {
     private double brokerSum = 0;
     private double brokerWeightSum = 0;
     private double brokerPrice = 0;
+    private double brokerMemoSum = 0;
+    private double brokerMemoWeight = 0;
+
+    private double memoSum = 0;
+    private double memoWeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +130,8 @@ public class BalanceActivity extends AppCompatActivity {
         btnBalanceSale = findViewById(R.id.btnBalanceSale);
         btnBalanceGoods = findViewById(R.id.btnBalanceGoods);
         btnBalanceOpen = findViewById(R.id.btnBalanceOpen);
-        btnBalanceBroker = findViewById(R.id.btnBalanceBroker);
+        btnBalanceSorts = findViewById(R.id.btnBalanceSorts);
+        btnBalanceMemo = findViewById(R.id.btnBalanceMemo);
 
         llBalanceSort = findViewById(R.id.llBalanceSort);
 
@@ -152,399 +162,329 @@ public class BalanceActivity extends AppCompatActivity {
         // Setting all the buys in the array
         DataQueryBuilder buyBuilder = DataQueryBuilder.create();
         buyBuilder.setWhereClause(EMAIL_CLAUSE);
-        buyBuilder.setProperties("Sum(sum)", "done", "polish");
+        buyBuilder.setProperties("Sum(sum) as sum", "Sum(weight) as weight", "Sum(doneWeight) as doneWeight", "done", "polish");
         buyBuilder.setGroupBy("done", "polish");
 
         showProgress(true);
         Backendless.Data.of("Buy").find(buyBuilder, new AsyncCallback<List<Map>>() {
             @Override
             public void handleResponse(List<Map> response) {
-                if (response.size() >= 1) {
-                    if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
-                        allNotDoneRoughBuySum += (int) response.get(0).get("sum");
-                    } else {
-                        allNotDoneRoughBuySum += (double) response.get(0).get("sum");
+
+                for (int i = 0; i < response.size(); i++) {
+                    // polish = false / done = false
+                    if ((!(boolean) response.get(i).get("polish")) && (!(boolean) response.get(i).get("done"))) {
+
+                        if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                            allNotDoneRoughBuySum += (int) response.get(i).get("sum");
+                        } else {
+                            allNotDoneRoughBuySum += (double) response.get(i).get("sum");
+                        }
+
+                        if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                            allNotDoneRoughBuyWeight += (int) response.get(i).get("weight");
+                        } else {
+                            allNotDoneRoughBuyWeight += (double) response.get(i).get("weight");
+                        }
                     }
 
                     // Not sort buy polish
-                    if (response.size() >= 2) {
-                        if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
-                            allPolishBuySum += (int) response.get(1).get("sum");
+                    // polish = true / done = false
+                    else if (((boolean) response.get(i).get("polish")) && (!(boolean) response.get(i).get("done"))) {
+
+                        if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                            allPolishBuySum += (int) response.get(i).get("sum");
                         } else {
-                            allPolishBuySum += (double) response.get(1).get("sum");
+                            allPolishBuySum += (double) response.get(i).get("sum");
+                        }
+
+                        if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                            allPolishBuyWeight += (int) response.get(i).get("weight");
+                        } else {
+                            allPolishBuyWeight += (double) response.get(i).get("weight");
                         }
                     }
-                    if (response.size() >= 3) {
-                        if (Objects.requireNonNull(response.get(2).get("sum")).getClass().equals(Integer.class)) {
-                            allPolishBuySum += (int) response.get(2).get("sum");
+
+                    // polish = false / done = true
+                    else if ((!(boolean) response.get(i).get("polish")) && ((boolean) response.get(i).get("done"))) {
+
+                        if (Objects.requireNonNull(response.get(i).get("doneWeight")).getClass().equals(Integer.class)) {
+                            allRoughBuyDoneWeight += (int) response.get(i).get("doneWeight");
                         } else {
-                            allPolishBuySum += (double) response.get(2).get("sum");
+                            allRoughBuyDoneWeight += (double) response.get(i).get("doneWeight");
+                        }
+                    }
+
+                    // polish = true / done = true
+                    else if (((boolean) response.get(i).get("polish")) && ((boolean) response.get(i).get("done"))) {
+
+                        if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                            allPolishBuySum += (int) response.get(i).get("sum");
+                        } else {
+                            allPolishBuySum += (double) response.get(i).get("sum");
+                        }
+
+                        if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                            allPolishBuyWeight += (int) response.get(i).get("weight");
+                        } else {
+                            allPolishBuyWeight += (double) response.get(i).get("weight");
                         }
                     }
                 }
 
-                DataQueryBuilder buyBuilder = DataQueryBuilder.create();
-                buyBuilder.setWhereClause(EMAIL_CLAUSE);
-                buyBuilder.setProperties("Sum(weight)", "done", "polish");
-                buyBuilder.setGroupBy("done", "polish");
+                // Getting the sale sum of exports
+                DataQueryBuilder saleBuilder = DataQueryBuilder.create();
+                saleBuilder.setWhereClause(EMAIL_CLAUSE);
+                saleBuilder.setProperties("Sum(saleSum) as sum", "Sum(weight) as weight", "kind", "polish");
+                saleBuilder.setGroupBy("kind", "polish");
 
-                Backendless.Data.of("Buy").find(buyBuilder, new AsyncCallback<List<Map>>() {
+                Backendless.Data.of("Sale").find(saleBuilder, new AsyncCallback<List<Map>>() {
                     @Override
                     public void handleResponse(List<Map> response) {
-                        if (response.size() >= 1) {
-                            if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
-                                allNotDoneRoughBuyWeight += (int) response.get(0).get("sum");
-                            } else {
-                                allNotDoneRoughBuyWeight += (double) response.get(0).get("sum");
-                            }
+                        for (int i = 0; i < response.size(); i++) {
 
-                            // Not sort buy polish
-                            if (response.size() >= 2) {
-                                if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
-                                    allPolishBuyWeight += (int) response.get(1).get("sum");
+                            // export  - polish
+                            if (Objects.equals(response.get(i).get("kind"), "export") && (boolean) response.get(i).get("polish")) {
+
+                                if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                    allPolishExportSum += (int) response.get(i).get("sum");
                                 } else {
-                                    allPolishBuyWeight += (double) response.get(1).get("sum");
+                                    allPolishExportSum += (double) response.get(i).get("sum");
                                 }
-                            }
-                            if (response.size() >= 3) {
-                                if (Objects.requireNonNull(response.get(2).get("sum")).getClass().equals(Integer.class)) {
-                                    allPolishBuyWeight += (int) response.get(2).get("sum");
+
+                                if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                    allPolishExportWeight += (int) response.get(i).get("weight");
                                 } else {
-                                    allPolishBuyWeight += (double) response.get(2).get("sum");
+                                    allPolishExportWeight += (double) response.get(i).get("weight");
+                                }
+
+                                // sale  - polish
+                            } else if (Objects.equals(response.get(i).get("kind"), "sale") && (boolean) response.get(i).get("polish")) {
+
+                                if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                    allPolishSaleSum += (int) response.get(i).get("sum");
+                                } else {
+                                    allPolishSaleSum += (double) response.get(i).get("sum");
+                                }
+
+                                if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                    allPolishSaleWeight += (int) response.get(i).get("weight");
+                                } else {
+                                    allPolishSaleWeight += (double) response.get(i).get("weight");
+                                }
+
+                                // sale  - rough
+                            } else if (Objects.equals(response.get(i).get("kind"), "sale") && (!(boolean) response.get(i).get("polish"))) {
+
+                                if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                    allRoughSaleSum += (int) response.get(i).get("sum");
+                                } else {
+                                    allRoughSaleSum += (double) response.get(i).get("sum");
+                                }
+
+                                if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                    allRoughSaleWeight += (int) response.get(i).get("weight");
+                                } else {
+                                    allRoughSaleWeight += (double) response.get(i).get("weight");
                                 }
                             }
                         }
 
-                        DataQueryBuilder buyBuilder = DataQueryBuilder.create();
-                        buyBuilder.setWhereClause(EMAIL_CLAUSE);
-                        buyBuilder.setProperties("Sum(doneWeight)");
-                        buyBuilder.setHavingClause("polish = false");
-                        buyBuilder.setHavingClause("done = true");
+                        // Getting all the sorts info
+                        DataQueryBuilder sortBuilder = DataQueryBuilder.create();
+                        sortBuilder.setWhereClause(EMAIL_CLAUSE);
+                        sortBuilder.setGroupBy("sale", "last");
+                        sortBuilder.setProperties("Sum(saleSum) as saleSum", "Sum(sum) as sum", "Sum(weight) as weight", "Count(objectId) as count", "sale", "last");
 
-                        Backendless.Data.of("Buy").find(buyBuilder, new AsyncCallback<List<Map>>() {
+                        Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                             @Override
                             public void handleResponse(List<Map> response) {
-                                if (response.size() >= 1) {
-                                    if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
-                                        allRoughBuyDoneWeight += (int) response.get(0).get("sum");
-                                    } else {
-                                        allRoughBuyDoneWeight += (double) response.get(0).get("sum");
+
+                                for (int i = 0; i < response.size(); i++) {
+
+                                    if ((boolean) response.get(i).get("sale")) {
+                                        if (Objects.requireNonNull(response.get(i).get("saleSum")).getClass().equals(Integer.class)) {
+                                            sortSaleSum += (int) response.get(i).get("saleSum");
+                                        } else {
+                                            sortSaleSum += (double) response.get(i).get("saleSum");
+                                        }
+
+                                        if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                            sortSum += (int) response.get(i).get("sum");
+                                        } else {
+                                            sortSum += (double) response.get(i).get("sum");
+                                        }
                                     }
+
+                                    if ((boolean) response.get(i).get("last")) {
+                                        if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                            allSortSum += (int) response.get(i).get("sum");
+                                        } else {
+                                            allSortSum += (double) response.get(i).get("sum");
+                                        }
+
+                                        if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                            allSortWeight += (int) response.get(i).get("weight");
+                                        } else {
+                                            allSortWeight += (double) response.get(i).get("weight");
+                                        }
+                                    }
+                                    sortNum += (int) response.get(i).get("count");
                                 }
 
-                                // Getting the sale sum of exports
-                                DataQueryBuilder exportSumBuilder = DataQueryBuilder.create();
-                                exportSumBuilder.setWhereClause(EMAIL_CLAUSE);
-                                exportSumBuilder.setGroupBy("kind");
-                                exportSumBuilder.setProperties("Sum(saleSum)");
+                                DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
+                                sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
+                                sortInfoBuilder.setGroupBy("kind");
+                                sortInfoBuilder.setProperties("Sum(sum) as sum", "Sum(weight) as weight", "kind");
 
-                                Backendless.Data.of("Sale").find(exportSumBuilder, new AsyncCallback<List<Map>>() {
+                                Backendless.Data.of("sortInfo").find(sortInfoBuilder, new AsyncCallback<List<Map>>() {
                                     @Override
                                     public void handleResponse(List<Map> response) {
-                                        if (response.size() >= 1) {
-                                            if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
-                                                allPolishExportSum += (int) response.get(0).get("sum");
-                                            } else {
-                                                allPolishExportSum += (double) response.get(0).get("sum");
+                                        for (int i = 0; i < response.size(); i++) {
+
+                                            if (Objects.equals(response.get(i).get("kind"), "open")) {
+                                                if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
+                                                    openStockPolishSum += (int) response.get(i).get("sum");
+                                                } else {
+                                                    openStockPolishSum += (double) response.get(i).get("sum");
+                                                }
+
+                                                if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                                    openStockPolishWeight += (int) response.get(i).get("weight");
+                                                } else {
+                                                    openStockPolishWeight += (double) response.get(i).get("weight");
+                                                }
                                             }
                                         }
 
-                                        // Getting the weight sum of exports
-                                        DataQueryBuilder exportWeightBuilder = DataQueryBuilder.create();
-                                        exportWeightBuilder.setWhereClause(EMAIL_CLAUSE);
-                                        exportWeightBuilder.setGroupBy("kind");
-                                        exportWeightBuilder.setProperties("Sum(weight)");
-
-                                        Backendless.Data.of("Sale").find(exportWeightBuilder, new AsyncCallback<List<Map>>() {
+                                        DataQueryBuilder brokerSortBuilder = DataQueryBuilder.create();
+                                        brokerSortBuilder.setWhereClause(EMAIL_CLAUSE);
+                                        brokerSortBuilder.setGroupBy("memo");
+                                        brokerSortBuilder.setProperties("Sum(sumINV) as sumINV", "Sum(weight) as weight", "memo");
+                                        Backendless.Data.of("BrokerSort").find(brokerSortBuilder, new AsyncCallback<List<Map>>() {
                                             @Override
                                             public void handleResponse(List<Map> response) {
-                                                if (response.size() >= 1) {
-                                                    if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
-                                                        allPolishExportWeight += (int) response.get(0).get("sum");
-                                                    } else {
-                                                        allPolishExportWeight += (double) response.get(0).get("sum");
+                                                for (int i = 0; i < response.size(); i++) {
+
+                                                    if (!(boolean) response.get(i).get("memo")) {
+
+                                                        if (Objects.requireNonNull(response.get(i).get("sumINV")).getClass().equals(Integer.class)) {
+                                                            brokerSum += (int) response.get(i).get("sumINV");
+                                                        } else {
+                                                            brokerSum += (double) response.get(i).get("sumINV");
+                                                        }
+
+                                                        if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                                            brokerWeightSum += (int) response.get(i).get("weight");
+                                                        } else {
+                                                            brokerWeightSum += (double) response.get(i).get("weight");
+                                                        }
+
+                                                    } else if ((boolean) response.get(i).get("memo")) {
+
+                                                        if (Objects.requireNonNull(response.get(i).get("sumINV")).getClass().equals(Integer.class)) {
+                                                            brokerMemoSum += (int) response.get(i).get("sumINV");
+                                                        } else {
+                                                            brokerMemoSum += (double) response.get(i).get("sumINV");
+                                                        }
+
+                                                        if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                                            brokerMemoWeight += (int) response.get(i).get("weight");
+                                                        } else {
+                                                            brokerMemoWeight += (double) response.get(i).get("weight");
+                                                        }
                                                     }
                                                 }
 
-                                                // Getting the sale sum of sales
-                                                DataQueryBuilder saleSumBuilder = DataQueryBuilder.create();
-                                                saleSumBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                saleSumBuilder.setHavingClause(SALE_CLAUSE);
-                                                saleSumBuilder.setGroupBy("polish");
-                                                saleSumBuilder.setProperties("Sum(saleSum)");
-
-                                                Backendless.Data.of("Sale").find(saleSumBuilder, new AsyncCallback<List<Map>>() {
+                                                DataQueryBuilder memoBuilder = DataQueryBuilder.create();
+                                                memoBuilder.setWhereClause(EMAIL_CLAUSE);
+                                                memoBuilder.setGroupBy("kind");
+                                                memoBuilder.setProperties("Sum(sumINV) as sumINV", "Sum(weight) as weight", "kind");
+                                                Backendless.Data.of("Memo").find(memoBuilder, new AsyncCallback<List<Map>>() {
                                                     @Override
                                                     public void handleResponse(List<Map> response) {
-                                                        if (response.size() >= 2) {
-                                                            if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
-                                                                allPolishSaleSum += (int) response.get(1).get("sum");
+                                                        for (int i = 0; i < response.size(); i++) {
+
+                                                            if ((Objects.requireNonNull(response.get(i).get("sumINV"))).getClass().equals(Integer.class)) {
+                                                                memoSum += (int) response.get(i).get("sumINV");
                                                             } else {
-                                                                allPolishSaleSum += (double) response.get(1).get("sum");
+                                                                memoSum += (double) response.get(i).get("sumINV");
                                                             }
-                                                            if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
-                                                                allRoughSaleSum += (int) response.get(0).get("sum");
+
+                                                            if (Objects.requireNonNull(response.get(i).get("weight")).getClass().equals(Integer.class)) {
+                                                                memoWeight += (int) response.get(i).get("weight");
                                                             } else {
-                                                                allRoughSaleSum += (double) response.get(0).get("sum");
+                                                                memoWeight += (double) response.get(i).get("weight");
                                                             }
                                                         }
 
-                                                        // Getting the weight sum of sales
-                                                        DataQueryBuilder saleWeightBuilder = DataQueryBuilder.create();
-                                                        saleWeightBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                        saleWeightBuilder.setHavingClause(SALE_CLAUSE);
-                                                        saleWeightBuilder.setProperties("Sum(weight)");
-                                                        saleWeightBuilder.setGroupBy("polish");
+                                                        showProgress(false);
 
-                                                        Backendless.Data.of("Sale").find(saleWeightBuilder, new AsyncCallback<List<Map>>() {
-                                                            @Override
-                                                            public void handleResponse(List<Map> response) {
-                                                                if (response.size() >= 2) {
-                                                                    if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
-                                                                        allPolishSaleWeight += (int) response.get(1).get("sum");
-                                                                    } else {
-                                                                        allPolishSaleWeight += (double) response.get(1).get("sum");
-                                                                    }
+                                                        //Calculate The Values//
+                                                        exportSum = allPolishExportSum;
+                                                        exportWeight = allPolishExportWeight;
+                                                        exportPrice = (exportWeight > 0) ? (exportSum / exportWeight) : 0;
 
-                                                                    if (Objects.requireNonNull(response.get(0).get("sum")).getClass().equals(Integer.class)) {
-                                                                        allRoughSaleWeight += (int) response.get(0).get("sum");
-                                                                    } else {
-                                                                        allRoughSaleWeight += (double) response.get(0).get("sum");
-                                                                    }
-                                                                }
+                                                        saleRoughSum = allRoughSaleSum;
+                                                        saleRoughWeight = allRoughSaleWeight;
+                                                        saleRoughPrice = (saleRoughWeight > 0) ? (saleRoughSum / saleRoughWeight) : 0;
 
-                                                                // Getting all the sorts info
-                                                                DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-                                                                sortBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                sortBuilder.setGroupBy("sale");
-                                                                sortBuilder.setProperties("Sum(saleSum), sale");
+                                                        salePolishSum = allPolishSaleSum;
+                                                        salePolishWeight = allPolishSaleWeight;
+                                                        salePolishPrice = (salePolishWeight > 0) ? (salePolishSum / salePolishWeight) : 0;
 
-                                                                Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                                                    @Override
-                                                                    public void handleResponse(List<Map> response) {
-                                                                        if (response.size() >= 2) {
-                                                                            if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
-                                                                                sortSaleSum += (int) response.get(1).get("sum");
-                                                                            } else {
-                                                                                sortSaleSum += (double) response.get(1).get("sum");
-                                                                            }
-                                                                        } else {
-                                                                            sortSaleSum = 0;
-                                                                        }
+                                                        saleSum = salePolishSum + saleRoughSum + exportSum;
+                                                        saleWeight = saleRoughWeight + salePolishWeight + exportWeight;
+                                                        salePrice = (saleWeight > 0) ? (saleSum / saleWeight) : 0;
 
-                                                                        DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-                                                                        sortBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                        sortBuilder.setGroupBy("sale");
-                                                                        sortBuilder.setProperties("Sum(sum), sale");
+                                                        buyRoughSum = allNotDoneRoughBuySum + allRoughBuyDoneSum;
+                                                        buyRoughWeight = allRoughBuyDoneOrgWeight + allNotDoneRoughBuyWeight;
+                                                        buyRoughPrice = (buyRoughWeight > 0) ? (buyRoughSum / buyRoughWeight) : 0;
 
-                                                                        Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                                                            @Override
-                                                                            public void handleResponse(List<Map> response) {
-                                                                                if (response.size() >= 2) {
-                                                                                    if (Objects.requireNonNull(response.get(1).get("sum")).getClass().equals(Integer.class)) {
-                                                                                        sortSum += (int) response.get(1).get("sum");
-                                                                                    } else {
-                                                                                        sortSum += (double) response.get(1).get("sum");
-                                                                                    }
-                                                                                } else {
-                                                                                    sortSum = 0;
-                                                                                }
+                                                        buyPolishSum = allPolishBuySum;
+                                                        buyPolishWeight = allPolishBuyWeight;
+                                                        buyPolishPrice = (buyPolishWeight > 0) ? (buyPolishSum / buyPolishWeight) : 0;
 
+                                                        buySum = buyRoughSum + buyPolishSum;
+                                                        buyWeight = buyRoughWeight + buyPolishWeight;
+                                                        buyPrice = (buyWeight > 0) ? (buySum / buyWeight) : 0;
 
-                                                                                DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-                                                                                sortBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                                sortBuilder.setProperties("Count(objectId)");
+                                                        RoughWeight = openStockRoughWeight + allNotDoneRoughBuyWeight - saleRoughWeight;
+                                                        PolishWeight = openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight - salePolishWeight - exportWeight;
+                                                        weight = RoughWeight + PolishWeight;
 
-                                                                                Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
-                                                                                    @Override
-                                                                                    public void handleResponse(List<Map> response) {
-                                                                                        if (response.size() >= 1) {
-                                                                                            sortNum += (int) response.get(0).get("count");
-                                                                                        } else {
-                                                                                            sortNum = 0;
-                                                                                        }
+                                                        roughCostPrice = (openStockRoughWeight + allNotDoneRoughBuyWeight > 0) ? ((openStockRoughSum + allNotDoneRoughBuySum) / (openStockRoughWeight + allNotDoneRoughBuyWeight)) : 0;
+                                                        roughSum = roughCostPrice * RoughWeight;
 
-                                                                                        DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
-                                                                                        sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                                        sortInfoBuilder.setGroupBy("kind");
-                                                                                        sortInfoBuilder.setProperties("Sum(sum), kind");
+                                                        polishCostPrice = ((openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight) > 0) ? (openStockPolishSum + allRoughBuyDoneSum + buyPolishSum) / (openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight) : 0;
+                                                        polishSum = PolishWeight * polishCostPrice;
 
-                                                                                        Backendless.Data.of("sortInfo").find(sortInfoBuilder, new AsyncCallback<List<Map>>() {
-                                                                                            @Override
-                                                                                            public void handleResponse(List<Map> response) {
-                                                                                                for (int i=0; i<response.size(); i++) {
-                                                                                                    if (Objects.equals(response.get(i).get("kind"), "open")) {
-                                                                                                        if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
-                                                                                                            openStockPolishSum += (int) response.get(i).get("sum");
-                                                                                                        } else {
-                                                                                                            openStockPolishSum += (double) response.get(i).get("sum");
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
+                                                        costSum = roughSum + polishSum;
+                                                        costPrice = (weight > 0) ? (costSum / weight) : 0;
 
-                                                                                                DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
-                                                                                                sortInfoBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                                                sortInfoBuilder.setGroupBy("kind");
-                                                                                                sortInfoBuilder.setProperties("Sum(weight), kind");
+                                                        openStockRoughPrice = openStockRoughWeight == 0 ? 0 : openStockRoughSum / openStockRoughWeight;
+                                                        openStockPolishPrice = openStockPolishWeight == 0 ? 0 : openStockPolishSum / openStockPolishWeight;
 
-                                                                                                Backendless.Data.of("sortInfo").find(sortInfoBuilder, new AsyncCallback<List<Map>>() {
-                                                                                                    @Override
-                                                                                                    public void handleResponse(List<Map> response) {
-                                                                                                        for (int i = 0; i < response.size(); i++) {
-                                                                                                            if (Objects.equals(response.get(i).get("kind"), "open")) {
-                                                                                                                if (Objects.requireNonNull(response.get(i).get("sum")).getClass().equals(Integer.class)) {
-                                                                                                                    openStockPolishWeight += (int) response.get(i).get("sum");
-                                                                                                                } else {
-                                                                                                                    openStockPolishWeight += (double) response.get(i).get("sum");
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
+                                                        openStockSum = openStockPolishSum + openStockRoughSum;
+                                                        openStockWeight = openStockPolishWeight + openStockRoughWeight;
+                                                        openStockPrice = openStockWeight == 0 ? 0 : (openStockSum / openStockWeight);
 
-                                                                                                        DataQueryBuilder brokerSortBuilder = DataQueryBuilder.create();
-                                                                                                        brokerSortBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                                                        Backendless.Data.of(BrokerSort.class).find(brokerSortBuilder, new AsyncCallback<List<BrokerSort>>() {
-                                                                                                            @Override
-                                                                                                            public void handleResponse(List<BrokerSort> response) {
-                                                                                                                for (BrokerSort brokerSort : response) {
-                                                                                                                    brokerSum += brokerSort.getSum();
-                                                                                                                    brokerWeightSum += brokerSort.getWeight();
-                                                                                                                }
+                                                        sortProfit = sortSaleSum - sortSum;
+                                                        sortProfitPre = saleWeight != 0 ? (sortProfit / saleSum) : 0;
+                                                        sortProfitPrice = saleWeight != 0 ? (sortProfit / saleWeight) : 0;
 
-                                                                                                                DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-                                                                                                                sortBuilder.setWhereClause(EMAIL_CLAUSE);
-                                                                                                                sortBuilder.setHavingClause("last = true");
-                                                                                                                Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
-                                                                                                                    @Override
-                                                                                                                    public void handleResponse(List<Sort> response) {
-                                                                                                                        for (Sort sort : response) {
-                                                                                                                            allSortSum += sort.getSum();
-                                                                                                                            allSortWeight += sort.getWeight();
-                                                                                                                        }
+                                                        brokerPrice = brokerWeightSum == 0 ? 0 : brokerSum / brokerWeightSum;
+                                                        brokerMemoPrice = brokerMemoWeight == 0 ? 0 : brokerMemoSum / brokerMemoWeight;
 
-                                                                                                                        showProgress(false);
+                                                        memoPrice = memoWeight == 0 ? 0 : memoSum / memoWeight;
 
-                                                                                                                        //Calculate The Values//
-                                                                                                                        exportSum = allPolishExportSum;
-                                                                                                                        exportWeight = allPolishExportWeight;
-                                                                                                                        exportPrice = (exportWeight > 0) ? (exportSum / exportWeight) : 0;
+                                                        allMemoSum = brokerMemoSum + memoSum;
+                                                        allMemoWeight = brokerMemoWeight + memoWeight;
+                                                        allMemoPrice = allMemoWeight == 0 ? 0 : allMemoSum / allMemoWeight;
 
-                                                                                                                        saleRoughSum = allRoughSaleSum;
-                                                                                                                        saleRoughWeight = allRoughSaleWeight;
-                                                                                                                        saleRoughPrice = (saleRoughWeight > 0) ? (saleRoughSum / saleRoughWeight) : 0;
+                                                        allSortPrice = allSortWeight == 0 ? 0 : allSortSum / allSortWeight;
 
-                                                                                                                        salePolishSum = allPolishSaleSum;
-                                                                                                                        salePolishWeight = allPolishSaleWeight;
-                                                                                                                        salePolishPrice = (salePolishWeight > 0) ? (salePolishSum / salePolishWeight) : 0;
-
-                                                                                                                        saleSum = salePolishSum + saleRoughSum + exportSum;
-                                                                                                                        saleWeight = saleRoughWeight + salePolishWeight + exportWeight;
-                                                                                                                        salePrice = (saleWeight > 0) ? (saleSum / saleWeight) : 0;
-
-                                                                                                                        buyRoughSum = allNotDoneRoughBuySum + allRoughBuyDoneSum;
-                                                                                                                        buyRoughWeight = allRoughBuyDoneOrgWeight + allNotDoneRoughBuyWeight;
-                                                                                                                        buyRoughPrice = (buyRoughWeight > 0) ? (buyRoughSum / buyRoughWeight) : 0;
-
-                                                                                                                        buyPolishSum = allPolishBuySum;
-                                                                                                                        buyPolishWeight = allPolishBuyWeight;
-                                                                                                                        buyPolishPrice = (buyPolishWeight > 0) ? (buyPolishSum / buyPolishWeight) : 0;
-
-                                                                                                                        buySum = buyRoughSum + buyPolishSum;
-                                                                                                                        buyWeight = buyRoughWeight + buyPolishWeight;
-                                                                                                                        buyPrice = (buyWeight > 0) ? (buySum / buyWeight) : 0;
-
-                                                                                                                        RoughWeight = openStockRoughWeight + allNotDoneRoughBuyWeight - saleRoughWeight;
-                                                                                                                        PolishWeight = openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight - salePolishWeight - exportWeight;
-                                                                                                                        weight = RoughWeight + PolishWeight;
-
-                                                                                                                        roughCostPrice = (openStockRoughWeight + allNotDoneRoughBuyWeight > 0) ? ((openStockRoughSum + allNotDoneRoughBuySum) / (openStockRoughWeight + allNotDoneRoughBuyWeight)) : 0;
-                                                                                                                        roughSum = roughCostPrice * RoughWeight;
-
-                                                                                                                        polishCostPrice = ((openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight) > 0) ? (openStockPolishSum + allRoughBuyDoneSum + buyPolishSum) / (openStockPolishWeight + allRoughBuyDoneWeight + buyPolishWeight) : 0;
-                                                                                                                        polishSum = PolishWeight * polishCostPrice;
-
-                                                                                                                        costSum = roughSum + polishSum;
-                                                                                                                        costPrice = (weight > 0) ? (costSum / weight) : 0;
-
-                                                                                                                        openStockRoughPrice = openStockRoughWeight == 0 ? 0 : openStockRoughSum / openStockRoughWeight;
-                                                                                                                        openStockPolishPrice = openStockPolishWeight == 0 ? 0 : openStockPolishSum / openStockPolishWeight;
-
-                                                                                                                        openStockSum = openStockPolishSum + openStockRoughSum;
-                                                                                                                        openStockWeight = openStockPolishWeight + openStockRoughWeight;
-                                                                                                                        openStockPrice = openStockWeight == 0 ? 0 : (openStockSum / openStockWeight);
-
-                                                                                                                        sortProfit = sortSaleSum - sortSum;
-                                                                                                                        sortProfitPre = saleWeight != 0 ? (sortProfit / saleSum) : 0;
-                                                                                                                        sortProfitPrice = saleWeight != 0 ? (sortProfit / saleWeight) : 0;
-
-                                                                                                                        brokerPrice = brokerWeightSum == 0 ? 0 : brokerSum/brokerWeightSum;
-
-                                                                                                                        allSortPrice = allSortWeight == 0 ? 0 : allSortSum/allSortWeight;
-
-                                                                                                                        setTheText(0);
-                                                                                                                        btnBalanceGoods.setSelected(true);
-                                                                                                                    }
-
-                                                                                                                    @Override
-                                                                                                                    public void handleFault(BackendlessFault fault) {
-
-                                                                                                                    }
-                                                                                                                });
-                                                                                                            }
-
-                                                                                                            @Override
-                                                                                                            public void handleFault(BackendlessFault fault) {
-
-                                                                                                            }
-                                                                                                        });
-
-                                                                                                    }
-
-                                                                                                    @Override
-                                                                                                    public void handleFault(BackendlessFault fault) {
-                                                                                                        showProgress(false);
-                                                                                                        Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                                    }
-                                                                                                });
-                                                                                            }
-
-                                                                                            @Override
-                                                                                            public void handleFault(BackendlessFault fault) {
-                                                                                                showProgress(false);
-                                                                                                Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                            }
-                                                                                        });
-                                                                                    }
-
-                                                                                    @Override
-                                                                                    public void handleFault(BackendlessFault fault) {
-                                                                                        showProgress(false);
-                                                                                        Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                                    }
-                                                                                });
-                                                                            }
-
-                                                                            @Override
-                                                                            public void handleFault(BackendlessFault fault) {
-                                                                                showProgress(false);
-                                                                                Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                            }
-                                                                        });
-                                                                    }
-
-                                                                    @Override
-                                                                    public void handleFault(BackendlessFault fault) {
-                                                                        showProgress(false);
-                                                                        Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                });
-                                                            }
-
-                                                            @Override
-                                                            public void handleFault(BackendlessFault fault) {
-                                                                showProgress(false);
-                                                                Toast.makeText(BalanceActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
+                                                        setTheText("Goods");
+                                                        btnBalanceGoods.setSelected(true);
                                                     }
 
                                                     @Override
@@ -570,7 +510,6 @@ public class BalanceActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-
 
                             @Override
                             public void handleFault(BackendlessFault fault) {
@@ -599,69 +538,87 @@ public class BalanceActivity extends AppCompatActivity {
         btnBalanceGoods.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setTheText(0);
+                setTheText("Goods");
                 btnBalanceGoods.setSelected(true);
                 btnBalanceOpen.setSelected(false);
                 btnBalanceSale.setSelected(false);
                 btnBalanceBuy.setSelected(false);
-                btnBalanceBroker.setSelected(false);
+                btnBalanceSorts.setSelected(false);
+                btnBalanceMemo.setSelected(false);
             }
         });
 
         btnBalanceBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setTheText(1);
+                setTheText("Buys");
                 btnBalanceGoods.setSelected(false);
                 btnBalanceOpen.setSelected(false);
                 btnBalanceSale.setSelected(false);
                 btnBalanceBuy.setSelected(true);
-                btnBalanceBroker.setSelected(false);
+                btnBalanceSorts.setSelected(false);
+                btnBalanceMemo.setSelected(false);
             }
         });
 
         btnBalanceSale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setTheText(2);
+                setTheText("Sales");
                 btnBalanceGoods.setSelected(false);
                 btnBalanceOpen.setSelected(false);
                 btnBalanceSale.setSelected(true);
                 btnBalanceBuy.setSelected(false);
-                btnBalanceBroker.setSelected(false);
+                btnBalanceSorts.setSelected(false);
+                btnBalanceMemo.setSelected(false);
             }
         });
 
         btnBalanceOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setTheText(3);
+                setTheText("Open");
                 btnBalanceGoods.setSelected(false);
                 btnBalanceOpen.setSelected(true);
                 btnBalanceSale.setSelected(false);
                 btnBalanceBuy.setSelected(false);
-                btnBalanceBroker.setSelected(false);
+                btnBalanceSorts.setSelected(false);
+                btnBalanceMemo.setSelected(false);
             }
         });
 
-        btnBalanceBroker.setOnClickListener(new View.OnClickListener() {
+        btnBalanceSorts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setTheText(4);
+                setTheText("Sorts");
                 btnBalanceGoods.setSelected(false);
                 btnBalanceOpen.setSelected(false);
                 btnBalanceSale.setSelected(false);
                 btnBalanceBuy.setSelected(false);
-                btnBalanceBroker.setSelected(true);
+                btnBalanceSorts.setSelected(true);
+                btnBalanceMemo.setSelected(false);
+            }
+        });
+
+        btnBalanceMemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setTheText("Memo");
+                btnBalanceGoods.setSelected(false);
+                btnBalanceOpen.setSelected(false);
+                btnBalanceSale.setSelected(false);
+                btnBalanceBuy.setSelected(false);
+                btnBalanceSorts.setSelected(false);
+                btnBalanceMemo.setSelected(true);
             }
         });
     }
 
     @SuppressLint("SetTextI18n")
-    public void setTheText(int head) {
+    public void setTheText(String head) {
 
         switch (head) {
-            case 0:
+            case "Goods":
                 tvBalanceHeadline.setText("מאזן כולל");
                 tvPolishHeadline.setText("מאזן מלוטש");
                 tvRoughHeadline.setText("מאזן גלם");
@@ -684,7 +641,7 @@ public class BalanceActivity extends AppCompatActivity {
                 tvBalanceSortProfitPrice.setText("רווח ממוצע לקראט:  " + numberFormat.format(sortProfitPrice) + "$");
                 break;
 
-            case 1:
+            case "Buys":
                 tvBalanceHeadline.setText("סחורות שניקנו");
                 tvPolishHeadline.setText("קניית מלוטש");
                 tvRoughHeadline.setText("קניית גלם");
@@ -702,7 +659,7 @@ public class BalanceActivity extends AppCompatActivity {
                 llBalanceSort.setVisibility(View.GONE);
                 break;
 
-            case 2:
+            case "Sales":
                 tvBalanceHeadline.setText("סחורות שנמכרו");
                 tvPolishHeadline.setText("מכירת מלוטש בארץ");
                 tvRoughHeadline.setText("מכירת מלוטש ביצוא");
@@ -723,7 +680,7 @@ public class BalanceActivity extends AppCompatActivity {
                 llBalanceSort.setVisibility(View.GONE);
                 break;
 
-            case 3:
+            case "Open":
                 tvBalanceHeadline.setText("פתיחת מלוטש וגלם");
                 tvPolishHeadline.setText("פתיחת מלוטש");
                 tvRoughHeadline.setText("פתיחת גלם");
@@ -741,10 +698,10 @@ public class BalanceActivity extends AppCompatActivity {
                 llBalanceSort.setVisibility(View.GONE);
                 break;
 
-            case 4:
+            case "Sorts":
                 tvBalanceHeadline.setText("מיונים אצל ניב");
                 tvPolishHeadline.setText("מיונים במשרד");
-                tvRoughHeadline.setText("-----");
+                tvRoughHeadline.setText("מיונים בממו");
 
                 tvBalanceSum.setText("סכום:  " + numberFormat.format(brokerSum) + "$");
                 tvBalanceWeight.setText("משקל:  " + numberFormat.format(brokerWeightSum) + " קראט ");
@@ -752,9 +709,27 @@ public class BalanceActivity extends AppCompatActivity {
                 tvBalancePolishSum.setText("סכום:  " + numberFormat.format(allSortSum) + "$");
                 tvBalancePolishWeight.setText("משקל:  " + numberFormat.format(allSortWeight) + " קראט ");
                 tvBalancePolishPrice.setText("מחיר ממוצע:  " + numberFormat.format(allSortPrice) + "$");
-                tvBalanceRoughSum.setText("------");
-                tvBalanceRoughWeight.setText("------");
-                tvBalanceRoughPrice.setText("------");
+                tvBalanceRoughSum.setText("סכום:  " + numberFormat.format(allMemoSum) + "$");
+                tvBalanceRoughWeight.setText("משקל:  " + numberFormat.format(allMemoWeight) + " קראט ");
+                tvBalanceRoughPrice.setText("מחיר ממוצע:  " + numberFormat.format(allMemoPrice) + "$");
+
+                llBalanceSort.setVisibility(View.GONE);
+                break;
+
+            case "Memo":
+                tvBalanceHeadline.setText("ממו אצל ניב");
+                tvPolishHeadline.setText("ממו מהמשרד");
+                tvRoughHeadline.setText("");
+
+                tvBalanceSum.setText("סכום:  " + numberFormat.format(brokerMemoSum) + "$");
+                tvBalanceWeight.setText("משקל:  " + numberFormat.format(brokerMemoWeight) + " קראט ");
+                tvBalancePrice.setText("מחיר ממוצע:  " + numberFormat.format(brokerMemoPrice) + "$");
+                tvBalancePolishSum.setText("סכום:  " + numberFormat.format(memoSum) + "$");
+                tvBalancePolishWeight.setText("משקל:  " + numberFormat.format(memoWeight) + " קראט ");
+                tvBalancePolishPrice.setText("מחיר ממוצע:  " + numberFormat.format(memoPrice) + "$");
+                tvBalanceRoughSum.setText(" ");
+                tvBalanceRoughWeight.setText(" ");
+                tvBalanceRoughPrice.setText(" ");
 
                 llBalanceSort.setVisibility(View.GONE);
                 break;

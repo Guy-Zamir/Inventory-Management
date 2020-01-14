@@ -42,19 +42,19 @@
 
             <Button
                 android:id="@+id/btnBalanceGoods"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/table_row"
-                android:text="סחורות"
+                android:text="מאזן כולל"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnBalanceBuy"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
@@ -66,7 +66,7 @@
 
             <Button
                 android:id="@+id/btnBalanceSale"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
@@ -76,17 +76,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnBalanceOpen"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:background="@drawable/table_row"
-                android:text="פתיחה"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,8 +85,20 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnBalanceBroker"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnBalanceOpen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:text="פתיחה"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnBalanceSorts"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
@@ -108,25 +109,13 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/btnBalanceSale1"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnBalanceMemo"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/table_row"
-                android:text="xxxxxx"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btnBalanceBroker1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:background="@drawable/table_row"
-                android:text="xxxxx"
+                android:text="ממו"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />

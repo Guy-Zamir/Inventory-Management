@@ -128,9 +128,6 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                         for (Object object : sorts) {
                             HashMap sort = (HashMap) object;
                             SortInfo sortInfo = new SortInfo();
-                            //sortInfo.setSale((boolean) sort.get("sale"));
-                            //sortInfo.setBuy(false);
-                            //sortInfo.setSplit(false);
                             sortInfo.setOut(false);
                             sortInfo.setKind((boolean) sort.get("sale") ? "sale" : "OK");
                             sortInfo.setSortCount((Integer) sort.get("sortCount"));
@@ -160,7 +157,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                     SortInfo sortInfo = new SortInfo();
                                     sortInfo.setOut(false);
                                     sortInfo.setKind((String) sort.get("kind"));
-                                    if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker")) {
+                                    if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker") || sortInfo.getKind().equals("memo")) {
                                         sortInfo.setFromName((String) sort.get("fromName"));
                                     } else {
                                         sortInfo.setFromName(sort.get("fromName") + " - " + sort.get("sortCount"));
@@ -190,7 +187,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                             sortInfo.setOut(true);
                                             sortInfo.setKind((String) sort.get("kind"));
                                             sortInfo.setSortCount((int) sort.get("sortCount"));
-                                            if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker")) {
+                                            if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker") || sortInfo.getKind().equals("memo")) {
                                                 sortInfo.setFromName((String) sort.get("toName"));
                                             } else {
                                                 sortInfo.setFromName(sort.get("toName") + " - " + sort.get("sortCount"));
@@ -256,7 +253,8 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                 Toast.makeText(this, "יש לבחור פריט", Toast.LENGTH_SHORT).show();
 
             } else if (filterSorts.get(selectedItem).getKind().equals("buy") || filterSorts.get(selectedItem).getKind().equals("sale") ||
-                    filterSorts.get(selectedItem).getKind().equals("open") || filterSorts.get(selectedItem).getKind().equals("broker")) {
+                    filterSorts.get(selectedItem).getKind().equals("open") || filterSorts.get(selectedItem).getKind().equals("broker") ||
+                    filterSorts.get(selectedItem).getKind().equals("memo")) {
                 Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
 
             } else {
@@ -314,13 +312,10 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                     for (int i = 0; i < response.size(); i++) {
                                         HashMap sort = (HashMap) response.get(i);
                                         SortInfo sortInfo = new SortInfo();
-                                        //sortInfo.setSale((boolean) sort.get("sale"));
-                                        //sortInfo.setBuy((boolean) sort.get("buy"));
-                                        //sortInfo.setSplit((boolean) sort.get("split"));
                                         sortInfo.setOut(false);
                                         sortInfo.setKind((String) sort.get("kind"));
                                         sortInfo.setSortCount((int) sort.get("sortCount"));
-                                        if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker")) {
+                                        if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker") || sortInfo.getKind().equals("memo")) {
                                             sortInfo.setFromName((String) sort.get("fromName"));
                                         } else {
                                             sortInfo.setFromName(sort.get("fromName") + " - " + sort.get("sortCount"));
@@ -351,7 +346,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                                 sortInfo.setOut(true);
                                                 sortInfo.setKind((String) sort.get("kind"));
                                                 sortInfo.setSortCount((int) sort.get("sortCount"));
-                                                if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker")) {
+                                                if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker") || sortInfo.getKind().equals("memo")) {
                                                     sortInfo.setFromName((String) sort.get("toName"));
                                                 } else {
                                                     sortInfo.setFromName(sort.get("toName") + " - " + sort.get("sortCount"));
@@ -425,9 +420,6 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                         for (Object object : sorts) {
                             HashMap sort = (HashMap) object;
                             SortInfo sortInfo = new SortInfo();
-                            //sortInfo.setSale((boolean) sort.get("sale"));
-                            //sortInfo.setBuy(false);
-                            //sortInfo.setSplit(false);
                             sortInfo.setOut(false);
                             sortInfo.setKind((boolean) sort.get("sale") ? "sale" : "OK");
                             sortInfo.setSortCount((Integer) sort.get("sortCount"));
@@ -457,7 +449,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                     SortInfo sortInfo = new SortInfo();
                                     sortInfo.setOut(false);
                                     sortInfo.setKind((String) sort.get("kind"));
-                                    if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker")) {
+                                    if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker") || sortInfo.getKind().equals("memo")) {
                                         sortInfo.setFromName((String) sort.get("fromName"));
                                     } else {
                                         sortInfo.setFromName(sort.get("fromName") + " - " + sort.get("sortCount"));
@@ -487,7 +479,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                             sortInfo.setOut(true);
                                             sortInfo.setKind((String) sort.get("kind"));
                                             sortInfo.setSortCount((int) sort.get("sortCount"));
-                                            if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker")) {
+                                            if (sortInfo.getKind().equals("buy") || sortInfo.getKind().equals("open") || sortInfo.getKind().equals("broker") || sortInfo.getKind().equals("memo")) {
                                                 sortInfo.setFromName((String) sort.get("toName"));
                                             } else {
                                                 sortInfo.setFromName(sort.get("toName") + " - " + sort.get("sortCount"));

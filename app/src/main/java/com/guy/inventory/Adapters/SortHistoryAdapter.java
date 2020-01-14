@@ -72,10 +72,13 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
         tvSortHistoryPL.setVisibility(sortHistory.get(position).getKind().equals("sale") ? View.VISIBLE : View.GONE);
 
         if (sortHistory.get(position).getKind().equals("sale")) {
-            ivOutIn.setImageResource(R.drawable.empty_dollar);
+            ivOutIn.setImageResource(R.drawable.dollar_icon);
 
-        } else if (sortHistory.get(position).getKind().equals("broker")){
+        } else if (sortHistory.get(position).getKind().equals("broker")) {
             ivOutIn.setImageResource(R.drawable.broker_icon);
+
+        } else if (sortHistory.get(position).getKind().equals("memo")) {
+            ivOutIn.setImageResource(R.drawable.m_icon);
 
         } else if (sortHistory.get(position).isOut()) {
             ivOutIn.setImageResource(R.drawable.out_icon);

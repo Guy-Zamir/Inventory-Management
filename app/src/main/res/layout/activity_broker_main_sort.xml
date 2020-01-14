@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/background"
@@ -35,137 +36,243 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnAll"
+        <LinearLayout
+            android:id="@+id/llALL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginRight="0dp"
             android:layout_marginBottom="20dp"
             android:layout_weight="1.5"
-            android:background="@drawable/buttons"
-            android:text="ALL"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:background="@drawable/table_row"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnPR"
+            <TextView
+                android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/buttons"
-                android:text="PR"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="כל המיונים"
+                android:textColor="#ffffff"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnAS"
+            <ImageView
+                android:id="@+id/imageView11"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/buttons"
-                android:text="AS"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1.5"
+                app:srcCompat="@drawable/all_icon" />
 
-            <Button
-                android:id="@+id/btnRA"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/buttons"
-                android:text="RA"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1.5"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnEM"
+            <LinearLayout
+                android:id="@+id/llCU"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1.5"
-                android:background="@drawable/buttons"
-                android:text="EM"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnCU"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1.5"
-                android:background="@drawable/buttons"
-                android:text="CU"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="קושונים"
+                    android:textColor="#ffffff"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnBA"
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:srcCompat="@drawable/cu_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llAS"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1.5"
-                android:background="@drawable/buttons"
-                android:text="BA"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="אשרים"
+                    android:textColor="#ffffff"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:srcCompat="@drawable/as_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llRA"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="רדיאנים"
+                    android:textColor="#ffffff"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:srcCompat="@drawable/ra_icon" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1.5"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/llPR"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="פרינססים"
+                    android:textColor="#ffffff"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:srcCompat="@drawable/pr_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llEM"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="אמרלדים"
+                    android:textColor="#ffffff"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:srcCompat="@drawable/em_icon" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llBA"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/table_row"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="בגטים"
+                    android:textColor="#ffffff"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:srcCompat="@drawable/ba_icon" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

@@ -616,7 +616,7 @@ public class NewSaleSortActivity extends AppCompatActivity {
 
             Sort oldSort = InventoryApp.sorts.get(chosenSort);
             Sort newSaleSort = new Sort();
-            newSaleSort.setName(oldSort.getName() + "S");
+            newSaleSort.setName(oldSort.getName() + ":מ");
             newSaleSort.setSortCount(oldSort.getSortCount()+1);
             newSaleSort.setSaleId(InventoryApp.sales.get(index).getObjectId());
             newSaleSort.setSaleName(InventoryApp.sales.get(index).getClientName());

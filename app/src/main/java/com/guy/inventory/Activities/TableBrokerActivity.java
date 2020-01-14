@@ -21,9 +21,11 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Adapters.BrokerAdapter;
+import com.guy.inventory.Adapters.MemoAdapter;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.BrokerSort;
+import com.guy.inventory.Tables.Memo;
 import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
 import java.util.List;
@@ -35,13 +37,16 @@ public class TableBrokerActivity extends AppCompatActivity {
     private TextView tvLoad;
 
     private String kind;
+    private boolean memo;
 
     final DataQueryBuilder brokerBuilder = DataQueryBuilder.create();
+    final DataQueryBuilder memoBuilder = DataQueryBuilder.create();
     private ListView lvBrokerList;
     private BrokerAdapter brokerAdapter;
+    private MemoAdapter memoAdapter;
     private int selectedItem = -1;
-    private final int PAGE_SIZE = 100;
     private final String emailClause = "userEmail = '" + InventoryApp.user.getEmail() + "'";
+    private final String ALL = "כל המיונים";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,49 +60,83 @@ public class TableBrokerActivity extends AppCompatActivity {
         tvLoad = findViewById(R.id.tvLoad);
 
         kind = getIntent().getStringExtra("kind");
+        memo = getIntent().getBooleanExtra("memo", false);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle(kind);
+        actionBar.setTitle(memo ? kind + " - ממו" : kind + " - ניב");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         brokerBuilder.setWhereClause(emailClause);
+        int PAGE_SIZE = 100;
         brokerBuilder.setPageSize(PAGE_SIZE);
-        if (!kind.equals("ALL")) {
+        if (!kind.equals(ALL)) {
             brokerBuilder.setHavingClause("kind = '" + kind + "'");
+            memoBuilder.setHavingClause("kind = '" + kind + "'");
         }
-        showProgress(true);
-        Backendless.Data.of(BrokerSort.class).find(brokerBuilder, new AsyncCallback<List<BrokerSort>>() {
-            @Override
-            public void handleResponse(List<BrokerSort> response) {
-                InventoryApp.brokerSorts = response;
-                brokerAdapter = new BrokerAdapter(TableBrokerActivity.this, InventoryApp.brokerSorts);
-                lvBrokerList.setAdapter(brokerAdapter);
-                brokerAdapter.setAll(kind.equals("ALL"));
-                showProgress(false);
-            }
 
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                showProgress(false);
-                Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        //Broker Activity
+        if (!memo) {
+            showProgress(true);
+            Backendless.Data.of(BrokerSort.class).find(brokerBuilder, new AsyncCallback<List<BrokerSort>>() {
+                @Override
+                public void handleResponse(List<BrokerSort> response) {
+                    InventoryApp.brokerSorts = response;
+                    brokerAdapter = new BrokerAdapter(TableBrokerActivity.this, InventoryApp.brokerSorts);
+                    lvBrokerList.setAdapter(brokerAdapter);
+                    brokerAdapter.setAll(kind.equals(ALL));
+                    showProgress(false);
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    showProgress(false);
+                    Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        // Memo Activity
+        } else {
+            showProgress(true);
+            Backendless.Data.of(Memo.class).find(memoBuilder, new AsyncCallback<List<Memo>>() {
+                @Override
+                public void handleResponse(List<Memo> response) {
+                    InventoryApp.memos = response;
+                    memoAdapter = new MemoAdapter(TableBrokerActivity.this, InventoryApp.memos);
+                    lvBrokerList.setAdapter(memoAdapter);
+                    memoAdapter.setAll(kind.equals(ALL));
+                    showProgress(false);
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    showProgress(false);
+                    Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         lvBrokerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
                 selectedItem = position;
-                brokerAdapter.setSelectedPosition(position);
-                brokerAdapter.notifyDataSetChanged();
+
+                if (memo) {
+                    memoAdapter.setSelectedPosition(position);
+                    memoAdapter.notifyDataSetChanged();
+
+                } else {
+                    brokerAdapter.setSelectedPosition(position);
+                    brokerAdapter.notifyDataSetChanged();
+                }
             }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.table_broker_action_bar, menu);
+        getMenuInflater().inflate(memo ? R.menu.table_memo_action_bar : R.menu.table_broker_action_bar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -105,10 +144,11 @@ public class TableBrokerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newIcon:
-                if (!kind.equals("ALL")) {
+                if (!kind.equals(ALL)) {
                     Intent newBrokerSort = new Intent(TableBrokerActivity.this, NewBrokerSortActivity.class);
                     newBrokerSort.putExtra("kind", kind);
                     newBrokerSort.putExtra("add", false);
+                    newBrokerSort.putExtra("memo", memo);
                     startActivityForResult(newBrokerSort, 1);
                 } else {
                     Toast.makeText(this, "לא ניתן ליצור מיון מתוך עמוד כלל המיונים", Toast.LENGTH_SHORT).show();
@@ -121,9 +161,15 @@ public class TableBrokerActivity extends AppCompatActivity {
 
                 } else {
                     Intent newBrokerSort = new Intent(TableBrokerActivity.this, NewBrokerSortActivity.class);
-                    newBrokerSort.putExtra("kind", InventoryApp.brokerSorts.get(selectedItem).getKind());
+                    if (memo) {
+                        newBrokerSort.putExtra("kind", InventoryApp.memos.get(selectedItem).getKind());
+                    } else {
+                        newBrokerSort.putExtra("kind", InventoryApp.brokerSorts.get(selectedItem).getKind());
+                    }
+
                     newBrokerSort.putExtra("add", true);
                     newBrokerSort.putExtra("index", selectedItem);
+                    newBrokerSort.putExtra("memo", memo);
                     startActivityForResult(newBrokerSort, 1);
                 }
                 break;
@@ -144,8 +190,12 @@ public class TableBrokerActivity extends AppCompatActivity {
                             tvLoad.setText("מוחק את הנתונים אנא המתן...");
 
                             final DataQueryBuilder sortInfoBuilder = DataQueryBuilder.create();
-                            sortInfoBuilder.setWhereClause("toId = '" + InventoryApp.brokerSorts.get(selectedItem).getObjectId() + "'");
+                            if (memo) {
+                                sortInfoBuilder.setWhereClause("toId = '" + InventoryApp.memos.get(selectedItem).getObjectId() + "'");
 
+                            } else {
+                                sortInfoBuilder.setWhereClause("toId = '" + InventoryApp.brokerSorts.get(selectedItem).getObjectId() + "'");
+                            }
                             Backendless.Data.of(SortInfo.class).find(sortInfoBuilder, new AsyncCallback<List<SortInfo>>() {
                                 @Override
                                 public void handleResponse(List<SortInfo> response) {
@@ -164,7 +214,15 @@ public class TableBrokerActivity extends AppCompatActivity {
                                     final double allWeight = weight;
                                     final String name = sortName;
 
-                                    Backendless.Data.of("SortInfo").remove("toId = '" + InventoryApp.brokerSorts.get(selectedItem).getObjectId() + "'", new AsyncCallback<Integer>() {
+                                    String whereClause;
+                                    if (memo) {
+                                        whereClause = "toId = '" + InventoryApp.memos.get(selectedItem).getObjectId() + "'";
+
+                                    } else {
+                                        whereClause = "toId = '" + InventoryApp.brokerSorts.get(selectedItem).getObjectId() + "'";
+                                    }
+
+                                    Backendless.Data.of("SortInfo").remove(whereClause, new AsyncCallback<Integer>() {
                                         @Override
                                         public void handleResponse(Integer response) {
                                             DataQueryBuilder sortBuilder = DataQueryBuilder.create();
@@ -182,22 +240,45 @@ public class TableBrokerActivity extends AppCompatActivity {
                                                     Backendless.Data.of(Sort.class).save(sort, new AsyncCallback<Sort>() {
                                                         @Override
                                                         public void handleResponse(Sort response) {
-                                                            Backendless.Persistence.of(BrokerSort.class).remove(InventoryApp.brokerSorts.get(selectedItem), new AsyncCallback<Long>() {
-                                                                @Override
-                                                                public void handleResponse(Long response) {
-                                                                    showProgress(false);
-                                                                    Toast.makeText(TableBrokerActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                                                                    setResult(RESULT_OK);
-                                                                    finishActivity(1);
-                                                                    TableBrokerActivity.this.finish();
-                                                                }
 
-                                                                @Override
-                                                                public void handleFault(BackendlessFault fault) {
-                                                                    Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                    showProgress(false);
-                                                                }
-                                                            });
+                                                            // Deleting the Memo
+                                                            if (memo) {
+                                                                Backendless.Persistence.of(Memo.class).remove(InventoryApp.memos.get(selectedItem), new AsyncCallback<Long>() {
+                                                                    @Override
+                                                                    public void handleResponse(Long response) {
+                                                                        showProgress(false);
+                                                                        Toast.makeText(TableBrokerActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                                                        setResult(RESULT_OK);
+                                                                        finishActivity(1);
+                                                                        TableBrokerActivity.this.finish();
+                                                                    }
+
+                                                                    @Override
+                                                                    public void handleFault(BackendlessFault fault) {
+                                                                        Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        showProgress(false);
+                                                                    }
+                                                                });
+
+                                                            // Deleting the brokerSort
+                                                            } else {
+                                                                Backendless.Persistence.of(BrokerSort.class).remove(InventoryApp.brokerSorts.get(selectedItem), new AsyncCallback<Long>() {
+                                                                    @Override
+                                                                    public void handleResponse(Long response) {
+                                                                        showProgress(false);
+                                                                        Toast.makeText(TableBrokerActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                                                                        setResult(RESULT_OK);
+                                                                        finishActivity(1);
+                                                                        TableBrokerActivity.this.finish();
+                                                                    }
+
+                                                                    @Override
+                                                                    public void handleFault(BackendlessFault fault) {
+                                                                        Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        showProgress(false);
+                                                                    }
+                                                                });
+                                                            }
                                                         }
 
                                                         @Override
@@ -267,22 +348,44 @@ public class TableBrokerActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            showProgress(true);
-            Backendless.Data.of(BrokerSort.class).find(brokerBuilder, new AsyncCallback<List<BrokerSort>>() {
-                @Override
-                public void handleResponse(List<BrokerSort> response) {
-                    InventoryApp.brokerSorts = response;
-                    brokerAdapter.notifyDataSetChanged();
-                    brokerAdapter.setAll(kind.equals("ALL"));
-                    showProgress(false);
-                }
+            if (!memo) {
+                showProgress(true);
+                Backendless.Data.of(BrokerSort.class).find(brokerBuilder, new AsyncCallback<List<BrokerSort>>() {
+                    @Override
+                    public void handleResponse(List<BrokerSort> response) {
+                        InventoryApp.brokerSorts = response;
+                        brokerAdapter = new BrokerAdapter(TableBrokerActivity.this, InventoryApp.brokerSorts);
+                        lvBrokerList.setAdapter(brokerAdapter);
+                        brokerAdapter.setAll(kind.equals(ALL));
+                        showProgress(false);
+                    }
 
-                @Override
-                public void handleFault(BackendlessFault fault) {
-                    showProgress(false);
-                    Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } else {
+                showProgress(true);
+                Backendless.Data.of(Memo.class).find(brokerBuilder, new AsyncCallback<List<Memo>>() {
+                    @Override
+                    public void handleResponse(List<Memo> response) {
+                        InventoryApp.memos = response;
+                        memoAdapter = new MemoAdapter(TableBrokerActivity.this, InventoryApp.memos);
+                        lvBrokerList.setAdapter(memoAdapter);
+                        memoAdapter.setAll(kind.equals(ALL));
+                        showProgress(false);
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        showProgress(false);
+                        Toast.makeText(TableBrokerActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
     }
 

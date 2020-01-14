@@ -10,20 +10,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.guy.inventory.Tables.BrokerSort;
 import com.guy.inventory.R;
+import com.guy.inventory.Tables.Memo;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class BrokerAdapter extends ArrayAdapter<BrokerSort> {
+public class MemoAdapter extends ArrayAdapter<Memo> {
     private Context context;
-    private List<BrokerSort> brokerSorts;
+    private List<Memo> memos;
     private int selectedPosition = -1;
     private boolean all;
 
-    public BrokerAdapter(Context context, List<BrokerSort> list) {
+    public MemoAdapter(Context context, List<Memo> list) {
         super(context, R.layout.broker_sort_row_layout, list);
-        this.brokerSorts = list;
+        this.memos = list;
         this.context = context;
     }
 
@@ -47,17 +47,17 @@ public class BrokerAdapter extends ArrayAdapter<BrokerSort> {
         TextView tvSortSumINV = convertView.findViewById(R.id.tvSortSumINV);
         ImageView ivMemo = convertView.findViewById(R.id.ivMemo);
 
-        BrokerSort brokerSort = brokerSorts.get(position);
+        Memo memo = memos.get(position);
 
-        tvSortName.setText(all ? brokerSort.getKind() + " " + brokerSort.getName() : brokerSort.getName());
-        tvSortPrice.setText("מחיר: " + numberFormat.format(brokerSort.getPrice()) + "$");
-        tvSortPriceINV.setText("מחיר במלאי: " + numberFormat.format(brokerSort.getPriceINV()) + " $");
-        tvSortWeight.setText("משקל: " + numberFormat.format(brokerSort.getWeight()) + " קראט ");
-        tvSortSum.setText("סכום: " + numberFormat.format(brokerSort.getSum()) + "$");
-        tvSortSumINV.setText("סכום במלאי: " + numberFormat.format(brokerSort.getSumINV()) + "$");
+        tvSortName.setText(all ? memo.getKind() + " " + memo.getName() + " ל" + memo.getClientName(): memo.getName() + " ל" + memo.getClientName());
+        tvSortPrice.setText("מחיר: " + numberFormat.format(memo.getPrice()) + "$");
+        tvSortPriceINV.setText("מחיר במלאי: " + numberFormat.format(memo.getPriceINV()) + " $");
+        tvSortWeight.setText("משקל: " + numberFormat.format(memo.getWeight()) + " קראט ");
+        tvSortSum.setText("סכום: " + numberFormat.format(memo.getSum()) + "$");
+        tvSortSumINV.setText("סכום במלאי: " + numberFormat.format(memo.getSumINV()) + "$");
 
         convertView.setBackgroundResource((position == selectedPosition) ? R.drawable.table_row_selected : R.drawable.table_row);
-        ivMemo.setVisibility(brokerSort.getMemo() ? View.VISIBLE : View.INVISIBLE);
+        ivMemo.setVisibility(View.GONE);
         return convertView;
     }
 

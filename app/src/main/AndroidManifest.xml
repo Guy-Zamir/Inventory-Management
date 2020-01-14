@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.NewBrokerSortActivity"></activity>
+        <activity android:name=".Activities.NewBrokerSortActivity" />
         <activity android:name=".Activities.TableBrokerActivity" />
         <activity android:name=".Activities.BrokerMainSortActivity" />
         <activity android:name=".Activities.NewSaleSortActivity" />

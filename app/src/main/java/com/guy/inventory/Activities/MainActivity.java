@@ -64,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
         btnMemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BalanceActivity.class);
+                Intent intent = new Intent(MainActivity.this, BrokerMainSortActivity.class);
+                intent.putExtra("memo", true);
                 startActivity(intent);
             }
         });
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BrokerMainSortActivity.class);
+                intent.putExtra("memo", false);
                 startActivity(intent);
             }
         });

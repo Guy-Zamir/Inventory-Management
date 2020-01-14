@@ -163,11 +163,7 @@ public class TableSortingActivity extends AppCompatActivity {
 
                 @Override
                 public void handleFault(BackendlessFault fault) {
-                    if (fault.getCode().equals("1009")) {
-                        Toast.makeText(TableSortingActivity.this, "טרם נשרמו מיונים", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(TableSortingActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(TableSortingActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                     showProgress(false);
                 }
             });
