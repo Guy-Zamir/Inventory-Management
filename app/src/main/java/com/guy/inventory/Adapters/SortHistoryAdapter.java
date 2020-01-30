@@ -39,7 +39,6 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
 
         // Defining the views in the layouts
         final TextView tvSortHistoryNameOrg = convertView.findViewById(R.id.tvSortHistoryNameOrg);
-        TextView tvSortHistoryDate = convertView.findViewById(R.id.tvSortHistoryDate);
         final TextView tvSortHistorySaleName = convertView.findViewById(R.id.tvSortHistorySaleName);
         TextView tvSortHistoryWeight = convertView.findViewById(R.id.tvSortHistoryWeight);
         TextView tvSortHistoryPrice = convertView.findViewById(R.id.tvSortHistoryPrice);
@@ -50,19 +49,12 @@ public class SortHistoryAdapter extends ArrayAdapter<SortInfo> {
 
         ImageView ivOutIn = convertView.findViewById(R.id.ivOutIn);
 
-        Calendar sortDate = Calendar.getInstance();
-        sortDate.setTime(sortHistory.get(position).getCreated());
-        @SuppressLint("DefaultLocale") String sortDays = String.format("%02d", sortDate.get(Calendar.DAY_OF_MONTH));
-        @SuppressLint("DefaultLocale") String sortMonth = String.format("%02d", sortDate.get(Calendar.MONTH) + 1);
-        @SuppressLint("DefaultLocale") String sortYear = String.format("%02d", sortDate.get(Calendar.YEAR));
-
         tvSortHistoryNameOrg.setText(sortHistory.get(position).getFromName());
         tvSortHistorySaleName.setText("נמכר ל: " + sortHistory.get(position).getToName());
-        tvSortHistoryDate.setText("תאריך: " + sortDays + "/" + sortMonth + "/" + sortYear);
         tvSortHistoryWeight.setText("משקל: " + numberFormat.format(sortHistory.get(position).getWeight()) + " קראט ");
-        tvSortHistoryPrice.setText("מחיר: " + numberFormat.format(sortHistory.get(position).getPrice()) + " $ ");
-        tvSortHistorySum.setText("סכום: " + numberFormat.format(sortHistory.get(position).getSum()) + " $ ");
-        tvSortHistoryPL.setText("רווח: " + numberFormat.format(((sortHistory.get(position).getSoldPrice()) - sortHistory.get(position).getPrice())*sortHistory.get(position).getWeight()) + "$");
+        tvSortHistoryPrice.setText("מחיר מיון: " + numberFormat.format(sortHistory.get(position).getPrice()) + " $ ");
+        tvSortHistorySum.setText("סכום מיון: " + numberFormat.format(sortHistory.get(position).getSum()) + " $ ");
+        tvSortHistoryPL.setText("רווח גולמי: " + numberFormat.format(((sortHistory.get(position).getSoldPrice()) - sortHistory.get(position).getPrice())*sortHistory.get(position).getWeight()) + "$");
         tvSortHistoryPriceSold.setText("מחיר מכירה: " + numberFormat.format(sortHistory.get(position).getSoldPrice()) + "$");
         tvSortHistorySumSold.setText("סכום מכירה: " + numberFormat.format(sortHistory.get(position).getSoldPrice() * sortHistory.get(position).getWeight()));
 

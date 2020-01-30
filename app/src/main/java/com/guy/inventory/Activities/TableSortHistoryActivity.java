@@ -20,6 +20,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
 import com.guy.inventory.Adapters.SortHistoryAdapter;
+import com.guy.inventory.EndlessScrollListener;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.SortInfo;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class TableSortHistoryActivity extends AppCompatActivity {
     private View mProgressView;
@@ -62,20 +64,20 @@ public class TableSortHistoryActivity extends AppCompatActivity {
         index = getIntent().getIntExtra("index", 0);
         objectIdHistory.add(InventoryApp.sorts.get(index).getObjectId());
         nameHistory.add(InventoryApp.sorts.get(index).getName() + " - " + InventoryApp.sorts.get(index).getSortCount());
-        boolean sales = getIntent().getBooleanExtra("sales", false);
+        final boolean sales = getIntent().getBooleanExtra("sales", false);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("תנועות: " + InventoryApp.sorts.get(index).getName() + " - " + InventoryApp.sorts.get(index).getSortCount());
 
-        sortHistoryBuilder.setWhereClause("objectId = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
+        sortHistoryBuilder.setWhereClause("fromId  = '" + InventoryApp.sorts.get(index).getObjectId() + "'");
         sortHistoryBuilder.setSortBy("created DESC");
-        sortHistoryBuilder.addRelated("Sorts");
+        sortHistoryBuilder.setPageSize(PAGE_SIZE);
 
         sortSalesBuilder.setWhereClause("sale = true");
-        sortSalesBuilder.setPageSize(PAGE_SIZE);
         sortSalesBuilder.setSortBy("created DESC");
+        sortSalesBuilder.setPageSize(PAGE_SIZE);
 
         showProgress(true);
         if (sales) {
@@ -90,14 +92,14 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                             sortInfo.setOut(false);
                             sortInfo.setKind("sale");
                             sortInfo.setSortCount((Integer) sort.get("sortCount"));
-                            sortInfo.setFromName(sort.get("name") + " - " + sort.get("sortCount"));
-                            sortInfo.setCreated((Date) sort.get("created"));
+                            sortInfo.setFromName((String) sort.get("name"));
+                            sortInfo.setTheDate((Date) sort.get("theDate"));
                             sortInfo.setToName((String) sort.get("saleName"));
-                            sortInfo.setSoldPrice(sort.get("soldPrice").getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
+                            sortInfo.setSoldPrice(Objects.requireNonNull(sort.get("soldPrice")).getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
                             sortInfo.setObjectId((String) sort.get("objectId"));
-                            sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                            sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                            sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                            sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                            sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                            sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                             filterSorts.add(sortInfo);
                         }
                     }
@@ -117,28 +119,26 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                 }
             });
 
-        // Getting only 1 sort from the selected sort object id and displaying all the sorts that related to it (NO sortInfo!)
+            // Getting only 1 sort from the selected sort object id and displaying all the sorts that related to it (NO sortInfo!)
         } else {
             Backendless.Data.of("Sort").find(sortHistoryBuilder, new AsyncCallback<List<Map>>() {
                 @Override
                 public void handleResponse(List<Map> response) {
-                    Object[] sorts;
                     if (response.size() > 0) {
-                        sorts = (Object[]) response.get(0).get("Sorts");
-                        for (Object object : sorts) {
+                        for (Object object : response) {
                             HashMap sort = (HashMap) object;
                             SortInfo sortInfo = new SortInfo();
                             sortInfo.setOut(false);
                             sortInfo.setKind((boolean) sort.get("sale") ? "sale" : "OK");
                             sortInfo.setSortCount((Integer) sort.get("sortCount"));
-                            sortInfo.setFromName(sort.get("name") + " - " + sort.get("sortCount"));
-                            sortInfo.setCreated((Date) sort.get("created"));
+                            sortInfo.setFromName(((boolean) sort.get("sale")) ? (String) sort.get("name") : sort.get("name") + " - " + sort.get("sortCount"));
+                            sortInfo.setTheDate((Date) sort.get("theDate"));
                             sortInfo.setToName((String) sort.get("saleName"));
-                            sortInfo.setSoldPrice(sort.get("soldPrice").getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
+                            sortInfo.setSoldPrice(Objects.requireNonNull(sort.get("soldPrice")).getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
                             sortInfo.setObjectId((String) sort.get("objectId"));
-                            sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                            sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                            sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                            sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                            sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                            sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                             filterSorts.add(sortInfo);
                         }
                     }
@@ -165,10 +165,10 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                     sortInfo.setSortCount((int) sort.get("sortCount"));
                                     sortInfo.setToName((String) sort.get("toName"));
                                     sortInfo.setObjectId((String) sort.get("fromId"));
-                                    sortInfo.setCreated((Date) sort.get("created"));
-                                    sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                                    sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                                    sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                                    sortInfo.setTheDate((Date) sort.get("theDate"));
+                                    sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                                    sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                                    sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                                     filterSorts.add(sortInfo);
                                 }
                             }
@@ -194,10 +194,10 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                             }
                                             sortInfo.setToName((String) sort.get("toName"));
                                             sortInfo.setObjectId((String) sort.get("toId"));
-                                            sortInfo.setCreated((Date) sort.get("created"));
-                                            sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                                            sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                                            sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                                            sortInfo.setTheDate((Date) sort.get("theDate"));
+                                            sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                                            sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                                            sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                                             filterSorts.add(sortInfo);
                                         }
                                     }
@@ -226,18 +226,66 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                     Toast.makeText(TableSortHistoryActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
-            lvSortHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    view.setSelected(true);
-                    sortHistoryAdapter.setSelectedPosition(position);
-                    sortHistoryAdapter.notifyDataSetChanged();
-                    selectedItem = position;
-                }
-            });
         }
+
+        lvSortHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                view.setSelected(true);
+                sortHistoryAdapter.setSelectedPosition(position);
+                sortHistoryAdapter.notifyDataSetChanged();
+                selectedItem = position;
+            }
+        });
+
+        lvSortHistoryList.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                if (sales) {
+                    loadNextDataFromApi(totalItemsCount);
+                    // ONLY if more data is actually being loaded; false otherwise.
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
+
+    public void loadNextDataFromApi(final int offset) {
+        showProgress(true);
+        sortSalesBuilder.setOffset(offset);
+        Backendless.Data.of("Sort").find(sortSalesBuilder, new AsyncCallback<List<Map>>() {
+            @Override
+            public void handleResponse(List<Map> response) {
+                if (response.size() > 0) {
+                    for (int i = 0; i < response.size(); i++) {
+                        Map sort = response.get(i);
+                        SortInfo sortInfo = new SortInfo();
+                        sortInfo.setOut(false);
+                        sortInfo.setKind("sale");
+                        sortInfo.setSortCount((Integer) sort.get("sortCount"));
+                        sortInfo.setFromName((String) sort.get("name"));
+                        sortInfo.setTheDate((Date) sort.get("theDate"));
+                        sortInfo.setToName((String) sort.get("saleName"));
+                        sortInfo.setSoldPrice(Objects.requireNonNull(sort.get("soldPrice")).getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
+                        sortInfo.setObjectId((String) sort.get("objectId"));
+                        sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                        sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                        sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                        filterSorts.add(sortInfo);
+                    }
+                }
+                sortHistoryAdapter.notifyDataSetChanged();
+                showProgress(false);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(TableSortHistoryActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
         @Override
@@ -254,7 +302,7 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
             } else if (filterSorts.get(selectedItem).getKind().equals("buy") || filterSorts.get(selectedItem).getKind().equals("sale") ||
                     filterSorts.get(selectedItem).getKind().equals("open") || filterSorts.get(selectedItem).getKind().equals("broker") ||
-                    filterSorts.get(selectedItem).getKind().equals("memo")) {
+                    filterSorts.get(selectedItem).getKind().equals("memo") || filterSorts.get(selectedItem).getKind().equals("split")) {
                 Toast.makeText(this, "אין עוד פירוט", Toast.LENGTH_SHORT).show();
 
             } else {
@@ -267,35 +315,28 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
                 final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
                 sortBuilder.setPageSize(PAGE_SIZE);
-
-                sortBuilder.setWhereClause("objectId = '" + filterSorts.get(selectedItem).getObjectId() + "'");
-                sortBuilder.addRelated("Sorts");
-
+                sortBuilder.setWhereClause("fromId = '" + filterSorts.get(selectedItem).getObjectId() + "'");
                 final int offset = filterSorts.size();
 
                 showProgress(true);
-
-                // Getting only 1 sort from the selected sort object id and displaying all the sorts that related to it (NO sortInfo!)
                 Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                     @Override
                     public void handleResponse(List<Map> response) {
-                        Object[] sorts;
                         if (response.size() > 0) {
-                            sorts = (Object[]) response.get(0).get("Sorts");
-                            for (Object object : sorts) {
+                            for (Object object : response) {
                                 HashMap sort = (HashMap) object;
                                 SortInfo sortInfo = new SortInfo();
                                 sortInfo.setOut(false);
                                 sortInfo.setKind((boolean) sort.get("sale") ? "sale" : "OK");
                                 sortInfo.setSortCount((Integer) sort.get("sortCount"));
-                                sortInfo.setFromName(sort.get("name") + " - " + sort.get("sortCount"));
-                                sortInfo.setCreated((Date) sort.get("created"));
+                                sortInfo.setFromName(((boolean) sort.get("sale")) ? (String) sort.get("name") : sort.get("name") + " - " + sort.get("sortCount"));
+                                sortInfo.setTheDate((Date) sort.get("theDate"));
                                 sortInfo.setToName((String) sort.get("saleName"));
-                                sortInfo.setSoldPrice(sort.get("soldPrice").getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
+                                sortInfo.setSoldPrice(Objects.requireNonNull(sort.get("soldPrice")).getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
                                 sortInfo.setObjectId((String) sort.get("objectId"));
-                                sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                                sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                                sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                                sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                                sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                                sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                                 filterSorts.add(sortInfo);
                             }
                         }
@@ -322,11 +363,10 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                         }
                                         sortInfo.setToName((String) sort.get("toName"));
                                         sortInfo.setObjectId((String) sort.get("fromId"));
-                                        sortInfo.setCreated((Date) sort.get("created"));
-                                        sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                                        sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                                        sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
-
+                                        sortInfo.setTheDate((Date) sort.get("theDate"));
+                                        sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                                        sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                                        sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                                         filterSorts.add(sortInfo);
                                     }
                                 }
@@ -353,10 +393,10 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                                 }
                                                 sortInfo.setToName((String) sort.get("toName"));
                                                 sortInfo.setObjectId((String) sort.get("toId"));
-                                                sortInfo.setCreated((Date) sort.get("created"));
-                                                sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                                                sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                                                sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                                                sortInfo.setTheDate((Date) sort.get("theDate"));
+                                                sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                                                sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                                                sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                                                 filterSorts.add(sortInfo);
                                             }
                                         }
@@ -402,35 +442,28 @@ public class TableSortHistoryActivity extends AppCompatActivity {
 
             final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
             sortBuilder.setPageSize(PAGE_SIZE);
-
-            sortBuilder.setWhereClause("objectId = '" + objectIdHistory.get(objectIdHistory.size()-2) + "'");
-            sortBuilder.addRelated("Sorts");
-
+            sortBuilder.setWhereClause("fromId = '" + objectIdHistory.get(objectIdHistory.size()-2) + "'");
             final int offset = filterSorts.size();
 
             showProgress(true);
-
-            // Getting only 1 sort from the selected sort object id and displaying all the sorts that related to it (NO sortInfo!)
             Backendless.Data.of("Sort").find(sortBuilder, new AsyncCallback<List<Map>>() {
                 @Override
                 public void handleResponse(List<Map> response) {
-                    Object[] sorts;
                     if (response.size() > 0) {
-                        sorts = (Object[]) response.get(0).get("Sorts");
-                        for (Object object : sorts) {
+                        for (Object object : response) {
                             HashMap sort = (HashMap) object;
                             SortInfo sortInfo = new SortInfo();
                             sortInfo.setOut(false);
                             sortInfo.setKind((boolean) sort.get("sale") ? "sale" : "OK");
                             sortInfo.setSortCount((Integer) sort.get("sortCount"));
-                            sortInfo.setFromName(sort.get("name") + " - " + sort.get("sortCount"));
-                            sortInfo.setCreated((Date) sort.get("created"));
+                            sortInfo.setFromName(((boolean) sort.get("sale")) ? (String) sort.get("name") : sort.get("name") + " - " + sort.get("sortCount"));
+                            sortInfo.setTheDate((Date) sort.get("theDate"));
                             sortInfo.setToName((String) sort.get("saleName"));
-                            sortInfo.setSoldPrice(sort.get("soldPrice").getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
+                            sortInfo.setSoldPrice(Objects.requireNonNull(sort.get("soldPrice")).getClass().equals(Integer.class) ? (int) sort.get("soldPrice") : (double) sort.get("soldPrice"));
                             sortInfo.setObjectId((String) sort.get("objectId"));
-                            sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                            sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                            sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                            sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                            sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                            sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                             filterSorts.add(sortInfo);
                         }
                     }
@@ -457,10 +490,10 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                     sortInfo.setSortCount((int) sort.get("sortCount"));
                                     sortInfo.setToName((String) sort.get("toName"));
                                     sortInfo.setObjectId((String) sort.get("fromId"));
-                                    sortInfo.setCreated((Date) sort.get("created"));
-                                    sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                                    sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                                    sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                                    sortInfo.setTheDate((Date) sort.get("theDate"));
+                                    sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                                    sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                                    sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                                     filterSorts.add(sortInfo);
                                 }
                             }
@@ -486,10 +519,10 @@ public class TableSortHistoryActivity extends AppCompatActivity {
                                             }
                                             sortInfo.setToName((String) sort.get("toName"));
                                             sortInfo.setObjectId((String) sort.get("toId"));
-                                            sortInfo.setCreated((Date) sort.get("created"));
-                                            sortInfo.setPrice(sort.get("price").getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
-                                            sortInfo.setWeight(sort.get("weight").getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
-                                            sortInfo.setSum(sort.get("sum").getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
+                                            sortInfo.setTheDate((Date) sort.get("theDate"));
+                                            sortInfo.setPrice(Objects.requireNonNull(sort.get("price")).getClass().equals(Integer.class) ? (int) sort.get("price") : (double) sort.get("price"));
+                                            sortInfo.setWeight(Objects.requireNonNull(sort.get("weight")).getClass().equals(Integer.class) ? (int) sort.get("weight") : (double) sort.get("weight"));
+                                            sortInfo.setSum(Objects.requireNonNull(sort.get("sum")).getClass().equals(Integer.class) ? (int) sort.get("sum") : (double) sort.get("sum"));
                                             filterSorts.add(sortInfo);
                                         }
                                     }

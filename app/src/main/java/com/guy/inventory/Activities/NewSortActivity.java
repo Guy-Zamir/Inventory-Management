@@ -17,6 +17,9 @@ import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class NewSortActivity extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class NewSortActivity extends AppCompatActivity {
     private boolean open;
     private double weight, price;
     private String name, shape, size, color, clarity;
+    private Date theDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,10 @@ public class NewSortActivity extends AppCompatActivity {
                     clarity = etNewSortClarity.getText().toString().isEmpty() ? "null" : etNewSortClarity.getText().toString().trim();
                     price = etNewSortPrice.getText().toString().isEmpty() ? 0.0 : Double.valueOf(etNewSortPrice.getText().toString().trim());
                     weight = etNewSortWeight.getText().toString().isEmpty() ? 0.0 : Double.valueOf(etNewSortWeight.getText().toString().trim());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.DATE, 1);
+                    calendar.set(Calendar.MONTH, 0);
+                    theDate = open ? new GregorianCalendar(2020, 0, 1).getTime() : Calendar.getInstance().getTime();
 
                     final Sort sort = new Sort();
                     sort.setName(name);
@@ -100,6 +108,7 @@ public class NewSortActivity extends AppCompatActivity {
                     sort.setSum(open ? price*weight : 0.0);
                     sort.setSortCount(0);
                     sort.setLast(true);
+                    sort.setTheDate(theDate);
                     sort.setUserEmail(InventoryApp.user.getEmail());
 
                     showProgress(true);
@@ -118,6 +127,7 @@ public class NewSortActivity extends AppCompatActivity {
                                 sortInfo.setWeight(response.getWeight());
                                 sortInfo.setSum(response.getSum());
                                 sortInfo.setKind("open");
+                                sortInfo.setTheDate(Calendar.getInstance().getTime());
                                 sortInfo.setUserEmail(InventoryApp.user.getEmail());
                                 Backendless.Persistence.save(sortInfo, new AsyncCallback<SortInfo>() {
                                     @Override

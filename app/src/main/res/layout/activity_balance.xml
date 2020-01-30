@@ -31,7 +31,7 @@
     <LinearLayout
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -123,8 +123,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="100000"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -143,7 +142,7 @@
                     android:layout_marginRight="10dp"
                     android:text="מאזן גלם ומלוטש"
                     android:textColor="@color/colorText"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -155,7 +154,7 @@
                     android:layout_marginRight="10dp"
                     android:text="סכום עלות"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalanceWeight"
@@ -167,7 +166,7 @@
                     android:baselineAligned="false"
                     android:text="משקל שנותר"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalancePrice"
@@ -179,7 +178,7 @@
                     android:baselineAligned="false"
                     android:text="מחיר ממוצע לעלות"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -199,7 +198,7 @@
                     android:layout_marginRight="10dp"
                     android:text="מאזן מלוטש"
                     android:textColor="@color/colorText"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -211,7 +210,7 @@
                     android:layout_marginRight="10dp"
                     android:text="סכום עלות"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalancePolishWeight"
@@ -222,7 +221,7 @@
                     android:layout_marginRight="10dp"
                     android:text="משקל שנותר"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalancePolishPrice"
@@ -233,7 +232,7 @@
                     android:layout_marginRight="10dp"
                     android:text="מחיר ממוצע לעלות"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -252,7 +251,7 @@
                     android:layout_marginRight="10dp"
                     android:text="מאזן גלם"
                     android:textColor="@color/colorText"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -264,7 +263,7 @@
                     android:layout_marginRight="10dp"
                     android:text="סכום עלות"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalanceRoughWeight"
@@ -275,7 +274,7 @@
                     android:layout_marginRight="10dp"
                     android:text="משקל שנותר"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalanceRoughPrice"
@@ -286,7 +285,7 @@
                     android:layout_marginRight="10dp"
                     android:text="מחיר ממוצע לעלות"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -306,7 +305,7 @@
                     android:layout_marginRight="10dp"
                     android:text="מיונים"
                     android:textColor="@color/colorText"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -316,9 +315,9 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="רווח"
+                    android:text="רווח גולמי"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalanceSortProfitPrice"
@@ -329,7 +328,7 @@
                     android:layout_marginRight="10dp"
                     android:text="רווח ממוצע לקראט"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalanceSortProfitPre"
@@ -340,7 +339,7 @@
                     android:layout_marginRight="10dp"
                     android:text="אחוז הרווח מהמחזור"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvBalanceSortNum"
@@ -351,7 +350,7 @@
                     android:layout_marginRight="10dp"
                     android:text="מספר מיונים"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 

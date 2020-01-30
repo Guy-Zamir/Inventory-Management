@@ -8,7 +8,7 @@ public class Buy {
     private double price, weight, doneWeight, sum, workDepreciation, wage;
     private int days;
     private String id, supplierName;
-    private boolean polish, done, paid;
+    private boolean polish, done, paid, open;
 
     private Date created, updated;
     private String objectId, userEmail;
@@ -163,5 +163,13 @@ public class Buy {
 
     public void setSupplier(Client supplier) {
         this.supplier = supplier;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 }

@@ -2,6 +2,8 @@ package com.guy.inventory.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class NewBrokerSortActivity extends AppCompatActivity {
@@ -57,6 +60,7 @@ public class NewBrokerSortActivity extends AppCompatActivity {
     private String sortName;
     private double price, priceINV, weight;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,11 +89,22 @@ public class NewBrokerSortActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
 
-        if (memo) {
-            actionBar.setTitle(add ? "הוספה ל: " + InventoryApp.memos.get(index).getName() + " - " + kind : "חבילת ממו חדשה - " + kind);
+        if (add) {
+            etBrokerWeight.setHint("משקל להוספה/הורדה");
+            etBrokerPriceINV.setHint("מחיר יציאה מהמלאי להורדה/הוספה");
+        }
 
+        if (memo) {
+            if (add) {
+                actionBar.setTitle("הוספה/הורדה ל" + InventoryApp.memos.get(index).getName() + " - " + kind);
+                etBrokerPrice.setText(String.valueOf(InventoryApp.memos.get(index).getPrice()));
+
+            } else {
+                actionBar.setTitle("חבילת ממו חדשה - " + kind);
+            }
         } else {
-            actionBar.setTitle(add ? "הוספה ל: " + InventoryApp.brokerSorts.get(index).getName() + " - " + kind : "חבילת מתווך חדשה - " + kind);
+            actionBar.setTitle(add ? "הוספה/הורדה ל" + InventoryApp.brokerSorts.get(index).getName() + " - " + kind : "חבילת מתווך חדשה - " + kind);
+            etBrokerPrice.setText(add ? String.valueOf(InventoryApp.brokerSorts.get(index).getPrice()) : "");
             chosenClient = 1;
             acClient.setVisibility(View.GONE);
         }
@@ -116,6 +131,24 @@ public class NewBrokerSortActivity extends AppCompatActivity {
                 acSorts.setThreshold(1);
                 acSorts.setAdapter(sortAdapter);
                 showProgress(false);
+
+                if (add) {
+                    if (memo) {
+                        for (Sort sort : InventoryApp.sorts) {
+                            if (InventoryApp.memos.get(index).getFromSortId().equals(sort.getObjectId())) {
+                                acSorts.setText(sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C");
+                                break;
+                            }
+                        }
+                    } else {
+                        for (Sort sort : InventoryApp.sorts) {
+                            if (InventoryApp.brokerSorts.get(index).getFromSortId().equals(sort.getObjectId())) {
+                                acSorts.setText(sort.getName() + "-" + sort.getSortCount() + " = " + numberFormat.format(sort.getPrice()) + "P : " + numberFormat.format(sort.getWeight()) + "C");
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             @Override
@@ -170,6 +203,14 @@ public class NewBrokerSortActivity extends AppCompatActivity {
                 acClient.setThreshold(1);
                 acClient.setAdapter(clientAdapter);
                 showProgress(false);
+
+                if (add) {
+                    if (memo) {
+                        acClient.setText(InventoryApp.memos.get(index).getClientName());
+                    } else {
+                        acClient.setText(InventoryApp.brokerSorts.get(index).getName());
+                    }
+                }
             }
 
             @Override
@@ -198,6 +239,7 @@ public class NewBrokerSortActivity extends AppCompatActivity {
                 acClient.showDropDown();
             }
         });
+
 
         btnBrokerSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,7 +345,8 @@ public class NewBrokerSortActivity extends AppCompatActivity {
     private String check() {
         if ((etBrokerName.getText().toString().isEmpty() && !add) || etBrokerPrice.getText().toString().isEmpty()
                 || etBrokerPriceINV.getText().toString().isEmpty() || etBrokerWeight.getText().toString().isEmpty() ||
-        chosenSort == -1 || chosenClient == -1) {
+                (chosenSort == -1 && !add)|| (chosenClient == -1 && !add)) {
+
             return "יש להזין את כל הנתונים";
 
         } else if (Double.valueOf(etBrokerPrice.getText().toString()) < Double.valueOf(etBrokerPriceINV.getText().toString())) {
@@ -318,7 +361,12 @@ public class NewBrokerSortActivity extends AppCompatActivity {
         } else {
             price = Double.valueOf(etBrokerPrice.getText().toString());
             priceINV = Double.valueOf(etBrokerPriceINV.getText().toString());
-            sortName = (add ? InventoryApp.brokerSorts.get(index).getName() : etBrokerName.getText().toString().trim());
+
+            if (memo) {
+                sortName = (add ? InventoryApp.memos.get(index).getName() : etBrokerName.getText().toString().trim());
+            } else {
+                sortName = (add ? InventoryApp.brokerSorts.get(index).getName() : etBrokerName.getText().toString().trim());
+            }
             weight = Double.valueOf(etBrokerWeight.getText().toString());
             return "OK";
         }
@@ -335,6 +383,7 @@ public class NewBrokerSortActivity extends AppCompatActivity {
         sortInfo.setWeight(weight);
         sortInfo.setSum(priceINV * weight);
         sortInfo.setKind(memo ? "memo" : "broker");
+        sortInfo.setTheDate(Calendar.getInstance().getTime());
         sortInfo.setOut(true);
         sortInfo.setUserEmail(InventoryApp.user.getEmail());
         return sortInfo;

@@ -105,7 +105,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
         String payMonth = String.format("%02d", payDate.get(Calendar.MONTH) + 1);
         String payYear = String.format("%02d", payDate.get(Calendar.YEAR));
 
-        tvBuySupplier.setText(buys.get(position).getSupplierName());
+        tvBuySupplier.setText(buys.get(position).isOpen() ? buys.get(position).getSupplierName() + " מלאי פתיחה" : buys.get(position).getSupplierName());
         tvBuyDate.setText("תאריך קניה: " + buyDays + "/" + buyMonth+ "/" + buyYear);
         tvBuyPrice.setText("מחיר לקראט: " + numberFormat.format(buys.get(position).getPrice()) + "$");
         tvBuyDetailsPayDate.setText("תאריך פקיעה: " + payDays + "/" + payMonth+ "/" + payYear);
@@ -121,7 +121,7 @@ public class BuysAdapter extends ArrayAdapter<Buy> {
 
         // When the goods are done
         ivDone.setImageResource((InventoryApp.buys.get(position).isDone()) ? R.drawable.done1_icon : R.drawable.not_done1_icon);
-        // When the the buy is a polish buy
+        // When the buy is a polish buy
         ivPolish.setVisibility((InventoryApp.buys.get(position).isPolish()) ? View.VISIBLE : View.INVISIBLE);
 
         // When the user selected the position

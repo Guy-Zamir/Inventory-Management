@@ -25,6 +25,7 @@ public class SortInfo
     private double soldPrice;
     private String kind;
     private boolean out;
+    private Date theDate;
 
     public Date getUpdated()
     {
@@ -219,5 +220,13 @@ public class SortInfo
 
     public void setOut(boolean out) {
         this.out = out;
+    }
+
+    public Date getTheDate() {
+        return theDate;
+    }
+
+    public void setTheDate(Date theDate) {
+        this.theDate = theDate;
     }
 }

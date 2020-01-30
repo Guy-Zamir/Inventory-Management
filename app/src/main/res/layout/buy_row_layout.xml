@@ -130,7 +130,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center_horizontal"
-                    android:text="מיונים"
+                    android:text="מיונים שנכנסו"
                     android:textColor="@color/colorText"
                     android:textSize="18sp"
                     android:textStyle="bold" />

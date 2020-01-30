@@ -27,10 +27,8 @@ import com.guy.inventory.EndlessScrollListener;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
 import com.guy.inventory.Tables.Buy;
-import com.guy.inventory.Tables.Sale;
 import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -430,49 +428,49 @@ public class TableBuyActivity extends AppCompatActivity {
     }
 
     public void loadNextDataFromApi(final int offset) {
-            final DataQueryBuilder buyBuilderLoad = DataQueryBuilder.create();
-            buyBuilderLoad.setOffset(offset);
-            buyBuilderLoad.setSortBy(order);
-            buyBuilderLoad.setWhereClause(whereClause);
-            buyBuilderLoad.setPageSize(PAGE_SIZE);
+        final DataQueryBuilder buyBuilderLoad = DataQueryBuilder.create();
+        buyBuilderLoad.setOffset(offset);
+        buyBuilderLoad.setSortBy(order);
+        buyBuilderLoad.setWhereClause(whereClause);
+        buyBuilderLoad.setPageSize(PAGE_SIZE);
 
-            showProgress(true);
-            Backendless.Data.of(Buy.class).find(buyBuilderLoad, new AsyncCallback<List<Buy>>() {
-                @Override
-                public void handleResponse(List<Buy> response) {
-                    InventoryApp.buys.addAll(response);
+        showProgress(true);
+        Backendless.Data.of(Buy.class).find(buyBuilderLoad, new AsyncCallback<List<Buy>>() {
+            @Override
+            public void handleResponse(List<Buy> response) {
+                InventoryApp.buys.addAll(response);
 
-                    final DataQueryBuilder buyNameBuilderLoad = DataQueryBuilder.create();
-                    buyNameBuilderLoad.setOffset(offset);
-                    buyNameBuilderLoad.setSortBy(order);
-                    buyNameBuilderLoad.setWhereClause(whereClause);
-                    buyNameBuilderLoad.setPageSize(PAGE_SIZE);
-                    buyNameBuilderLoad.addRelated("Supplier");
-                    Backendless.Data.of("Buy").find(buyNameBuilderLoad, new AsyncCallback<List<Map>>() {
-                        @Override
-                        public void handleResponse(List<Map> response) {
-                            for (int i = 0; i < response.size(); i++) {
-                                HashMap supplier = (HashMap) response.get(i).get("Supplier");
-                                InventoryApp.buys.get(i + offset).setSupplierName((supplier == null) ? "1" : (String) supplier.get("name"));
-                            }
-
-                                buysAdapter.notifyDataSetChanged();
-                                showProgress(false);
+                final DataQueryBuilder buyNameBuilderLoad = DataQueryBuilder.create();
+                buyNameBuilderLoad.setOffset(offset);
+                buyNameBuilderLoad.setSortBy(order);
+                buyNameBuilderLoad.setWhereClause(whereClause);
+                buyNameBuilderLoad.setPageSize(PAGE_SIZE);
+                buyNameBuilderLoad.addRelated("Supplier");
+                Backendless.Data.of("Buy").find(buyNameBuilderLoad, new AsyncCallback<List<Map>>() {
+                    @Override
+                    public void handleResponse(List<Map> response) {
+                        for (int i = 0; i < response.size(); i++) {
+                            HashMap supplier = (HashMap) response.get(i).get("Supplier");
+                            InventoryApp.buys.get(i + offset).setSupplierName((supplier == null) ? "1" : (String) supplier.get("name"));
                         }
 
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                            showProgress(false);
-                        }
-                    });
-                }
+                        buysAdapter.notifyDataSetChanged();
+                        showProgress(false);
+                    }
 
-                @Override
-                public void handleFault(BackendlessFault fault) {
-                    showProgress(false);
-                    Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                        showProgress(false);
+                    }
+                });
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                showProgress(false);
+                Toast.makeText(TableBuyActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

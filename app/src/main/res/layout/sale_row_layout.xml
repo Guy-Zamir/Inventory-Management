@@ -129,7 +129,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center_horizontal"
-                android:text="מיונים"
+                android:text="מיונים שנמכרו"
                 android:textColor="@color/colorText"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -305,36 +305,512 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvSaleDetailsSortLeftN"
+                android:id="@+id/tvSaleDetailsSortN6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center_horizontal"
-                android:text="שם מיון עודפים"
+                android:text="שם מיון 6"
                 android:textColor="@color/colorText"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvSaleDetailsSortLeftW"
+                android:id="@+id/tvSaleDetailsSortW6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center_horizontal"
-                android:text="משקל במיון עודפים"
+                android:text="משקל במיון 6"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvSaleDetailsSortLeftP"
+                android:id="@+id/tvSaleDetailsSortP6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:fontFamily="sans-serif-smallcaps"
                 android:gravity="center_horizontal"
-                android:text="מחיר במיון עודפים"
+                android:text="מחיר במיון 6"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 7"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 7"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 7"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 8"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 8"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 8"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 9"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 9"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 9"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 10"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 10"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 10"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 11"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 11"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 11"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 12"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 12"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 12"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 13"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 13"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 13"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 14"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 14"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 14"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 15"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 15"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 15"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 16"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 16"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 16"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 17"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 17"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 17"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 18"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 18"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 18"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 19"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 19"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 19"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortN20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="שם מיון 20"
+                android:textColor="@color/colorText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortW20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="משקל במיון 20"
+                android:textColor="@color/colorText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvSaleDetailsSortP20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_horizontal"
+                android:text="מחיר במיון 20"
                 android:textColor="@color/colorText"
                 android:textSize="16sp" />
 

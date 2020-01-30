@@ -68,14 +68,16 @@ public class TableBrokerActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         brokerBuilder.setWhereClause(emailClause);
+        memoBuilder.setWhereClause(emailClause);
         int PAGE_SIZE = 100;
         brokerBuilder.setPageSize(PAGE_SIZE);
+        memoBuilder.setPageSize(PAGE_SIZE);
         if (!kind.equals(ALL)) {
             brokerBuilder.setHavingClause("kind = '" + kind + "'");
             memoBuilder.setHavingClause("kind = '" + kind + "'");
         }
 
-        //Broker Activity
+        // Broker Activity
         if (!memo) {
             showProgress(true);
             Backendless.Data.of(BrokerSort.class).find(brokerBuilder, new AsyncCallback<List<BrokerSort>>() {

@@ -25,6 +25,8 @@ import com.guy.inventory.Tables.Sort;
 import com.guy.inventory.Tables.SortInfo;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -395,14 +397,13 @@ public class DoneActivity extends AppCompatActivity {
                                             sortInfoLeftOver.setFromName(InventoryApp.buys.get(index).getSupplierName());
                                             sortInfoLeftOver.setToName(leftOverSort.getName());
                                             sortInfoLeftOver.setKind("buy");
-                                            //sortInfoLeftOver.setBuy(true);
-                                            //sortInfoLeftOver.setSale(false);
                                             sortInfoLeftOver.setToId(leftOverSort.getObjectId());
                                             sortInfoLeftOver.setSortCount(leftOverSort.getSortCount());
                                             sortInfoLeftOver.setFromId(InventoryApp.buys.get(index).getObjectId());
                                             sortInfoLeftOver.setPrice(sortPriceLeftOver);
                                             sortInfoLeftOver.setWeight(sortWeightLeftOver);
                                             sortInfoLeftOver.setSum(sortPriceLeftOver * sortWeightLeftOver);
+                                            sortInfoLeftOver.setTheDate(Calendar.getInstance().getTime());
                                             sortInfoLeftOver.setUserEmail(InventoryApp.user.getEmail());
                                             sortInfoLeftOver.save();
                                         }
@@ -452,6 +453,7 @@ public class DoneActivity extends AppCompatActivity {
             sortInfo.setWeight(sortWeight);
             sortInfo.setSum(sortPrice*sortWeight);
             sortInfo.setKind("buy");
+            sortInfo.setTheDate(Calendar.getInstance().getTime());
             sortInfo.setUserEmail(InventoryApp.user.getEmail());
 
             return sortInfo;

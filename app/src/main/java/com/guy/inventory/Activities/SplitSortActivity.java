@@ -27,6 +27,7 @@ import com.guy.inventory.Tables.SortInfo;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -380,6 +381,7 @@ public class SplitSortActivity extends AppCompatActivity {
             sortInfo.setWeight(sortWeight);
             sortInfo.setSum(sortPrice*sortWeight);
             sortInfo.setKind("split");
+            sortInfo.setTheDate(Calendar.getInstance().getTime());
             sortInfo.setUserEmail(InventoryApp.user.getEmail());
 
             return sortInfo;

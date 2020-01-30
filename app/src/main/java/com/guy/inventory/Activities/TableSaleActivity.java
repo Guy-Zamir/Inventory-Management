@@ -26,11 +26,7 @@ import com.guy.inventory.Adapters.SalesAdapter;
 import com.guy.inventory.EndlessScrollListener;
 import com.guy.inventory.InventoryApp;
 import com.guy.inventory.R;
-import com.guy.inventory.Tables.BrokerSort;
 import com.guy.inventory.Tables.Sale;
-import com.guy.inventory.Tables.Sort;
-import com.guy.inventory.Tables.SortInfo;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -200,106 +196,108 @@ public class TableSaleActivity extends AppCompatActivity {
                     Toast.makeText(this, "יש לחבור פריט למחיקה", Toast.LENGTH_LONG).show();
 
                 } else if (InventoryApp.sales.get(selectedItem).isSorted()) {
-                    AlertDialog.Builder deleteAlert = new AlertDialog.Builder(TableSaleActivity.this);
-                    deleteAlert.setTitle("התראת מחיקה");
-                    deleteAlert.setMessage("האם אתה בטוח שברצונך למחוק את המכירה המסומנת?");
-                    deleteAlert.setNegativeButton(android.R.string.no, null);
-                    deleteAlert.setIcon(android.R.drawable.ic_dialog_alert);
-                    deleteAlert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            showProgress(true);
-                            tvLoad.setText("מוחק את הנתונים אנא המתן...");
-
-                            final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-                            sortBuilder.setWhereClause("saleId = '" + InventoryApp.sales.get(selectedItem).getObjectId() + "'");
-
-                            Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
-                                @Override
-                                public void handleResponse(List<Sort> response) {
-                                    // Finding all the sortInfo and deleting them after collecting the data of the weight and sum
-                                    double sum = 0;
-                                    double weight = 0;
-                                    String sortName = "";
-
-                                    for (Sort sort : response) {
-                                        sum += sort.getSum();
-                                        weight += sort.getWeight();
-                                        sortName = sort.getName();
-                                    }
-
-                                    final double allSum = sum;
-                                    final double allWeight = weight;
-                                    final String name = sortName.substring(0, sortName.length()-1);
-
-                                    Backendless.Data.of("Sort").remove("saleId = '" + InventoryApp.sales.get(selectedItem).getObjectId() + "'", new AsyncCallback<Integer>() {
-                                        @Override
-                                        public void handleResponse(Integer response) {
-                                            DataQueryBuilder sortBuilder = DataQueryBuilder.create();
-                                            sortBuilder.setWhereClause("name = '" + name + "'");
-                                            sortBuilder.setHavingClause("last = true");
-                                            Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
-                                                @Override
-                                                public void handleResponse(List<Sort> response) {
-                                                    final Sort sort = response.get(0);
-
-                                                    // Adding to the original sort the weight and sum
-                                                    sort.setSum(sort.getSum() + allSum);
-                                                    sort.setWeight(sort.getWeight() + allWeight);
-                                                    sort.setPrice(sort.getSum() / sort.getWeight());
-                                                    Backendless.Data.of(Sort.class).save(sort, new AsyncCallback<Sort>() {
-                                                        @Override
-                                                        public void handleResponse(Sort response) {
-                                                            Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(selectedItem), new AsyncCallback<Long>() {
-                                                                @Override
-                                                                public void handleResponse(Long response) {
-                                                                    showProgress(false);
-                                                                    Toast.makeText(TableSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
-                                                                    setResult(RESULT_OK);
-                                                                    finishActivity(1);
-                                                                    TableSaleActivity.this.finish();
-                                                                }
-
-                                                                @Override
-                                                                public void handleFault(BackendlessFault fault) {
-                                                                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                    showProgress(false);
-                                                                }
-                                                            });
-                                                        }
-
-                                                        @Override
-                                                        public void handleFault(BackendlessFault fault) {
-                                                            Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                            showProgress(false);
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void handleFault(BackendlessFault fault) {
-                                                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    showProgress(false);
-                                                }
-                                            });
-                                        }
-
-                                        @Override
-                                        public void handleFault(BackendlessFault fault) {
-                                            Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                            showProgress(false);
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault fault) {
-                                    Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
-                                    showProgress(false);
-                                }
-                            });
-                        }
-                    });
-                    deleteAlert.show();
+                    //AlertDialog.Builder deleteAlert = new AlertDialog.Builder(TableSaleActivity.this);
+                    //deleteAlert.setTitle("התראת מחיקה");
+                    //deleteAlert.setMessage("האם אתה בטוח שברצונך למחוק את המכירה המסומנת?");
+                    //deleteAlert.setNegativeButton(android.R.string.no, null);
+                    //deleteAlert.setIcon(android.R.drawable.ic_dialog_alert);
+                    //deleteAlert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    //    public void onClick(DialogInterface dialog, int which) {
+                    //        showProgress(true);
+                    //        tvLoad.setText("מוחק את הנתונים אנא המתן...");
+//
+                    //        final DataQueryBuilder sortBuilder = DataQueryBuilder.create();
+                    //        sortBuilder.setWhereClause("saleId = '" + InventoryApp.sales.get(selectedItem).getObjectId() + "'");
+                    //        sortBuilder.addRelated("Sorts");
+//
+                    //        Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
+                    //            @Override
+                    //            public void handleResponse(List<Sort> response) {
+                    //                // Finding all the sorts and deleting them after collecting the data of the weight and sum
+                    //                double sum = 0;
+                    //                double weight = 0;
+                    //                String sortName = "";
+//
+                    //                for (Sort sort : response) {
+                    //                    sum += sort.getSum();
+                    //                    weight += sort.getWeight();
+                    //                    sortName = sort.getName();
+                    //                }
+//
+                    //                final double allSum = sum;
+                    //                final double allWeight = weight;
+                    //                final String name = sortName.substring(0, sortName.length()-1);
+//
+                    //                Backendless.Data.of("Sort").remove("saleId = '" + InventoryApp.sales.get(selectedItem).getObjectId() + "'", new AsyncCallback<Integer>() {
+                    //                    @Override
+                    //                    public void handleResponse(Integer response) {
+                    //                        DataQueryBuilder sortBuilder = DataQueryBuilder.create();
+                    //                        sortBuilder.setWhereClause("name = '" + name + "'");
+                    //                        sortBuilder.setHavingClause("last = true");
+                    //                        Backendless.Data.of(Sort.class).find(sortBuilder, new AsyncCallback<List<Sort>>() {
+                    //                            @Override
+                    //                            public void handleResponse(List<Sort> response) {
+                    //                                final Sort sort = response.get(0);
+//
+                    //                                // Adding to the original sort the weight and sum
+                    //                                sort.setSum(sort.getSum() + allSum);
+                    //                                sort.setWeight(sort.getWeight() + allWeight);
+                    //                                sort.setPrice(sort.getSum() / sort.getWeight());
+                    //                                Backendless.Data.of(Sort.class).save(sort, new AsyncCallback<Sort>() {
+                    //                                    @Override
+                    //                                    public void handleResponse(Sort response) {
+                    //                                        Backendless.Persistence.of(Sale.class).remove(InventoryApp.sales.get(selectedItem), new AsyncCallback<Long>() {
+                    //                                            @Override
+                    //                                            public void handleResponse(Long response) {
+                    //                                                showProgress(false);
+                    //                                                Toast.makeText(TableSaleActivity.this, "נשמר בהצלחה", Toast.LENGTH_SHORT).show();
+                    //                                                setResult(RESULT_OK);
+                    //                                                finishActivity(1);
+                    //                                                TableSaleActivity.this.finish();
+                    //                                            }
+//
+                    //                                            @Override
+                    //                                            public void handleFault(BackendlessFault fault) {
+                    //                                                Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    //                                                showProgress(false);
+                    //                                            }
+                    //                                        });
+                    //                                    }
+//
+                    //                                    @Override
+                    //                                    public void handleFault(BackendlessFault fault) {
+                    //                                        Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    //                                        showProgress(false);
+                    //                                    }
+                    //                                });
+                    //                            }
+//
+                    //                            @Override
+                    //                            public void handleFault(BackendlessFault fault) {
+                    //                                Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    //                                showProgress(false);
+                    //                            }
+                    //                        });
+                    //                    }
+//
+                    //                    @Override
+                    //                    public void handleFault(BackendlessFault fault) {
+                    //                        Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    //                        showProgress(false);
+                    //                    }
+                    //                });
+                    //            }
+//
+                    //            @Override
+                    //            public void handleFault(BackendlessFault fault) {
+                    //                Toast.makeText(TableSaleActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                    //                showProgress(false);
+                    //            }
+                    //        });
+                    //    }
+                    //});
+                    //deleteAlert.show();
+                    break;
 
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(TableSaleActivity.this);

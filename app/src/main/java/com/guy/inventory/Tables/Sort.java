@@ -13,6 +13,7 @@ public class Sort
     private String size;
     private String clarity;
     private String objectId;
+    private String fromId;
     private Double sum;
     private Double weight;
     private String ownerId;
@@ -28,6 +29,7 @@ public class Sort
     private Date created;
     private String saleName;
     private Double saleSum;
+    private Date theDate;
 
     public String getColor()
     {
@@ -262,5 +264,21 @@ public class Sort
 
     public void setSaleSum(Double saleSum) {
         this.saleSum = saleSum;
+    }
+
+    public Date getTheDate() {
+        return theDate;
+    }
+
+    public void setTheDate(Date theDate) {
+        this.theDate = theDate;
+    }
+
+    public String getFromId() {
+        return fromId;
+    }
+
+    public void setFromId(String fromId) {
+        this.fromId = fromId;
     }
 }
